@@ -1,0 +1,136 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Resource">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Utils">
+      <UniqueIdentifier>{a26ada9a-3419-439b-bc29-42a84492e74f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source">
+      <UniqueIdentifier>{2f27bf58-0a03-4735-9d95-be9cee780362}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Launch">
+      <UniqueIdentifier>{b053c72e-4ae8-4bd2-be89-82770199fb18}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core">
+      <UniqueIdentifier>{3fe4baf1-a48b-4ef7-8b42-eaafea4a939b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\DirectX11">
+      <UniqueIdentifier>{24f4f418-3142-4082-8792-2900158c5861}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Engine">
+      <UniqueIdentifier>{d579aca8-a843-4e55-a8bd-c9c14a7beaa9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Manager">
+      <UniqueIdentifier>{5810ae0c-9eee-46e8-94c7-96307b230996}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\DirectX11\State">
+      <UniqueIdentifier>{97050cd6-c249-4049-8d39-55a46767a9ba}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source\Utils\EnginePch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\pch.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Launch\LaunchWindows.cpp">
+      <Filter>Source\Launch</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDDevice.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDSwapChain.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDRenderTarget.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDInputLayout.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDVertexBuffer.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Engine\Engine.cpp">
+      <Filter>Source\Core\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Manager\ResourceManager.cpp">
+      <Filter>Source\Core\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDRasterizerState.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DXDDepthStencilView.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp">
+      <Filter>Source\Core\DirectX11\State</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp">
+      <Filter>Source\Core\DirectX11\State</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Source\Utils\EnginePch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\pch.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDDevice.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDSwapChain.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDRenderTarget.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDInputLayout.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDVertexBuffer.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Engine\Engine.h">
+      <Filter>Source\Core\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Manager\ResourceManager.h">
+      <Filter>Source\Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDRasterizerState.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\DXDDepthStencilView.h">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h">
+      <Filter>Source\Core\DirectX11\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h">
+      <Filter>Source\Core\DirectX11\State</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
