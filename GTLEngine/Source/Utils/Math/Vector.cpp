@@ -1,4 +1,4 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "Vector.h"
 
 const FVector FVector::ZeroVector = FVector(0, 0, 0);

@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Matrix.h"
 
 
@@ -256,25 +256,25 @@ FMatrix FMatrix::CreateScaleMatrix(const FVector& scale)
 FMatrix FMatrix::CreateBasisMatrix(const FVector& xAxis, const FVector& yAxis, const FVector& zAxis, const FVector& origin)
 {
 	FMatrix basisMatrix;
-	// 0¹øÂ° Çà (XÃàÀÇ °ªµé)
+	// 0ë²ˆì§¸ í–‰ (Xì¶•ì˜ ê°’ë“¤)
 	basisMatrix.M[0][0] = xAxis.X;
 	basisMatrix.M[0][1] = yAxis.X;
 	basisMatrix.M[0][2] = zAxis.X;
 	basisMatrix.M[0][3] = 0.0f;
 
-	// 1¹øÂ° Çà
+	// 1ë²ˆì§¸ í–‰
 	basisMatrix.M[1][0] = xAxis.Y;
 	basisMatrix.M[1][1] = yAxis.Y;
 	basisMatrix.M[1][2] = zAxis.Y;
 	basisMatrix.M[1][3] = 0.0f;
 
-	// 2¹øÂ° Çà
+	// 2ë²ˆì§¸ í–‰
 	basisMatrix.M[2][0] = xAxis.Z;
 	basisMatrix.M[2][1] = yAxis.Z;
 	basisMatrix.M[2][2] = zAxis.Z;
 	basisMatrix.M[2][3] = 0.0f;
 
-	// 3¹øÂ° Çà (Translation ¼ººĞ)
+	// 3ë²ˆì§¸ í–‰ (Translation ì„±ë¶„)
 	basisMatrix.M[3][0] = origin.Dot(xAxis);
 	basisMatrix.M[3][1] = origin.Dot(yAxis);
 	basisMatrix.M[3][2] = origin.Dot(zAxis);
@@ -308,25 +308,25 @@ FMatrix FMatrix::CreateTranslationMatrix(const FVector& location)
 
 FMatrix FMatrix::CreateLookToMatrixLeftHand(const FVector& eye, const FVector& toDir, const FVector& up)
 {
-	// Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ
+	// ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥
 	FVector zAxis = toDir.GetNormalizedVector();
 
-	// ¿Ş¼Õ	ÁÂÇ¥°è¿¡¼­ Ä«¸Ş¶óÀÇ ¿À¸¥ÂÊ ¹æÇâ
+	// ì™¼ì†	ì¢Œí‘œê³„ì—ì„œ ì¹´ë©”ë¼ì˜ ì˜¤ë¥¸ìª½ ë°©í–¥
 	FVector xAxis = FVector::CrossProduct(up, zAxis).GetNormalizedVector();
 
-	// yÃà : zÃà°ú xÃàÀÇ ¿ÜÀû
+	// yì¶• : zì¶•ê³¼ xì¶•ì˜ ì™¸ì 
 	FVector yAxis = FVector::CrossProduct(zAxis, xAxis);
 
 	FMatrix viewMatrix;
 
-	// Çà·ÄÀÇ »ó´Ü 3¡¿3 ºÎºĞ¿¡ (xAxis, yAxis, zAxis) ¹èÄ¡
-	// (row-major, row=0,1,2°¡ °¢°¢ x,y,zÃàÀ» ´ãÀ½)
+	// í–‰ë ¬ì˜ ìƒë‹¨ 3Ã—3 ë¶€ë¶„ì— (xAxis, yAxis, zAxis) ë°°ì¹˜
+	// (row-major, row=0,1,2ê°€ ê°ê° x,y,zì¶•ì„ ë‹´ìŒ)
 	viewMatrix.M[0][0] = xAxis.X;  viewMatrix.M[0][1] = yAxis.X;  viewMatrix.M[0][2] = zAxis.X;  viewMatrix.M[0][3] = 0.0f;
 	viewMatrix.M[1][0] = xAxis.Y;  viewMatrix.M[1][1] = yAxis.Y;  viewMatrix.M[1][2] = zAxis.Y;  viewMatrix.M[1][3] = 0.0f;
 	viewMatrix.M[2][0] = xAxis.Z;  viewMatrix.M[2][1] = yAxis.Z;  viewMatrix.M[2][2] = zAxis.Z;  viewMatrix.M[2][3] = 0.0f;
 
-	// ¸¶Áö¸· Çà(3¹øÂ° Çà): ¿øÁ¡(eye)¿¡ ´ëÇÑ º¯È¯
-	// Ä«¸Ş¶ó ÁÂÇ¥°è·Î ÀÌµ¿ÇÏ·Á¸é -eye¡¤(°¢ Ãà) Àû¿ë
+	// ë§ˆì§€ë§‰ í–‰(3ë²ˆì§¸ í–‰): ì›ì (eye)ì— ëŒ€í•œ ë³€í™˜
+	// ì¹´ë©”ë¼ ì¢Œí‘œê³„ë¡œ ì´ë™í•˜ë ¤ë©´ -eyeÂ·(ê° ì¶•) ì ìš©
 	viewMatrix.M[3][0] = -eye.Dot(xAxis);
 	viewMatrix.M[3][1] = -eye.Dot(yAxis);
 	viewMatrix.M[3][2] = -eye.Dot(zAxis);
@@ -337,23 +337,23 @@ FMatrix FMatrix::CreateLookToMatrixLeftHand(const FVector& eye, const FVector& t
 
 FMatrix FMatrix::CreateLookToMatrixRightHand(const FVector& eye, const FVector& toDir, const FVector& up)
 {
-	// Right-Hand ÁÂÇ¥°è¿¡¼­´Â Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâÀÌ -zÃà
+	// Right-Hand ì¢Œí‘œê³„ì—ì„œëŠ” ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ì´ -zì¶•
 	FVector zAxis = (-toDir).GetNormalizedVector();
 
-	// ¿À¸¥¼Õ ÁÂÇ¥°è¿¡¼­ Ä«¸Ş¶óÀÇ ¿À¸¥ÂÊ ¹æÇâ
+	// ì˜¤ë¥¸ì† ì¢Œí‘œê³„ì—ì„œ ì¹´ë©”ë¼ì˜ ì˜¤ë¥¸ìª½ ë°©í–¥
 	FVector xAxis = up.Cross(zAxis).GetNormalizedVector();
 
-	// 3) yÃà(Up): zAxis ¡¿ xAxis
+	// 3) yì¶•(Up): zAxis Ã— xAxis
 	FVector yAxis = zAxis.Cross(xAxis);
 
 	FMatrix viewMatrix;
-	// Çà·ÄÀÇ »ó´Ü 3¡¿3 ºÎºĞ¿¡ (xAxis, yAxis, zAxis) ¹èÄ¡
-	// (row-major, row=0,1,2°¡ °¢°¢ x,y,z Ãà)
+	// í–‰ë ¬ì˜ ìƒë‹¨ 3Ã—3 ë¶€ë¶„ì— (xAxis, yAxis, zAxis) ë°°ì¹˜
+	// (row-major, row=0,1,2ê°€ ê°ê° x,y,z ì¶•)
 	viewMatrix.M[0][0] = xAxis.X;   viewMatrix.M[0][1] = yAxis.X;   viewMatrix.M[0][2] = zAxis.X;   viewMatrix.M[0][3] = 0.0f;
 	viewMatrix.M[1][0] = xAxis.Y;   viewMatrix.M[1][1] = yAxis.Y;   viewMatrix.M[1][2] = zAxis.Y;   viewMatrix.M[1][3] = 0.0f;
 	viewMatrix.M[2][0] = xAxis.Z;   viewMatrix.M[2][1] = yAxis.Z;   viewMatrix.M[2][2] = zAxis.Z;   viewMatrix.M[2][3] = 0.0f;
 
-	// 4) ¸¶Áö¸· Çà(3¹øÂ° Çà): Ä«¸Ş¶ó ÁÂÇ¥°è·Î eye¸¦ ÀÌµ¿ÇÏ±â À§ÇÑ ÆòÇàÀÌµ¿
+	// 4) ë§ˆì§€ë§‰ í–‰(3ë²ˆì§¸ í–‰): ì¹´ë©”ë¼ ì¢Œí‘œê³„ë¡œ eyeë¥¼ ì´ë™í•˜ê¸° ìœ„í•œ í‰í–‰ì´ë™
 	viewMatrix.M[3][0] = -eye.Dot(xAxis);
 	viewMatrix.M[3][1] = -eye.Dot(yAxis);
 	viewMatrix.M[3][2] = -eye.Dot(zAxis);
@@ -390,7 +390,7 @@ FMatrix FMatrix::CreateOrthographicProjectionMatrixRightHand(float screenWidth, 
 
 FMatrix FMatrix::CreatePerspectiveProjectionMatrixLeftHand(float fov, float aspectRatio, float zNear, float zFar)
 {
-	// fovDeg(µµ ´ÜÀ§)¸¦ ¶óµğ¾ÈÀ¸·Î º¯È¯
+	// fovDeg(ë„ ë‹¨ìœ„)ë¥¼ ë¼ë””ì•ˆìœ¼ë¡œ ë³€í™˜
 	float rad = fov * (PI / 180.f);
 	float tanHalfFov = std::tan(rad * 0.5f);
 
@@ -398,18 +398,18 @@ FMatrix FMatrix::CreatePerspectiveProjectionMatrixLeftHand(float fov, float aspe
 	float height = 1 / tanHalfFov;
 	float width = height / aspectRatio;
 
-	// z ¹üÀ§ (¿ø±Ù ±íÀÌ)
+	// z ë²”ìœ„ (ì›ê·¼ ê¹Šì´)
 	float fRange = zFar / (zFar - zNear);
 
 	FMatrix proj;
 
-	// Ã¹ ¹øÂ° Çà: x Ãà ½ºÄÉÀÏ
+	// ì²« ë²ˆì§¸ í–‰: x ì¶• ìŠ¤ì¼€ì¼
 	proj.M[0][0] = width; proj.M[0][1] = 0.0f; proj.M[0][2] = 0.0f;  proj.M[0][3] = 0.0f;
-	// µÎ ¹øÂ° Çà: y Ãà ½ºÄÉÀÏ
+	// ë‘ ë²ˆì§¸ í–‰: y ì¶• ìŠ¤ì¼€ì¼
 	proj.M[1][0] = 0.0f; proj.M[1][1] = height; proj.M[1][2] = 0.0f;  proj.M[1][3] = 0.0f;
-	// ¼¼ ¹øÂ° Çà: z º¯È¯ (±íÀÌ)
+	// ì„¸ ë²ˆì§¸ í–‰: z ë³€í™˜ (ê¹Šì´)
 	proj.M[2][0] = 0.0f; proj.M[2][1] = 0.0f; proj.M[2][2] = fRange; proj.M[2][3] = 1.0f;
-	// ³× ¹øÂ° Çà: z ÆòÇàÀÌµ¿
+	// ë„¤ ë²ˆì§¸ í–‰: z í‰í–‰ì´ë™
 	proj.M[3][0] = 0.0f; proj.M[3][1] = 0.0f; proj.M[3][2] = -zNear * fRange; proj.M[3][3] = 0.0f;
 
 	return proj;
@@ -417,7 +417,7 @@ FMatrix FMatrix::CreatePerspectiveProjectionMatrixLeftHand(float fov, float aspe
 
 FMatrix FMatrix::CreatePerspectiveProjectionMatrixRightHand(float fov, float aspectRatio, float zNear, float zFar)
 {
-	// fov (µµ ´ÜÀ§)¸¦ ¶óµğ¾ÈÀ¸·Î º¯È¯
+	// fov (ë„ ë‹¨ìœ„)ë¥¼ ë¼ë””ì•ˆìœ¼ë¡œ ë³€í™˜
 	float rad = fov * (PI / 180.f);
 	float tanHalfFov = std::tan(rad * 0.5f);
 
@@ -425,18 +425,18 @@ FMatrix FMatrix::CreatePerspectiveProjectionMatrixRightHand(float fov, float asp
 	float height = 1.0f / tanHalfFov;
 	float width = height / aspectRatio;
 
-	// z ¹üÀ§ (¿ø±Ù ±íÀÌ)
+	// z ë²”ìœ„ (ì›ê·¼ ê¹Šì´)
 	float zRange = zFar - zNear;
 
 	FMatrix proj;
 
-	// Ã¹ ¹øÂ° Çà: x Ãà ½ºÄÉÀÏ
+	// ì²« ë²ˆì§¸ í–‰: x ì¶• ìŠ¤ì¼€ì¼
 	proj.M[0][0] = width; proj.M[0][1] = 0.0f; proj.M[0][2] = 0.0f; proj.M[0][3] = 0.0f;
-	// µÎ ¹øÂ° Çà: y Ãà ½ºÄÉÀÏ
+	// ë‘ ë²ˆì§¸ í–‰: y ì¶• ìŠ¤ì¼€ì¼
 	proj.M[1][0] = 0.0f; proj.M[1][1] = height; proj.M[1][2] = 0.0f; proj.M[1][3] = 0.0f;
-	// ¼¼ ¹øÂ° Çà: z º¯È¯ (±íÀÌ)
+	// ì„¸ ë²ˆì§¸ í–‰: z ë³€í™˜ (ê¹Šì´)
 	proj.M[2][0] = 0.0f; proj.M[2][1] = 0.0f; proj.M[2][2] = -(zFar + zNear) / zRange; proj.M[2][3] = -1.0f;
-	// ³× ¹øÂ° Çà: z ÆòÇàÀÌµ¿
+	// ë„¤ ë²ˆì§¸ í–‰: z í‰í–‰ì´ë™
 	proj.M[3][0] = 0.0f; proj.M[3][1] = 0.0f; proj.M[3][2] = -(2.0f * zFar * zNear) / zRange; proj.M[3][3] = 0.0f;
 
 	return proj;

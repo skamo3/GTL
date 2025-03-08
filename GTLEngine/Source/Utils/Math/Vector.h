@@ -1,4 +1,4 @@
-
+ï»¿
 #pragma once
 #include <cmath>
 
@@ -125,7 +125,7 @@ struct FVector
     }
 
     /// <summary>
-	/// ÀÌ º¤ÅÍ¿Í ´Ù¸¥ º¤ÅÍÀÇ ³»ÀûÀ» ¹İÈ¯
+	/// ì´ ë²¡í„°ì™€ ë‹¤ë¥¸ ë²¡í„°ì˜ ë‚´ì ì„ ë°˜í™˜
     /// </summary>
     inline float Dot(const FVector& v) const
     {
@@ -133,7 +133,7 @@ struct FVector
     }
 
     /// <summary>
-	/// v1°ú v2ÀÇ ³»ÀûÀ» ¹İÈ¯
+	/// v1ê³¼ v2ì˜ ë‚´ì ì„ ë°˜í™˜
     /// </summary>
     inline static float DotProduct(const FVector& v1, const FVector& v2)
     {
@@ -141,7 +141,7 @@ struct FVector
     }
 	
     /// <summary>
-	/// ÀÌ º¤ÅÍ¿Í ´Ù¸¥ º¤ÅÍÀÇ ¿ÜÀûÀ» ¹İÈ¯
+	/// ì´ ë²¡í„°ì™€ ë‹¤ë¥¸ ë²¡í„°ì˜ ì™¸ì ì„ ë°˜í™˜
     /// </summary>
     inline FVector Cross(const FVector& v) const
 	{
@@ -153,7 +153,7 @@ struct FVector
 	}
 
     /// <summary>
-	/// v1°ú v2ÀÇ ¿ÜÀûÀ» ¹İÈ¯
+	/// v1ê³¼ v2ì˜ ì™¸ì ì„ ë°˜í™˜
     /// </summary>
     inline static FVector CrossProduct(const FVector& v1, const FVector& v2)
     {
@@ -170,7 +170,7 @@ struct FVector
 	}
 
 	/// <summary>
-	/// º¤ÅÍ ¼ººĞµéÀ» Àı´ë°ªÀ¸·Î º¯È¯
+	/// ë²¡í„° ì„±ë¶„ë“¤ì„ ì ˆëŒ€ê°’ìœ¼ë¡œ ë³€í™˜
 	/// </summary>
 	inline FVector GetAbs() const
 	{
@@ -178,7 +178,7 @@ struct FVector
 	}
 
 	/// <summary>
-	/// x, y¸¸ °í·ÁÇÑ 2D º¤ÅÍÀÇ ±æÀÌ¸¦ ¹İÈ¯
+	/// x, yë§Œ ê³ ë ¤í•œ 2D ë²¡í„°ì˜ ê¸¸ì´ë¥¼ ë°˜í™˜
 	/// </summary>
 	inline float Length2D() const
 	{
@@ -186,7 +186,7 @@ struct FVector
 	}
 
     /// <summary>
-	/// x, y¸¸ °í·ÁÇÑ 2D º¤ÅÍÀÇ ±æÀÌÀÇ Á¦°öÀ» ¹İÈ¯
+	/// x, yë§Œ ê³ ë ¤í•œ 2D ë²¡í„°ì˜ ê¸¸ì´ì˜ ì œê³±ì„ ë°˜í™˜
     /// </summary>
     inline float SquaredLength2D() const
     {
@@ -199,7 +199,7 @@ struct FVector
     }
 
     /// <summary>
-	/// Á¤±ÔÈ­(±æÀÌ°¡ 1ÀÎ)º¤ÅÍ·Î º¯È¯)
+	/// ì •ê·œí™”(ê¸¸ì´ê°€ 1ì¸)ë²¡í„°ë¡œ ë³€í™˜)
     /// </summary>
     inline FVector GetNormalizedVector() const
     {
@@ -212,7 +212,7 @@ struct FVector
     }
 
 	/// <summary>
-	/// º¤ÅÍ¸¦ Á¤±ÔÈ­µÈ ´ÜÀ§ º¤ÅÍ(Unit Direction Vector)·Î º¯È¯ÇÏ°í, º¤ÅÍÀÇ ¿ø·¡ ±æÀÌ(Length)¸¦ ÇÔ²² ¹İÈ¯ÇÕ´Ï´Ù.
+	/// ë²¡í„°ë¥¼ ì •ê·œí™”ëœ ë‹¨ìœ„ ë²¡í„°(Unit Direction Vector)ë¡œ ë³€í™˜í•˜ê³ , ë²¡í„°ì˜ ì›ë˜ ê¸¸ì´(Length)ë¥¼ í•¨ê»˜ ë°˜í™˜í•©ë‹ˆë‹¤.
 	/// </summary>
 	void ToDirectionAndLength(FVector& outDir, float& outLength)
 	{
@@ -229,7 +229,7 @@ struct FVector
 	}
 
     /// <summary>
-    /// º¤ÅÍ¸¦ ZÃà ±âÁØÀ¸·Î Åõ¿µ(XY Æò¸é À§¿¡ º¤ÅÍ¸¦ Projection)ÇÑ º¤ÅÍ¸¦ ¹İÈ¯
+    /// ë²¡í„°ë¥¼ Zì¶• ê¸°ì¤€ìœ¼ë¡œ íˆ¬ì˜(XY í‰ë©´ ìœ„ì— ë²¡í„°ë¥¼ Projection)í•œ ë²¡í„°ë¥¼ ë°˜í™˜
     /// </summary>
     inline FVector Projection() const
     {
@@ -238,13 +238,13 @@ struct FVector
     }
 
     /// <summary>
-    /// ÀÌ º¤ÅÍÀÇ °¢ ¼ººĞ¿¡ ´ëÇÑ ¿ª¼ö(1/src.X, 1/src.Y, 1/src.Z)¸¦ ¹İÈ¯
+    /// ì´ ë²¡í„°ì˜ ê° ì„±ë¶„ì— ëŒ€í•œ ì—­ìˆ˜(1/src.X, 1/src.Y, 1/src.Z)ë¥¼ ë°˜í™˜
     /// </summary>
     static bool Reciprocal(const FVector& src, FVector& dst);
 };
 
 
-// ºñ¸â¹ö ¿ÀÆÛ·¹ÀÌÅÍ: float * FVector
+// ë¹„ë©¤ë²„ ì˜¤í¼ë ˆì´í„°: float * FVector
 inline FVector operator*(float s, const FVector& v)
 {
 	return FVector(v.X * s, v.Y * s, v.Z * s);

@@ -1,4 +1,4 @@
-#include "pch.h"
+ï»¿#include "pch.h"
 #include "Math.h"
 
 FMatrix FMath::CreateScaleMatrix(float scale)
@@ -37,7 +37,7 @@ FMatrix FMath::CreateWorldMatrix(const FVector& position, const FVector& rotatio
 	FMatrix R = CreateRotationMatrix(rotation);
 	FMatrix T = CreateTranslationMatrix(position);
 
-	// Scale ¡æ Rotation ¡æ Translation ¼ø¼­·Î Çà·ÄÀ» °öÇØÁØ´Ù.
+	// Scale â†’ Rotation â†’ Translation ìˆœì„œë¡œ í–‰ë ¬ì„ ê³±í•´ì¤€ë‹¤.
 	FMatrix worldMatrix = (S * R) * T;
 	return worldMatrix;
 }
@@ -103,8 +103,8 @@ FMatrix FMath::CreatePerspectiveProjectionMatrix(float fov, float aspectRatio, f
 
 FMatrix FMath::CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const FMatrix& projMat)
 {
-	// º¸Åë DirectX´Â M*V*P ¼øÀ¸·Î °öÇØÁØ´Ù.
-	// OpenGLµµ ±âº» °³³äÀº µ¿ÀÏÇÏ³ª, Çà·ÄÀÌ row-major vs column-major Â÷ÀÌ Á¤µµ¸¸ ÀÖÀ½.
+	// ë³´í†µ DirectXëŠ” M*V*P ìˆœìœ¼ë¡œ ê³±í•´ì¤€ë‹¤.
+	// OpenGLë„ ê¸°ë³¸ ê°œë…ì€ ë™ì¼í•˜ë‚˜, í–‰ë ¬ì´ row-major vs column-major ì°¨ì´ ì •ë„ë§Œ ìˆìŒ.
 	return modelMat * viewMat * projMat;
 }
 
@@ -112,9 +112,9 @@ FVector FMath::TransformNormal(const FVector& v, const FMatrix& m)
 {
 	FVector result;
 
-	// (x, y, z, 0)À» m°ú °öÇÑ´Ù (TranslationÀº ¹«½Ã)
-	// row-vector ¡¿ matrix ÇüÅÂ·Î °è»ê
-	// v' = [v.x, v.y, v.z, 0] ¡¿ m
+	// (x, y, z, 0)ì„ mê³¼ ê³±í•œë‹¤ (Translationì€ ë¬´ì‹œ)
+	// row-vector Ã— matrix í˜•íƒœë¡œ ê³„ì‚°
+	// v' = [v.x, v.y, v.z, 0] Ã— m
 	result.X = v.X * m.M[0][0] + v.Y * m.M[1][0] + v.Z * m.M[2][0];
 	result.Y = v.X * m.M[0][1] + v.Y * m.M[1][1] + v.Z * m.M[2][1];
 	result.Z = v.X * m.M[0][2] + v.Y * m.M[1][2] + v.Z * m.M[2][2];
