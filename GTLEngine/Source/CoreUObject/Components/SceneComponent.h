@@ -1,8 +1,8 @@
 #pragma once
 
-#include "CoreUObject/Object.h"
+#include "ActorComponent.h"
 
-class USceneComponent : public UObject
+class USceneComponent : public UActorComponent
 {
 public:
 	/*FVector RelativeLocation;

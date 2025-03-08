@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp" />
@@ -55,6 +56,7 @@
     <ClCompile Include="Source\Utils\pch.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h" />
