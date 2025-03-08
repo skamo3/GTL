@@ -39,7 +39,7 @@ void UDXDShaderManager::ReleaseAllShader()
 	}
 }
 
-HRESULT UDXDShaderManager::AddVertexShader(const string& FileName, ComPtr<ID3DBlob> Blob)
+HRESULT UDXDShaderManager::AddVertexShader(const string& FileName, ComPtr<ID3DBlob>& Blob)
 {
 	HRESULT hr;
 

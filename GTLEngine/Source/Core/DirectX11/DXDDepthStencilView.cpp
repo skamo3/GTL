@@ -8,12 +8,14 @@ UDXDDepthStencilView::~UDXDDepthStencilView()
     ReleaseDepthStencilView();
 }
 
-HRESULT UDXDDepthStencilView::CreateDepthStencilView(ComPtr<ID3D11Device> Device)
+HRESULT UDXDDepthStencilView::CreateDepthStencilView(ComPtr<ID3D11Device> Device, HWND hWnd)
 {
     D3D11_TEXTURE2D_DESC DepthStencilBufferDesc;
 
-	DepthStencilBufferDesc.Width = 0;
-	DepthStencilBufferDesc.Height = 0;
+	RECT WindowRect;
+	GetWindowRect(hWnd, &WindowRect);
+	DepthStencilBufferDesc.Width = WindowRect.right - WindowRect.left;
+	DepthStencilBufferDesc.Height = WindowRect.bottom - WindowRect.top;
 	DepthStencilBufferDesc.MipLevels = 1;
 	DepthStencilBufferDesc.ArraySize = 1;
 	DepthStencilBufferDesc.Format = DXGI_FORMAT_D24_UNORM_S8_UINT;

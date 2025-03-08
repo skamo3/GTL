@@ -16,10 +16,6 @@ HRESULT UDXDRasterizerState::CreateRasterizerState(ComPtr<ID3D11Device> Device)
     if (FAILED(hr))
         return hr;
     
-    D3D11_RASTERIZER_DESC WireRasterizerDesc = {};
-    WireRasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // 와이어 모드
-    WireRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
-
     return S_OK;
 }
 
