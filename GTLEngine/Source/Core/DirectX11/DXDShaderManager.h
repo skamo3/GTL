@@ -19,7 +19,7 @@ private:
 	ComPtr<ID3D11Device> DXDDevice;
 
 public:
-	HRESULT AddVertexShader(const string& FileName, ComPtr<ID3DBlob> Blob);
+	HRESULT AddVertexShader(const string& FileName, ComPtr<ID3DBlob>& Blob);
 	HRESULT AddPixelShader(const string& FileName);
 
 	ComPtr<ID3D11VertexShader> GetVertexShaderByKey(const string& Name) const;
