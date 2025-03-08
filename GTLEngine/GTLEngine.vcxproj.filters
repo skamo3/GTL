@@ -29,6 +29,9 @@
     <Filter Include="Source\Core\DirectX11\State">
       <UniqueIdentifier>{97050cd6-c249-4049-8d39-55a46767a9ba}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\CoreUObject">
+      <UniqueIdentifier>{dbd4ccfe-0492-4ca2-b714-94245b29eedc}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -82,6 +85,15 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp">
       <Filter>Source\Core\DirectX11\State</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Manager\TimeManager.cpp">
+      <Filter>Source\Core\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Object.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\GTLStringLibrary.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -131,6 +143,15 @@
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h">
       <Filter>Source\Core\DirectX11\State</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Manager\TimeManager.h">
+      <Filter>Source\Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Object.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\GTLStringLibrary.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

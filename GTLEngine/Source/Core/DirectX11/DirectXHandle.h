@@ -5,7 +5,8 @@ class UDXDSwapChain;
 class UDXDRenderTarget;
 class UDXDDepthStencilView;
 class UDXDRasterizerState;
-class UShaderManager;
+class UDXDShaderManager;
+class UDXDInputLayout;
 
 class UDirectXHandle
 {
@@ -17,6 +18,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void PrepareRender();
+	void Render();
 
 	FWindowInfo GetWindowInfo() const { return WindowInfo; }
 
@@ -25,15 +27,20 @@ private:
 	D3D11_VIEWPORT ViewportInfo;
 
 public:
+	void AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
+
+public:
 	shared_ptr<UDXDDevice>	GetD3DDevice() const { return DXDDevice; }
 	shared_ptr<UDXDSwapChain>	GetSwapChain() const { return SwapChain; }
-	shared_ptr<UDXDRenderTarget>	GetRenderTarget() const { return RenderTarget; }
 
 private:
 	shared_ptr<UDXDDevice>				DXDDevice;
 	shared_ptr<UDXDSwapChain>			SwapChain;
-	shared_ptr<UDXDRenderTarget>		RenderTarget;
-	shared_ptr<UDXDDepthStencilView>	DepthStencilView;
-	shared_ptr<UDXDRasterizerState>		RasterizerState;
+	map<string, shared_ptr<UDXDRenderTarget>>		RenderTarget;
+	shared_ptr<UDXDDepthStencilView>	DepthStencilView; // 여러개 보류.
+	shared_ptr<UDXDRasterizerState>		RasterizerState; // 여러개 보류.
+	shared_ptr<UDXDShaderManager>			ShaderManager;
+
+	shared_ptr<UDXDInputLayout> InputLayout;
 
 };

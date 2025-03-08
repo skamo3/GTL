@@ -11,7 +11,7 @@ public:
     ~UDXDRenderTarget();
 
 public:
-    HRESULT CreateRenderTarget(shared_ptr<UDXDDevice>	DXDDevice, shared_ptr<UDXDSwapChain> SwapChain);
+    HRESULT CreateRenderTarget(shared_ptr<UDXDDevice> DXDDevice, shared_ptr<UDXDSwapChain> SwapChain, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
     void ReleaseRenderTarget();
 
 
