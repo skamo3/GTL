@@ -14,6 +14,9 @@ public:
     }
 
     void InitEngine();
+	void Update();
+    void Render();
+	void ClearEngine();
 
 private:
     UEngine() = default;

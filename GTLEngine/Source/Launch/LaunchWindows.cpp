@@ -1,6 +1,8 @@
 #include "pch.h"
 #include <Windows.h>
 
+#include "Engine/Engine.h"
+
 // 각종 메시지를 처리할 함수
 LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
@@ -36,6 +38,17 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
 
+	UEngine& Engine = UEngine::GetEngine();
+    Engine.InitEngine();
+
+    bool GameLoopState = true;
+    while (GameLoopState)
+    {
+        Engine.Update();
+		Engine.Render();
+    }
+
+    Engine.ClearEngine();
 
 
     return 0;
