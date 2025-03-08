@@ -95,19 +95,16 @@ void UDirectXHandle::ReleaseDirectX11Handle()
 	if (DXDDeviceContext)
 	{
 		DXDDeviceContext->Flush();
-		DXDDeviceContext->Release();
 		DXDDeviceContext.Reset();
 	}
 
 	if (DXDDevice)
 	{
-		DXDDevice->Release();
 		DXDDevice.Reset();
 	}
 
 	if (DXDSwapChain)
 	{
-		DXDSwapChain->Release();
 		DXDSwapChain.Reset();
 	}
 
@@ -125,7 +122,7 @@ void UDirectXHandle::ReleaseDirectX11Handle()
 void UDirectXHandle::PrepareRender()
 {
 	// 렌더 타겟 클리어 및 클리어에 적용할 색.
-	FLOAT ClearColor[4] = { 0.025f, 0.025f, 0.025f, 1.0f };
+	FLOAT ClearColor[4] = { 1.0f, 0.f, 0.f, 1.0f };
 
 	for (auto& Target : RenderTarget)
 	{

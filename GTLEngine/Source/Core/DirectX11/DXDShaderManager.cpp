@@ -29,12 +29,10 @@ void UDXDShaderManager::ReleaseAllShader()
 	PixelShader.clear();
 	if (VertexShaderCSO)
 	{
-		VertexShaderCSO->Release();
 		VertexShaderCSO.Reset();
 	}
 	if (PixelShaderCSO)
 	{
-		PixelShaderCSO->Release();
 		PixelShaderCSO.Reset();
 	}
 }

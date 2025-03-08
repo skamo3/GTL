@@ -23,13 +23,11 @@ void UDXDRenderTarget::ReleaseRenderTarget()
 {
 	if (FrameBuffer)
 	{
-		FrameBuffer->Release();
 		FrameBuffer.Reset();
 	}
 
 	if (FrameBufferRTV)
 	{
-		FrameBuffer->Release();
 		FrameBuffer.Reset();
 	}
 }

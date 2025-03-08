@@ -27,9 +27,10 @@ public:
 
 private:
 	// TODO: map -> TMap 으로 변경.
-	map<string, ComPtr<ID3D11VertexShader>> VertexShader;
-	map<string, ComPtr<ID3D11PixelShader>> PixelShader;
+	TMap<string, ComPtr<ID3D11VertexShader>> VertexShader;
+	TMap<string, ComPtr<ID3D11PixelShader>> PixelShader;
 
+	
 	// CSO : Compile Shader Object.
 	ComPtr<ID3DBlob> VertexShaderCSO;
 	ComPtr<ID3DBlob> PixelShaderCSO;
