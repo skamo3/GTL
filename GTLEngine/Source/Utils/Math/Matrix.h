@@ -1,6 +1,9 @@
 #pragma once
 #include "Vector.h"
 
+#define PI 3.1415926535897932384626433832795f
+#define PI2 6.283185307179586476925286766559f
+
 struct alignas(16) FMatrix
 {
 	alignas(16) float M[4][4];

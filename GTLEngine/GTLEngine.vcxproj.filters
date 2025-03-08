@@ -204,13 +204,13 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\Math.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utils\Math\Matrix.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\Vector.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Math.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
