@@ -1,5 +1,7 @@
-#pragma once
+ï»¿#pragma once
 #include "Matrix.h"
+#include "Vector.h"
+#include "Ray.h"
 
 struct FMath
 {
@@ -14,102 +16,102 @@ struct FMath
 	}
 
 	/// <summary>
-	/// scale °ªÀ» »ç¿ëÇÏ¿© ½ºÄÉÀÏ¸µ Çà·ÄÀ» »ı¼º
+	/// scale ê°’ì„ ì‚¬ìš©í•˜ì—¬ ìŠ¤ì¼€ì¼ë§ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateScaleMatrix(float scale);
 
 	/// <summary>
-	/// scale º¤ÅÍ¸¦ »ç¿ëÇÏ¿© ½ºÄÉÀÏ¸µ Çà·ÄÀ» »ı¼º
+	/// scale ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ ìŠ¤ì¼€ì¼ë§ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateScaleMatrix(const FVector& scale);
 
 	/// <summary>
-	/// pitch(X), yaw(Y), roll(Z) °¢µµ¸¦ »ç¿ëÇÏ¿© È¸Àü Çà·ÄÀ» »ı¼º
+	/// pitch(X), yaw(Y), roll(Z) ê°ë„ë¥¼ ì‚¬ìš©í•˜ì—¬ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationMatrix(float pitch, float yaw, float roll);
 
 	/// <summary>
-	/// rotation º¤ÅÍ¸¦ »ç¿ëÇÏ¿© È¸Àü Çà·ÄÀ» »ı¼º
+	/// rotation ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationMatrix(const FVector& rotation);
 
 	/// <summary>
-	/// Location º¤ÅÍ¸¦ »ç¿ëÇÏ¿© ÀÌµ¿ Çà·ÄÀ» »ı¼º
+	/// Location ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ ì´ë™ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateTranslationMatrix(const FVector& location);
 
 
 	/// <summary>
-	/// X, Y, Z °ªÀ» »ç¿ëÇÏ¿© ÀÌµ¿ Çà·ÄÀ» »ı¼º
+	/// X, Y, Z ê°’ì„ ì‚¬ìš©í•˜ì—¬ ì´ë™ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateTranslationMatrix(float x, float y, float z);
 
 
 	/// <summary>
-	/// position, rotation, scale º¤ÅÍ¸¦ »ç¿ëÇÏ¿© World Çà·ÄÀ» »ı¼º
+	/// position, rotation, scale ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ World í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateWorldMatrix(const FVector& position, const FVector& rotation, const FVector& scale);
 	 
 	/// <summary>
-	/// <para>ÁÖ¾îÁø ¼¼ °³ÀÇ Ãà º¤ÅÍ(X, Y, Z)¿Í ¿øÁ¡ º¤ÅÍ¸¦ »ç¿ëÇÏ¿© ±âÀú Çà·Ä(»õ·Î¿î ÁÂÇ¥°è(±âÀú, Basis)¸¦ ³ªÅ¸³»´Â 4¡¿4 Çà·Ä)À» »ı¼º.</para>
-	/// ÁÂÇ¥°è¿¡¼­ Á¤ÀÇµÈ Á¡(º¤ÅÍ)À» ¿ùµå(¶Ç´Â »óÀ§) ÁÂÇ¥°è·Î º¯È¯ÇÒ ¼ö ÀÖÀ½
+	/// <para>ì£¼ì–´ì§„ ì„¸ ê°œì˜ ì¶• ë²¡í„°(X, Y, Z)ì™€ ì›ì  ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ ê¸°ì € í–‰ë ¬(ìƒˆë¡œìš´ ì¢Œí‘œê³„(ê¸°ì €, Basis)ë¥¼ ë‚˜íƒ€ë‚´ëŠ” 4Ã—4 í–‰ë ¬)ì„ ìƒì„±.</para>
+	/// ì¢Œí‘œê³„ì—ì„œ ì •ì˜ëœ ì (ë²¡í„°)ì„ ì›”ë“œ(ë˜ëŠ” ìƒìœ„) ì¢Œí‘œê³„ë¡œ ë³€í™˜í•  ìˆ˜ ìˆìŒ
 	/// </summary>
 	static FMatrix CreateBasisMatrix(const FVector& xAxis, const FVector& yAxis, const FVector& zAxis, const FVector& origin);
 
 	/// <summary>
-	/// View Çà·ÄÀ» »ı¼º
+	/// View í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	/// <param name="target">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â À§Ä¡ º¤ÅÍ</param>
-	/// <param name="up">Ä«¸Ş¶ó ±âÁØ upVector</param>
-	/// <param name="isLeft">¿Ş¼Õ ÁÂÇ¥°è¸é true, ¿À¸¥¼Õ ÁÂÇ¥°è¸é false</param>
+	/// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	/// <param name="target">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ìœ„ì¹˜ ë²¡í„°</param>
+	/// <param name="up">ì¹´ë©”ë¼ ê¸°ì¤€ upVector</param>
+	/// <param name="isLeft">ì™¼ì† ì¢Œí‘œê³„ë©´ true, ì˜¤ë¥¸ì† ì¢Œí‘œê³„ë©´ false</param>
 	//static FMatrix CreateViewMatrixByTargetPos(const FVector& eye, const FVector& target, const FVector& up, bool isLeft = true);
 
 	/// <summary>
-	/// View Çà·ÄÀ» »ı¼º
+	/// View í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	/// <param name="direction">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ</param>
-	/// <param name="up">Ä«¸Ş¶ó ±âÁØ upVector</param>
-	/// <param name="isLeft">¿Ş¼Õ ÁÂÇ¥°è¸é true, ¿À¸¥¼Õ ÁÂÇ¥°è¸é false</param>
+	/// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	/// <param name="direction">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°</param>
+	/// <param name="up">ì¹´ë©”ë¼ ê¸°ì¤€ upVector</param>
+	/// <param name="isLeft">ì™¼ì† ì¢Œí‘œê³„ë©´ true, ì˜¤ë¥¸ì† ì¢Œí‘œê³„ë©´ false</param>
 	static FMatrix CreateViewMatrixByDirection(const FVector& eye, const FVector& direction, const FVector& up, bool isLeft = true);
 
 	/// <summary>
-	/// Orthographic Projection(Á÷°¢ Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// Orthographic Projection(ì§ê° íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="screenWidth">È­¸é ³ĞÀÌ</param>
-	/// <param name="screenHeight">È­¸é ³ôÀÌ</param>
+	/// <param name="screenWidth">í™”ë©´ ë„“ì´</param>
+	/// <param name="screenHeight">í™”ë©´ ë†’ì´</param>
 	/// <param name="zNear">ViewFrustum Near</param>
 	/// <param name="zFar">ViewFrustum Far</param>
-	/// <param name="isLeft">¿Ş¼Õ ÁÂÇ¥°è¸é true, ¿À¸¥¼Õ ÁÂÇ¥°è¸é false</param>
+	/// <param name="isLeft">ì™¼ì† ì¢Œí‘œê³„ë©´ true, ì˜¤ë¥¸ì† ì¢Œí‘œê³„ë©´ false</param>
 	/// <returns></returns>
 	static FMatrix CreateOrthographicProjectionMatrix(float screenWidth, float screenHeight, float zNear, float zFar, bool isLeft = true);
 
 	/// <summary>
-	/// Perspective Projection(¿ø±Ù Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// Perspective Projection(ì›ê·¼ íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="fov">Fov °¢µµ</param>
-	/// <param name="width">È­¸é ³ĞÀÌ</param>
-	/// <param name="height">È­¸é ³ôÀÌ</param>
+	/// <param name="fov">Fov ê°ë„</param>
+	/// <param name="width">í™”ë©´ ë„“ì´</param>
+	/// <param name="height">í™”ë©´ ë†’ì´</param>
 	/// <param name="zNear">ViewFrustum Near</param>
 	/// <param name="zFar">ViewFrustum Far</param>
-	/// <param name="isLeft">¿Ş¼Õ ÁÂÇ¥°è¸é true, ¿À¸¥¼Õ ÁÂÇ¥°è¸é false</param>
+	/// <param name="isLeft">ì™¼ì† ì¢Œí‘œê³„ë©´ true, ì˜¤ë¥¸ì† ì¢Œí‘œê³„ë©´ false</param>
 	/// <returns></returns>
 	static FMatrix CreatePerspectiveProjectionMatrix(float fov, float width, float height, float zNear, float zFar, bool isLeft = true);
 
 	/// <summary>
-	/// Perspective Projection(¿ø±Ù Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// Perspective Projection(ì›ê·¼ íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="fov">Fov °¢µµ</param>
-	/// <param name="aspectRatio">È­¸é ºñÀ²</param>
+	/// <param name="fov">Fov ê°ë„</param>
+	/// <param name="aspectRatio">í™”ë©´ ë¹„ìœ¨</param>
 	/// <param name="zNear">ViewFrustum Near</param>
 	/// <param name="zFar">ViewFrustum Far</param>
-	/// <param name="isLeft">¿Ş¼Õ ÁÂÇ¥°è¸é true, ¿À¸¥¼Õ ÁÂÇ¥°è¸é false</param>
+	/// <param name="isLeft">ì™¼ì† ì¢Œí‘œê³„ë©´ true, ì˜¤ë¥¸ì† ì¢Œí‘œê³„ë©´ false</param>
 	/// <returns></returns>
 	static FMatrix CreatePerspectiveProjectionMatrix(float fov, float aspectRatio, float zNear, float zFar, bool isLeft = true);
 
 	/// <summary>
-	/// model->view->projection Çà·Ä º¯È¯ÇÏ¿© MVP Çà·ÄÀ» »ı¼º
+	/// model->view->projection í–‰ë ¬ ë³€í™˜í•˜ì—¬ MVP í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	/// <param name="modelMat"></param>
 	/// <param name="viewMat"></param>
@@ -118,7 +120,7 @@ struct FMath
 	static FMatrix CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const FMatrix& projMat);
 
 	/// <summary>
-	/// (¹ı¼±¡¤¹æÇâ º¤ÅÍ) ¡¿ (Çà·Ä) = º¯È¯µÈ ¹æÇâ ¿¬»êÀ» ¼öÇàÇÏ°í, °á°úÀûÀÎ »õ ¹æÇâ º¤ÅÍ(È¸Àü¡¤½ºÄÉÀÏ ¹İ¿µ, ÆòÇàÀÌµ¿ ¹«½Ã)¸¦ ¹İÈ¯
+	/// (ë²•ì„ Â·ë°©í–¥ ë²¡í„°) Ã— (í–‰ë ¬) = ë³€í™˜ëœ ë°©í–¥ ì—°ì‚°ì„ ìˆ˜í–‰í•˜ê³ , ê²°ê³¼ì ì¸ ìƒˆ ë°©í–¥ ë²¡í„°(íšŒì „Â·ìŠ¤ì¼€ì¼ ë°˜ì˜, í‰í–‰ì´ë™ ë¬´ì‹œ)ë¥¼ ë°˜í™˜
 	/// </summary>
 	static FVector TransformNormal(const FVector& v, const FMatrix& m);
 };

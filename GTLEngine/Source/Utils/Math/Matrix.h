@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Vector.h"
 
 struct alignas(16) FMatrix
@@ -8,7 +8,7 @@ struct alignas(16) FMatrix
 
 public:
 	/// <summary>
-	/// ±âº» »ı¼ºÀÚ´Â ´ÜÀ§ Çà·Ä·Î ÃÊ±âÈ­ÇÕ´Ï´Ù.
+	/// ê¸°ë³¸ ìƒì„±ìëŠ” ë‹¨ìœ„ í–‰ë ¬ë¡œ ì´ˆê¸°í™”í•©ë‹ˆë‹¤.
 	/// </summary>
 	FMatrix();
 	FMatrix(const FMatrix& other);
@@ -19,7 +19,7 @@ public:
 
 
 	/// <summary>
-	/// ÇöÀç Çà·ÄÀ» ´ÜÀ§ Çà·Ä·Î ¼³Á¤ÇÕ´Ï´Ù.
+	/// í˜„ì¬ í–‰ë ¬ì„ ë‹¨ìœ„ í–‰ë ¬ë¡œ ì„¤ì •í•©ë‹ˆë‹¤.
 	/// </summary>
 	inline void SetIdentity()
 	{
@@ -33,25 +33,25 @@ public:
 	{
 		FMatrix result;
 
-		// Ã¹ ¹øÂ° Çà
+		// ì²« ë²ˆì§¸ í–‰
 		result.M[0][0] = M[0][0] * other.M[0][0] + M[0][1] * other.M[1][0] + M[0][2] * other.M[2][0] + M[0][3] * other.M[3][0];
 		result.M[0][1] = M[0][0] * other.M[0][1] + M[0][1] * other.M[1][1] + M[0][2] * other.M[2][1] + M[0][3] * other.M[3][1];
 		result.M[0][2] = M[0][0] * other.M[0][2] + M[0][1] * other.M[1][2] + M[0][2] * other.M[2][2] + M[0][3] * other.M[3][2];
 		result.M[0][3] = M[0][0] * other.M[0][3] + M[0][1] * other.M[1][3] + M[0][2] * other.M[2][3] + M[0][3] * other.M[3][3];
 
-		// µÎ ¹øÂ° Çà
+		// ë‘ ë²ˆì§¸ í–‰
 		result.M[1][0] = M[1][0] * other.M[0][0] + M[1][1] * other.M[1][0] + M[1][2] * other.M[2][0] + M[1][3] * other.M[3][0];
 		result.M[1][1] = M[1][0] * other.M[0][1] + M[1][1] * other.M[1][1] + M[1][2] * other.M[2][1] + M[1][3] * other.M[3][1];
 		result.M[1][2] = M[1][0] * other.M[0][2] + M[1][1] * other.M[1][2] + M[1][2] * other.M[2][2] + M[1][3] * other.M[3][2];
 		result.M[1][3] = M[1][0] * other.M[0][3] + M[1][1] * other.M[1][3] + M[1][2] * other.M[2][3] + M[1][3] * other.M[3][3];
 
-		// ¼¼ ¹øÂ° Çà
+		// ì„¸ ë²ˆì§¸ í–‰
 		result.M[2][0] = M[2][0] * other.M[0][0] + M[2][1] * other.M[1][0] + M[2][2] * other.M[2][0] + M[2][3] * other.M[3][0];
 		result.M[2][1] = M[2][0] * other.M[0][1] + M[2][1] * other.M[1][1] + M[2][2] * other.M[2][1] + M[2][3] * other.M[3][1];
 		result.M[2][2] = M[2][0] * other.M[0][2] + M[2][1] * other.M[1][3] + M[2][2] * other.M[2][2] + M[2][3] * other.M[3][2];
 		result.M[2][3] = M[2][0] * other.M[0][3] + M[2][1] * other.M[1][3] + M[2][2] * other.M[2][3] + M[2][3] * other.M[3][3];
 
-		// ³× ¹øÂ° Çà
+		// ë„¤ ë²ˆì§¸ í–‰
 		result.M[3][0] = M[3][0] * other.M[0][0] + M[3][1] * other.M[1][0] + M[3][2] * other.M[2][0] + M[3][3] * other.M[3][0];
 		result.M[3][1] = M[3][0] * other.M[0][1] + M[3][1] * other.M[1][1] + M[3][2] * other.M[2][1] + M[3][3] * other.M[3][1];
 		result.M[3][2] = M[3][0] * other.M[0][2] + M[3][1] * other.M[1][3] + M[3][2] * other.M[2][3] + M[3][3] * other.M[3][3];
@@ -85,14 +85,14 @@ public:
 
 	inline FVector operator*(const FVector& v) const
 	{
-		// 4x4 Çà·Ä °ö¿¡¼­, v´Â (v.X, v.Y, v.Z, 1)·Î °¡Á¤
-		// -> X,Y,Z = Çà(Row) dot (x,y,z,1)
+		// 4x4 í–‰ë ¬ ê³±ì—ì„œ, vëŠ” (v.X, v.Y, v.Z, 1)ë¡œ ê°€ì •
+		// -> X,Y,Z = í–‰(Row) dot (x,y,z,1)
 		float x = M[0][0] * v.X + M[0][1] * v.Y + M[0][2] * v.Z + M[0][3] * 1.0f;
 		float y = M[1][0] * v.X + M[1][1] * v.Y + M[1][2] * v.Z + M[1][3] * 1.0f;
 		float z = M[2][0] * v.X + M[2][1] * v.Y + M[2][2] * v.Z + M[2][3] * 1.0f;
 
-		// °£´ÜÈ÷ W¸¦ ¹«½Ã(=1)ÇÏ°Å³ª, ¿ø±Ù(Perspective) Á¤º¸¸¦ ¾²Áö ¾Ê´Â °æ¿ì
-		// ¸¸¾à Åõ¿µÇà·Ä µî¿¡¼­ W != 1 ÀÎ °á°ú°¡ ÇÊ¿äÇÏ¸é µû·Î °è»ê ÈÄ ³ª´²Áà¾ß ÇÔ.
+		// ê°„ë‹¨íˆ Wë¥¼ ë¬´ì‹œ(=1)í•˜ê±°ë‚˜, ì›ê·¼(Perspective) ì •ë³´ë¥¼ ì“°ì§€ ì•ŠëŠ” ê²½ìš°
+		// ë§Œì•½ íˆ¬ì˜í–‰ë ¬ ë“±ì—ì„œ W != 1 ì¸ ê²°ê³¼ê°€ í•„ìš”í•˜ë©´ ë”°ë¡œ ê³„ì‚° í›„ ë‚˜ëˆ ì¤˜ì•¼ í•¨.
 
 		return FVector(x, y, z);
 	}
@@ -148,7 +148,7 @@ public:
 	}
 
 	/// <summary>
-	/// ÇöÀç 4x4 Çà·ÄÀ» ÀüÄ¡(Çà°ú ¿­À» µÚ ¹Ù²Û)ÇÑ »õ FMatrix¸¦ ¹İÈ¯ 
+	/// í˜„ì¬ 4x4 í–‰ë ¬ì„ ì „ì¹˜(í–‰ê³¼ ì—´ì„ ë’¤ ë°”ê¾¼)í•œ ìƒˆ FMatrixë¥¼ ë°˜í™˜ 
 	/// </summary>
 	inline FMatrix GetTranspose() const
 	{
@@ -163,7 +163,7 @@ public:
 	}
 
 	/// <summary>
-	/// ÇöÀç 4x4 Çà·ÄÀÇ Çà·Ä½Ä(Á¤»ç°¢ Çà·Ä¿¡ ½ºÄ®¶ó¸¦ ´ëÀÀ½ÃÅ°´Â ÇÔ¼ö)À» °è»êÇÏ¿© ¹İÈ¯
+	/// í˜„ì¬ 4x4 í–‰ë ¬ì˜ í–‰ë ¬ì‹(ì •ì‚¬ê° í–‰ë ¬ì— ìŠ¤ì¹¼ë¼ë¥¼ ëŒ€ì‘ì‹œí‚¤ëŠ” í•¨ìˆ˜)ì„ ê³„ì‚°í•˜ì—¬ ë°˜í™˜
 	/// </summary>
 	inline float Determinant() const
 	{
@@ -196,16 +196,16 @@ public:
 	}
 
 	/// <summary>
-	/// 4x4 Çà·Ä srcÀÇ ¿ªÇà·Ä(src*dst = Identity)À» ±¸ÇØ dst¿¡ ÀúÀåÇÕ´Ï´Ù.
-	/// ¸¸¾à ¿ªÇà·ÄÀÌ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é(determinant°¡ 0¿¡ °¡±õ°Ô ÀÛÀº °æ¿ì) false¸¦ ¹İÈ¯
+	/// 4x4 í–‰ë ¬ srcì˜ ì—­í–‰ë ¬(src*dst = Identity)ì„ êµ¬í•´ dstì— ì €ì¥í•©ë‹ˆë‹¤.
+	/// ë§Œì•½ ì—­í–‰ë ¬ì´ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´(determinantê°€ 0ì— ê°€ê¹ê²Œ ì‘ì€ ê²½ìš°) falseë¥¼ ë°˜í™˜
 	/// </summary>
-	/// <param name="src">¿ªÇà·ÄÀ» ±¸ÇÒ ¼Ò½º Çà·Ä</param>
-	/// <param name="dst">°á°ú·Î ¾òÀ» ¿ªÇà·ÄÀ» ÀúÀåÇÒ ´ë»ó</param>
-	/// <returns>¿ªÇà·ÄÀ» ±¸ÇÒ ¼ö ÀÖÀ¸¸é true, ¾Æ´Ï¸é false</returns>
+	/// <param name="src">ì—­í–‰ë ¬ì„ êµ¬í•  ì†ŒìŠ¤ í–‰ë ¬</param>
+	/// <param name="dst">ê²°ê³¼ë¡œ ì–»ì„ ì—­í–‰ë ¬ì„ ì €ì¥í•  ëŒ€ìƒ</param>
+	/// <returns>ì—­í–‰ë ¬ì„ êµ¬í•  ìˆ˜ ìˆìœ¼ë©´ true, ì•„ë‹ˆë©´ false</returns>
 	static bool Inverse(const FMatrix& src, FMatrix& dst);
 
 	/// <summary>
-	/// <para>3D º¯È¯Çà·ÄÀÇ È¸Àü Çà·ÄÀÇ Adjoint(¿©ÀÎ¼ö)¸¸ ±¸ÇØ¼­ ¹İÈ¯</para> 
+	/// <para>3D ë³€í™˜í–‰ë ¬ì˜ íšŒì „ í–‰ë ¬ì˜ Adjoint(ì—¬ì¸ìˆ˜)ë§Œ êµ¬í•´ì„œ ë°˜í™˜</para> 
 	/// </summary>
 	inline FMatrix RotationAdjoint() const
 	{
@@ -235,13 +235,13 @@ public:
 	}
 
 	/// <summary>
-	/// ÀÌ Çà·Ä(°¢ ±¸¼º ¿ä¼Ò´Â Çà º¤ÅÍÀÇ Å©±â)¿¡¼­ °è»êµÈ 3D ½ºÄÉÀÏ º¤ÅÍ¸¦ ¹İÈ¯
+	/// ì´ í–‰ë ¬(ê° êµ¬ì„± ìš”ì†ŒëŠ” í–‰ ë²¡í„°ì˜ í¬ê¸°)ì—ì„œ ê³„ì‚°ëœ 3D ìŠ¤ì¼€ì¼ ë²¡í„°ë¥¼ ë°˜í™˜
 	/// </summary>
 	/// <returns></returns>
 	FVector GetScaleVector() const;
 
 	/// <summary>
-	/// ÀÌ Çà·Ä¿¡¼­ ½ºÄÉÀÏ¸µÀ» Á¦°Å(Áï, °¢ ÇàÀÇ Å©±â°¡ 1)
+	/// ì´ í–‰ë ¬ì—ì„œ ìŠ¤ì¼€ì¼ë§ì„ ì œê±°(ì¦‰, ê° í–‰ì˜ í¬ê¸°ê°€ 1)
 	/// </summary>
 	inline void RemoveScaling()
 	{
@@ -259,12 +259,12 @@ public:
 	}
 
 	/// <summary>
-	/// scaleÀÌ Á¦°ÅµÈ Çà·ÄÀ» ¹İÈ¯
+	/// scaleì´ ì œê±°ëœ í–‰ë ¬ì„ ë°˜í™˜
 	/// </summary>
 	FMatrix GetMatrixWithOutScale() const;
 
 	/// <summary>
-	/// ÀÌ Çà·Ä¿¡¼­ ÀÌµ¿ ¼ººĞ(Translation)À» Á¦°Å
+	/// ì´ í–‰ë ¬ì—ì„œ ì´ë™ ì„±ë¶„(Translation)ì„ ì œê±°
 	/// </summary>
 	/// <returns></returns>
 	inline FMatrix RemoveTranslation() const
@@ -279,13 +279,13 @@ public:
 	}
 
 	/// <summary>
-	/// ÀÌµ¿ ¼ººĞ(Translation)À» Ãß°¡ÇÑ Çà·ÄÀ» ¹İÈ¯
+	/// ì´ë™ ì„±ë¶„(Translation)ì„ ì¶”ê°€í•œ í–‰ë ¬ì„ ë°˜í™˜
 	/// </summary>
 	/// <param name="translation"></param>
 	FMatrix AppendTranslation(const FVector& translation) const;
 
 	/// <summary>
-	/// ÀÌ Çà·Ä¿¡ scaleÀ» Àû¿ëÇÑ Çà·ÄÀ» ¹İÈ¯
+	/// ì´ í–‰ë ¬ì— scaleì„ ì ìš©í•œ í–‰ë ¬ì„ ë°˜í™˜
 	/// </summary>
 	inline FMatrix ApplyScale(const float scale) const
 	{
@@ -300,7 +300,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·Ä¿¡ scaleÀ» Àû¿ëÇÑ Çà·ÄÀ» ¹İÈ¯
+	/// í–‰ë ¬ì— scaleì„ ì ìš©í•œ í–‰ë ¬ì„ ë°˜í™˜
 	/// </summary>
 	/// <param name="scale"></param>
 	inline FMatrix ApplyScale(const FVector& scale) const
@@ -315,49 +315,49 @@ public:
 	}
 
 	/// <summary>
-	/// xÃàÀ» ±âÁØÀ¸·Î ÁÖ¾îÁø °¢µµ(angle)¸¸Å­ È¸Àü Çà·ÄÀ» »ı¼º
+	/// xì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ì£¼ì–´ì§„ ê°ë„(angle)ë§Œí¼ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationX(float angle);
 
 	/// <summary>
-	/// yÃàÀ» ±âÁØÀ¸·Î ÁÖ¾îÁø °¢µµ(angle)¸¸Å­ È¸Àü Çà·ÄÀ» »ı¼º
+	/// yì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ì£¼ì–´ì§„ ê°ë„(angle)ë§Œí¼ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationY(float angle);
 
 	/// <summary>
-	/// zÃàÀ» ±âÁØÀ¸·Î ÁÖ¾îÁø °¢µµ(angle)¸¸Å­ È¸Àü Çà·ÄÀ» »ı¼º
+	/// zì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ì£¼ì–´ì§„ ê°ë„(angle)ë§Œí¼ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationZ(float angle);
 
 	/// <summary>
-	/// rotation º¤ÅÍ¸¦ ¹Ş¾Æ¼­ X, Y, Z ÃàÀ» ±âÁØÀ¸·Î È¸Àü Çà·ÄÀ» »ı¼º
+	/// rotation ë²¡í„°ë¥¼ ë°›ì•„ì„œ X, Y, Z ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ íšŒì „ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateRotationXYZ(const FVector& rotation);
 
 	/// <summary>
-	/// Rotation º¤ÅÍ¸¦ ¹Ş¾Æ¼­ X, Y, Z ÃàÀ» ±âÁØÀ¸·Î È¸Àü
+	/// Rotation ë²¡í„°ë¥¼ ë°›ì•„ì„œ X, Y, Z ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ íšŒì „
 	/// </summary>
 	inline void Rotate(const FVector& Rotation)
 	{
-		// 1) ¿ÀÀÏ·¯ °¢µµ(µµ ´ÜÀ§) ¡æ 4¡¿4 È¸Àü Çà·Ä
+		// 1) ì˜¤ì¼ëŸ¬ ê°ë„(ë„ ë‹¨ìœ„) â†’ 4Ã—4 íšŒì „ í–‰ë ¬
 		FMatrix rotMat = CreateRotationXYZ(Rotation);
 
-		// 2) ÇöÀç Çà·Ä¿¡ °öÇØ ´©Àû
+		// 2) í˜„ì¬ í–‰ë ¬ì— ê³±í•´ ëˆ„ì 
 		*this *= rotMat;
 	}
 
 	/// <summary>
-	/// scale scalar °ªÀ» ¹Ş¾Æ¼­ X, Y, Z ÃàÀ» ±âÁØÀ¸·Î ½ºÄÉÀÏ¸µ Çà·ÄÀ» »ı¼º
+	/// scale scalar ê°’ì„ ë°›ì•„ì„œ X, Y, Z ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ìŠ¤ì¼€ì¼ë§ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateScaleMatrix(float scale);
 
 	/// <summary>
-	/// scale º¤ÅÍ °ªÀ» ¹Ş¾Æ¼­ X, Y, Z ÃàÀ» ±âÁØÀ¸·Î ½ºÄÉÀÏ¸µ Çà·ÄÀ» »ı¼º
+	/// scale ë²¡í„° ê°’ì„ ë°›ì•„ì„œ X, Y, Z ì¶•ì„ ê¸°ì¤€ìœ¼ë¡œ ìŠ¤ì¼€ì¼ë§ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateScaleMatrix(const FVector& scale);
 
 	/// <summary>
-	/// Çà·ÄÀÇ ÀÌµ¿(Translation) ºÎºĞÀ» ÁöÁ¤µÈ º¤ÅÍ °ª¸¸Å­ ½ºÄÉÀÏ¸µÇÕ´Ï´Ù.
+	/// í–‰ë ¬ì˜ ì´ë™(Translation) ë¶€ë¶„ì„ ì§€ì •ëœ ë²¡í„° ê°’ë§Œí¼ ìŠ¤ì¼€ì¼ë§í•©ë‹ˆë‹¤.
 	/// </summary>
 	inline void ScaleTranslation(FVector& inScale3D)
 	{
@@ -367,7 +367,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·ÄÀÇ °¢ Ãà(X, Y, Z)À» Çà·ÄÀÌ °¡Áö°í ÀÖ´Â ½ºÄÉÀÏ(Scale)À» Æ÷ÇÔÇÑ »óÅÂ·Î ÃßÃâÇÏ¿© ¹İÈ¯
+	/// í–‰ë ¬ì˜ ê° ì¶•(X, Y, Z)ì„ í–‰ë ¬ì´ ê°€ì§€ê³  ìˆëŠ” ìŠ¤ì¼€ì¼(Scale)ì„ í¬í•¨í•œ ìƒíƒœë¡œ ì¶”ì¶œí•˜ì—¬ ë°˜í™˜
 	/// </summary>
 	inline void GetScaledAxes(FVector& X, FVector& Y, FVector& Z) const
 	{
@@ -377,7 +377,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·ÄÀÇ Ãà ¹æÇâ¸¸ °¡Á®¿À°í, Å©±â(Scale)´Â Á¦¿ÜÇÏ¿© ¹İÈ¯
+	/// í–‰ë ¬ì˜ ì¶• ë°©í–¥ë§Œ ê°€ì ¸ì˜¤ê³ , í¬ê¸°(Scale)ëŠ” ì œì™¸í•˜ì—¬ ë°˜í™˜
 	/// </summary>
 	inline void GetUnitAxes(FVector& X, FVector& Y, FVector& Z) const
 	{
@@ -388,8 +388,8 @@ public:
 	}
 
 	/// <summary>
-	/// <para>Çà·ÄÀÇ Æ¯Á¤ Ãà(i¹øÂ° Ãà)À» ÁÖ¾îÁø º¤ÅÍ·Î ¼³Á¤</para>
-	/// Çà·ÄÀÌ °¡Áö°í ÀÖ´Â X, Y, ZÃà Áß¿¡¼­ ÀÎÀÚ·Î Àü´ŞµÈ i¿¡ ÇØ´çÇÏ´Â ÃàÀ» axis¶ó´Â º¤ÅÍ °ªÀ¸·Î º¯°æÇÏ´Â ÇÔ¼ö
+	/// <para>í–‰ë ¬ì˜ íŠ¹ì • ì¶•(ië²ˆì§¸ ì¶•)ì„ ì£¼ì–´ì§„ ë²¡í„°ë¡œ ì„¤ì •</para>
+	/// í–‰ë ¬ì´ ê°€ì§€ê³  ìˆëŠ” X, Y, Zì¶• ì¤‘ì—ì„œ ì¸ìë¡œ ì „ë‹¬ëœ iì— í•´ë‹¹í•˜ëŠ” ì¶•ì„ axisë¼ëŠ” ë²¡í„° ê°’ìœ¼ë¡œ ë³€ê²½í•˜ëŠ” í•¨ìˆ˜
 	/// </summary>
 	inline void SetAxis(int i, const FVector& axis)
 	{
@@ -399,7 +399,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·ÄÀÇ X, Y, Z Ãà, À§Ä¡ ¼ººĞÀ» °¢°¢ »õ °ªÀ¸·Î °»½Å
+	/// í–‰ë ¬ì˜ X, Y, Z ì¶•, ìœ„ì¹˜ ì„±ë¶„ì„ ê°ê° ìƒˆ ê°’ìœ¼ë¡œ ê°±ì‹ 
 	/// </summary>
 	inline void SetAxes(FVector& XAxis, FVector& YAxis, FVector& ZAxis, FVector& Origin)
 	{
@@ -410,8 +410,8 @@ public:
 	}
 
 	/// <summary>
-	/// <para>4¡¿4 º¯È¯ Çà·Ä¿¡¼­ À§Ä¡(Translation) ¼ººĞ¸¸ ÃßÃâ</para>
-	/// ÇØ´ç º¯È¯ Çà·ÄÀÌ ³ªÅ¸³»´Â ÁÂÇ¥°èÀÇ À§Ä¡(¿øÁ¡, Origin) ¸¦ ÀÇ¹Ì
+	/// <para>4Ã—4 ë³€í™˜ í–‰ë ¬ì—ì„œ ìœ„ì¹˜(Translation) ì„±ë¶„ë§Œ ì¶”ì¶œ</para>
+	/// í•´ë‹¹ ë³€í™˜ í–‰ë ¬ì´ ë‚˜íƒ€ë‚´ëŠ” ì¢Œí‘œê³„ì˜ ìœ„ì¹˜(ì›ì , Origin) ë¥¼ ì˜ë¯¸
 	/// </summary>
 	inline FVector GetOrigin() const
 	{
@@ -419,8 +419,8 @@ public:
 	}
 
 	/// <summary>
-	/// <para>ÁÂÇ¥°èÀÇ ¿øÁ¡(À§Ä¡)À» ÁÖ¾îÁø º¤ÅÍ·Î ¼³Á¤</para>
-	/// º¯È¯ Çà·ÄÀÇ À§Ä¡(Translation) ¼ººĞÀ» Æ¯Á¤ º¤ÅÍ°ªÀ¸·Î ¼³Á¤ÇÏ¿©, ÇØ´ç Çà·ÄÀÌ Ç¥ÇöÇÏ´Â ÁÂÇ¥°èÀÇ Áß½É(¿øÁ¡)À» ÁöÁ¤ÇÑ º¤ÅÍ À§Ä¡·Î ¿Å±â´Â ÇÔ¼ö
+	/// <para>ì¢Œí‘œê³„ì˜ ì›ì (ìœ„ì¹˜)ì„ ì£¼ì–´ì§„ ë²¡í„°ë¡œ ì„¤ì •</para>
+	/// ë³€í™˜ í–‰ë ¬ì˜ ìœ„ì¹˜(Translation) ì„±ë¶„ì„ íŠ¹ì • ë²¡í„°ê°’ìœ¼ë¡œ ì„¤ì •í•˜ì—¬, í•´ë‹¹ í–‰ë ¬ì´ í‘œí˜„í•˜ëŠ” ì¢Œí‘œê³„ì˜ ì¤‘ì‹¬(ì›ì )ì„ ì§€ì •í•œ ë²¡í„° ìœ„ì¹˜ë¡œ ì˜®ê¸°ëŠ” í•¨ìˆ˜
 	/// </summary>
 	inline void SetOrigin(const FVector& newOrigin)
 	{
@@ -430,17 +430,17 @@ public:
 	}
 
 	/// <summary>
-	/// <para>ÁÖ¾îÁø ¼¼ °³ÀÇ Ãà º¤ÅÍ(X, Y, Z)¿Í ¿øÁ¡ º¤ÅÍ¸¦ »ç¿ëÇÏ¿© ±âÀú Çà·Ä(»õ·Î¿î ÁÂÇ¥°è(±âÀú, Basis)¸¦ ³ªÅ¸³»´Â 4¡¿4 Çà·Ä)À» »ı¼º.</para>
-	/// ÁÂÇ¥°è¿¡¼­ Á¤ÀÇµÈ Á¡(º¤ÅÍ)À» ¿ùµå(¶Ç´Â »óÀ§) ÁÂÇ¥°è·Î º¯È¯ÇÒ ¼ö ÀÖÀ½
+	/// <para>ì£¼ì–´ì§„ ì„¸ ê°œì˜ ì¶• ë²¡í„°(X, Y, Z)ì™€ ì›ì  ë²¡í„°ë¥¼ ì‚¬ìš©í•˜ì—¬ ê¸°ì € í–‰ë ¬(ìƒˆë¡œìš´ ì¢Œí‘œê³„(ê¸°ì €, Basis)ë¥¼ ë‚˜íƒ€ë‚´ëŠ” 4Ã—4 í–‰ë ¬)ì„ ìƒì„±.</para>
+	/// ì¢Œí‘œê³„ì—ì„œ ì •ì˜ëœ ì (ë²¡í„°)ì„ ì›”ë“œ(ë˜ëŠ” ìƒìœ„) ì¢Œí‘œê³„ë¡œ ë³€í™˜í•  ìˆ˜ ìˆìŒ
 	/// </summary>
 	static FMatrix CreateBasisMatrix(const FVector& xAxis, const FVector& yAxis, const FVector& zAxis, const FVector& origin);
 	/// <summary>
-	/// locationÀ» ÀÌ¿ëÇÏ¿© ÀÌµ¿ Çà·ÄÀ» »ı¼º
+	/// locationì„ ì´ìš©í•˜ì—¬ ì´ë™ í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreateTranslationMatrix(const FVector& location);
 
 	/// <summary>
-	/// Çà·ÄÀÇ Æ¯Á¤ Column(i¹øÂ° Column)À» ¹İÈ¯
+	/// í–‰ë ¬ì˜ íŠ¹ì • Column(ië²ˆì§¸ Column)ì„ ë°˜í™˜
 	/// </summary>
 	inline FVector GetColumn(int i) const
 	{
@@ -448,7 +448,7 @@ public:
 	}
 	
 	/// <summary>
-	/// Çà·ÄÀÇ Æ¯Á¤ Column(i¹øÂ° Column)À» ÁÖ¾îÁø º¤ÅÍ·Î ¼³Á¤
+	/// í–‰ë ¬ì˜ íŠ¹ì • Column(ië²ˆì§¸ Column)ì„ ì£¼ì–´ì§„ ë²¡í„°ë¡œ ì„¤ì •
 	///	</summary>
 	inline void SetColumn(int i, const FVector& v)
 	{
@@ -458,7 +458,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·ÄÀÇ Æ¯Á¤ Row(i¹øÂ° Row)À» ¹İÈ¯
+	/// í–‰ë ¬ì˜ íŠ¹ì • Row(ië²ˆì§¸ Row)ì„ ë°˜í™˜
 	/// </summary>
 	inline FVector GetRow(int i) const
 	{
@@ -466,7 +466,7 @@ public:
 	}
 
 	/// <summary>
-	/// Çà·ÄÀÇ Æ¯Á¤ Row(i¹øÂ° Row)À» ÁÖ¾îÁø º¤ÅÍ·Î ¼³Á¤
+	/// í–‰ë ¬ì˜ íŠ¹ì • Row(ië²ˆì§¸ Row)ì„ ì£¼ì–´ì§„ ë²¡í„°ë¡œ ì„¤ì •
 	/// </summary>
 	inline void SetRow(int i, const FVector& v)
 	{
@@ -477,72 +477,72 @@ public:
 
 	inline FVector GetForwardVector() const
 	{
-		// row 0°¡ XÃà
+		// row 0ê°€ Xì¶•
 		return GetRow(0).GetNormalizedVector();
 	}
 
 	inline FVector GetRightVector() const
 	{
-		// row 1°¡ YÃà
+		// row 1ê°€ Yì¶•
 		return GetRow(1).GetNormalizedVector();
 	}
 
 	inline FVector GetUpVector() const
 	{
-		// row 2°¡ ZÃà
+		// row 2ê°€ Zì¶•
 		return GetRow(2).GetNormalizedVector();
 	}
 
 	///// <summary>
-	///// ¿Ş¼Õ ÁÂÇ¥°è(Left-Handed)¿¡¼­ ºä Çà·ÄÀ» »ı¼º
+	///// ì™¼ì† ì¢Œí‘œê³„(Left-Handed)ì—ì„œ ë·° í–‰ë ¬ì„ ìƒì„±
 	///// </summary>
-	///// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	///// <param name="at">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â À§Ä¡ º¤ÅÍ</param>
-	///// <param name="up">Ä«¸Ş¶óÀÇ upVector</param>
+	///// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	///// <param name="at">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ìœ„ì¹˜ ë²¡í„°</param>
+	///// <param name="up">ì¹´ë©”ë¼ì˜ upVector</param>
 	//static FMatrix CreateLookAtMatrixLeftHand(const FVector& eye, const FVector& at, const FVector& up);
 
 	///// <summary>
-	///// ¿À¸¥¼Õ ÁÂÇ¥°è(Right-Handed)¿¡¼­ ºä Çà·ÄÀ» »ı¼º
+	///// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(Right-Handed)ì—ì„œ ë·° í–‰ë ¬ì„ ìƒì„±
 	///// </summary>
-	///// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	///// <param name="at">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â À§Ä¡ º¤ÅÍ</param>
-	///// <param name="up">Ä«¸Ş¶óÀÇ upVector</param>
+	///// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	///// <param name="at">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ìœ„ì¹˜ ë²¡í„°</param>
+	///// <param name="up">ì¹´ë©”ë¼ì˜ upVector</param>
 	//static FMatrix CreateLookAtMatrixRightHand(const FVector& eye, const FVector& at, const FVector& up);
 
 	/// <summary>
-	/// ¿Ş¼Õ ÁÂÇ¥°è(Left-Handed)¿¡¼­ ºä Çà·ÄÀ» »ı¼º
+	/// ì™¼ì† ì¢Œí‘œê³„(Left-Handed)ì—ì„œ ë·° í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	/// <param name="toDir">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ</param>
-	/// <param name="up">Ä«¸Ş¶óÀÇ upVector</param>
+	/// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	/// <param name="toDir">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°</param>
+	/// <param name="up">ì¹´ë©”ë¼ì˜ upVector</param>
 	static FMatrix CreateLookToMatrixLeftHand(const FVector& eye, const FVector& toDir, const FVector& up);
 
 	/// <summary>
-	/// ¿À¸¥¼Õ ÁÂÇ¥°è(Right-Handed)¿¡¼­ ºä Çà·ÄÀ» »ı¼º
+	/// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(Right-Handed)ì—ì„œ ë·° í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
-	/// <param name="eye">Ä«¸Ş¶ó À§Ä¡</param>
-	/// <param name="toDir">Ä«¸Ş¶ó°¡ ¹Ù¶óº¸´Â ¹æÇâ º¤ÅÍ</param>
-	/// <param name="up">Ä«¸Ş¶óÀÇ upVector</param>
+	/// <param name="eye">ì¹´ë©”ë¼ ìœ„ì¹˜</param>
+	/// <param name="toDir">ì¹´ë©”ë¼ê°€ ë°”ë¼ë³´ëŠ” ë°©í–¥ ë²¡í„°</param>
+	/// <param name="up">ì¹´ë©”ë¼ì˜ upVector</param>
 	static FMatrix CreateLookToMatrixRightHand(const FVector& eye, const FVector& toDir, const FVector& up);
 
 	/// <summary>
-	/// ¿Ş¼Õ ÁÂÇ¥°è(Left-Handed)¿¡¼­ Orthographic Projection(Á÷°¢ Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// ì™¼ì† ì¢Œí‘œê³„(Left-Handed)ì—ì„œ Orthographic Projection(ì§ê° íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	/// <returns></returns>
 	static FMatrix CreateOrthographicProjectionMatrixLeftHand(float screenWidth, float screenHeight, float zNear, float zFar);
 
 	/// <summary>
-	/// ¿À¸¥¼Õ ÁÂÇ¥°è(Right-Handed)¿¡¼­ Orthographic Projection(Á÷°¢ Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(Right-Handed)ì—ì„œ Orthographic Projection(ì§ê° íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	/// <returns></returns>
 	static FMatrix CreateOrthographicProjectionMatrixRightHand(float screenWidth, float screenHeight, float zNear, float zFar);
 
 	/// <summary>
-	/// ¿Ş¼Õ ÁÂÇ¥°è(Left-Handed)¿¡¼­ Perspective Projection(¿ø±Ù Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// ì™¼ì† ì¢Œí‘œê³„(Left-Handed)ì—ì„œ Perspective Projection(ì›ê·¼ íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreatePerspectiveProjectionMatrixLeftHand(float fov, float aspectRatio, float zNear, float zFar);
 	/// <summary>
-	/// ¿À¸¥¼Õ ÁÂÇ¥°è(Right-Handed)¿¡¼­ Perspective Projection(¿ø±Ù Åõ¿µ) Çà·ÄÀ» »ı¼º
+	/// ì˜¤ë¥¸ì† ì¢Œí‘œê³„(Right-Handed)ì—ì„œ Perspective Projection(ì›ê·¼ íˆ¬ì˜) í–‰ë ¬ì„ ìƒì„±
 	/// </summary>
 	static FMatrix CreatePerspectiveProjectionMatrixRightHand(float fov, float aspectRatio, float zNear, float zFar);
 };
