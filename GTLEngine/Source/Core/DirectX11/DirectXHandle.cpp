@@ -145,6 +145,12 @@ void UDirectXHandle::PrepareRender()
 	DXDDeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 }
 
+void UDirectXHandle::Render()
+{
+
+	DXDSwapChain->Present(1, 0);
+}
+
 void UDirectXHandle::AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
 	shared_ptr<UDXDRenderTarget> NewRenderTarget = make_shared<UDXDRenderTarget>();

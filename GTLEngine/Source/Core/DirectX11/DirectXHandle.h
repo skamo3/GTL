@@ -25,7 +25,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void PrepareRender();
-	//void Render(TArray<UObject> Objs);
+	void Render();
 
 	HWND GetWindowHandle() const { return WindowHandle; }
 
@@ -46,7 +46,7 @@ private:
 	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
 	ComPtr<IDXGISwapChain> DXDSwapChain;
 
-	map<string, shared_ptr<UDXDRenderTarget>>		RenderTarget;
+	TMap<string, shared_ptr<UDXDRenderTarget>>		RenderTarget;
 	shared_ptr<UDXDDepthStencilView>	DepthStencilView; // 여러개 보류.
 	shared_ptr<UDXDRasterizerState>		RasterizerState; // 여러개 보류.
 	shared_ptr<UDXDShaderManager>			ShaderManager;
