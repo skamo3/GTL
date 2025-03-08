@@ -44,6 +44,20 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     bool GameLoopState = true;
     while (GameLoopState)
     {
+        MSG msg;
+        while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE))
+        {
+            TranslateMessage(&msg);
+            DispatchMessage(&msg);
+
+            if (msg.message == WM_QUIT)
+            {
+                GameLoopState = false;
+                break;
+            }
+        }
+
+
         Engine.Update();
 		Engine.Render();
     }

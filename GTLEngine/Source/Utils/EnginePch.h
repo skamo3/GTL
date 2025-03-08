@@ -40,10 +40,10 @@ template <typename T>
 using TArray = vector<T>;
 
 template <typename T1, typename T2>
-using TPair = pair<T, T2>;
+using TPair = pair<T1, T2>;
 
-template <typename T, typename T2>
-using TMap = unordered_map<T, T2>;
+template <typename T1, typename T2>
+using TMap = unordered_map<T1, T2>;
 
 template <typename T>
 using TQueue = queue<T>;
