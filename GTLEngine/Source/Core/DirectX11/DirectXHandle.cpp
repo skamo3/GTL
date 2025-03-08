@@ -68,7 +68,7 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		return S_FALSE;
 
 	ComPtr<ID3DBlob> VertexShaderBlob;
-	hr = ShaderManager->AddVertexShader("SimpleVertexShader.hlsl", VertexShaderBlob);
+	hr = ShaderManager->AddVertexShader("Resource/Shader/ShaderW0.hlsl", VertexShaderBlob);
 	if (FAILED(hr))
 		return hr;
 
@@ -77,11 +77,12 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 	if (FAILED(hr))
 		return hr;
 
-	hr = ShaderManager->AddPixelShader("SimplePixelShader.hlsl");
+	hr = ShaderManager->AddPixelShader("Resource/Shader/ShaderW0.hlsl");
 	if (FAILED(hr))
 		return hr;
 
-	hr = DepthStencilView->CreateDepthStencilView(DXDDevice);
+	DepthStencilView = make_shared<UDXDDepthStencilView>();
+	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, WindowHandle);
 	if (FAILED(hr))
 		return hr;
 
