@@ -41,6 +41,9 @@
     <Filter Include="Resource\Shader">
       <UniqueIdentifier>{c34f390c-aa3f-4dd9-afda-0ba06be4b984}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Utils\Math">
+      <UniqueIdentifier>{6d872954-0dfc-4b02-ace1-94496a445dc4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -118,6 +121,15 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Math.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Matrix.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Vector.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -191,6 +203,15 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Matrix.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Vector.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

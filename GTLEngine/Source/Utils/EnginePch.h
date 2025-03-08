@@ -32,3 +32,6 @@ typedef	INT8		int8;
 typedef	INT16		int16;
 typedef	INT32		int32;
 typedef	INT64		int64;
+
+#define PI 3.1415926535897932384626433832795f
+#define PI2 6.283185307179586476925286766559f
