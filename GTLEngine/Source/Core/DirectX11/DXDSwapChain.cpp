@@ -45,6 +45,7 @@ HRESULT UDXDSwapChain::CreateSwapChain(HWND hWnd, shared_ptr<UDXDDevice> Device,
     hr = SwapChain->GetDesc(&swapchaindesc);
     if (FAILED(hr))
         return hr;
+
     ViewportInfo = { 0.0f, 0.0f, (float)swapchaindesc.BufferDesc.Width, (float)swapchaindesc.BufferDesc.Height, 0.0f, 1.0f };
 
     return S_OK;

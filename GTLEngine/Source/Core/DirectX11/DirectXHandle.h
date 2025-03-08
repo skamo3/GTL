@@ -8,6 +8,8 @@ class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
 
+class UObject;
+
 class UDirectXHandle
 {
 public:
@@ -18,7 +20,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void PrepareRender();
-	void Render();
+	//void Render(TArray<UObject> Objs);
 
 	FWindowInfo GetWindowInfo() const { return WindowInfo; }
 

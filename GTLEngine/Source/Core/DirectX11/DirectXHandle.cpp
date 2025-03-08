@@ -17,25 +17,48 @@ UDirectXHandle::~UDirectXHandle()
 HRESULT UDirectXHandle::CreateDirectX11Handle()
 {
 	DXDDevice = make_shared<UDXDDevice>();
+	if (DXDDevice == nullptr)
+		return S_FALSE;
 	HRESULT hr = DXDDevice->CreateDeviceAndContext();
-	if (FAILED(hr)) 
+	if (FAILED(hr))
 		return hr;
 
 	SwapChain = make_shared<UDXDSwapChain>();
-	SwapChain->CreateSwapChain(WindowInfo.hWnd, DXDDevice, ViewportInfo);
+	if (SwapChain.get() == nullptr)
+		return S_FALSE;
+	hr = SwapChain->CreateSwapChain(WindowInfo.hWnd, DXDDevice, ViewportInfo);
+	if (FAILED(hr))
+		return hr;
 
 	RasterizerState = make_shared<UDXDRasterizerState>();
-	RasterizerState->CreateRasterizerState(DXDDevice);
+	if (RasterizerState == nullptr)
+		return S_FALSE;
+	hr = RasterizerState->CreateRasterizerState(DXDDevice);
+	if (FAILED(hr))
+		return hr;
 
 	// 셰이더 생성
 	ShaderManager = make_shared<UDXDShaderManager>(DXDDevice);
+	if (ShaderManager == nullptr)
+		return S_FALSE;
 	InputLayout = make_shared<UDXDInputLayout>();
+	if (InputLayout == nullptr)
+		return S_FALSE;
 
 	ComPtr<ID3DBlob> VertexShaderBlob;
-	ShaderManager->AddVertexShader("SimpleVertexShader.hlsl", VertexShaderBlob);
+	hr = ShaderManager->AddVertexShader("SimpleVertexShader.hlsl", VertexShaderBlob);
+	if (FAILED(hr))
+		return hr;
+
 	// 이 위로 VertexShader 추가 생성
-	InputLayout->CreateInputLayout(DXDDevice, VertexShaderBlob); // Blob은 마지막 최종 Blob으로 저장. 대신 InputLayout은 동일하게 맞춰주어야 함.
-	ShaderManager->AddPixelShader("SimplePixelShader.hlsl");
+	hr = InputLayout->CreateInputLayout(DXDDevice, VertexShaderBlob); // Blob은 마지막 최종 Blob으로 저장. 대신 InputLayout은 동일하게 맞춰주어야 함.
+	if (FAILED(hr))
+		return hr;
+
+	hr = ShaderManager->AddPixelShader("SimplePixelShader.hlsl");
+	if (FAILED(hr))
+		return hr;
+
 
 	return S_OK;
 }

@@ -32,6 +32,15 @@
     <Filter Include="Source\CoreUObject">
       <UniqueIdentifier>{dbd4ccfe-0492-4ca2-b714-94245b29eedc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\CoreUObject\Components">
+      <UniqueIdentifier>{cf3cac87-66f9-494c-b6ee-22392fad8cf2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\CoreUObject\GameFrameWork">
+      <UniqueIdentifier>{c059c46c-6b18-4c4e-8594-8c2e8b507887}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource\Shader">
+      <UniqueIdentifier>{c34f390c-aa3f-4dd9-afda-0ba06be4b984}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -94,6 +103,27 @@
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\World.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\SceneComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp">
+      <Filter>Source\CoreUObject\GameFrameWork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -153,5 +183,31 @@
     <ClInclude Include="Source\Utils\GTLStringLibrary.h">
       <Filter>Utils</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CoreUObject\World.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\SceneComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h">
+      <Filter>Source\CoreUObject\GameFrameWork</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="Resource\Shader\ShaderW0.hlsl">
+      <Filter>Resource\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>
