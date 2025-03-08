@@ -51,3 +51,6 @@ using TQueue = queue<T>;
 template <typename T>
 using TSet = set<T>;
 
+
+#define PI 3.1415926535897932384626433832795f
+#define PI2 6.283185307179586476925286766559f
