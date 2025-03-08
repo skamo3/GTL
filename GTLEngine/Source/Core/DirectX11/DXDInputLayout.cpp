@@ -1,9 +1,7 @@
 #include "pch.h"
 #include "DXDInputLayout.h"
 
-#include "DXDDevice.h"
-
-HRESULT UDXDInputLayout::CreateInputLayout(shared_ptr<UDXDDevice> Device, ComPtr<ID3DBlob> Blob)
+HRESULT UDXDInputLayout::CreateInputLayout(ComPtr<ID3D11Device> Device, ComPtr<ID3DBlob> Blob)
 {
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
@@ -12,6 +10,6 @@ HRESULT UDXDInputLayout::CreateInputLayout(shared_ptr<UDXDDevice> Device, ComPtr
         // D3D10_APPEND_ALIGNED_ELEMENT
     };
 
-	Device->GetDevice()->CreateInputLayout(layout, ARRAYSIZE(layout), Blob->GetBufferPointer(), Blob->GetBufferSize(), &DXDInputLayout);
+	Device->CreateInputLayout(layout, ARRAYSIZE(layout), Blob->GetBufferPointer(), Blob->GetBufferSize(), &DXDInputLayout);
 	return S_OK;
 }

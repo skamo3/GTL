@@ -29,10 +29,8 @@
     <ClCompile Include="Source\CoreUObject\World.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp" />
-    <ClCompile Include="Source\Core\DirectX11\DXDDevice.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDDepthStencilView.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDRasterizerState.cpp" />
-    <ClCompile Include="Source\Core\DirectX11\DXDSwapChain.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDInputLayout.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDRenderTarget.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp" />
@@ -58,10 +56,8 @@
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />
-    <ClInclude Include="Source\Core\DirectX11\DXDDevice.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDDepthStencilView.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDRasterizerState.h" />
-    <ClInclude Include="Source\Core\DirectX11\DXDSwapChain.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDInputLayout.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDRenderTarget.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h" />

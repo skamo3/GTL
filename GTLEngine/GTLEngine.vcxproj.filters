@@ -52,12 +52,6 @@
     <ClCompile Include="Source\Launch\LaunchWindows.cpp">
       <Filter>Source\Launch</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DXDDevice.cpp">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DXDSwapChain.cpp">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\DirectX11\DXDRenderTarget.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
@@ -131,12 +125,6 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\pch.h">
       <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\DirectX11\DXDDevice.h">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\DirectX11\DXDSwapChain.h">
-      <Filter>Source\Core\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\DXDRenderTarget.h">
       <Filter>Source\Core\DirectX11</Filter>

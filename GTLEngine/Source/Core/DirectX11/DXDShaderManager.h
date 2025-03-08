@@ -1,6 +1,5 @@
 #pragma once
 
-class UDXDDevice;
 class UDXDInputLayout;
 
 struct FShaderInfo
@@ -12,12 +11,12 @@ class UDXDShaderManager
 {
 public:
 	UDXDShaderManager() = default;
-	UDXDShaderManager(shared_ptr<UDXDDevice> Device);
+	UDXDShaderManager(ComPtr<ID3D11Device> Device);
 
 	void ReleaseAllShader();
 
 private:
-	shared_ptr<UDXDDevice> DXDDevice;
+	ComPtr<ID3D11Device> DXDDevice;
 
 public:
 	HRESULT AddVertexShader(const string& FileName, ComPtr<ID3DBlob> Blob);

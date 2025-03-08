@@ -5,10 +5,10 @@
 
 uint32 UEngineStatics::NextUUID = 0;
 
-void UEngine::InitEngine()
+void UEngine::InitEngine(HWND hWnd)
 {
-	DirectX11Handle = make_shared<UDirectXHandle>();
-	DirectX11Handle->CreateDirectX11Handle();
+	DirectX11Handle = new UDirectXHandle();
+	DirectX11Handle->CreateDirectX11Handle(hWnd);
 }
 
 void UEngine::Update()

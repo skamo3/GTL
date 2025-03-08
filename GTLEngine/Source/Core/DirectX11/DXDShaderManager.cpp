@@ -4,9 +4,7 @@
 
 #include "Engine/Engine.h"
 
-#include "DXDDevice.h"
-
-UDXDShaderManager::UDXDShaderManager(shared_ptr<UDXDDevice> Device)
+UDXDShaderManager::UDXDShaderManager(ComPtr<ID3D11Device> Device)
 	: DXDDevice(Device)
 {
 	VertexShader.clear();
@@ -53,7 +51,7 @@ HRESULT UDXDShaderManager::AddVertexShader(const string& FileName, ComPtr<ID3DBl
 		return hr;
 
 	ComPtr<ID3D11VertexShader> NewVertexShader;
-	hr = DXDDevice->GetDevice()->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), nullptr, &NewVertexShader);
+	hr = DXDDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), nullptr, &NewVertexShader);
 	if (FAILED(hr))
 		return hr;
 	VertexShader.insert(make_pair(FileName, NewVertexShader));
@@ -73,7 +71,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const string& FileName)
 		return hr;
 
 	ComPtr<ID3D11PixelShader> NewPixelShader;
-	hr = DXDDevice->GetDevice()->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &NewPixelShader);
+	hr = DXDDevice->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &NewPixelShader);
 	if (FAILED(hr))
 		return hr;
 

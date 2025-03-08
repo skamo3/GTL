@@ -1,14 +1,12 @@
 #pragma once
 
-class UDXDDevice;
-
 class UDXDDepthStencilView
 {
 public:
 	UDXDDepthStencilView() = default;
 	~UDXDDepthStencilView();
 
-	HRESULT CreateDepthStencilView(shared_ptr<UDXDDevice> DXDDevice);
+	HRESULT CreateDepthStencilView(ComPtr<ID3D11Device> DXDDevice);
 	void ReleaseDepthStencilView();
 
 	ComPtr<ID3D11DepthStencilView> GetDepthStencilView() const { return DepthStencilView; }

@@ -3,14 +3,12 @@
 
 #include "DXDDepthStencilView.h"
 
-#include "DXDDevice.h"
-
 UDXDDepthStencilView::~UDXDDepthStencilView()
 {
     ReleaseDepthStencilView();
 }
 
-HRESULT UDXDDepthStencilView::CreateDepthStencilView(shared_ptr<UDXDDevice> Device)
+HRESULT UDXDDepthStencilView::CreateDepthStencilView(ComPtr<ID3D11Device> Device)
 {
     D3D11_TEXTURE2D_DESC DepthStencilBufferDesc;
 
@@ -26,7 +24,7 @@ HRESULT UDXDDepthStencilView::CreateDepthStencilView(shared_ptr<UDXDDevice> Devi
 	DepthStencilBufferDesc.CPUAccessFlags = 0;
 	DepthStencilBufferDesc.MiscFlags = 0;
 
-	Device->GetDevice()->CreateTexture2D(&DepthStencilBufferDesc, nullptr, &DepthStencilBuffer);
+	Device->CreateTexture2D(&DepthStencilBufferDesc, nullptr, &DepthStencilBuffer);
 
 	D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
 	ZeroMemory(&DepthStencilViewDesc, sizeof(DepthStencilViewDesc));
@@ -34,7 +32,7 @@ HRESULT UDXDDepthStencilView::CreateDepthStencilView(shared_ptr<UDXDDevice> Devi
 	DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
 	DepthStencilViewDesc.Texture2D.MipSlice = 0;
 
-	Device->GetDevice()->CreateDepthStencilView(DepthStencilBuffer.Get(), &DepthStencilViewDesc, &DepthStencilView);
+	Device->CreateDepthStencilView(DepthStencilBuffer.Get(), &DepthStencilViewDesc, &DepthStencilView);
 
     return S_OK;
 }

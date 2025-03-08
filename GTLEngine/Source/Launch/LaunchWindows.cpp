@@ -37,9 +37,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
         CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
         nullptr, nullptr, hInstance, nullptr);
-
+    
 	UEngine& Engine = UEngine::GetEngine();
-    Engine.InitEngine();
+    Engine.InitEngine(hWnd);
 
     bool GameLoopState = true;
     while (GameLoopState)

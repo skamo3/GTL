@@ -32,11 +32,3 @@ typedef	INT8		int8;
 typedef	INT16		int16;
 typedef	INT32		int32;
 typedef	INT64		int64;
-
-struct FWindowInfo
-{
-	bool	bFullScreen;
-	HWND	hWnd; // 출력 윈도우.
-	int32	Width;
-	int32	Weight;
-};

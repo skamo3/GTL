@@ -29,7 +29,7 @@ public:
         return Engine;
     }
 
-    void InitEngine();
+    void InitEngine(HWND hWnd);
 	void Update();
     void Render();
 	void ClearEngine();
@@ -43,7 +43,7 @@ private:
     UEngine& operator=(UEngine&&) = delete;
 
 private:
-	shared_ptr<UDirectXHandle> DirectX11Handle;
+	UDirectXHandle* DirectX11Handle;
 	shared_ptr<UResourceManager> ResourceManager;
     shared_ptr<UWorld> World;
 
