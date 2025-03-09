@@ -5,7 +5,7 @@
 class UInputManager : public UObject
 {
 public:
-    enum class MOUSE_BUTTON
+    enum class EMouseButton
     {
         LEFT = 0,
         RIGHT,
@@ -40,11 +40,11 @@ public:
     // 마우스 입력 관련 함수
 
     // 0: Left Button, 1: Right Button, 2: Middle Button
-    bool GetMouseButton(MOUSE_BUTTON button) const;
+    bool GetMouseButton(EMouseButton button) const;
     // 0: Left Button, 1: Right Button, 2: Middle Button    
-    bool GetMouseDown(MOUSE_BUTTON button) const;
+    bool GetMouseDown(EMouseButton button) const;
     // 0: Left Button, 1: Right Button, 2: Middle Button    
-    bool GetMouseUp(MOUSE_BUTTON button) const;
+    bool GetMouseUp(EMouseButton button) const;
     int GetMouseClientX() const { return CurrentMouseState.ScreenX;};
     int GetMouseClient() const { return CurrentMouseState.ScreenY;};
     int GetMouseScreenX() const { return CurrentMouseState.ClientX;};
