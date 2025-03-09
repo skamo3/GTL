@@ -1,6 +1,7 @@
 #include "pch.h"
 #include "DXDRasterizerState.h"
 
+#include "Engine.h"
 #include "DXDDepthStencilView.h"
 
 UDXDDepthStencilView::~UDXDDepthStencilView()

@@ -2,6 +2,8 @@
 #include "pch.h"
 #include "InputManager.h"
 
+#include "Engine.h"
+
 UInputManager::UInputManager()
     : CurrentKeyStates(TArray<bool>(256, false))
     , PrevKeyStates(TArray<bool>(256, false))
@@ -13,7 +15,7 @@ UInputManager::~UInputManager()
     PrevKeyStates.clear();
 }
 
-void UInputManager::Tick(HWND hWnd, int Width, int Height)
+void UInputManager::Tick(float TickTime)
 {
     // 현재 키 상태를 이전 상태에 복사
     PrevKeyStates = CurrentKeyStates;
@@ -37,14 +39,19 @@ void UInputManager::Tick(HWND hWnd, int Width, int Height)
         CurrentMouseState.ScreenX = pt.x;
         CurrentMouseState.ScreenY = pt.y;
 
-        if (ScreenToClient(hWnd, &pt))
+        
+        if (ScreenToClient(UEngine::GetEngine().GetWindowInfo().WindowHandle, &pt))
         {
             CurrentMouseState.ClientX = pt.x;
             CurrentMouseState.ClientY = pt.y;
-
-            ConvertMouseToNDC(hWnd, Width, Height);
+            FWindowInfo WindowInfo = UEngine::GetEngine().GetWindowInfo();
+            ConvertMouseToNDC(WindowInfo.WindowHandle, WindowInfo.Width, WindowInfo.Height);
         }
     }
+}
+
+void UInputManager::Destroy()
+{
 }
 
 bool UInputManager::GetKey(int key) const

@@ -3,21 +3,22 @@
 
 #include "DirectX11/DirectXHandle.h"
 #include "Manager/InputManager.h"
+#include "Manager/ResourceManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
-
 #include "GameFrameWork/Camera.h"
 
 uint32 UEngineStatics::NextUUID = 0;
 
-bool UEngine::InitEngine(HWND hWnd)
+bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
+	WindowInfo = InWindowInfo;
 	DirectX11Handle = new UDirectXHandle();
-	HRESULT hr = DirectX11Handle->CreateDirectX11Handle(hWnd);
+	HRESULT hr = DirectX11Handle->CreateDirectX11Handle(WindowInfo.WindowHandle);
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, L"DirectX11 핸들 생성 실패", L"에러", MB_OK);
+		MessageBox(WindowInfo.WindowHandle, L"DirectX11 핸들 생성 실패", L"에러", MB_OK);
 		return false;
 	}
 
@@ -28,7 +29,7 @@ bool UEngine::InitEngine(HWND hWnd)
 	hr = DirectX11Handle->AddRenderTarget("MainRenderTarget", framebufferRTVdesc);
 	if (FAILED(hr))
 	{
-		MessageBox(hWnd, L"렌더 타겟 추가 실패", L"에러", MB_OK);
+		MessageBox(WindowInfo.WindowHandle, L"렌더 타겟 추가 실패", L"에러", MB_OK);
 		return false;
 	}
 
@@ -37,6 +38,7 @@ bool UEngine::InitEngine(HWND hWnd)
     // 리소스 매니저 추가.
 
     // 월드 추가.
+	World = UWorld::CreateWorld("MainWorld");
 
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
@@ -70,19 +72,41 @@ void UEngine::ClearEngine()
 		DirectX11Handle->ReleaseDirectX11Handle();
 	}
 
-	if (ResourceManager.get())
+	if (ResourceManager)
 	{
-        ResourceManager.reset();
+        delete ResourceManager;
+		ResourceManager = nullptr;
 	}
 
-    if (World.get())
+    if (World)
     {
-        World.reset();
+        delete World;
+		World = nullptr;
     }
 
     if (InputManager)
     {
         delete InputManager;
+		InputManager = nullptr;
     }
 }
 
+void UEngine::AddTotalAllocationBytes(uint32 Bytes)
+{
+	TotalAllocationBytes += Bytes;
+}
+
+void UEngine::AddTotalAllocationCount(uint32 Count)
+{
+	TotalAllocationCount += Count;
+}
+
+void UEngine::RemoveTotalAllocationBytes(uint32 Bytes)
+{
+	TotalAllocationBytes -= Bytes;
+}
+
+void UEngine::RemoveTotalAllocationCount(uint32 Count)
+{
+	TotalAllocationCount -= Count;
+}

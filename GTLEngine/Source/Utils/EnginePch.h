@@ -53,3 +53,11 @@ using TQueue = queue<T>;
 
 template <typename T>
 using TSet = set<T>;
+
+struct FWindowInfo
+{
+	uint Id;
+	HWND WindowHandle;
+	uint Width;
+	uint Height;
+};

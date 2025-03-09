@@ -4,7 +4,6 @@ class UDirectXHandle;
 class UResourceManager;
 class UWorld;
 class UInputManager;
-
 class ACamera;
 
 class UEngineStatics
@@ -32,19 +31,17 @@ public:
         return Engine;
     }
 
-    bool InitEngine(HWND hWnd);
+    bool InitEngine(const FWindowInfo& InWindowInfo);
 	void Tick();
     void Render();
 	void ClearEngine();
 
     // Getter
     UDirectXHandle* GetDirectX11Handle() const { return DirectX11Handle; }
-    UResourceManager* GetResourceManager() const { return ResourceManager.get(); }
-    UWorld* GetWorld() const { return World.get(); }
+    UResourceManager* GetResourceManager() const { return ResourceManager; }
+    UWorld* GetWorld() const { return World; }
     UInputManager* GetInputManager() const { return InputManager; }
 
-    uint32 GetTotalAllocationBytes() const { return TotalAllocationBytes; }
-    uint32 GetTotalAllocationCount() const { return TotalAllocationCount; }
 
 private:
     UEngine() = default;
@@ -58,15 +55,23 @@ private:
 	UDirectXHandle* DirectX11Handle;
 	UResourceManager* ResourceManager;
     UWorld* World;
-
     ACamera* MainCamera;
     UInputManager* InputManager;
 
 public:
-    void AddTotalAllocationBytes(uint32 NewBytes);
+    const FWindowInfo& GetWindowInfo() const { return WindowInfo; }
+
+private:
+    FWindowInfo WindowInfo;
+
+public:
+    uint32 GetTotalAllocationBytes() const { return TotalAllocationBytes; }
+    uint32 GetTotalAllocationCount() const { return TotalAllocationCount; }
+
+    void AddTotalAllocationBytes(uint32 Bytes);
     void AddTotalAllocationCount(uint32 Count);
 
-    void RemoveTotalAllocationBytes(uint32 NewBytes);
+    void RemoveTotalAllocationBytes(uint32 Bytes);
     void RemoveTotalAllocationCount(uint32 Count);
 
 private:

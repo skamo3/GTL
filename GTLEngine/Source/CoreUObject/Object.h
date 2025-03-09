@@ -39,4 +39,4 @@ private:
 
 };
 
-TArray<UObject*> GUObjectArray;
+//TArray<UObject*> GUObjectArray;

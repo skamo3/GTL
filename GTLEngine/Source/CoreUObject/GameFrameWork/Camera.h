@@ -9,7 +9,6 @@ class ACamera : public AActor
 public:
 	ACamera();
 
-
 public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

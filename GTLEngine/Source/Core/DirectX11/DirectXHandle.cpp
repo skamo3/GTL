@@ -9,6 +9,8 @@
 #include "CoreUObject/GameFrameWork/Actor.h"
 #include "CoreUObject/GameFrameWork/Camera.h"
 
+#include "Engine.h"
+
 UDirectXHandle::~UDirectXHandle()
 {
 	ReleaseDirectX11Handle();
@@ -25,7 +27,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 	swapchaindesc.SampleDesc.Count = 1; // 멀티 샘플링 비활성화
 	swapchaindesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 렌더 타겟으로 사용
 	swapchaindesc.BufferCount = 2; // 더블 버퍼링
-	swapchaindesc.OutputWindow = WindowHandle; // 렌더링할 창 핸들
+	swapchaindesc.OutputWindow = UEngine::GetEngine().GetWindowInfo().WindowHandle; // 렌더링할 창 핸들
 	swapchaindesc.Windowed = TRUE; // 창 모드
 	swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 스왑 방식
 
@@ -70,7 +72,6 @@ HRESULT UDirectXHandle::CreateShaderManager()
 
 HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 {
-	WindowHandle = hWnd;
 	HRESULT hr;
 	// 디바이스 및 스왑체인 생성.
 	hr = CreateDeviceAndSwapchain();
@@ -91,7 +92,7 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 	
 	// 뎁스 스텐실 뷰 생성.
 	DepthStencilView = make_shared<UDXDDepthStencilView>();
-	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, WindowHandle);
+	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle);
 	if (FAILED(hr))
 		return hr;
 

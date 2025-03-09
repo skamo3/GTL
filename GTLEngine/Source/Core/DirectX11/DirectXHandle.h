@@ -30,14 +30,11 @@ public:
 	void UpdateCameraMatrix(ACamera* Camera);
 	void Render(const TArray<AActor*> Actors);
 
-	HWND GetWindowHandle() const { return WindowHandle; }
-
 private:
 	void InitView();
 
 
 private:
-	HWND WindowHandle;
 	D3D11_VIEWPORT ViewportInfo;
 
 public:

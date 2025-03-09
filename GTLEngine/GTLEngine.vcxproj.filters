@@ -61,9 +61,6 @@
     <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DXDInputLayout.cpp">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\DirectX11\DXDVertexBuffer.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
@@ -139,6 +136,12 @@
     <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\CameraComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Camera.cpp">
+      <Filter>Source\CoreUObject\GameFrameWork</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -151,9 +154,6 @@
       <Filter>Source\Core\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\DirectX11\DXDInputLayout.h">
       <Filter>Source\Core\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\DXDVertexBuffer.h">
@@ -230,6 +230,12 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\CameraComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Camera.h">
+      <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

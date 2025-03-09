@@ -49,13 +49,18 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // 윈도우 클래스 등록
     RegisterClassW(&wndclass);
 
+    int Width = 1024;
+    int Height = 1024;
+
     // 1024 x 1024 크기에 윈도우 생성
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, 1024, 1024,
+        CW_USEDEFAULT, CW_USEDEFAULT, Width, Height,
         nullptr, nullptr, hInstance, nullptr);
     
+    FWindowInfo WindowInfo = { 0, hWnd, Width, Height };
+
 	UEngine& Engine = UEngine::GetEngine();
-    bool GameLoopState = Engine.InitEngine(hWnd);
+    bool GameLoopState = Engine.InitEngine(WindowInfo);
 
     while (GameLoopState)
     {

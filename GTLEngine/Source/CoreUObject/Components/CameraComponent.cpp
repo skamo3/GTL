@@ -3,7 +3,7 @@
 
 void UCameraComponent::Tick(float TickTime)
 {
-	AActorComponent::Tick(TickTime);
+	UActorComponent::Tick(TickTime);
 	// TODO: Log 추가.
 }
 
