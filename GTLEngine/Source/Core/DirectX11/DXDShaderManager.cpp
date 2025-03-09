@@ -32,7 +32,7 @@ void UDXDShaderManager::ReleaseAllShader()
 	}
 }
 
-HRESULT UDXDShaderManager::AddPixelShader(const string& Name, const string& FileName)
+HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Name, const std::wstring& FileName)
 {
 	HRESULT hr;
 
@@ -53,7 +53,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const string& Name, const string& File
 	return S_OK;
 }
 
-HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const string& Name, const string& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Name, const std::wstring& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
 	if (DXDDevice == nullptr)
 		return S_FALSE;
@@ -82,14 +82,14 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const string& Name, con
 	return S_OK;
 }
 
-ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const string& Name) const
+ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Name) const
 {
 	if (VertexShaders.find(Name) == VertexShaders.end())
 		return nullptr;
 	return VertexShaders.at(Name);
 }
 
-ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const string& Name) const
+ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const std::wstring& Name) const
 {
 	if (PixelShaders.find(Name) == PixelShaders.end())
 		return nullptr;

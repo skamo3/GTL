@@ -17,11 +17,11 @@ public:
 	virtual void Destroy() = 0;
 
 public:
-	string GetName() const { return NamePrivate; }
+	std::wstring GetName() const { return NamePrivate; }
 
 private:
 	// Name of this object.
-	string NamePrivate;
+	std::wstring NamePrivate;
 
 
 public:

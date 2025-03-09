@@ -12,13 +12,6 @@ class UObject;
 class AActor;
 class ACamera;
 
-
-struct FVertexSimple
-{
-	float X = 0.f, Y = 0.f, Z = 0.f;
-	float R = 0.f, G = 0.f, B = 0.f, A = 1.f;
-};
-
 class UDirectXHandle
 {
 public:
@@ -45,7 +38,7 @@ private:
 	D3D11_VIEWPORT ViewportInfo;
 
 public:
-	HRESULT AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
+	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
 public:
 	ComPtr<ID3D11Device>	GetD3DDevice() const { return DXDDevice; }
@@ -57,9 +50,9 @@ private:
 	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
 	ComPtr<IDXGISwapChain> DXDSwapChain;
 
-	TMap<string, shared_ptr<UDXDRenderTarget>> RenderTarget;
-	shared_ptr<UDXDDepthStencilView> DepthStencilView; // 여러개 보류.
-	shared_ptr<UDXDRasterizerState> RasterizerState; // 여러개 보류.
-	shared_ptr<UDXDShaderManager> ShaderManager;
+	TMap<std::wstring, UDXDRenderTarget*> RenderTarget;
+	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
+	UDXDRasterizerState* RasterizerState; // 여러개 보류.
+	UDXDShaderManager* ShaderManager;
 
 };

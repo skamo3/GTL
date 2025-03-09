@@ -15,7 +15,7 @@
 #include <queue>
 #include <set>
 #include <cmath>
-using namespace std;
+
 
 // D3D include
 #pragma comment(lib, "user32")
@@ -40,19 +40,19 @@ typedef	INT32		int32;
 typedef	INT64		int64;
 
 template <typename T>
-using TArray = vector<T>;
+using TArray = std::vector<T>;
 
 template <typename T1, typename T2>
-using TPair = pair<T1, T2>;
+using TPair = std::pair<T1, T2>;
 
 template <typename T1, typename T2>
-using TMap = unordered_map<T1, T2>;
+using TMap = std::unordered_map<T1, T2>;
 
 template <typename T>
-using TQueue = queue<T>;
+using TQueue = std::queue<T>;
 
 template <typename T>
-using TSet = set<T>;
+using TSet = std::set<T>;
 
 struct FWindowInfo
 {

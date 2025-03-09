@@ -7,13 +7,12 @@
 class UGTLStringLibrary
 {
 public:
-	static wstring StringToWString(const string& str)
+	static std::wstring StringToWString(const std::wstring& str)
 	{
-		wstring_convert<codecvt_utf8<wchar_t>> converter;
-		return converter.from_bytes(str);
+		return std::wstring();
 	}
 
-	/*static string WStringToString(const string& wstr)
+	/*static wstring WStringToString(const wstring& wstr)
 	{
 	}*/
 

@@ -7,7 +7,8 @@ UObject::UObject()
 {
 	UUID = UEngineStatics::GenUUID();
 	InternalIndex = 0;
-	NamePrivate = string(typeid(*this).name()) + "_" + to_string(UUID);
+	// string(typeid(*this).name()) + "_" + to_string(UUID);
+	NamePrivate = L"";
 }
 
 UObject::~UObject()
