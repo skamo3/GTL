@@ -57,7 +57,7 @@ HRESULT UDirectXHandle::CreateShaderManager()
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	HRESULT hr = ShaderManager->AddVertexShaderandInputLayout("DefaultVS", "Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
+	HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout("DefaultVS", "Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
 
 	hr = ShaderManager->AddPixelShader("DefaultPX", "Resource/Shader/ShaderW0.hlsl");
 	if (FAILED(hr))

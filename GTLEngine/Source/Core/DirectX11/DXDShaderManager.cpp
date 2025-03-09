@@ -53,7 +53,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const string& Name, const string& File
 	return S_OK;
 }
 
-HRESULT UDXDShaderManager::AddVertexShaderandInputLayout(const string& Name, const string& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const string& Name, const string& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
 	if (DXDDevice == nullptr)
 		return S_FALSE;

@@ -19,7 +19,7 @@ private:
 
 public:
 	
-	HRESULT AddVertexShaderandInputLayout(const string& Name, const string& FileName, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize);
+	HRESULT AddVertexShaderAndInputLayout(const string& Name, const string& FileName, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize);
 
 	HRESULT AddPixelShader(const string& Name, const string& FileName);
 
