@@ -3,7 +3,7 @@
 
 #include "DirectX11/DirectXHandle.h"
 #include "Manager/InputManager.h"
-#include "Manager/ResourceManager.h"
+#include "Resource/ResourceManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
