@@ -2,6 +2,8 @@
 
 #include "Math/Vector.h"
 
+#include "UI/UIManager.h"
+
 class UUIManager;
 
 class UJunglePropertyWindow {
@@ -25,3 +27,11 @@ private:
 	template<typename T>
 	void ChangeNumToStrWithMargin(int marginNum, T num);
 };
+
+template<typename T>
+void UJunglePropertyWindow::ChangeNumToStrWithMargin(int marginNum, T num) {
+	bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
+	//strOut = new char[bufSize];
+	//std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+	//strOut[bufSize - 1] = '\0';
+}

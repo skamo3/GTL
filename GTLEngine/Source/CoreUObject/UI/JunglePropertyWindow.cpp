@@ -1,8 +1,6 @@
 #include "pch.h"
 #include "JunglePropertyWindow.h"
 
-#include "UI/UIManager.h"
-
 // ImGui include.
 #include "ImGui/imgui.h"
 
@@ -23,15 +21,15 @@ void UJunglePropertyWindow::Draw()
     ImGui::PushItemWidth(67);
     ChangeNumToStrWithMargin(4, objectTranslation.X);
     ImGui::InputText("##objectTranslationX", strOut, bufSize);
-    objectTranslation.X = atof(strOut);
+    objectTranslation.X = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectTranslation.Y);
     ImGui::InputText("##objectTranslationY", strOut, bufSize);
-    objectTranslation.Y = atof(strOut);
+    objectTranslation.Y = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectTranslation.Z);
     ImGui::InputText("##objectTranslationZ", strOut, bufSize);
-    objectTranslation.Z = atof(strOut);
+    objectTranslation.Z = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ImGui::Text("Translation");
     ImGui::PopItemWidth();
@@ -40,15 +38,15 @@ void UJunglePropertyWindow::Draw()
     ImGui::PushItemWidth(67);
     ChangeNumToStrWithMargin(4, objectRotation.X);
     ImGui::InputText("##objectRotationX", strOut, bufSize);
-    objectRotation.X = atof(strOut);
+    objectRotation.X = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectRotation.Y);
     ImGui::InputText("##objectRotationY", strOut, bufSize);
-    objectRotation.Y = atof(strOut);
+    objectRotation.Y = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectRotation.Z);
     ImGui::InputText("##objectRotationZ", strOut, bufSize);
-    objectRotation.Z = atof(strOut);
+    objectRotation.Z = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ImGui::Text("Rotation");
     ImGui::PopItemWidth();
@@ -57,15 +55,15 @@ void UJunglePropertyWindow::Draw()
     ImGui::PushItemWidth(67);
     ChangeNumToStrWithMargin(4, objectScale.X);
     ImGui::InputText("##objectScaleX", strOut, bufSize);
-    objectScale.X = atof(strOut);
+    objectScale.X = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectScale.Y);
     ImGui::InputText("##objectScaleY", strOut, bufSize);
-    objectScale.Y = atof(strOut);
+    objectScale.Y = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectScale.Z);
     ImGui::InputText("##objectScaleZ", strOut, bufSize);
-    objectScale.Z = static_cast<float>(atof(strOut));
+    objectScale.Z = static_cast<float>(static_cast<float>(atof(strOut)));
     ImGui::SameLine();
     ImGui::Text("Scale");
     ImGui::PopItemWidth();
@@ -74,10 +72,3 @@ void UJunglePropertyWindow::Draw()
     ImGui::End();
 }
 
-template<typename T>
-void UJunglePropertyWindow::ChangeNumToStrWithMargin(int marginNum, T num) {
-    bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
-    strOut = new char[bufSize];
-    //std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
-    strOut[bufSize - 1] = '\0';
-}

@@ -2,6 +2,8 @@
 
 #include "Math/Vector.h"
 
+#include "UI/UIManager.h"
+
 const char* primitives[] = { "Sphere", "Cube", "Triangle" };
 
 class UUIManager;
@@ -30,3 +32,12 @@ private:
 	template<typename T>
 	void ChangeNumToStrWithMargin(int marginNum, T num);
 };
+
+template<typename T>
+void UJungleControlPanel::ChangeNumToStrWithMargin(int marginNum, T num)
+{
+	bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
+	//strOut = new char[bufSize];
+	//std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+	//strOut[bufSize - 1] = '\0';
+}
