@@ -18,57 +18,56 @@ void UJunglePropertyWindow::Draw()
 {
     ImGui::Begin("Jungle Property Window ");
 
-    ImGui::PushItemWidth(67);
-    ChangeNumToStrWithMargin(4, objectTranslation.X);
-    ImGui::InputText("##objectTranslationX", strOut, bufSize);
-    objectTranslation.X = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectTranslation.Y);
-    ImGui::InputText("##objectTranslationY", strOut, bufSize);
-    objectTranslation.Y = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectTranslation.Z);
-    ImGui::InputText("##objectTranslationZ", strOut, bufSize);
-    objectTranslation.Z = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ImGui::Text("Translation");
-    ImGui::PopItemWidth();
-
-
-    ImGui::PushItemWidth(67);
-    ChangeNumToStrWithMargin(4, objectRotation.X);
-    ImGui::InputText("##objectRotationX", strOut, bufSize);
-    objectRotation.X = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectRotation.Y);
-    ImGui::InputText("##objectRotationY", strOut, bufSize);
-    objectRotation.Y = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectRotation.Z);
-    ImGui::InputText("##objectRotationZ", strOut, bufSize);
-    objectRotation.Z = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ImGui::Text("Rotation");
-    ImGui::PopItemWidth();
-
-
-    ImGui::PushItemWidth(67);
-    ChangeNumToStrWithMargin(4, objectScale.X);
-    ImGui::InputText("##objectScaleX", strOut, bufSize);
-    objectScale.X = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectScale.Y);
-    ImGui::InputText("##objectScaleY", strOut, bufSize);
-    objectScale.Y = static_cast<float>(atof(strOut));
-    ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, objectScale.Z);
-    ImGui::InputText("##objectScaleZ", strOut, bufSize);
-    objectScale.Z = static_cast<float>(static_cast<float>(atof(strOut)));
-    ImGui::SameLine();
-    ImGui::Text("Scale");
-    ImGui::PopItemWidth();
-
+    DrawObjectTranslation();
+    DrawObjectRotation();
+    DrawObjectScale();
 
     ImGui::End();
 }
+
+void UJunglePropertyWindow::DrawObjectTranslation()
+{
+    ImGui::PushItemWidth(67);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.X, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Y, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Z, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::Text("Translation");
+    ImGui::PopStyleVar();
+    ImGui::PopItemWidth();
+}
+
+void UJunglePropertyWindow::DrawObjectRotation()
+{
+    ImGui::PushItemWidth(67);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("##objectRotationX", &objectRotation.X, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectRotationY", &objectRotation.Y, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectRotationZ", &objectRotation.Z, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::Text("Rotation");
+    ImGui::PopStyleVar();
+    ImGui::PopItemWidth();
+}
+
+void UJunglePropertyWindow::DrawObjectScale()
+{
+    ImGui::PushItemWidth(67);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("##objectScaleX", &objectScale.X, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectScaleY", &objectScale.Y, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::SliderFloat("##objectScaleZ", &objectScale.Z, -10.f, 10.f, "%.3f");
+    ImGui::SameLine();
+    ImGui::Text("Scale");
+    ImGui::PopStyleVar();
+    ImGui::PopItemWidth();
+}
+
 
