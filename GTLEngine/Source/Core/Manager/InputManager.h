@@ -13,6 +13,7 @@ public:
     };
 
     UInputManager();
+    ~UInputManager();
 
     // 매 프레임 호출하여 입력 상태를 업데이트
     void Update(HWND hWnd, int Width, int Height);
@@ -58,8 +59,7 @@ protected:
     void ConvertMouseToNDC(HWND hWnd, int Width, int Height);
 
 private:
-    // 소멸자, 복사/대입 금지
-    ~UInputManager();
+    // 복사 및 대입 금지
     UInputManager(const UInputManager&) = delete;
     UInputManager& operator=(const UInputManager&) = delete;
     UInputManager(UInputManager&&) = delete;

@@ -8,7 +8,10 @@ UInputManager::UInputManager()
 {}
 
 UInputManager::~UInputManager()
-{}
+{
+    currentKeyStates.clear();
+    prevKeyStates.clear();
+}
 
 void UInputManager::Update(HWND hWnd, int Width, int Height)
 {

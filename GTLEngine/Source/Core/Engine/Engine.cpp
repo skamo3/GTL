@@ -66,6 +66,23 @@ void UEngine::Render()
 void UEngine::ClearEngine()
 {
 	if (DirectX11Handle)
+	{
 		DirectX11Handle->ReleaseDirectX11Handle();
+	}
+
+	if (ResourceManager.get())
+	{
+        ResourceManager.reset();
+	}
+
+    if (World.get())
+    {
+        World.reset();
+    }
+
+    if (InputManager)
+    {
+        delete InputManager;
+    }
 }
 
