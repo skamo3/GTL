@@ -2,7 +2,7 @@
 #pragma once
 #include <cmath>
 
-#define SMALL_NUMBER (0.00000001f)
+#define SMALL_NUMBER 1.e-8f
 #define PI 3.1415926535897932384626433832795f
 #define PI2 6.283185307179586476925286766559f
 
@@ -14,7 +14,7 @@ struct FVector
 	static const FVector ZeroVector;
 	// Vector(1, 1, 1)
 	static const FVector OneVector;
-	// Vector(0,1, 0)
+	// DirectX 기준 : Vector(0, 1, 0)
 	static const FVector UpVector;
 	// DirectX 기준 : Vector(0, -1, 0)
 	static const FVector DownVector;
