@@ -50,7 +50,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 
 HRESULT UDirectXHandle::CreateShaderManager()
 {
-	ShaderManager = make_shared<UDXDShaderManager>(DXDDevice);
+	ShaderManager = new UDXDShaderManager(DXDDevice);
 	if (ShaderManager == nullptr)
 		return S_FALSE;
 
@@ -61,9 +61,9 @@ HRESULT UDirectXHandle::CreateShaderManager()
 		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout("DefaultVS", "Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
+	HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
 
-	hr = ShaderManager->AddPixelShader("DefaultPX", "Resource/Shader/ShaderW0.hlsl");
+	hr = ShaderManager->AddPixelShader(L"DefaultPX", L"Resource/Shader/ShaderW0.hlsl");
 	if (FAILED(hr))
 		return hr;
 
@@ -79,7 +79,7 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		return hr;
 
 	// 래스터라이저 스테이트 생성.
-	RasterizerState = make_shared<UDXDRasterizerState>();
+	RasterizerState = new UDXDRasterizerState();
 	if (RasterizerState == nullptr)
 		return S_FALSE;
 	hr = RasterizerState->CreateRasterizerState(DXDDevice);
@@ -91,7 +91,7 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 	hr = CreateShaderManager();
 	
 	// 뎁스 스텐실 뷰 생성.
-	DepthStencilView = make_shared<UDXDDepthStencilView>();
+	DepthStencilView = new UDXDDepthStencilView();
 	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle);
 	if (FAILED(hr))
 		return hr;
@@ -174,14 +174,14 @@ void UDirectXHandle::InitView()
 	DXDDeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 }
 
-HRESULT UDirectXHandle::AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
+HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
-	shared_ptr<UDXDRenderTarget> NewRenderTarget = make_shared<UDXDRenderTarget>();
+	UDXDRenderTarget* NewRenderTarget = new UDXDRenderTarget();
 	
 	HRESULT hr = NewRenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
 	if (FAILED(hr))
 		return hr;
-	RenderTarget.insert(make_pair(TargetName, NewRenderTarget));
+	RenderTarget.insert(std::make_pair(TargetName, NewRenderTarget));
 
 	return S_OK;
 }

@@ -26,7 +26,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // 색상 포맷
 	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
 
-	hr = DirectX11Handle->AddRenderTarget("MainRenderTarget", framebufferRTVdesc);
+	hr = DirectX11Handle->AddRenderTarget(L"MainRenderTarget", framebufferRTVdesc);
 	if (FAILED(hr))
 	{
 		MessageBox(WindowInfo.WindowHandle, L"렌더 타겟 추가 실패", L"에러", MB_OK);
@@ -38,7 +38,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 리소스 매니저 추가.
 
     // 월드 추가.
-	World = UWorld::CreateWorld("MainWorld");
+	World = UWorld::CreateWorld(L"MainWorld");
 
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
