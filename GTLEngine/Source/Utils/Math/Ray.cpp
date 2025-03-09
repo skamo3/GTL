@@ -121,7 +121,60 @@ bool FRayCast::IntersectRayAABB(const FRay& ray, const FVector& boxMin, const FV
     }
 }
 
-bool FRayCast::IntersectRayTriangle(const FRay& ray, const FVector& v0, const FVector& v1, const FVector& v2, OUT float& outT)
+bool FRayCast::IntersectRayTrianglePlane(const FRay& ray, const FVector& v0, const FVector& v1, const FVector& v2, OUT float& outT)
 {
-	return false;
+    // 삼각형 평면의 법선 계산
+    FVector edge0 = v1 - v0;
+    FVector edge1 = v2 - v0;
+    FVector normal = edge0.Cross(edge1).GetNormalizedVector();
+
+    // 평면과의 교차 검사
+    float t;
+    if (!IntersectRayPlane(ray, v0, normal, t))
+        return false;
+
+    // Ray 상의 교차점 P 계산
+    FVector P = ray.GetOrigin() + ray.GetDirection() * t;
+
+    // 바리센트릭 좌표 계산으로 P가 삼각형 내부에 있는지 판별
+    // 바리센트릭 좌표(barycentric coordinates)는 삼각형 내부의 임의의 점을 삼각형의 세 꼭짓점에 대한 가중치의 조합으로 표현하는 좌표계
+	// 삼각형의 꼭짓점을 v0, v1, v2 라고 할 때, P = u*v0 + v*v1 + (1-u-v)*v2 로 표현
+	// u, v, 1-u-v이 모두 0 이상이고, u+v가 1 이하이면 삼각형 내부에 있다고 판단
+
+    FVector vp0 = P - v0;
+    float dot00 = edge0.Dot(edge0);
+    float dot01 = edge0.Dot(edge1);
+    float dot02 = edge0.Dot(vp0);
+    float dot11 = edge1.Dot(edge1);
+    float dot12 = edge1.Dot(vp0);
+
+    float invDenom = 1.0f / (dot00 * dot11 - dot01 * dot01);
+    float u = (dot11 * dot02 - dot01 * dot12) * invDenom;
+    float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
+
+    // u와 v가 모두 0 이상이고, u+v가 1 이하이면 삼각형 내부에 있음
+    if (u < 0 || v < 0 || (u + v) > 1)
+        return false;
+
+    outT = t;
+    return true;
+}
+
+bool FRayCast::IntersectRayPlane(const FRay& ray, const FVector& planePoint, const FVector& planeNormal, OUT float& outT)
+{
+	float denom = ray.GetDirection().Dot(planeNormal);
+
+	if (fabs(denom) < SMALL_NUMBER)
+	{
+		return false;
+	}
+
+	float t = (planePoint - ray.GetOrigin()).Dot(planeNormal) / denom;
+	if (t < 0)
+	{
+		return false;
+	}
+
+	outT = t;
+	return true;
 }
