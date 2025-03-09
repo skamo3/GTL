@@ -39,9 +39,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         nullptr, nullptr, hInstance, nullptr);
     
 	UEngine& Engine = UEngine::GetEngine();
-    Engine.InitEngine(hWnd);
+    bool GameLoopState = Engine.InitEngine(hWnd);
 
-    bool GameLoopState = true;
     while (GameLoopState)
     {
         MSG msg;

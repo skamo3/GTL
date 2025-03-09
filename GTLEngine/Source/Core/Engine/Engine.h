@@ -29,7 +29,7 @@ public:
         return Engine;
     }
 
-    void InitEngine(HWND hWnd);
+    bool InitEngine(HWND hWnd);
 	void Update();
     void Render();
 	void ClearEngine();
