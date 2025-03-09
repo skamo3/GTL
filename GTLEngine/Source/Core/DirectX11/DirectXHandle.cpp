@@ -11,6 +11,8 @@
 
 #include "Engine.h"
 
+#include "Gizmo/Gizmo.h"
+
 UDirectXHandle::~UDirectXHandle()
 {
 	ReleaseDirectX11Handle();

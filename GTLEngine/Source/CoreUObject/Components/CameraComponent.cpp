@@ -9,4 +9,5 @@ void UCameraComponent::Tick(float TickTime)
 
 void UCameraComponent::Destroy()
 {
+	USceneComponent::Destroy();
 }

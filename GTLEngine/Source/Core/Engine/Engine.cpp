@@ -9,6 +9,8 @@
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/Gizmo.h"
 
+#include "Gizmo/Gizmo.h"
+
 uint32 UEngineStatics::NextUUID = 0;
 
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)

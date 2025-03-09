@@ -2,6 +2,8 @@
 
 #include "Object.h"
 
+class AActor;
+
 class UActorComponent : public UObject
 {
 
@@ -10,4 +12,8 @@ public:
 	virtual void Destroy() override;
 
 public:
+	AActor* GetOwner() const { return OwnerPrivate; }
+
+private:
+	AActor* OwnerPrivate;
 };
