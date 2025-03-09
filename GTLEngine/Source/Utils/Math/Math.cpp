@@ -133,16 +133,16 @@ FVector FMath::TransformDirection(const FVector& dir, const FMatrix& m)
 	return result;
 }
 
-FRay FMath::CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight)
+FRay FMath::CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight)
 {
 	// Screen 좌표계를 NDC 좌표계로 변환
 	float ndcX = (2.0f * mousePos.X) / screenWidth - 1.0f;
 	float ndcY = 1.0f - (2.0f * mousePos.Y) / screenHeight;
 
-	return CalculateRay(viewMatrix, projMatrix, ndcX, ndcY, screenWidth, screenHeight);
+	return CreateRay(viewMatrix, projMatrix, ndcX, ndcY, screenWidth, screenHeight);
 }
 
-FRay FMath::CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight)
+FRay FMath::CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight)
 {
 	FRay resultRay;
 

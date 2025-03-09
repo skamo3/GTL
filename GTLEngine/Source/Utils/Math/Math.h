@@ -128,13 +128,13 @@ struct FMath
 	/// <summary>
 	/// Mouse Position을 사용하여 Ray를 생성
 	/// </summary>
-	static FRay CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight);
+	static FRay CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight);
 
 	/// <summary>
 	/// Mouse Position을 사용하여 Ray를 생성
 	/// </summary>
 	/// <param name="ndcMouseX">ndc 좌표로 변환된 MouseX</param>
 	/// <param name="ndcMouseY">ndc 좌표로 변환된 MouseY</param>
-	static FRay CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight);
+	static FRay CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight);
 };
 
