@@ -44,6 +44,12 @@
     <Filter Include="Utils\Math">
       <UniqueIdentifier>{6d872954-0dfc-4b02-ace1-94496a445dc4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Core\Resource">
+      <UniqueIdentifier>{90606f6a-3a7d-493b-bf6c-270521d09937}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Resource\Shape">
+      <UniqueIdentifier>{0e6dd969-e426-44d8-ae97-12fd5536dc00}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -72,9 +78,6 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Engine\Engine.cpp">
       <Filter>Source\Core\Engine</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Manager\ResourceManager.cpp">
-      <Filter>Source\Core\Manager</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\DirectX11\DXDRasterizerState.cpp">
       <Filter>Source\Core\DirectX11</Filter>
@@ -142,6 +145,9 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Camera.cpp">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Resource\ResourceManager.cpp">
+      <Filter>Source\Core\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -167,9 +173,6 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Engine\Engine.h">
       <Filter>Source\Core\Engine</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Manager\ResourceManager.h">
-      <Filter>Source\Core\Manager</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\DXDRasterizerState.h">
       <Filter>Source\Core\DirectX11</Filter>
@@ -236,6 +239,15 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Camera.h">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Resource\ResourceManager.h">
+      <Filter>Source\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h">
+      <Filter>Source\Core\Resource\Shape</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Resource\VertexTypes.h">
+      <Filter>Source\Core\Resource</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

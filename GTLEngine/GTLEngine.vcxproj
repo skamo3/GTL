@@ -43,8 +43,8 @@
     <ClCompile Include="Source\Core\Manager\InputManager.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="Source\Core\Manager\ResourceManager.cpp" />
     <ClCompile Include="Source\Core\Manager\TimeManager.cpp" />
+    <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
@@ -83,8 +83,10 @@
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />
     <ClInclude Include="Source\Core\Manager\InputManager.h" />
-    <ClInclude Include="Source\Core\Manager\ResourceManager.h" />
     <ClInclude Include="Source\Core\Manager\TimeManager.h" />
+    <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
+    <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
+    <ClInclude Include="Source\Core\Resource\VertexTypes.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
     <ClInclude Include="Source\Utils\Math\Math.h" />
