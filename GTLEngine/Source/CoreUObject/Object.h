@@ -13,8 +13,7 @@ public:
 
 
 public:
-	virtual void Init() = 0;
-	virtual void Update(float TickTime) = 0;
+	virtual void Tick(float TickTime) = 0;
 	virtual void Destroy() = 0;
 
 public:
@@ -40,4 +39,4 @@ private:
 
 };
 
-//TArray<UObject*> GUObjectArray;
+TArray<UObject*> GUObjectArray;

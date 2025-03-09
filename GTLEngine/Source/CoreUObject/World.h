@@ -25,15 +25,16 @@ public:
 		if (newActor != nullptr)
 		{
 			newActor->SetOwner(InOwner);
-			Actors.push_back(newActor);
+			ActiveActors.push_back(newActor);
 		}
 		return newObj;
 	}
 
 public:
-	virtual void Init() override;
-	virtual void Update(float TickTime) override;
+	void CameraTick(float TickTime);
+	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
+
 
 
 public:

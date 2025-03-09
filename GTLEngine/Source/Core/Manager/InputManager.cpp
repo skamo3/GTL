@@ -10,7 +10,7 @@ UInputManager::UInputManager()
 UInputManager::~UInputManager()
 {}
 
-void UInputManager::Update(HWND hWnd, int Width, int Height)
+void UInputManager::Tick(HWND hWnd, int Width, int Height)
 {
     // 현재 키 상태를 이전 상태에 복사
     prevKeyStates = currentKeyStates;

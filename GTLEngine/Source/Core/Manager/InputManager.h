@@ -11,7 +11,7 @@ public:
     }
 
     // 매 프레임 호출하여 입력 상태를 업데이트
-    void Update(HWND hWnd, int Width, int Height);
+    void Tick(HWND hWnd, int Width, int Height);
 
     // 키보드 입력 함수
     bool GetKey(int key) const;

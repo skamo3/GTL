@@ -4,6 +4,8 @@ class UDirectXHandle;
 class UResourceManager;
 class UWorld;
 
+class ACamera;
+
 class UEngineStatics
 {
 public:
@@ -30,7 +32,7 @@ public:
     }
 
     bool InitEngine(HWND hWnd);
-	void Update();
+	void Tick();
     void Render();
 	void ClearEngine();
 
@@ -44,9 +46,10 @@ private:
 
 private:
 	UDirectXHandle* DirectX11Handle;
-	shared_ptr<UResourceManager> ResourceManager;
-    shared_ptr<UWorld> World;
+	UResourceManager* ResourceManager;
+    UWorld* World;
 
+    ACamera* MainCamera;
 
 public:
     void AddTotalAllocationBytes(uint32 NewBytes);

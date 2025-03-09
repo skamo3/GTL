@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Object.h"
+#include "Components/ActorComponent.h"
 
-class UActorComponent : public UObject
+class UCameraComponent : public UActorComponent
 {
 
 public:

@@ -127,7 +127,14 @@ void UDirectXHandle::ReleaseDirectX11Handle()
 	ShaderManager->ReleaseAllShader();
 }
 
-void UDirectXHandle::Render(const TArray<AActor> Actors)
+void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
+{
+	// Camera->GetCameraComponent.
+	// MVP 계산 행렬 구하고
+	// 카메라 상수버퍼로 바로 전달.
+}
+
+void UDirectXHandle::Render(const TArray<AActor*> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.
 	InitView();

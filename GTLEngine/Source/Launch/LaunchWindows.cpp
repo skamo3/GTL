@@ -70,7 +70,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
 
-        Engine.Update();
+        Engine.Tick();
 		Engine.Render();
     }
 

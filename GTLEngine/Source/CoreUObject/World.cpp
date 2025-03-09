@@ -11,15 +11,17 @@ UWorld* UWorld::CreateWorld(string WorldName)
     return NewWorld;
 }
 
-void UWorld::Init()
+void UWorld::CameraTick(float TickTime)
 {
+	// 카메라 정보 업데이트.
+	// 위치, 뭐 등등..
 }
 
-void UWorld::Update(float TickTime)
+void UWorld::Tick(float TickTime)
 {
 	for (AActor* Actor : ActiveActors)
 	{
-		Actor->Update(TickTime);
+		Actor->Tick(TickTime);
 	}
 }
 

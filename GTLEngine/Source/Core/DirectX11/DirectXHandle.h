@@ -10,6 +10,7 @@ class UDXDInputLayout;
 
 class UObject;
 class AActor;
+class ACamera;
 
 class UDirectXHandle
 {
@@ -26,7 +27,8 @@ public:
 	HRESULT CreateDirectX11Handle(HWND hWnd);
 	void ReleaseDirectX11Handle();
 
-	void Render(const TArray<AActor> Actors);
+	void UpdateCameraMatrix(ACamera* Camera);
+	void Render(const TArray<AActor*> Actors);
 
 	HWND GetWindowHandle() const { return WindowHandle; }
 
