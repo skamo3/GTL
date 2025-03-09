@@ -25,39 +25,14 @@ void UDXDShaderManager::ReleaseAllShader()
 			Shader.second.Reset();
 	}
 
-	VertexShaders.clear();
 	PixelShaders.clear();
-	if (VertexShaderCSO)
-	{
-		VertexShaderCSO.Reset();
-	}
 	if (PixelShaderCSO)
 	{
 		PixelShaderCSO.Reset();
 	}
 }
 
-HRESULT UDXDShaderManager::AddVertexShader(const string& FileName, ComPtr<ID3DBlob>& Blob)
-{
-	HRESULT hr;
-
-	if (DXDDevice == nullptr)
-		return S_FALSE;
-
-	hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FileName).c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &Blob, nullptr);
-	if (FAILED(hr))
-		return hr;
-
-	ComPtr<ID3D11VertexShader> NewVertexShader;
-	hr = DXDDevice->CreateVertexShader(Blob->GetBufferPointer(), Blob->GetBufferSize(), nullptr, &NewVertexShader);
-	if (FAILED(hr))
-		return hr;
-	VertexShaders.insert(make_pair(FileName, NewVertexShader));
-
-	return S_OK;
-}
-
-HRESULT UDXDShaderManager::AddPixelShader(const string& FileName)
+HRESULT UDXDShaderManager::AddPixelShader(const string& Name, const string& FileName)
 {
 	HRESULT hr;
 
@@ -73,7 +48,36 @@ HRESULT UDXDShaderManager::AddPixelShader(const string& FileName)
 	if (FAILED(hr))
 		return hr;
 
-	PixelShaders.insert(make_pair(FileName, NewPixelShader));
+	PixelShaders.insert(make_pair(Name, NewPixelShader));
+
+	return S_OK;
+}
+
+HRESULT UDXDShaderManager::AddVertexShaderandInputLayout(const string& Name, const string& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+{
+	if (DXDDevice == nullptr)
+		return S_FALSE;
+	HRESULT hr;
+
+	ComPtr<ID3DBlob> VertexShaderCSO;
+
+	hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FilePath).c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
+	if (FAILED(hr))
+		return hr;
+
+	ComPtr<ID3D11VertexShader> NewVertexShader;
+	hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
+	if (FAILED(hr))
+		return hr;
+	VertexShaders.insert(make_pair(Name, NewVertexShader));
+
+	ComPtr<ID3D11InputLayout> NewInputLayout;
+	hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &NewInputLayout);
+	if (FAILED(hr))
+		return hr;
+
+	InputLayouts.insert(make_pair(Name, NewInputLayout));
+	
 
 	return S_OK;
 }

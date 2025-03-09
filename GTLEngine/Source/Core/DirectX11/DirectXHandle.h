@@ -19,22 +19,26 @@ public:
 
 private:
 	HRESULT CreateDeviceAndSwapchain();
+	HRESULT CreateShaderManager();
 
 public:
 	HRESULT CreateDirectX11Handle(HWND hWnd);
 	void ReleaseDirectX11Handle();
 
-	void PrepareRender();
 	void Render();
 
 	HWND GetWindowHandle() const { return WindowHandle; }
+
+private:
+	void InitView();
+
 
 private:
 	HWND WindowHandle;
 	D3D11_VIEWPORT ViewportInfo;
 
 public:
-	void AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
+	HRESULT AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
 public:
 	ComPtr<ID3D11Device>	GetD3DDevice() const { return DXDDevice; }
@@ -46,11 +50,9 @@ private:
 	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
 	ComPtr<IDXGISwapChain> DXDSwapChain;
 
-	TMap<string, shared_ptr<UDXDRenderTarget>>		RenderTarget;
-	shared_ptr<UDXDDepthStencilView>	DepthStencilView; // 여러개 보류.
-	shared_ptr<UDXDRasterizerState>		RasterizerState; // 여러개 보류.
-	shared_ptr<UDXDShaderManager>			ShaderManager;
-
-	shared_ptr<UDXDInputLayout> InputLayout;
+	TMap<string, shared_ptr<UDXDRenderTarget>> RenderTarget;
+	shared_ptr<UDXDDepthStencilView> DepthStencilView; // 여러개 보류.
+	shared_ptr<UDXDRasterizerState> RasterizerState; // 여러개 보류.
+	shared_ptr<UDXDShaderManager> ShaderManager;
 
 };

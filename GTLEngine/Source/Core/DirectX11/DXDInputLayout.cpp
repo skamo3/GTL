@@ -11,5 +11,6 @@ HRESULT UDXDInputLayout::CreateInputLayout(ComPtr<ID3D11Device> Device, ComPtr<I
     };
 
 	Device->CreateInputLayout(layout, ARRAYSIZE(layout), Blob->GetBufferPointer(), Blob->GetBufferSize(), &DXDInputLayout);
+
 	return S_OK;
 }

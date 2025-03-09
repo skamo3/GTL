@@ -44,14 +44,38 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 	return S_OK;
 }
 
+HRESULT UDirectXHandle::CreateShaderManager()
+{
+	ShaderManager = make_shared<UDXDShaderManager>(DXDDevice);
+	if (ShaderManager == nullptr)
+		return S_FALSE;
+
+	// VertexShader 생성 및 InputLayout 생성.
+	D3D11_INPUT_ELEMENT_DESC layout[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+	};
+
+	HRESULT hr = ShaderManager->AddVertexShaderandInputLayout("DefaultVS", "Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
+
+	hr = ShaderManager->AddPixelShader("DefaultPX", "Resource/Shader/ShaderW0.hlsl");
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
+}
+
 HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 {
 	WindowHandle = hWnd;
 	HRESULT hr;
+	// 디바이스 및 스왑체인 생성.
 	hr = CreateDeviceAndSwapchain();
 	if (FAILED(hr))
 		return hr;
 
+	// 래스터라이저 스테이트 생성.
 	RasterizerState = make_shared<UDXDRasterizerState>();
 	if (RasterizerState == nullptr)
 		return S_FALSE;
@@ -59,33 +83,15 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 	if (FAILED(hr))
 		return hr;
 
-	// 셰이더 생성
-	ShaderManager = make_shared<UDXDShaderManager>(DXDDevice);
-	if (ShaderManager == nullptr)
-		return S_FALSE;
-	InputLayout = make_shared<UDXDInputLayout>();
-	if (InputLayout == nullptr)
-		return S_FALSE;
-
-	ComPtr<ID3DBlob> VertexShaderBlob;
-	hr = ShaderManager->AddVertexShader("Resource/Shader/ShaderW0.hlsl", VertexShaderBlob);
-	if (FAILED(hr))
-		return hr;
-
-	// 이 위로 VertexShader 추가 생성
-	hr = InputLayout->CreateInputLayout(DXDDevice, VertexShaderBlob); // Blob은 마지막 최종 Blob으로 저장. 대신 InputLayout은 동일하게 맞춰주어야 함.
-	if (FAILED(hr))
-		return hr;
-
-	hr = ShaderManager->AddPixelShader("Resource/Shader/ShaderW0.hlsl");
-	if (FAILED(hr))
-		return hr;
-
+	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
+	// VertexShader, InputLayout 는 쌍으로 생성 및 이름으로 관리.
+	hr = CreateShaderManager();
+	
+	// 뎁스 스텐실 뷰 생성.
 	DepthStencilView = make_shared<UDXDDepthStencilView>();
 	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, WindowHandle);
 	if (FAILED(hr))
 		return hr;
-
 
 	return S_OK;
 }
@@ -119,10 +125,23 @@ void UDirectXHandle::ReleaseDirectX11Handle()
 	ShaderManager->ReleaseAllShader();
 }
 
-void UDirectXHandle::PrepareRender()
+void UDirectXHandle::Render()
+{
+	// 그릴 렌더 타겟뷰 초기화.
+	InitView();
+	// 셰이더 준비.
+	// 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
+	// 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.
+	// 액터에 해당하는 오브젝트 렌더링.
+
+
+	DXDSwapChain->Present(1, 0);
+}
+
+void UDirectXHandle::InitView()
 {
 	// 렌더 타겟 클리어 및 클리어에 적용할 색.
-	FLOAT ClearColor[4] = { 1.0f, 0.f, 0.f, 1.0f };
+	FLOAT ClearColor[4] = { 0.25f, 0.25f, 0.25f, 1.0f };
 
 	for (auto& Target : RenderTarget)
 	{
@@ -145,15 +164,14 @@ void UDirectXHandle::PrepareRender()
 	DXDDeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
 }
 
-void UDirectXHandle::Render()
-{
-
-	DXDSwapChain->Present(1, 0);
-}
-
-void UDirectXHandle::AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
+HRESULT UDirectXHandle::AddRenderTarget(string TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
 	shared_ptr<UDXDRenderTarget> NewRenderTarget = make_shared<UDXDRenderTarget>();
-	NewRenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
+	
+	HRESULT hr = NewRenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
+	if (FAILED(hr))
+		return hr;
 	RenderTarget.insert(make_pair(TargetName, NewRenderTarget));
+
+	return S_OK;
 }
