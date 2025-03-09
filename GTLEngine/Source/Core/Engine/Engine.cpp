@@ -2,6 +2,7 @@
 #include "Engine.h"
 
 #include "DirectX11/DirectXHandle.h"
+#include "Manager/InputManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
@@ -33,6 +34,13 @@ bool UEngine::InitEngine(HWND hWnd)
 
 	// 셰이더 추가.
 
+    // 리소스 매니저 추가.
+
+    // 월드 추가.
+
+    // 인풋 매니저 추가.
+    InputManager = new UInputManager();
+
 	return true;
 }
 
@@ -58,6 +66,23 @@ void UEngine::Render()
 void UEngine::ClearEngine()
 {
 	if (DirectX11Handle)
+	{
 		DirectX11Handle->ReleaseDirectX11Handle();
+	}
+
+	if (ResourceManager.get())
+	{
+        ResourceManager.reset();
+	}
+
+    if (World.get())
+    {
+        World.reset();
+    }
+
+    if (InputManager)
+    {
+        delete InputManager;
+    }
 }
 

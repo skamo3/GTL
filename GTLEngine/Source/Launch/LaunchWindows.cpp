@@ -25,6 +25,9 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         // Signal that the app should quit
         PostQuitMessage(0);
         break;
+    case WM_SIZE:
+        // TODO: Signal that the window size has changed
+        break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
     }
@@ -67,6 +70,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 GameLoopState = false;
                 break;
             }
+
+            // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달
         }
 
 

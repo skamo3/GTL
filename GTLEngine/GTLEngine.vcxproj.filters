@@ -136,6 +136,9 @@
     <ClCompile Include="Source\Core\Manager\InputManager.cpp">
       <Filter>Source\Core\Manager</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -224,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Manager\InputManager.h">
       <Filter>Source\Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

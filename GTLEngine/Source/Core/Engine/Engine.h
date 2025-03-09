@@ -3,6 +3,7 @@
 class UDirectXHandle;
 class UResourceManager;
 class UWorld;
+class UInputManager;
 
 class ACamera;
 
@@ -36,6 +37,15 @@ public:
     void Render();
 	void ClearEngine();
 
+    // Getter
+    UDirectXHandle* GetDirectX11Handle() const { return DirectX11Handle; }
+    UResourceManager* GetResourceManager() const { return ResourceManager.get(); }
+    UWorld* GetWorld() const { return World.get(); }
+    UInputManager* GetInputManager() const { return InputManager; }
+
+    uint32 GetTotalAllocationBytes() const { return TotalAllocationBytes; }
+    uint32 GetTotalAllocationCount() const { return TotalAllocationCount; }
+
 private:
     UEngine() = default;
     ~UEngine() = default;
@@ -50,6 +60,7 @@ private:
     UWorld* World;
 
     ACamera* MainCamera;
+    UInputManager* InputManager;
 
 public:
     void AddTotalAllocationBytes(uint32 NewBytes);
