@@ -108,16 +108,67 @@ FMatrix FMath::CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const 
 	return modelMat * viewMat * projMat;
 }
 
-FVector FMath::TransformNormal(const FVector& v, const FMatrix& m)
+FVector FMath::TransformPos(const FVector& pos, const FMatrix& m, OUT float& w)
+{
+	FVector result;
+	result.X = m.M[0][0] * pos.X + m.M[1][0] * pos.Y + m.M[2][0] * pos.Z + m.M[3][0];
+	result.Y = m.M[0][1] * pos.X + m.M[1][1] * pos.Y + m.M[2][1] * pos.Z + m.M[3][1];
+	result.Z = m.M[0][2] * pos.X + m.M[1][2] * pos.Y + m.M[2][2] * pos.Z + m.M[3][2];
+	w = m.M[0][3] * pos.X + m.M[1][3] * pos.Y + m.M[2][3] * pos.Z + m.M[3][3];
+
+	return result;
+}
+
+FVector FMath::TransformDirection(const FVector& dir, const FMatrix& m)
 {
 	FVector result;
 
 	// (x, y, z, 0)을 m과 곱한다 (Translation은 무시)
 	// row-vector × matrix 형태로 계산
-	// v' = [v.x, v.y, v.z, 0] × m
-	result.X = v.X * m.M[0][0] + v.Y * m.M[1][0] + v.Z * m.M[2][0];
-	result.Y = v.X * m.M[0][1] + v.Y * m.M[1][1] + v.Z * m.M[2][1];
-	result.Z = v.X * m.M[0][2] + v.Y * m.M[1][2] + v.Z * m.M[2][2];
+	// v' = [dir.x, dir.y, dir.z, 0] × m
+	result.X = dir.X * m.M[0][0] + dir.Y * m.M[1][0] + dir.Z * m.M[2][0];
+	result.Y = dir.X * m.M[0][1] + dir.Y * m.M[1][1] + dir.Z * m.M[2][1];
+	result.Z = dir.X * m.M[0][2] + dir.Y * m.M[1][2] + dir.Z * m.M[2][2];
 
 	return result;
+}
+
+FRay FMath::CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight)
+{
+	// Screen 좌표계를 NDC 좌표계로 변환
+	float ndcX = (2.0f * mousePos.X) / screenWidth - 1.0f;
+	float ndcY = 1.0f - (2.0f * mousePos.Y) / screenHeight;
+
+	return CalculateRay(viewMatrix, projMatrix, ndcX, ndcY, screenWidth, screenHeight);
+}
+
+FRay FMath::CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight)
+{
+	FRay resultRay;
+
+	FVector startClip = FVector(ndcMouseX, ndcMouseY, 0.0f);
+	FVector endClip = FVector(ndcMouseX, ndcMouseY, 1.0f);
+
+	// View-Projection 행렬의 역행렬 계산
+	FMatrix viewProj = viewMatrix * projMatrix;
+	FMatrix invViewProj;
+	if (FMatrix::Inverse(viewProj, invViewProj) == false)
+	{
+		return resultRay;
+	}
+
+	// NDC 좌표계를 월드 좌표계로 변환
+	float startW = 0;
+	FVector startWorldPos = TransformPos(startClip, invViewProj, startW);
+	startWorldPos /= startW;
+
+	float endW = 0;
+	FVector endWorldPos = TransformPos(endClip, invViewProj, endW);
+	endWorldPos /= endW;
+
+	// Ray 생성
+	resultRay.SetOrigin(startWorldPos);
+	resultRay.SetDirection(FVector(endWorldPos - startWorldPos).GetNormalizedVector());
+
+	return resultRay;
 }

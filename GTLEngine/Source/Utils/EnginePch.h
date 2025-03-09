@@ -1,5 +1,7 @@
 #pragma once
 
+#define NOMINMAX
+
 // STL include
 #include <windows.h>
 #include <tchar.h>
@@ -12,6 +14,7 @@
 #include <unordered_map>
 #include <queue>
 #include <set>
+#include <cmath>
 using namespace std;
 
 // D3D include

@@ -113,15 +113,28 @@ struct FMath
 	/// <summary>
 	/// model->view->projection 행렬 변환하여 MVP 행렬을 생성
 	/// </summary>
-	/// <param name="modelMat"></param>
-	/// <param name="viewMat"></param>
-	/// <param name="projMat"></param>
-	/// <returns></returns>
 	static FMatrix CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const FMatrix& projMat);
+
+	/// <summary>
+	/// (위치 벡터) x (행렬) = 변환된 위치 연산을 수행하고, 결과적인 새 위치 벡터(회전·스케일 반영, 평행이동 포함)를 반환
+	/// </summary>
+	static FVector TransformPos(const FVector& pos, const FMatrix& m, OUT float& w);
 
 	/// <summary>
 	/// (법선·방향 벡터) × (행렬) = 변환된 방향 연산을 수행하고, 결과적인 새 방향 벡터(회전·스케일 반영, 평행이동 무시)를 반환
 	/// </summary>
-	static FVector TransformNormal(const FVector& v, const FMatrix& m);
+	static FVector TransformDirection(const FVector& dir, const FMatrix& m);
+
+	/// <summary>
+	/// Mouse Position을 사용하여 Ray를 생성
+	/// </summary>
+	static FRay CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, const FVector& mousePos, float screenWidth, float screenHeight);
+
+	/// <summary>
+	/// Mouse Position을 사용하여 Ray를 생성
+	/// </summary>
+	/// <param name="ndcMouseX">ndc 좌표로 변환된 MouseX</param>
+	/// <param name="ndcMouseY">ndc 좌표로 변환된 MouseY</param>
+	static FRay CalculateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight);
 };
 
