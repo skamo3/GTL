@@ -28,36 +28,29 @@ FMatrix::FMatrix(float m00, float m01, float m02, float m03, float m10, float m1
 	M[3][0] = m30; M[3][1] = m31;  M[3][2] = m32;  M[3][3] = m33;
 }
 
+FVector FMatrix::ProjectVector(const FVector& v, float inW, float& outW) const
+{
+	float x = M[0][0] * v.X + M[0][1] * v.Y + M[0][2] * v.Z + M[0][3] * inW;
+	float y = M[1][0] * v.X + M[1][1] * v.Y + M[1][2] * v.Z + M[1][3] * inW;
+	float z = M[2][0] * v.X + M[2][1] * v.Y + M[2][2] * v.Z + M[2][3] * inW;
+	float wOut = M[3][0] * v.X + M[3][1] * v.Y + M[3][2] * v.Z + M[3][3] * inW;
+
+	return FVector(x, y, z);
+}
+
+FVector FMatrix::AffineTransform(const FVector& v) const
+{
+	float x = M[0][0] * v.X + M[0][1] * v.Y + M[0][2] * v.Z;
+	float y = M[1][0] * v.X + M[1][1] * v.Y + M[1][2] * v.Z;
+	float z = M[2][0] * v.X + M[2][1] * v.Y + M[2][2] * v.Z;
+
+	return FVector(x, y, z);
+}
+
 bool FMatrix::Inverse(const FMatrix& src, FMatrix& dst)
 {
-	const FMatrix& cpyMat = src;
-	FMatrix result;
-	
-	float det[4];
-	FMatrix temp;
-
-	temp.M[0][0] = cpyMat.M[2][2] * cpyMat.M[3][3] - cpyMat.M[2][3] * cpyMat.M[3][2];
-	temp.M[0][1] = cpyMat.M[1][2] * cpyMat.M[3][3] - cpyMat.M[1][3] * cpyMat.M[3][2];
-	temp.M[0][2] = cpyMat.M[1][2] * cpyMat.M[2][3] - cpyMat.M[1][3] * cpyMat.M[2][2];
-
-	temp.M[1][0] = cpyMat.M[2][2] * cpyMat.M[3][3] - cpyMat.M[2][3] * cpyMat.M[3][2];
-	temp.M[1][1] = cpyMat.M[0][2] * cpyMat.M[3][3] - cpyMat.M[0][3] * cpyMat.M[3][2];
-	temp.M[1][2] = cpyMat.M[0][2] * cpyMat.M[2][3] - cpyMat.M[0][3] * cpyMat.M[2][2];
-
-	temp.M[2][0] = cpyMat.M[1][2] * cpyMat.M[3][3] - cpyMat.M[1][3] * cpyMat.M[3][2];
-	temp.M[2][1] = cpyMat.M[0][2] * cpyMat.M[3][3] - cpyMat.M[0][3] * cpyMat.M[3][2];
-	temp.M[2][2] = cpyMat.M[0][2] * cpyMat.M[1][3] - cpyMat.M[0][3] * cpyMat.M[1][2];
-
-	temp.M[3][0] = cpyMat.M[1][2] * cpyMat.M[2][3] - cpyMat.M[1][3] * cpyMat.M[2][2];
-	temp.M[3][1] = cpyMat.M[0][2] * cpyMat.M[2][3] - cpyMat.M[0][3] * cpyMat.M[2][2];
-	temp.M[3][2] = cpyMat.M[0][2] * cpyMat.M[1][3] - cpyMat.M[0][3] * cpyMat.M[1][2];
-
-	det[0] = cpyMat.M[1][1] * temp.M[0][0] - cpyMat.M[2][1] * temp.M[0][1] + cpyMat.M[3][1] * temp.M[0][2];
-	det[1] = cpyMat.M[0][1] * temp.M[1][0] - cpyMat.M[2][1] * temp.M[1][1] + cpyMat.M[3][1] * temp.M[1][2];
-	det[2] = cpyMat.M[0][1] * temp.M[2][0] - cpyMat.M[1][1] * temp.M[2][1] + cpyMat.M[3][1] * temp.M[2][2];
-	det[3] = cpyMat.M[0][1] * temp.M[3][0] - cpyMat.M[1][1] * temp.M[3][1] + cpyMat.M[2][1] * temp.M[3][2];
-
-	const float determinant = cpyMat.M[0][0] * det[0] - cpyMat.M[1][0] * det[1] + cpyMat.M[2][0] * det[2] - cpyMat.M[3][0] * det[3];
+	// 우선 기존의 Determinant() 함수를 사용하여 행렬식을 계산합니다.
+	float determinant = src.Determinant();
 
 	if (determinant == 0)
 	{
@@ -65,59 +58,20 @@ bool FMatrix::Inverse(const FMatrix& src, FMatrix& dst)
 		return false;
 	}
 
-	const float Rdet = 1.0f / determinant;
+	float invDet = 1.0f / determinant;
+	FMatrix inv;
 
-	result.M[0][0] = det[0] * Rdet;
-	result.M[0][1] = -det[1] * Rdet;
-	result.M[0][2] = det[2] * Rdet;
-	result.M[0][3] = -det[3] * Rdet;
-	result.M[1][0] = -cpyMat.M[1][0] * temp.M[0][0] + cpyMat.M[2][0] * temp.M[0][1] - cpyMat.M[3][0] * temp.M[0][2] * Rdet;
+	// adjugate 행렬은 Cofactor 행렬의 전치입니다.
+	// 즉, inv.M[c][r] = Cofactor(src, r, c) * (1/det)
+	for (int r = 0; r < 4; r++)
+	{
+		for (int c = 0; c < 4; c++)
+		{
+			inv.M[c][r] = Cofactor(src, r, c) * invDet;
+		}
+	}
 
-	result.M[1][1] = Rdet * (cpyMat.M[0][0] * temp.M[1][0] - cpyMat.M[2][0] * temp.M[1][1] + cpyMat.M[3][0] * temp.M[1][2]);
-	result.M[1][2] = -Rdet * (cpyMat.M[0][0] * temp.M[2][0] - cpyMat.M[1][0] * temp.M[2][1] + cpyMat.M[3][0] * temp.M[2][2]);
-	result.M[1][3] = Rdet * (cpyMat.M[0][0] * temp.M[3][0] - cpyMat.M[1][0] * temp.M[3][1] + cpyMat.M[2][0] * temp.M[3][2]);
-	result.M[2][0] = Rdet * (
-		cpyMat.M[1][0] * (cpyMat.M[2][1] * cpyMat.M[3][3] - cpyMat.M[2][3] * cpyMat.M[3][1]) -
-		cpyMat.M[2][0] * (cpyMat.M[1][1] * cpyMat.M[3][3] - cpyMat.M[1][3] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[1][1] * cpyMat.M[2][3] - cpyMat.M[1][3] * cpyMat.M[2][1])
-		);
-	result.M[2][1] = -Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[2][1] * cpyMat.M[3][3] - cpyMat.M[2][3] * cpyMat.M[3][1]) -
-		cpyMat.M[2][0] * (cpyMat.M[0][1] * cpyMat.M[3][3] - cpyMat.M[0][3] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[0][1] * cpyMat.M[2][3] - cpyMat.M[0][3] * cpyMat.M[2][1])
-		);
-	result.M[2][2] = Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[1][1] * cpyMat.M[3][3] - cpyMat.M[1][3] * cpyMat.M[3][1]) -
-		cpyMat.M[1][0] * (cpyMat.M[0][1] * cpyMat.M[3][3] - cpyMat.M[0][3] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[0][1] * cpyMat.M[1][3] - cpyMat.M[0][3] * cpyMat.M[1][1])
-		);
-	result.M[2][3] = -Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[1][1] * cpyMat.M[2][3] - cpyMat.M[1][3] * cpyMat.M[2][1]) -
-		cpyMat.M[1][0] * (cpyMat.M[0][1] * cpyMat.M[2][3] - cpyMat.M[0][3] * cpyMat.M[2][1]) +
-		cpyMat.M[2][0] * (cpyMat.M[0][1] * cpyMat.M[1][3] - cpyMat.M[0][3] * cpyMat.M[1][1])
-		);
-	result.M[3][0] = -Rdet * (
-		cpyMat.M[1][0] * (cpyMat.M[2][1] * cpyMat.M[3][2] - cpyMat.M[2][2] * cpyMat.M[3][1]) -
-		cpyMat.M[2][0] * (cpyMat.M[1][1] * cpyMat.M[3][2] - cpyMat.M[1][2] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[1][1] * cpyMat.M[2][2] - cpyMat.M[1][2] * cpyMat.M[2][1])
-		);
-	result.M[3][1] = Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[2][1] * cpyMat.M[3][2] - cpyMat.M[2][2] * cpyMat.M[3][1]) -
-		cpyMat.M[2][0] * (cpyMat.M[0][1] * cpyMat.M[3][2] - cpyMat.M[0][2] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[0][1] * cpyMat.M[2][2] - cpyMat.M[0][2] * cpyMat.M[2][1])
-		);
-	result.M[3][2] = -Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[1][1] * cpyMat.M[3][2] - cpyMat.M[1][2] * cpyMat.M[3][1]) -
-		cpyMat.M[1][0] * (cpyMat.M[0][1] * cpyMat.M[3][2] - cpyMat.M[0][2] * cpyMat.M[3][1]) +
-		cpyMat.M[3][0] * (cpyMat.M[0][1] * cpyMat.M[1][2] - cpyMat.M[0][2] * cpyMat.M[1][1])
-		);
-	result.M[3][3] = Rdet * (
-		cpyMat.M[0][0] * (cpyMat.M[1][1] * cpyMat.M[2][2] - cpyMat.M[1][2] * cpyMat.M[2][1]) -
-		cpyMat.M[1][0] * (cpyMat.M[0][1] * cpyMat.M[2][2] - cpyMat.M[0][2] * cpyMat.M[2][1]) +
-		cpyMat.M[2][0] * (cpyMat.M[0][1] * cpyMat.M[1][2] - cpyMat.M[0][2] * cpyMat.M[1][1])
-		);
-
-	dst = result;
+	dst = inv;
 	return true;
 }
 
@@ -151,28 +105,14 @@ FMatrix FMatrix::GetMatrixWithOutScale() const
 
 FMatrix FMatrix::AppendTranslation(const FVector& translation) const
 {
-	FMatrix Result;
+	// 현재 행렬의 복사본을 생성합니다.
+	FMatrix Result = *this;
 
-	float* dest = &Result.M[0][0];
-	const float*  src = &M[0][0];
-	const float*  trans = &translation.X;
-
-	dest[0] = src[0];
-	dest[1] = src[1];
-	dest[2] = src[2];
-	dest[3] = src[3];
-	dest[4] = src[4];
-	dest[5] = src[5];
-	dest[6] = src[6];
-	dest[7] = src[7];
-	dest[8] = src[8];
-	dest[9] = src[9];
-	dest[10] = src[10];
-	dest[11] = src[11];
-	dest[12] = src[12] + trans[0];
-	dest[13] = src[13] + trans[1];
-	dest[14] = src[14] + trans[2];
-	dest[15] = src[15];
+	// 4번째 행(Translation 성분)에 translation을 추가합니다.
+	// (행렬이 row-major 방식일 경우, M[3][0..2]가 Translation 성분입니다.)
+	Result.M[3][0] += translation.X;
+	Result.M[3][1] += translation.Y;
+	Result.M[3][2] += translation.Z;
 
 	return Result;
 }
@@ -256,29 +196,14 @@ FMatrix FMatrix::CreateScaleMatrix(const FVector& scale)
 FMatrix FMatrix::CreateBasisMatrix(const FVector& xAxis, const FVector& yAxis, const FVector& zAxis, const FVector& origin)
 {
 	FMatrix basisMatrix;
-	// 0번째 행 (X축의 값들)
-	basisMatrix.M[0][0] = xAxis.X;
-	basisMatrix.M[0][1] = yAxis.X;
-	basisMatrix.M[0][2] = zAxis.X;
-	basisMatrix.M[0][3] = 0.0f;
-
-	// 1번째 행
-	basisMatrix.M[1][0] = xAxis.Y;
-	basisMatrix.M[1][1] = yAxis.Y;
-	basisMatrix.M[1][2] = zAxis.Y;
-	basisMatrix.M[1][3] = 0.0f;
-
+	// 1번째 행 (X축의 값들)
+	basisMatrix.M[0][0] = xAxis.X; basisMatrix.M[0][1] = yAxis.X; basisMatrix.M[0][2] = zAxis.X; basisMatrix.M[0][3] = 0.0f;
 	// 2번째 행
-	basisMatrix.M[2][0] = xAxis.Z;
-	basisMatrix.M[2][1] = yAxis.Z;
-	basisMatrix.M[2][2] = zAxis.Z;
-	basisMatrix.M[2][3] = 0.0f;
-
-	// 3번째 행 (Translation 성분)
-	basisMatrix.M[3][0] = origin.Dot(xAxis);
-	basisMatrix.M[3][1] = origin.Dot(yAxis);
-	basisMatrix.M[3][2] = origin.Dot(zAxis);
-	basisMatrix.M[3][3] = 1.0f;
+	basisMatrix.M[1][0] = xAxis.Y; basisMatrix.M[1][1] = yAxis.Y; basisMatrix.M[1][2] = zAxis.Y; basisMatrix.M[1][3] = 0.0f;
+	// 3번째 행
+	basisMatrix.M[2][0] = xAxis.Z; basisMatrix.M[2][1] = yAxis.Z; basisMatrix.M[2][2] = zAxis.Z; basisMatrix.M[2][3] = 0.0f;
+	// 4번째 행 (Translation 성분)
+	basisMatrix.M[3][0] = origin.Dot(xAxis); basisMatrix.M[3][1] = origin.Dot(yAxis); basisMatrix.M[3][2] = origin.Dot(zAxis); basisMatrix.M[3][3] = 1.0f;
 
 	return basisMatrix;
 }
@@ -320,17 +245,16 @@ FMatrix FMatrix::CreateLookToMatrixLeftHand(const FVector& eye, const FVector& t
 	FMatrix viewMatrix;
 
 	// 행렬의 상단 3×3 부분에 (xAxis, yAxis, zAxis) 배치
-	// (row-major, row=0,1,2가 각각 x,y,z축을 담음)
-	viewMatrix.M[0][0] = xAxis.X;  viewMatrix.M[0][1] = yAxis.X;  viewMatrix.M[0][2] = zAxis.X;  viewMatrix.M[0][3] = 0.0f;
-	viewMatrix.M[1][0] = xAxis.Y;  viewMatrix.M[1][1] = yAxis.Y;  viewMatrix.M[1][2] = zAxis.Y;  viewMatrix.M[1][3] = 0.0f;
-	viewMatrix.M[2][0] = xAxis.Z;  viewMatrix.M[2][1] = yAxis.Z;  viewMatrix.M[2][2] = zAxis.Z;  viewMatrix.M[2][3] = 0.0f;
 
+	// 첫 번째 행: x축
+	viewMatrix.M[0][0] = xAxis.X;  viewMatrix.M[0][1] = yAxis.X;  viewMatrix.M[0][2] = zAxis.X;  viewMatrix.M[0][3] = 0.0f;
+	// 두 번째 행: y축
+	viewMatrix.M[1][0] = xAxis.Y;  viewMatrix.M[1][1] = yAxis.Y;  viewMatrix.M[1][2] = zAxis.Y;  viewMatrix.M[1][3] = 0.0f;
+	// 세 번째 행: z축
+	viewMatrix.M[2][0] = xAxis.Z;  viewMatrix.M[2][1] = yAxis.Z;  viewMatrix.M[2][2] = zAxis.Z;  viewMatrix.M[2][3] = 0.0f;
 	// 마지막 행(3번째 행): 원점(eye)에 대한 변환
 	// 카메라 좌표계로 이동하려면 -eye·(각 축) 적용
-	viewMatrix.M[3][0] = -eye.Dot(xAxis);
-	viewMatrix.M[3][1] = -eye.Dot(yAxis);
-	viewMatrix.M[3][2] = -eye.Dot(zAxis);
-	viewMatrix.M[3][3] = 1.0f;
+	viewMatrix.M[3][0] = -eye.Dot(xAxis); viewMatrix.M[3][1] = -eye.Dot(yAxis); viewMatrix.M[3][2] = -eye.Dot(zAxis); viewMatrix.M[3][3] = 1.0f;
 
 	return viewMatrix;
 }
@@ -367,9 +291,13 @@ FMatrix FMatrix::CreateOrthographicProjectionMatrixLeftHand(float screenWidth, f
 	float fRange = 1.0f / (zFar - zNear);
 
 	FMatrix proj;
+	// x 축 스케일
 	proj.M[0][0] = 2.0f / screenWidth; proj.M[0][1] = 0.0f; proj.M[0][2] = 0.0f; proj.M[0][3] = 0.0f;
+	// y 축 스케일
 	proj.M[1][0] = 0.0f; proj.M[1][1] = 2.0f / screenHeight; proj.M[1][2] = 0.0f; proj.M[1][3] = 0.0f;
+	// z 축 스케일
 	proj.M[2][0] = 0.0f; proj.M[2][1] = 0.0f; proj.M[2][2] = fRange; proj.M[2][3] = 0.0f;
+	// Translation 성분
 	proj.M[3][0] = 0.0f; proj.M[3][1] = 0.0f; proj.M[3][2] = -zNear * fRange; proj.M[3][3] = 1.0f;
 
 	return proj;
@@ -380,9 +308,13 @@ FMatrix FMatrix::CreateOrthographicProjectionMatrixRightHand(float screenWidth, 
 	float fRange = 1.0f / (zFar - zNear);
 
 	FMatrix proj;
+	// x 축 스케일
 	proj.M[0][0] = 2.0f / screenWidth; proj.M[0][1] = 0.0f; proj.M[0][2] = 0.0f; proj.M[0][3] = 0.0f;
+	// y 축 스케일
 	proj.M[1][0] = 0.0f; proj.M[1][1] = 2.0f / screenHeight; proj.M[1][2] = 0.0f; proj.M[1][3] = 0.0f;
+	// z 축 스케일
 	proj.M[2][0] = 0.0f; proj.M[2][1] = 0.0f; proj.M[2][2] = fRange; proj.M[2][3] = 0.0f;
+	// Translation 성분
 	proj.M[3][0] = 0.0f; proj.M[3][1] = 0.0f; proj.M[3][2] = zNear * fRange; proj.M[3][3] = 1.0f;
 
 	return proj;

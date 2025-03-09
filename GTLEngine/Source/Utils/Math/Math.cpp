@@ -108,7 +108,7 @@ FMatrix FMath::CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const 
 	return modelMat * viewMat * projMat;
 }
 
-FVector FMath::TransformPos(const FVector& pos, const FMatrix& m, OUT float& w)
+FVector FMath::TransformPosition(const FVector& pos, const FMatrix& m, OUT float& w)
 {
 	FVector result;
 	result.X = m.M[0][0] * pos.X + m.M[1][0] * pos.Y + m.M[2][0] * pos.Z + m.M[3][0];

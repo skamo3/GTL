@@ -19,7 +19,7 @@ public:
 
 
 	/// <summary>
-	/// 현재 행렬을 단위 행렬로 설정합니다.
+	/// 현재 행렬을 단위 행렬(DirectX 기준 : 월드 좌표계)로 설정
 	/// </summary>
 	inline void SetIdentity()
 	{
@@ -83,20 +83,6 @@ public:
 		*this = *this * s;
 	}
 
-	inline FVector operator*(const FVector& v) const
-	{
-		// 4x4 행렬 곱에서, v는 (v.X, v.Y, v.Z, 1)로 가정
-		// -> X,Y,Z = 행(Row) dot (x,y,z,1)
-		float x = M[0][0] * v.X + M[0][1] * v.Y + M[0][2] * v.Z + M[0][3] * 1.0f;
-		float y = M[1][0] * v.X + M[1][1] * v.Y + M[1][2] * v.Z + M[1][3] * 1.0f;
-		float z = M[2][0] * v.X + M[2][1] * v.Y + M[2][2] * v.Z + M[2][3] * 1.0f;
-
-		// 간단히 W를 무시(=1)하거나, 원근(Perspective) 정보를 쓰지 않는 경우
-		// 만약 투영행렬 등에서 W != 1 인 결과가 필요하면 따로 계산 후 나눠줘야 함.
-
-		return FVector(x, y, z);
-	}
-
 	inline FMatrix operator+(const FMatrix& other) const
 	{
 		FMatrix result;
@@ -146,6 +132,18 @@ public:
 	{
 		return !(*this == other);
 	}
+
+	/// <summary>
+	/// 주어진 3차원 벡터에 대해 투영 변환을 수행
+	/// </summary>
+	/// <param name="inW">행렬 곱셈에 사용될 입력 w 값입니다. 0을 전달하면 방향 벡터를 변환, 1을 전달하면 위치 벡터를 변환</param>
+	/// <param name="outW">행렬 곱셈 수행 결과로 나온 w 값이 저장 원근 분할을 할 경우 결과 Vecotr에 w를 나눠줘야함 </param>
+	FVector ProjectVector(const FVector& v, float inW, float& outW) const;
+
+	/// <summary>
+	/// 입력 벡터를 (v.X, v.Y, v.Z, 1)로 취급하여, 현재 행렬과의 곱셈 결과로 변환된 3차원 좌표를 반환
+	/// </summary>
+	FVector AffineTransform(const FVector& v) const;
 
 	/// <summary>
 	/// 현재 4x4 행렬을 전치(행과 열을 뒤 바꾼)한 새 FMatrix를 반환 
@@ -205,7 +203,83 @@ public:
 	static bool Inverse(const FMatrix& src, FMatrix& dst);
 
 	/// <summary>
-	/// <para>3D 변환행렬의 회전 행렬의 Adjoint(여인수)만 구해서 반환</para> 
+	/// 3×3 행렬식 계산 (m의 지정한 세 행과 세 열에 대한 3×3 행렬식)
+	/// </summary>
+	static inline float Det3x3(const FMatrix& m, int r0, int r1, int r2, int c0, int c1, int c2)
+	{
+		return m.M[r0][c0] * (m.M[r1][c1] * m.M[r2][c2] - m.M[r1][c2] * m.M[r2][c1])
+			- m.M[r0][c1] * (m.M[r1][c0] * m.M[r2][c2] - m.M[r1][c2] * m.M[r2][c0])
+			+ m.M[r0][c2] * (m.M[r1][c0] * m.M[r2][c1] - m.M[r1][c1] * m.M[r2][c0]);
+	}
+
+	/// <summary>
+	/// 주어진 행(row)과 열(col)에 대한 Cofactor 계산
+	/// </summary>
+	static inline float Cofactor(const FMatrix& m, int row, int col)
+	{
+		// 4×4 행렬에서 지정한 row와 col을 제외한 3개의 행과 열을 선택합니다.
+		int rows[3], cols[3];
+		// row에 따른 rows 배열 할당
+		if (row == 0)
+		{
+			rows[0] = 1;
+			rows[1] = 2;
+			rows[2] = 3;
+		}
+		else if (row == 1)
+		{
+			rows[0] = 0;
+			rows[1] = 2;
+			rows[2] = 3;
+		}
+		else if (row == 2)
+		{
+			rows[0] = 0;
+			rows[1] = 1;
+			rows[2] = 3;
+		}
+		else // row == 3
+		{
+			rows[0] = 0;
+			rows[1] = 1;
+			rows[2] = 2;
+		}
+
+		// col에 따른 cols 배열 할당
+		if (col == 0)
+		{
+			cols[0] = 1;
+			cols[1] = 2;
+			cols[2] = 3;
+		}
+		else if (col == 1)
+		{
+			cols[0] = 0;
+			cols[1] = 2;
+			cols[2] = 3;
+		}
+		else if (col == 2)
+		{
+			cols[0] = 0;
+			cols[1] = 1;
+			cols[2] = 3;
+		}
+		else // col == 3
+		{
+			cols[0] = 0;
+			cols[1] = 1;
+			cols[2] = 2;
+		}
+
+		// 3×3 행렬식 계산
+		float minor = Det3x3(m, rows[0], rows[1], rows[2], cols[0], cols[1], cols[2]);
+		int sign = ((row + col) % 2 == 0) ? 1 : -1;
+		return sign * minor;
+	}
+
+	/// <summary>
+	/// <para>3D 변환행렬의 회전 행렬의 Adjoint(여인수)만 구해서 반환</para>
+	/// 여인수는 Cofactor 행렬의 전치 행렬이다.
 	/// </summary>
 	inline FMatrix RotationAdjoint() const
 	{
@@ -369,22 +443,22 @@ public:
 	/// <summary>
 	/// 행렬의 각 축(X, Y, Z)을 행렬이 가지고 있는 스케일(Scale)을 포함한 상태로 추출하여 반환
 	/// </summary>
-	inline void GetScaledAxes(FVector& X, FVector& Y, FVector& Z) const
+	inline void GetScaledAxes(FVector& outX, FVector& outY, FVector& outZ) const
 	{
-		X.X = M[0][0]; X.Y = M[0][1]; X.Z = M[0][2];
-		Y.X = M[1][0]; Y.Y = M[1][1]; Y.Z = M[1][2];
-		Z.X = M[2][0]; Z.Y = M[2][1]; Z.Z = M[2][2];
+		outX.X = M[0][0]; outX = M[0][1]; outX.Z = M[0][2];
+		outY.X = M[1][0]; outY.Y = M[1][1]; outY.Z = M[1][2];
+		outZ.X = M[2][0]; outZ.Y = M[2][1]; outZ.Z = M[2][2];
 	}
 
 	/// <summary>
 	/// 행렬의 축 방향만 가져오고, 크기(Scale)는 제외하여 반환
 	/// </summary>
-	inline void GetUnitAxes(FVector& X, FVector& Y, FVector& Z) const
+	inline void GetUnitAxes(FVector& outX, FVector& outY, FVector& outZ) const
 	{
-		GetScaledAxes(X, Y, Z);
-		X.GetNormalizedVector();
-		Y.GetNormalizedVector();
-		Z.GetNormalizedVector();
+		GetScaledAxes(outX, outY, outZ);
+		outX.GetNormalizedVector();
+		outY.GetNormalizedVector();
+		outZ.GetNormalizedVector();
 	}
 
 	/// <summary>
@@ -434,6 +508,7 @@ public:
 	/// 좌표계에서 정의된 점(벡터)을 월드(또는 상위) 좌표계로 변환할 수 있음
 	/// </summary>
 	static FMatrix CreateBasisMatrix(const FVector& xAxis, const FVector& yAxis, const FVector& zAxis, const FVector& origin);
+
 	/// <summary>
 	/// location을 이용하여 이동 행렬을 생성
 	/// </summary>
@@ -477,8 +552,8 @@ public:
 
 	inline FVector GetForwardVector() const
 	{
-		// row 0가 X축
-		return GetRow(0).GetNormalizedVector();
+		// row 2가 X축
+		return GetRow(2).GetNormalizedVector();
 	}
 
 	inline FVector GetRightVector() const
@@ -489,25 +564,9 @@ public:
 
 	inline FVector GetUpVector() const
 	{
-		// row 2가 Z축
-		return GetRow(2).GetNormalizedVector();
+		// row 0가 Z축
+		return GetRow(0).GetNormalizedVector();
 	}
-
-	///// <summary>
-	///// 왼손 좌표계(Left-Handed)에서 뷰 행렬을 생성
-	///// </summary>
-	///// <param name="eye">카메라 위치</param>
-	///// <param name="at">카메라가 바라보는 위치 벡터</param>
-	///// <param name="up">카메라의 upVector</param>
-	//static FMatrix CreateLookAtMatrixLeftHand(const FVector& eye, const FVector& at, const FVector& up);
-
-	///// <summary>
-	///// 오른손 좌표계(Right-Handed)에서 뷰 행렬을 생성
-	///// </summary>
-	///// <param name="eye">카메라 위치</param>
-	///// <param name="at">카메라가 바라보는 위치 벡터</param>
-	///// <param name="up">카메라의 upVector</param>
-	//static FMatrix CreateLookAtMatrixRightHand(const FVector& eye, const FVector& at, const FVector& up);
 
 	/// <summary>
 	/// 왼손 좌표계(Left-Handed)에서 뷰 행렬을 생성

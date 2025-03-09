@@ -118,7 +118,7 @@ struct FMath
 	/// <summary>
 	/// (위치 벡터) x (행렬) = 변환된 위치 연산을 수행하고, 결과적인 새 위치 벡터(회전·스케일 반영, 평행이동 포함)를 반환
 	/// </summary>
-	static FVector TransformPos(const FVector& pos, const FMatrix& m, OUT float& w);
+	static FVector TransformPosition(const FVector& pos, const FMatrix& m, OUT float& w);
 
 	/// <summary>
 	/// (법선·방향 벡터) × (행렬) = 변환된 방향 연산을 수행하고, 결과적인 새 방향 벡터(회전·스케일 반영, 평행이동 무시)를 반환
