@@ -162,13 +162,16 @@ bool FRayCast::IntersectRayTrianglePlane(const FRay& ray, const FVector& v0, con
 
 bool FRayCast::IntersectRayPlane(const FRay& ray, const FVector& planePoint, const FVector& planeNormal, OUT float& outT)
 {
+    // Ray 방향과 평면 법선의 내적 계산
 	float denom = ray.GetDirection().Dot(planeNormal);
 
+	// 내적 계산 결과가 0이면 Ray와 평면이 평행
 	if (fabs(denom) < SMALL_NUMBER)
 	{
 		return false;
 	}
 
+	// 교차점이 평면 위에 있는지 확인
 	float t = (planePoint - ray.GetOrigin()).Dot(planeNormal) / denom;
 	if (t < 0)
 	{
