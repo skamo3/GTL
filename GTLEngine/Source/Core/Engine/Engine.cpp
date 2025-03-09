@@ -16,6 +16,9 @@ uint32 UEngineStatics::NextUUID = 0;
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
 	WindowInfo = InWindowInfo;
+
+	// 리소스 매니저 추가.
+
 	DirectX11Handle = new UDirectXHandle();
 	HRESULT hr = DirectX11Handle->CreateDirectX11Handle(WindowInfo.WindowHandle);
 	if (FAILED(hr))
@@ -37,7 +40,13 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 
 	// 셰이더 추가.
 
-    // 리소스 매니저 추가.
+	// 버텍스 버퍼 추가.
+	// TODO: vertex 배열 만들어서 버텍스 버퍼 생성 로직 추가. 
+	//DirectX11Handle->AddNormalVertexBuffer();
+	//DirectX11Handle->AddLineVertexBuffer();
+	// 콘스탄트 버퍼 추가.
+	// TODO: Constant 배열 만들어서 Constant 버퍼 생성 로직 추가. 
+	//DirectX11Handle->AddConstantBuffer();
 
     // 월드 추가.
 	World = UWorld::CreateWorld();
