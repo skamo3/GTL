@@ -39,9 +39,12 @@ public:
 
 public:
 	TArray<AActor*> GetActors() const { return ActiveActors; }
+	ACamera* GetCamera() const { return MainCamera; }
 
 private:
 	TArray<AActor*> ActiveActors;
+	ACamera* MainCamera;
+
 
 };
 

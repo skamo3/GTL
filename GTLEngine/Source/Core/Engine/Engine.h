@@ -4,7 +4,6 @@ class UDirectXHandle;
 class UResourceManager;
 class UWorld;
 class UInputManager;
-class ACamera;
 
 class UEngineStatics
 {
@@ -55,7 +54,6 @@ private:
 	UDirectXHandle* DirectX11Handle;
 	UResourceManager* ResourceManager;
     UWorld* World;
-    ACamera* MainCamera;
     UInputManager* InputManager;
 
 public:

@@ -79,7 +79,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달
         }
 
-
         Engine.Tick();
 		Engine.Render();
     }
