@@ -11,6 +11,7 @@ class UDXDInputLayout;
 class UObject;
 class AActor;
 class ACamera;
+class UGizmo;
 
 class UDirectXHandle
 {
@@ -28,6 +29,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
+	void RenderGizmo(UObject* Selected, UGizmo* Gizmo);
 	void RenderObejct(const TArray<AActor*> Actors);
 
 private:

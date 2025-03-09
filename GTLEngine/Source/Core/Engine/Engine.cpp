@@ -2,11 +2,12 @@
 #include "Engine.h"
 
 #include "DirectX11/DirectXHandle.h"
-#include "Manager/InputManager.h"
+#include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
+#include "Gizmo/Gizmo.h"
 
 uint32 UEngineStatics::NextUUID = 0;
 
@@ -61,7 +62,7 @@ void UEngine::Render()
 {
 	DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
 	// 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
-	DirectX11Handle->RenderGizmo();
+	DirectX11Handle->RenderGizmo(SelectedObject, Gizmo);
 	DirectX11Handle->RenderObejct(World->GetActors());
 }
 

@@ -1,4 +1,10 @@
+#include "pch.h"
 #include "JungleControlPanel.h"
+
+#include "UI/UIManager.h"
+
+// ImGui include.
+#include "ImGui/imgui.h"
 
 UJungleControlPanel::UJungleControlPanel()
 {
@@ -101,8 +107,8 @@ void UJungleControlPanel::Draw()
 template<typename T>
 void UJungleControlPanel::ChangeNumToStrWithMargin(int marginNum, T num)
 {
-    bufSize = uUIManager.ChangeNumToStrWithMargin(4, num).size() + 1;
+    bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
     strOut = new char[bufSize];
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+    //std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
     strOut[bufSize - 1] = '\0';
 }

@@ -11,12 +11,12 @@ public:
 	void operator delete(void* ptr);
 	void operator delete[](void* ptr);
 
-
 public:
 	virtual void Tick(float TickTime) = 0;
 	virtual void Destroy() = 0;
 
 public:
+	
 	std::wstring GetName() const { return NamePrivate; }
 
 private:
@@ -36,4 +36,4 @@ private:
 
 };
 
- extern TArray<UObject*> GUObjectArray;
+extern TArray<UObject*> GUObjectArray;

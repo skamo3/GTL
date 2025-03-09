@@ -1,4 +1,10 @@
+#include "pch.h"
 #include "JunglePropertyWindow.h"
+
+#include "UI/UIManager.h"
+
+// ImGui include.
+#include "ImGui/imgui.h"
 
 UJunglePropertyWindow::UJunglePropertyWindow()
 {
@@ -59,7 +65,7 @@ void UJunglePropertyWindow::Draw()
     ImGui::SameLine();
     ChangeNumToStrWithMargin(4, objectScale.Z);
     ImGui::InputText("##objectScaleZ", strOut, bufSize);
-    objectScale.Z = atof(strOut);
+    objectScale.Z = static_cast<float>(atof(strOut));
     ImGui::SameLine();
     ImGui::Text("Scale");
     ImGui::PopItemWidth();
@@ -70,8 +76,8 @@ void UJunglePropertyWindow::Draw()
 
 template<typename T>
 void UJunglePropertyWindow::ChangeNumToStrWithMargin(int marginNum, T num) {
-    bufSize = uUIManager.ChangeNumToStrWithMargin(4, num).size() + 1;
+    bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
     strOut = new char[bufSize];
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+    //std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
     strOut[bufSize - 1] = '\0';
 }

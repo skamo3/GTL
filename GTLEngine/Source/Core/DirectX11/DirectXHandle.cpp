@@ -135,6 +135,11 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 	// 카메라 상수버퍼로 바로 전달.
 }
 
+void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
+{
+	// Selected 오브젝트 기반으로 기즈모 그리가.
+}
+
 void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.

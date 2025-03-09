@@ -1,12 +1,7 @@
 #pragma once
-#include <string>
-#include <vector>
 
+// ImGui include.
 #include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
-
 
 const char* verbosityLevels[] = {
     "", "Log", "Warning", "Error", "Display", "Fatal", "Verbose", "VeryVerbose", "Unkown"

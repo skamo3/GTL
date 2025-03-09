@@ -1,13 +1,10 @@
 #pragma once
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
 
-#include "Utils/Math/Vector.h"
-#include "Manager/UIManager.h"
+#include "Math/Vector.h"
 
 const char* primitives[] = { "Sphere", "Cube", "Triangle" };
+
+class UUIManager;
 
 class UJungleControlPanel 
 {
@@ -16,7 +13,7 @@ public:
 	~UJungleControlPanel();
 
 private:
-	UUIManager uUIManager;
+	UUIManager* UIManager;
 
 private:
 	int currentPrimitive = 0;

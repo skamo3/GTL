@@ -15,7 +15,7 @@ void UWorld::CameraTick(float TickTime)
 {
 	// 카메라 정보 업데이트.
 	// 위치, 뭐 등등..
-	MainCamera->Tick(TickTime);
+	//MainCamera->Tick(TickTime);
 }
 
 void UWorld::Tick(float TickTime)

@@ -1,11 +1,8 @@
 #pragma once
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
 
-#include "Utils/Math/Vector.h"
-#include "Manager/UIManager.h"
+#include "Math/Vector.h"
+
+class UUIManager;
 
 class UJunglePropertyWindow {
 public:
@@ -13,7 +10,7 @@ public:
 	~UJunglePropertyWindow();
 
 private:
-	UUIManager uUIManager;
+	UUIManager* UIManager;
 
 private:
 	FVector objectTranslation = { -0.140f, 0.030f, 0.0f };

@@ -23,9 +23,6 @@
     <Filter Include="Source\Core\Engine">
       <UniqueIdentifier>{d579aca8-a843-4e55-a8bd-c9c14a7beaa9}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Core\Manager">
-      <UniqueIdentifier>{5810ae0c-9eee-46e8-94c7-96307b230996}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\Core\DirectX11\State">
       <UniqueIdentifier>{97050cd6-c249-4049-8d39-55a46767a9ba}</UniqueIdentifier>
     </Filter>
@@ -52,6 +49,24 @@
     </Filter>
     <Filter Include="Source\CoreUObject\UI">
       <UniqueIdentifier>{0d95d03b-1052-4d97-a8d9-ceebd6c9b9f2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Input">
+      <UniqueIdentifier>{199bb3f6-6195-46c7-b919-e3b1fd7feed2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Gizmo">
+      <UniqueIdentifier>{8012af6f-ea9d-4e28-9b17-91bde153d4ae}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\Time">
+      <UniqueIdentifier>{12710c6e-6d7e-4998-8adc-3f0a341f51f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\UI">
+      <UniqueIdentifier>{d2496975-1220-4478-8e7f-ede5b0bcfec9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins">
+      <UniqueIdentifier>{5e8b687c-23a0-4d6d-8592-0ab36454280e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Plugins\ImGui">
+      <UniqueIdentifier>{d2deee3e-216b-4b88-9c6e-bfe332c67db1}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -94,12 +109,6 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp">
       <Filter>Source\Core\DirectX11\State</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Manager\TimeManager.cpp">
-      <Filter>Source\Core\Manager</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Object.cpp">
-      <Filter>Source\CoreUObject</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
@@ -136,9 +145,6 @@
     <ClCompile Include="Source\Utils\Math\Ray.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Manager\InputManager.cpp">
-      <Filter>Source\Core\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
@@ -151,9 +157,6 @@
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp">
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Manager\UIManager.cpp">
-      <Filter>Source\Core\Manager</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\JungleConsole.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
@@ -162,6 +165,42 @@
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\JunglePropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp">
+      <Filter>Source\Core\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Time\TimeManager.cpp">
+      <Filter>Source\Core\Time</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Input\InputManager.cpp">
+      <Filter>Source\Core\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\UI\UIManager.cpp">
+      <Filter>Source\Core\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Object.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_demo.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_draw.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_impl_dx11.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_impl_win32.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_tables.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
+      <Filter>Plugins\ImGui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -201,12 +240,6 @@
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h">
       <Filter>Source\Core\DirectX11\State</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Manager\TimeManager.h">
-      <Filter>Source\Core\Manager</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Object.h">
-      <Filter>Source\CoreUObject</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utils\GTLStringLibrary.h">
       <Filter>Utils</Filter>
     </ClInclude>
@@ -243,9 +276,6 @@
     <ClInclude Include="Source\Utils\Math\Ray.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Manager\InputManager.h">
-      <Filter>Source\Core\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
@@ -264,9 +294,6 @@
     <ClInclude Include="Source\Core\Resource\VertexTypes.h">
       <Filter>Source\Core\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Manager\UIManager.h">
-      <Filter>Source\Core\Manager</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\JungleConsole.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
@@ -275,6 +302,45 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\JunglePropertyWindow.h">
       <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Gizmo\Gizmo.h">
+      <Filter>Source\Core\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Time\TimeManager.h">
+      <Filter>Source\Core\Time</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Input\InputManager.h">
+      <Filter>Source\Core\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\UI\UIManager.h">
+      <Filter>Source\Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Object.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imconfig.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_impl_dx11.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_impl_win32.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_internal.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_rectpack.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_textedit.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_truetype.h">
+      <Filter>Plugins\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

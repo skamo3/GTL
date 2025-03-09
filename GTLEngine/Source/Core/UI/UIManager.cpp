@@ -9,7 +9,7 @@ std::string UUIManager::ChangeNumToStrWithMargin(int marginNum, T num)
 	int digitCount = numToStr.length();
 	int paddingSize = max(0, marginNum - digitCount / 2);
 
-	string strOut(paddingSize, ' ');
+	std::string strOut(paddingSize, ' ');
 	strOut += numToStr;
 
 	return strOut;
