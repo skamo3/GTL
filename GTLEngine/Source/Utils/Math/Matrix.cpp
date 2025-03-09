@@ -65,7 +65,7 @@ bool FMatrix::Inverse(const FMatrix& src, FMatrix& dst)
 		return false;
 	}
 
-	const float Rdet = 1.0 / determinant;
+	const float Rdet = 1.0f / determinant;
 
 	result.M[0][0] = det[0] * Rdet;
 	result.M[0][1] = -det[1] * Rdet;

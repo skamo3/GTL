@@ -106,12 +106,14 @@ struct FVector
 		if (index == 0) return X;
 		if (index == 1) return Y;
 		if (index == 2) return Z;
+		return 0.f;
 	}
 	inline float& operator[](int index)
 	{
 		if (index == 0) return X;
 		if (index == 1) return Y;
 		if (index == 2) return Z;
+		return X;
 	}
 
     inline float Length() const
