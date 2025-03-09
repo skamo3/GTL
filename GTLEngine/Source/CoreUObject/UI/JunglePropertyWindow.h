@@ -20,7 +20,8 @@ private:
 	FVector objectRotation = { 0.0f, 0.0f, 0.0f };
 	FVector objectScale = { 1.0f, 1.0f, 1.0f };
 
-	char strOut[32] = "";
+	char* strOut;
+	size_t bufSize;
 
 private:
 	void Draw();
