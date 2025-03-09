@@ -5,12 +5,13 @@
 #include "Math/Math.h"
 
 class AActor;
+class ACamera;
 
 class UWorld : public UObject
 {
 
 public:
-	static UWorld* CreateWorld(string WorldName);
+	static UWorld* CreateWorld();
 
 	template<typename T>
 	T* SpawnActor(string InName, FVector InLocation, FVector InScale, float InRotation, shared_ptr<UObject> InOwner)

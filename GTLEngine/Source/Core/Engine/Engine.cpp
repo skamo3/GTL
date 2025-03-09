@@ -7,7 +7,6 @@
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
-#include "GameFrameWork/Camera.h"
 
 uint32 UEngineStatics::NextUUID = 0;
 
@@ -38,7 +37,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 리소스 매니저 추가.
 
     // 월드 추가.
-	World = UWorld::CreateWorld("MainWorld");
+	World = UWorld::CreateWorld();
 
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
@@ -72,17 +71,17 @@ void UEngine::ClearEngine()
 		DirectX11Handle->ReleaseDirectX11Handle();
 	}
 
+	if (World)
+	{
+		delete World;
+		World = nullptr;
+	}
+
 	if (ResourceManager)
 	{
         delete ResourceManager;
 		ResourceManager = nullptr;
 	}
-
-    if (World)
-    {
-        delete World;
-		World = nullptr;
-    }
 
     if (InputManager)
     {

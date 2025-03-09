@@ -19,9 +19,6 @@ public:
 public:
 	string GetName() const { return NamePrivate; }
 
-protected:// 자기 자신만 스스로를 바꿀 수 있도록.
-	void SetName(const string& NewName) { NamePrivate = NewName; } 
-
 private:
 	// Name of this object.
 	string NamePrivate;
