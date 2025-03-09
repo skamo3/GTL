@@ -1,6 +1,5 @@
 #pragma once
 
-#include "pch.h"
 
 class UInputManager
 {
@@ -34,8 +33,12 @@ public:
     };
 
     // 마우스 입력 관련 함수
+
+    // 0: Left Button, 1: Right Button, 2: Middle Button
     bool GetMouseButton(int button) const;
+    // 0: Left Button, 1: Right Button, 2: Middle Button    
     bool GetMouseDown(int button) const;
+    // 0: Left Button, 1: Right Button, 2: Middle Button    
     bool GetMouseUp(int button) const;
     int GetMouseClientX() const { return currentMouseState.ScreenX;};
     int GetMouseClient() const { return currentMouseState.ScreenY;};

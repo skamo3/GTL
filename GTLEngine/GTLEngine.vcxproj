@@ -38,7 +38,9 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
-    <ClCompile Include="Source\Core\Manager\InputManager.cpp" />
+    <ClCompile Include="Source\Core\Manager\InputManager.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Core\Manager\ResourceManager.cpp" />
     <ClCompile Include="Source\Core\Manager\TimeManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
