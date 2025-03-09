@@ -14,17 +14,17 @@ struct FVector
 	static const FVector ZeroVector;
 	// Vector(1, 1, 1)
 	static const FVector OneVector;
-	// Vector(0, 0, 1)
+	// Vector(0,1, 0)
 	static const FVector UpVector;
-	// Vector(0, 0, -1)
+	// DirectX 기준 : Vector(0, -1, 0)
 	static const FVector DownVector;
-	// Vector(1, 0, 0)
+	// DirectX 기준 : Vector(0, 0, 1)
 	static const FVector ForwardVector;
-	// Vector(-1, 0, 0)
+	// DirectX 기준 : Vector(0, 0, -1)
 	static const FVector BackwardVector;
-	// Vector(0, 1, 0)
+	// DirectX 기준 : Vector(1, 0, 0)
 	static const FVector RightVector;
-	// Vector(0, -1, 0)
+	// DirectX 기준 : Vector(-1, 0, 0)
 	static const FVector LeftVector;
 
 	// Unit X Axis Vector (1, 0, 0)
@@ -86,9 +86,20 @@ struct FVector
 		return FVector(X / s, Y / s, Z / s);
 	}
 
+	inline FVector operator/=(const float s)
+	{
+		X /= s; Y /= s; Z /= s;
+		return *this;
+	}
+
 	inline FVector operator/(const FVector& v) const
 	{
 		return FVector(X / v.X, Y / v.Y, Z / v.Z);
+	}
+	inline FVector operator/=(const FVector& v)
+	{
+		X /= v.X; Y /= v.Y; Z /= v.Z;
+		return *this;
 	}
 
     inline bool operator==(const FVector& v) const

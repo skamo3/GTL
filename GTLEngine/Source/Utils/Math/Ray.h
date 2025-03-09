@@ -25,6 +25,9 @@ public:
 		return !(*this == other);
 	}
 
+	/// <summary>
+	/// 주어진 점이 Ray상에서 얼마나 떨어져 있는지 파라미터를 반환
+	/// </summary>
 	inline float GetParameter(const FVector& point) const
 	{
 		return (point - Origin).Dot(Direction);
@@ -62,8 +65,19 @@ public:
 		}
 	}
 
+
+
 private:
 	FVector Origin;
 	FVector Direction;
 };
 
+struct FRayCast
+{
+public:
+	static bool InserSectRaySphere(const FRay& ray, const FVector& sphereCenter, float sphereRadius, OUT float& outT);
+
+	static bool IntersectRayAABB(const FRay& ray, const FVector& boxMin, const FVector& boxMax, OUT float& outT);
+
+	static bool IntersectRayTriangle(const FRay& ray, const FVector& v0, const FVector& v1, const FVector& v2, OUT float& outT);
+};
