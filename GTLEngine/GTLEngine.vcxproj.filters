@@ -50,6 +50,9 @@
     <Filter Include="Source\Core\Resource\Shape">
       <UniqueIdentifier>{0e6dd969-e426-44d8-ae97-12fd5536dc00}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\CoreUObject\UI">
+      <UniqueIdentifier>{0d95d03b-1052-4d97-a8d9-ceebd6c9b9f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -147,6 +150,18 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp">
       <Filter>Source\Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Manager\UIManager.cpp">
+      <Filter>Source\Core\Manager</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\JungleConsole.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\JungleControlPanel.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\JunglePropertyWindow.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -248,6 +263,18 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Resource\VertexTypes.h">
       <Filter>Source\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Manager\UIManager.h">
+      <Filter>Source\Core\Manager</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\JungleConsole.h">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\JungleControlPanel.h">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\JunglePropertyWindow.h">
+      <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
