@@ -67,40 +67,39 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
     // 마우스 커서 위치를 NCD 좌표로 변환
     float HalfWidth = Width / 2.f;
     float HalfHeight = Height / 2.f;
-    float MaxHalfLength = max(HalfWidth, HalfHeight);
     CurrentMouseState.NdcX = (CurrentMouseState.ScreenX - HalfWidth) / HalfWidth;
-    CurrentMouseState.NdcY = (CurrentMouseState.ScreenY - HalfHeight) / HalfWidth * -1.f;
+    CurrentMouseState.NdcY = (CurrentMouseState.ScreenY - HalfHeight) / HalfHeight * -1.f;
 }
 
-bool UInputManager::GetMouseButton(MOUSE_BUTTON button) const
+bool UInputManager::GetMouseButton(EMouseButton button) const
 {
-    if (button == MOUSE_BUTTON::LEFT)
+    if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton;
-    if (button == MOUSE_BUTTON::RIGHT)
+    if (button == EMouseButton::RIGHT)
         return CurrentMouseState.RightButton;
-    if (button == MOUSE_BUTTON::MIDDLE)
+    if (button == EMouseButton::MIDDLE)
         return CurrentMouseState.MiddleButton;
     return false;
 }
 
-bool UInputManager::GetMouseDown(MOUSE_BUTTON button) const
+bool UInputManager::GetMouseDown(EMouseButton button) const
 {
-    if (button == MOUSE_BUTTON::LEFT)
+    if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton && !PrevMouseState.LeftButton;
-    if (button == MOUSE_BUTTON::RIGHT)
+    if (button == EMouseButton::RIGHT)
         return CurrentMouseState.RightButton && !PrevMouseState.RightButton;
-    if (button == MOUSE_BUTTON::MIDDLE)
+    if (button == EMouseButton::MIDDLE)
         return CurrentMouseState.MiddleButton && !PrevMouseState.MiddleButton;
     return false;
 }
 
-bool UInputManager::GetMouseUp(MOUSE_BUTTON button) const
+bool UInputManager::GetMouseUp(EMouseButton button) const
 {
-    if (button == MOUSE_BUTTON::LEFT)
+    if (button == EMouseButton::LEFT)
         return !CurrentMouseState.LeftButton && PrevMouseState.LeftButton;
-    if (button == MOUSE_BUTTON::RIGHT)
+    if (button == EMouseButton::RIGHT)
         return !CurrentMouseState.RightButton && PrevMouseState.RightButton;
-    if (button == MOUSE_BUTTON::MIDDLE)
+    if (button == EMouseButton::MIDDLE)
         return !CurrentMouseState.MiddleButton && PrevMouseState.MiddleButton;
     return false;
 }
