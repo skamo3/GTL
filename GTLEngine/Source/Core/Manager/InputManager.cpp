@@ -3,44 +3,44 @@
 #include "InputManager.h"
 
 UInputManager::UInputManager()
-    : currentKeyStates(TArray<bool>(256, false))
-    , prevKeyStates(TArray<bool>(256, false))
+    : CurrentKeyStates(TArray<bool>(256, false))
+    , PrevKeyStates(TArray<bool>(256, false))
 {}
 
 UInputManager::~UInputManager()
 {
-    currentKeyStates.clear();
-    prevKeyStates.clear();
+    CurrentKeyStates.clear();
+    PrevKeyStates.clear();
 }
 
 void UInputManager::Update(HWND hWnd, int Width, int Height)
 {
     // 현재 키 상태를 이전 상태에 복사
-    prevKeyStates = currentKeyStates;
+    PrevKeyStates = CurrentKeyStates;
     // 0~255 범위의 가상키에 대해 GetAsyncKeyState를 호출하여 현재 상태 업데이트
     for (int i = 0; i < 256; ++i)
     {
-        currentKeyStates[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
+        CurrentKeyStates[i] = (GetAsyncKeyState(i) & 0x8000) != 0;
     }
 
     // 현재 마우스 상태를 이전 상태에 복사
-    prevMouseState = currentMouseState;
+    PrevMouseState = CurrentMouseState;
     // 마우스 버튼 상태 업데이트
-    currentMouseState.leftButton = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
-    currentMouseState.rightButton = (GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
-    currentMouseState.middleButton = (GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0;
+    CurrentMouseState.LeftButton = (GetAsyncKeyState(VK_LBUTTON) & 0x8000) != 0;
+    CurrentMouseState.RightButton = (GetAsyncKeyState(VK_RBUTTON) & 0x8000) != 0;
+    CurrentMouseState.MiddleButton = (GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0;
 
     // 마우스 커서 위치 업데이트
     POINT pt;
     if (GetCursorPos(&pt))
     {
-        currentMouseState.ScreenX = pt.x;
-        currentMouseState.ScreenY = pt.y;
+        CurrentMouseState.ScreenX = pt.x;
+        CurrentMouseState.ScreenY = pt.y;
 
         if (ScreenToClient(hWnd, &pt))
         {
-            currentMouseState.ClientX = pt.x;
-            currentMouseState.ClientY = pt.y;
+            CurrentMouseState.ClientX = pt.x;
+            CurrentMouseState.ClientY = pt.y;
 
             ConvertMouseToNDC(hWnd, Width, Height);
         }
@@ -49,17 +49,17 @@ void UInputManager::Update(HWND hWnd, int Width, int Height)
 
 bool UInputManager::GetKey(int key) const
 {
-    return currentKeyStates[key];
+    return CurrentKeyStates[key];
 }
 
 bool UInputManager::GetKeyDown(int key) const
 {
-    return currentKeyStates[key] && !prevKeyStates[key];
+    return CurrentKeyStates[key] && !PrevKeyStates[key];
 }
 
 bool UInputManager::GetKeyUp(int key) const
 {
-    return !currentKeyStates[key] && prevKeyStates[key];
+    return !CurrentKeyStates[key] && PrevKeyStates[key];
 }
 
 void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
@@ -68,39 +68,39 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
     float HalfWidth = Width / 2.f;
     float HalfHeight = Height / 2.f;
     float MaxHalfLength = max(HalfWidth, HalfHeight);
-    currentMouseState.ndcX = (currentMouseState.ScreenX - HalfWidth) / HalfWidth;
-    currentMouseState.ndcY = (currentMouseState.ScreenY - HalfHeight) / HalfWidth * -1.f;
+    CurrentMouseState.NdcX = (CurrentMouseState.ScreenX - HalfWidth) / HalfWidth;
+    CurrentMouseState.NdcY = (CurrentMouseState.ScreenY - HalfHeight) / HalfWidth * -1.f;
 }
 
 bool UInputManager::GetMouseButton(MOUSE_BUTTON button) const
 {
     if (button == MOUSE_BUTTON::LEFT)
-        return currentMouseState.leftButton;
+        return CurrentMouseState.LeftButton;
     if (button == MOUSE_BUTTON::RIGHT)
-        return currentMouseState.rightButton;
+        return CurrentMouseState.RightButton;
     if (button == MOUSE_BUTTON::MIDDLE)
-        return currentMouseState.middleButton;
+        return CurrentMouseState.MiddleButton;
     return false;
 }
 
 bool UInputManager::GetMouseDown(MOUSE_BUTTON button) const
 {
     if (button == MOUSE_BUTTON::LEFT)
-        return currentMouseState.leftButton && !prevMouseState.leftButton;
+        return CurrentMouseState.LeftButton && !PrevMouseState.LeftButton;
     if (button == MOUSE_BUTTON::RIGHT)
-        return currentMouseState.rightButton && !prevMouseState.rightButton;
+        return CurrentMouseState.RightButton && !PrevMouseState.RightButton;
     if (button == MOUSE_BUTTON::MIDDLE)
-        return currentMouseState.middleButton && !prevMouseState.middleButton;
+        return CurrentMouseState.MiddleButton && !PrevMouseState.MiddleButton;
     return false;
 }
 
 bool UInputManager::GetMouseUp(MOUSE_BUTTON button) const
 {
     if (button == MOUSE_BUTTON::LEFT)
-        return !currentMouseState.leftButton && prevMouseState.leftButton;
+        return !CurrentMouseState.LeftButton && PrevMouseState.LeftButton;
     if (button == MOUSE_BUTTON::RIGHT)
-        return !currentMouseState.rightButton && prevMouseState.rightButton;
+        return !CurrentMouseState.RightButton && PrevMouseState.RightButton;
     if (button == MOUSE_BUTTON::MIDDLE)
-        return !currentMouseState.middleButton && prevMouseState.middleButton;
+        return !CurrentMouseState.MiddleButton && PrevMouseState.MiddleButton;
     return false;
 }
