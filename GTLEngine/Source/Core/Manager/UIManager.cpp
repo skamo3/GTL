@@ -2,7 +2,7 @@
 #include "UIManager.h"
 
 template<typename T>
-string UUIManager::ChangeNumToStrWithMargin(int marginNum, T num)
+std::string UUIManager::ChangeNumToStrWithMargin(int marginNum, T num)
 {
 	std::string numToStr = std::to_string(num);
 

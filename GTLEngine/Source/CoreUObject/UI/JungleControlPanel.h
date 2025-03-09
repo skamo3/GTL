@@ -26,7 +26,8 @@ private:
 	FVector cameraLocation = { -1.037f, 0.716f, 0.330f };
 	FVector cameraRotation = { 0.680f, 1.970f, 0.000f };
 
-	char strOut[32] = "";
+	char* strOut;
+	size_t bufSize;
 
 	void Draw();
 	template<typename T>
