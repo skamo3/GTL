@@ -1,14 +1,18 @@
 #pragma once
 
+#include "Object.h"
 
-class UInputManager
+class UInputManager : public UObject
 {
 public:
-    static UInputManager& Instance()
+    enum class MOUSE_BUTTON
     {
-        static UInputManager instance;
-        return instance;
-    }
+        LEFT = 0,
+        RIGHT,
+        MIDDLE,
+    };
+
+    UInputManager();
 
     // 매 프레임 호출하여 입력 상태를 업데이트
     void Update(HWND hWnd, int Width, int Height);
@@ -35,11 +39,11 @@ public:
     // 마우스 입력 관련 함수
 
     // 0: Left Button, 1: Right Button, 2: Middle Button
-    bool GetMouseButton(int button) const;
+    bool GetMouseButton(MOUSE_BUTTON button) const;
     // 0: Left Button, 1: Right Button, 2: Middle Button    
-    bool GetMouseDown(int button) const;
+    bool GetMouseDown(MOUSE_BUTTON button) const;
     // 0: Left Button, 1: Right Button, 2: Middle Button    
-    bool GetMouseUp(int button) const;
+    bool GetMouseUp(MOUSE_BUTTON button) const;
     int GetMouseClientX() const { return currentMouseState.ScreenX;};
     int GetMouseClient() const { return currentMouseState.ScreenY;};
     int GetMouseScreenX() const { return currentMouseState.ClientX;};
@@ -54,8 +58,7 @@ protected:
     void ConvertMouseToNDC(HWND hWnd, int Width, int Height);
 
 private:
-    // 생성자, 소멸자, 복사/대입 금지
-    UInputManager();
+    // 소멸자, 복사/대입 금지
     ~UInputManager();
     UInputManager(const UInputManager&) = delete;
     UInputManager& operator=(const UInputManager&) = delete;

@@ -69,35 +69,35 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
     currentMouseState.ndcY = (currentMouseState.ScreenY - HalfHeight) / HalfWidth * -1.f;
 }
 
-bool UInputManager::GetMouseButton(int button) const
+bool UInputManager::GetMouseButton(MOUSE_BUTTON button) const
 {
-    if (button == 0)
+    if (button == MOUSE_BUTTON::LEFT)
         return currentMouseState.leftButton;
-    if (button == 1)
+    if (button == MOUSE_BUTTON::RIGHT)
         return currentMouseState.rightButton;
-    if (button == 2)
+    if (button == MOUSE_BUTTON::MIDDLE)
         return currentMouseState.middleButton;
     return false;
 }
 
-bool UInputManager::GetMouseDown(int button) const
+bool UInputManager::GetMouseDown(MOUSE_BUTTON button) const
 {
-    if (button == 0)
+    if (button == MOUSE_BUTTON::LEFT)
         return currentMouseState.leftButton && !prevMouseState.leftButton;
-    if (button == 1)
+    if (button == MOUSE_BUTTON::RIGHT)
         return currentMouseState.rightButton && !prevMouseState.rightButton;
-    if (button == 2)
+    if (button == MOUSE_BUTTON::MIDDLE)
         return currentMouseState.middleButton && !prevMouseState.middleButton;
     return false;
 }
 
-bool UInputManager::GetMouseUp(int button) const
+bool UInputManager::GetMouseUp(MOUSE_BUTTON button) const
 {
-    if (button == 0)
+    if (button == MOUSE_BUTTON::LEFT)
         return !currentMouseState.leftButton && prevMouseState.leftButton;
-    if (button == 1)
+    if (button == MOUSE_BUTTON::RIGHT)
         return !currentMouseState.rightButton && prevMouseState.rightButton;
-    if (button == 2)
+    if (button == MOUSE_BUTTON::MIDDLE)
         return !currentMouseState.middleButton && prevMouseState.middleButton;
     return false;
 }

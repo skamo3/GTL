@@ -2,6 +2,7 @@
 #include "Engine.h"
 
 #include "DirectX11/DirectXHandle.h"
+#include "Manager/InputManager.h"
 
 uint32 UEngineStatics::NextUUID = 0;
 
@@ -27,6 +28,13 @@ bool UEngine::InitEngine(HWND hWnd)
 	}
 
 	// 셰이더 추가.
+
+    // 리소스 매니저 추가.
+
+    // 월드 추가.
+
+    // 인풋 매니저 추가.
+    InputManager = new UInputManager();
 
 	return true;
 }
