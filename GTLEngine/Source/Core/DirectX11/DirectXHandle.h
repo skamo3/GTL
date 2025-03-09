@@ -28,7 +28,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
-	void Render(const TArray<AActor*> Actors);
+	void RenderObejct(const TArray<AActor*> Actors);
 
 private:
 	void InitView();

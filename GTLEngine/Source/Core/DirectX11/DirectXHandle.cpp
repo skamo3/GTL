@@ -135,7 +135,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 	// 카메라 상수버퍼로 바로 전달.
 }
 
-void UDirectXHandle::Render(const TArray<AActor*> Actors)
+void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.
 	InitView();
