@@ -26,7 +26,15 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
         PostQuitMessage(0);
         break;
     case WM_SIZE:
-        // TODO: Signal that the window size has changed
+        {
+            /**
+            * switch문 특성상 아래 두 변수의 스코프를 현재의 case로 제한하지 않으면 다른 case에서도 접근 가능하지만, 초기화 되지 않음.
+            * 따라서 컴파일 에러가 발생하므로, 변수들의 스코프를 현재의 case로 제한.
+            */
+            int32 NewHeight = HIWORD(lParam);
+            int32 NewWidth = LOWORD(lParam);
+            // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달.
+        }
         break;
     default:
         return DefWindowProc(hWnd, message, wParam, lParam);
@@ -49,8 +57,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // 윈도우 클래스 등록
     RegisterClassW(&wndclass);
 
-    int Width = 1024;
-    int Height = 1024;
+    uint32 Width = 1024;
+    uint32 Height = 1024;
 
     // 1024 x 1024 크기에 윈도우 생성
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
@@ -75,8 +83,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
                 GameLoopState = false;
                 break;
             }
-
-            // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달
         }
 
 

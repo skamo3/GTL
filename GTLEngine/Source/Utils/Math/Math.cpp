@@ -159,11 +159,11 @@ FRay FMath::CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, floa
 
 	// NDC 좌표계를 월드 좌표계로 변환
 	float startW = 0;
-	FVector startWorldPos = TransformPos(startClip, invViewProj, startW);
+	FVector startWorldPos = TransformPosition(startClip, invViewProj, startW);
 	startWorldPos /= startW;
 
 	float endW = 0;
-	FVector endWorldPos = TransformPos(endClip, invViewProj, endW);
+	FVector endWorldPos = TransformPosition(endClip, invViewProj, endW);
 	endWorldPos /= endW;
 
 	// Ray 생성
