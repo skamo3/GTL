@@ -5,5 +5,5 @@
 class UUIManager {
 public:
 	template<typename T>
-	string ChangeNumToStrWithMargin(int marginNum, T num);
+	std::string ChangeNumToStrWithMargin(int marginNum, T num);
 };
