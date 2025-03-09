@@ -5,9 +5,9 @@
 #include "DXDDepthStencilView.h"
 #include "DXDRasterizerState.h"
 #include "DXDShaderManager.h"
-#include "DXDInputLayout.h"
 
 #include "CoreUObject/GameFrameWork/Actor.h"
+#include "CoreUObject/GameFrameWork/Camera.h"
 
 UDirectXHandle::~UDirectXHandle()
 {
