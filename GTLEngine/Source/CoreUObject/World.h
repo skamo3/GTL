@@ -10,12 +10,12 @@ class UWorld : public UObject
 {
 
 public:
-	static UWorld* CreateWorld(string WorldName);
+	static UWorld* CreateWorld(std::wstring WorldName);
 
 	template<typename T>
-	T* SpawnActor(string InName, FVector InLocation, FVector InScale, float InRotation, shared_ptr<UObject> InOwner)
+	T* SpawnActor(std::wstring InName, FVector InLocation, FVector InScale, float InRotation, UObject* InOwner)
 	{
-		T* newObj = make_shared<T>();
+		T* newObj = T();
 		AActor* newActor = dynamic_pointer_cast<AActor>(newObj);
 		// newActor-> SetLocation, SetScale, SetRotation.
 		newActor->SetLocation(InLocation);

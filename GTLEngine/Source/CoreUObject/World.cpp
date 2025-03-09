@@ -3,7 +3,7 @@
 
 #include "GameFrameWork/Actor.h"
 
-UWorld* UWorld::CreateWorld(string WorldName)
+UWorld* UWorld::CreateWorld(std::wstring WorldName)
 {
 	UWorld* NewWorld = new UWorld();
 	NewWorld->SetName(WorldName);
