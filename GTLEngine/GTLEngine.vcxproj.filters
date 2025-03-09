@@ -68,6 +68,9 @@
     <Filter Include="Plugins\ImGui">
       <UniqueIdentifier>{d2deee3e-216b-4b88-9c6e-bfe332c67db1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Plugins\SimpleJSON">
+      <UniqueIdentifier>{e19583fe-4f81-43a0-b3d8-b4207ffe65d3}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -341,6 +344,9 @@
     </ClInclude>
     <ClInclude Include="Plugins\ImGui\imstb_truetype.h">
       <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\SimpleJSON\json.hpp">
+      <Filter>Plugins\SimpleJSON</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

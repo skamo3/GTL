@@ -7,7 +7,7 @@
 UWorld* UWorld::CreateWorld()
 {
 	UWorld* NewWorld = new UWorld();
-
+	MainCamera = new ACamera();
     return NewWorld;
 }
 
@@ -28,4 +28,10 @@ void UWorld::Tick(float TickTime)
 
 void UWorld::Destroy()
 {
+	for (AActor* Actor : ActiveActors)
+	{
+		if (Actor)
+			Actor->Destroy();
+	}
+	ActiveActors.clear();
 }

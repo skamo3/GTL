@@ -123,6 +123,7 @@
     <ClInclude Include="Plugins\ImGui\imstb_rectpack.h" />
     <ClInclude Include="Plugins\ImGui\imstb_textedit.h" />
     <ClInclude Include="Plugins\ImGui\imstb_truetype.h" />
+    <ClInclude Include="Plugins\SimpleJSON\json.hpp" />
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CameraComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h" />
