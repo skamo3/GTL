@@ -9,6 +9,7 @@ class UDXDShaderManager;
 class UDXDInputLayout;
 
 class UObject;
+class AActor;
 
 class UDirectXHandle
 {
@@ -25,7 +26,7 @@ public:
 	HRESULT CreateDirectX11Handle(HWND hWnd);
 	void ReleaseDirectX11Handle();
 
-	void Render();
+	void Render(const TArray<AActor> Actors);
 
 	HWND GetWindowHandle() const { return WindowHandle; }
 

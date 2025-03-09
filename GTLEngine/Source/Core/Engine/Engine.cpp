@@ -3,6 +3,9 @@
 
 #include "DirectX11/DirectXHandle.h"
 
+#include "World.h"
+#include "GameFrameWork/Actor.h"
+
 uint32 UEngineStatics::NextUUID = 0;
 
 bool UEngine::InitEngine(HWND hWnd)
@@ -36,14 +39,7 @@ void UEngine::Update()
 	// TimeManager.
 
 	// World 오브젝트 값들 없데이트.
-	/*
-	
-	for (auto Object : World->GetObjects())
-	{
-		Object->Update();
-	}
-	
-	*/
+	World->Update(0.3f); // TODO: TickTime 값 수정 필요.
 
 }
 
@@ -51,7 +47,7 @@ void UEngine::Render()
 {
 	
 	// 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
-	DirectX11Handle->Render( /* World->GetObjects(); */);
+	DirectX11Handle->Render(World->GetObjects());
 
 }
 

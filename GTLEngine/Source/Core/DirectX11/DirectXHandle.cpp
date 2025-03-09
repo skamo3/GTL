@@ -7,6 +7,8 @@
 #include "DXDShaderManager.h"
 #include "DXDInputLayout.h"
 
+#include "CoreUObject/GameFrameWork/Actor.h"
+
 UDirectXHandle::~UDirectXHandle()
 {
 	ReleaseDirectX11Handle();
@@ -125,7 +127,7 @@ void UDirectXHandle::ReleaseDirectX11Handle()
 	ShaderManager->ReleaseAllShader();
 }
 
-void UDirectXHandle::Render()
+void UDirectXHandle::Render(const TArray<AActor> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.
 	InitView();
