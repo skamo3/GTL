@@ -104,8 +104,8 @@ bool USceneAsset::Save(std::wstring path)
 {
 	json::JSON sceneData = json::JSON::Make(json::JSON::Class::Object);
 
-	sceneData["Version"] = SceneData.Version;
-	sceneData["NextUUID"] = SceneData.NextUUID;
+	sceneData["Version"] = static_cast<uint32>(SceneData.Version);
+	sceneData["NextUUID"] = static_cast<uint32>(SceneData.NextUUID);
 
 	json::JSON primitives = json::JSON::Make(json::JSON::Class::Object);
 	for (const auto& primitive : SceneData.Primitives)
@@ -133,8 +133,7 @@ bool USceneAsset::Save(std::wstring path)
 		}
 		primitiveData["Scale"] = scale;
 
-		primitives.append(primitive.first, primitiveData);
-
+		primitives.append(WStringToString(primitive.first), primitiveData);
 
 		primitiveData["Type"] = WStringToString(primitive.second.Type);
 	}

@@ -1,6 +1,6 @@
 #pragma once
 
-typedef struct FVector;
+#include "Math/Vector.h"
 class UJungleConsole;
 
 class UUIManager {

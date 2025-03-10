@@ -20,7 +20,7 @@ void UAssetManager::RegistryAssetMetaDatas()
 	if (IsDebuggerPresent())
 	{
 		filesystem::path curPath = filesystem::current_path();
-		filesystem::path assetDir = curPath / L"Resources";
+		filesystem::path assetDir = curPath / L"Resource";
 		try
 		{
 			for (const auto& entry : filesystem::recursive_directory_iterator(assetDir))
@@ -84,6 +84,10 @@ void UAssetManager::LoadAssets()
 			case EAssetType::SceneAsset:
 			{
 				USceneAsset* sceneAsset = LoadAsset<USceneAsset>(assetMetaData.second);
+				if (sceneAsset != nullptr)
+				{
+					Assets[assetMetaData.first] = sceneAsset;
+				}
 				break;
 			}
 		}

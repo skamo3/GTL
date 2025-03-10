@@ -220,6 +220,9 @@
     <ClCompile Include="Source\Utils\JungleLog.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Asset\Asset.cpp">
+      <Filter>Source\Core\Asset</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Core\Asset\AssetManager.cpp">
       <Filter>Source\Core\Asset</Filter>
     </ClCompile>

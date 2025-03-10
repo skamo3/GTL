@@ -34,6 +34,10 @@ public:
 	{
 	}
 
+	FAssetMetaData()
+		: AssetName(L""), AssetPath(L""), AssetSize(0), bLoaded(false), AssetType(EAssetType::End)
+	{
+	}
 
 	std::wstring AssetName;
 	std::wstring AssetPath;
