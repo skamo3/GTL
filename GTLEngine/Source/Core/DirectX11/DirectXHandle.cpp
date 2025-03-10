@@ -9,6 +9,8 @@
 #include "CoreUObject/GameFrameWork/Actor.h"
 #include "CoreUObject/GameFrameWork/Camera.h"
 
+#include "CoreUObject/Components/PrimitiveComponent.h"
+
 #include "Engine.h"
 
 #include "Gizmo/Gizmo.h"
@@ -142,10 +144,27 @@ void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
 	// Selected 오브젝트 기반으로 기즈모 그리가.
 }
 
+void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
+{
+	if (PrimitiveComp)
+	{
+		TArray<FVertexSimple*> Vertices = PrimitiveComp->GetVertices();
+
+	}
+}
+
 void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.
 	InitView();
+
+	for (AActor* Actor : Actors)
+	{
+		UPrimitiveComponent* Primitive = Actor->GetComponentByClass<UPrimitiveComponent>();
+		RenderPrimitive(Primitive);
+		// PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
+		
+	}
 	// 셰이더 준비.
 	// 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
 	// 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.

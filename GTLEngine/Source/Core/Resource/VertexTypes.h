@@ -1,5 +1,13 @@
 #pragma once
 
+enum class EPrimitiveType
+{
+    Triangle,
+    Rectangle,
+    Sphere,
+    Cube,
+    NONE
+};
 
 struct FVertexSimple
 {

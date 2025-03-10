@@ -14,6 +14,7 @@ class UObject;
 class AActor;
 class ACamera;
 class UGizmo;
+class UPrimitiveComponent;
 
 class UDirectXHandle
 {
@@ -32,6 +33,7 @@ public:
 
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmo* Gizmo);
+	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObejct(const TArray<AActor*> Actors);
 
 private:

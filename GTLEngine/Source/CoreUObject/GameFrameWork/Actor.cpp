@@ -6,7 +6,7 @@
 AActor::AActor()
 	: Owner(nullptr)
 {
-	RootComponent = new USceneComponent();
+	RootComponent = AddComponent<USceneComponent>(this);
 }
 
 void AActor::Tick(float TickTime)
