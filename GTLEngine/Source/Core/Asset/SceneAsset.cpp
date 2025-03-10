@@ -135,7 +135,6 @@ bool USceneAsset::Save(std::wstring path)
 
 		primitives.append(WStringToString(primitive.first), primitiveData);
 
-
 		primitiveData["Type"] = WStringToString(primitive.second.Type);
 	}
 

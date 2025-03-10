@@ -72,7 +72,7 @@
       <UniqueIdentifier>{e19583fe-4f81-43a0-b3d8-b4207ffe65d3}</UniqueIdentifier>
     </Filter>
     <Filter Include="Source\Core\Asset">
-      <UniqueIdentifier>{c43e4cf0-6e38-4528-86d6-a9e84c4630c0}</UniqueIdentifier>
+      <UniqueIdentifier>{1cd82e48-94a8-45e6-b5c2-a221359f1fcf}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -224,6 +224,9 @@
       <Filter>Source\Core\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Asset\AssetManager.cpp">
+      <Filter>Source\Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Asset\Asset.cpp">
       <Filter>Source\Core\Asset</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Asset\SceneAsset.cpp">
@@ -387,10 +390,10 @@
     <ClInclude Include="Source\Utils\JungleLog.h">
       <Filter>Utils</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Asset\Asset.h">
+    <ClInclude Include="Source\Core\Asset\AssetManager.h">
       <Filter>Source\Core\Asset</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Asset\AssetManager.h">
+    <ClInclude Include="Source\Core\Asset\Asset.h">
       <Filter>Source\Core\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Asset\SceneAsset.h">

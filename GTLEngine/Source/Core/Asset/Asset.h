@@ -39,7 +39,6 @@ public:
 	{
 	}
 
-
 	std::wstring AssetName;
 	std::wstring AssetPath;
 

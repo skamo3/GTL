@@ -5,6 +5,7 @@
 #include "Time/TimeManager.h"
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
+#include "Asset/AssetManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
@@ -47,6 +48,10 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 콘스탄트 버퍼 추가.
     // TODO: Constant 배열 만들어서 Constant 버퍼 생성 로직 추가. 
     //DirectX11Handle->AddConstantBuffer();
+
+	UAssetManager* AssetManager = new UAssetManager();
+	AssetManager->RegistryAssetMetaDatas();
+	AssetManager->LoadAssets();
 
     // 월드 추가.
     World = UWorld::CreateWorld();
