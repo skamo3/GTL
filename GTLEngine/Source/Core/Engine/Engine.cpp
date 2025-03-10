@@ -2,6 +2,7 @@
 #include "Engine.h"
 
 #include "DirectX11/DirectXHandle.h"
+#include "Time/TimeManager.h"
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
 
@@ -50,6 +51,10 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 월드 추가.
     World = UWorld::CreateWorld();
 
+	// TimeManager 추가
+	TimeManager = new UTimeManager();
+	TimeManager->Initialize();
+
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
 
@@ -59,13 +64,14 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 void UEngine::Tick()
 {
     // TimeManager.
-    
+    TimeManager->Update();
 
-    // InputManager.
+	// InputManager.
+    InputManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
-    World->CameraTick(0.3f);
-    World->Tick(0.3f); // TODO: TickTime 값 수정 필요.
+    World->CameraTick(TimeManager->DeltaTime());
+    World->Tick(TimeManager->DeltaTime());
 }
 
 void UEngine::Render()
@@ -100,6 +106,12 @@ void UEngine::ClearEngine()
         delete InputManager;
         InputManager = nullptr;
     }
+
+	if (TimeManager) 
+	{
+		delete TimeManager;
+		TimeManager = nullptr;
+	}
 }
 
 void UEngine::AddTotalAllocationBytes(uint32 Bytes)

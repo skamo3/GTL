@@ -208,6 +208,12 @@
     <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Resource\Asset.cpp">
+      <Filter>Source\Core\Resource</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Resource\Scene.cpp">
+      <Filter>Source\Core\Resource</Filter>
+    </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
@@ -365,6 +371,12 @@
     </ClInclude>
     <ClInclude Include="Plugins\SimpleJSON\json.hpp">
       <Filter>Plugins\SimpleJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Resource\Asset.h">
+      <Filter>Source\Core\Resource</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Resource\Scene.h">
+      <Filter>Source\Core\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h">
       <Filter>Source\CoreUObject\UI</Filter>
