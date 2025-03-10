@@ -18,12 +18,12 @@ public:
 	template<typename T>
 	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FVector& InRotation, const FVector& InScale, UObject* InOwner)
 	{
-		T* newObj = T();
-		AActor* newActor = dynamic_pointer_cast<AActor>(newObj);
+		T* newObj = new T();
+		AActor* newActor = dynamic_cast<AActor*>(newObj);
 		// newActor-> SetLocation, SetScale, SetRotation.
-		newActor->SetLocation(InLocation);
-		newActor->SetScale(InScale);
-		newActor->SetRotation(InRotation);
+		newActor->SetActorLocation(InLocation);
+		newActor->SetActorScale(InScale);
+		newActor->SetActorRotation(InRotation);
 
 		if (newActor != nullptr)
 		{

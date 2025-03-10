@@ -8,6 +8,9 @@ UWorld* UWorld::CreateWorld()
 {
 	UWorld* NewWorld = new UWorld();
 	NewWorld->MainCamera = new ACamera();
+
+	NewWorld->SpawnActor<AActor>(TEXT("A"), FVector(), FVector(), FVector(), NewWorld);
+
     return NewWorld;
 }
 

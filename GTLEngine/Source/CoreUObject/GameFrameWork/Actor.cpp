@@ -44,3 +44,23 @@ FVector AActor::GetActorScale() const
 {
 	return RootComponent->GetComponentScale();
 }
+
+void AActor::SetActorLocation(FVector InLocation)
+{
+	// TODO:
+}
+
+void AActor::SetActorRotation(FVector InRotation)
+{
+	// TODO:
+}
+
+void AActor::SetActorScale(FVector InScale)
+{
+	// TODO:
+}
+
+void AActor::SetOwner(UObject* InOwner)
+{
+	// TODO:
+}
