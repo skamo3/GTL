@@ -4,6 +4,8 @@
 #include "ImGui/imgui.h"
 #include "UI/UIManager.h"
 
+const char* primitives[] = { "Sphere", "Cube", "Plane" };
+
 UJungleControlPanel::UJungleControlPanel(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
     

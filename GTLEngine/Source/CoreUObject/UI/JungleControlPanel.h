@@ -3,7 +3,7 @@
 #include "Math/Vector.h"
 #include "UI/UIBase.h"
 
-const char* primitives[] = { "Sphere", "Cube", "Plane" }; // TODO:
+const char* primitives[]; // TODO:
 
 class UJungleControlPanel: public UUIBase
 {

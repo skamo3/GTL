@@ -3,14 +3,67 @@
 
 #include "Math/Matrix.h"
 #include "UI/JungleConsole.h"
+#include "UI/JunglePropertyWindow.h"
+#include "UI/JungleControlPanel.h"
+
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_internal.h"
+#include "ImGui/imgui_impl_dx11.h"
+#include "ImGui/imgui_impl_win32.h"
 
 
-void UUIManager::RegisterJungleConsole(UJungleConsole& inJungleConsole)
+
+void UUIManager::Initialize(HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext)
 {
-	JungleConsole = &inJungleConsole;
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGui_ImplWin32_Init((void*)hWnd);
+	ImGui_ImplDX11_Init(device, deviceContext);
+
+	JungleConsole = new UJungleConsole(this);
+	JunglePropertyWindow = new UJunglePropertyWindow(this);
+	JungleControlPanel = new UJungleControlPanel(this);
 }
 
+void UUIManager::Tick(float TickTime)
+{
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
 
+	JungleConsole->Tick(TickTime);
+	JunglePropertyWindow->Tick(TickTime);
+	JungleControlPanel->Tick(TickTime);
+
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+void UUIManager::Destroy()
+{
+	if (JungleConsole) 
+	{
+		JungleConsole->Destroy();
+		delete JungleConsole;
+		JungleConsole = nullptr;
+	}
+
+	if (JunglePropertyWindow)
+	{
+		JunglePropertyWindow->Destroy();
+		delete JunglePropertyWindow;
+		JunglePropertyWindow = nullptr;
+	}
+
+	if (JungleControlPanel) 
+	{
+		JungleControlPanel->Destroy();
+		delete JungleControlPanel;
+		JungleControlPanel = nullptr;
+	}
+
+	
+}
 
 bool UUIManager::GetObjectTranslation(FVector& outTranslation)
 {

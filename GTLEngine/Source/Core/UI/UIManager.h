@@ -2,14 +2,20 @@
 
 #include "Math/Vector.h"
 class UJungleConsole;
+class UJunglePropertyWindow;
+class UJungleControlPanel;
 
 class UUIManager {
 
 public:
-	void RegisterJungleConsole(UJungleConsole& inJungleConsole);
+	void Initialize(HWND hWnd, ID3D11Device* device, ID3D11DeviceContext* deviceContext);
+	void Tick(float TickTime);
+	void Destroy();
 
 private:
 	UJungleConsole* JungleConsole;
+	UJunglePropertyWindow* JunglePropertyWindow;
+	UJungleControlPanel* JungleControlPanel;
 
 	
 public:

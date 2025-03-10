@@ -7,6 +7,7 @@ class UResourceManager;
 class UWorld;
 class UTimeManager;
 class UInputManager;
+class UUIManager;
 class UGizmo;
 class UObject;
 class UAssetManager;
@@ -61,6 +62,7 @@ private:
     UWorld* World;
     UTimeManager* TimeManager;
     UInputManager* InputManager;
+    UUIManager* UIManager;
     UGizmo* Gizmo;
 
     UObject* SelectedObject;

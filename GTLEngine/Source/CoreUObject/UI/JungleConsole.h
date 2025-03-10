@@ -3,8 +3,7 @@
 #include "UI/UIBase.h"
 
 #include "ImGui/imgui.h" // TODO: 아래 멤버 변수 중 ImGui의 구조체를 전방선언 하는 방법을 찾으면 cpp로 이동
-
-struct FLogEntry;
+#include "Utils/JungleLog.h"
 
 class UJungleConsole: public UUIBase
 {

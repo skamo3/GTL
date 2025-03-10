@@ -6,6 +6,7 @@
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
 #include "Asset/AssetManager.h"
+#include "UI/UIManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
@@ -63,6 +64,10 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
 
+    UIManager = new UUIManager();
+    UIManager->Initialize(WindowInfo.WindowHandle, 
+        DirectX11Handle->GetD3DDevice().Get(), DirectX11Handle->GetD3DDeviceContext().Get());
+
     return true;
 }
 
@@ -73,6 +78,8 @@ void UEngine::Tick()
 
 	// InputManager.
     InputManager->Tick(TimeManager->DeltaTime());
+
+    UIManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
     World->CameraTick(TimeManager->DeltaTime());
@@ -120,6 +127,13 @@ void UEngine::ClearEngine()
 		delete TimeManager;
 		TimeManager = nullptr;
 	}
+
+    if (UIManager) 
+    {
+        UIManager->Destroy();
+        delete UIManager;
+        UIManager = nullptr;
+    }
 }
 
 HRESULT UEngine::AddAllPrimitiveVertexBuffers()
