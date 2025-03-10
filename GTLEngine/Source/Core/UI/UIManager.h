@@ -1,6 +1,6 @@
 #pragma once
 
-typedef struct FVector;
+struct FVector;
 class UJungleConsole;
 
 class UUIManager {
