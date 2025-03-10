@@ -71,6 +71,9 @@
     <Filter Include="Plugins\SimpleJSON">
       <UniqueIdentifier>{e19583fe-4f81-43a0-b3d8-b4207ffe65d3}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\Core\Asset">
+      <UniqueIdentifier>{c43e4cf0-6e38-4528-86d6-a9e84c4630c0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -208,12 +211,6 @@
     <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Resource\Asset.cpp">
-      <Filter>Source\Core\Resource</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Resource\Scene.cpp">
-      <Filter>Source\Core\Resource</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
@@ -222,6 +219,15 @@
     </ClCompile>
     <ClCompile Include="Source\Utils\JungleLog.cpp">
       <Filter>Utils</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Asset\Asset.cpp">
+      <Filter>Source\Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Asset\AssetManager.cpp">
+      <Filter>Source\Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\Asset\SceneAsset.cpp">
+      <Filter>Source\Core\Asset</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -372,12 +378,6 @@
     <ClInclude Include="Plugins\SimpleJSON\json.hpp">
       <Filter>Plugins\SimpleJSON</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Resource\Asset.h">
-      <Filter>Source\Core\Resource</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Resource\Scene.h">
-      <Filter>Source\Core\Resource</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
@@ -386,6 +386,15 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\JungleLog.h">
       <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Asset\Asset.h">
+      <Filter>Source\Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Asset\AssetManager.h">
+      <Filter>Source\Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Asset\SceneAsset.h">
+      <Filter>Source\Core\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

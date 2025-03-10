@@ -1,39 +1,41 @@
 #include "pch.h"
-#include "Scene.h"
+#include "SceneAsset.h"
 #include <filesystem>
-#include <iostream>
 #include <fstream>
+#include <iostream>
 #include <sstream>
-#include "SimpleJSON/json.hpp"
+#include "SimpleJson/json.hpp"
 
 using namespace std;
 
-UScene::UScene()
+USceneAsset::USceneAsset(FAssetMetaData metaData)
+	: UAsset(metaData), SceneData(FSceneData())
 {
 }
 
-UScene::~UScene()
+USceneAsset::~USceneAsset()
 {
 }
 
-bool UScene::RegistryAsset(const std::wstring& name, const std::wstring& extention, const std::wstring& path)
+bool USceneAsset::RegistryAsset(FAssetMetaData metaData)
 {
-	if (UAsset::RegistryAsset(name, extention, path) == false)
-		return  false;
-	
+	if(UAsset::RegistryAsset(metaData) == false)
+	{
+		return false;
+	}
 
 	return true;
 }
 
-bool UScene::LoadAsset()
+bool USceneAsset::Load()
 {
-	if (bLoaded)
+	if (IsLoaded())
 	{
-		wcout << "Asset already loaded: " << AssetPath << endl;
+		wcout << "Asset already loaded: " << AssetMetaData.AssetPath << endl;
 		return true;
 	}
 
-	filesystem::path filePath = AssetPath;
+	filesystem::path filePath = AssetMetaData.AssetPath;
 	if (filesystem::exists(filePath) == false)
 	{
 		wcout << "File not found: " << filePath << endl;
@@ -58,15 +60,15 @@ bool UScene::LoadAsset()
 
 	json::JSON primitives = sceneData["Primitives"];
 
-	TMap<std::string, Primitive> loadedPrimitives;
+	TMap<std::wstring, Primitive> loadedPrimitives;
 	auto primitivesObj = primitives.ObjectRange();
 	for (auto it = primitivesObj.begin(); it != primitivesObj.end(); ++it)
 	{
-		string key = it->first;
+		wstring key = StringToWString(it->first);
 		json::JSON primitive = it->second;
 
 		Primitive loadedPrimitive;
-		loadedPrimitive.Type = primitive["Type"].ToString();
+		loadedPrimitive.Type = StringToWString(primitive["Type"].ToString());
 
 		auto locationArr = primitive["Location"].ArrayRange();
 		for (const auto& location : locationArr)
@@ -92,23 +94,24 @@ bool UScene::LoadAsset()
 		loadedPrimitives[key] = loadedPrimitive;
 	}
 
-	SceneData = { version, nextUUID, loadedPrimitives };
-	bLoaded = true;
+	SceneData = FSceneData(version, nextUUID, loadedPrimitives);
+
+	AssetMetaData.bLoaded = true;
+	return true;
 }
 
-bool UScene::SaveAsset()
+bool USceneAsset::Save(std::wstring path)
 {
 	json::JSON sceneData = json::JSON::Make(json::JSON::Class::Object);
 
-	sceneData["Version"] = SceneData.Version;
-	sceneData["NextUUID"] = SceneData.NextUUID;
+	sceneData["Version"] = static_cast<uint32>(SceneData.Version);
+	sceneData["NextUUID"] = static_cast<uint32>(SceneData.NextUUID);
 
 	json::JSON primitives = json::JSON::Make(json::JSON::Class::Object);
 	for (const auto& primitive : SceneData.Primitives)
 	{
 		json::JSON primitiveData = json::JSON::Make(json::JSON::Class::Object);
-		primitiveData["Type"] = primitive.second.Type;
-	
+
 		json::JSON location = json::JSON::Make(json::JSON::Class::Array);
 		for (const auto& value : primitive.second.Location)
 		{
@@ -130,7 +133,10 @@ bool UScene::SaveAsset()
 		}
 		primitiveData["Scale"] = scale;
 
-		primitives.append(primitive.first, primitiveData);
+		primitives.append(WStringToString(primitive.first), primitiveData);
+
+
+		primitiveData["Type"] = WStringToString(primitive.second.Type);
 	}
 
 	sceneData["Primitives"] = primitives;
@@ -138,11 +144,15 @@ bool UScene::SaveAsset()
 
 	string jsonStr = sceneData.dump(2);
 
-	filesystem::path filePath = AssetPath;
-	ofstream file(filePath);
+	if (path.empty())
+	{
+		path = AssetMetaData.AssetPath;
+	}
+
+	ofstream file(path);
 	if (!file.is_open())
 	{
-		wcout << "File open failed: " << filePath << endl;
+		wcout << "File open failed: " << path << endl;
 		return false;
 	}
 
@@ -152,10 +162,36 @@ bool UScene::SaveAsset()
 	return true;
 }
 
-void UScene::UnloadAsset()
+void USceneAsset::Unload()
 {
-	if (bLoaded)
-	{
-		// 메모리 해제
-	}
+}
+
+std::wstring USceneAsset::StringToWString(const std::string& str)
+{
+	// 필요한 버퍼 길이 계산 (널 문자 포함)
+	int len = MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, nullptr, 0);
+	if (len == 0)
+		throw std::runtime_error("MultiByteToWideChar 에러");
+
+	std::wstring wstr(len, L'\0');
+	MultiByteToWideChar(CP_UTF8, 0, str.c_str(), -1, &wstr[0], len);
+	// 마지막 널 문자를 제거할 수 있음
+	if (!wstr.empty() && wstr.back() == L'\0')
+		wstr.pop_back();
+	return wstr;
+}
+
+std::string USceneAsset::WStringToString(const std::wstring& wstr)
+{
+	// UTF-8 문자열로 변환하기 위해 필요한 버퍼 길이 계산 (널 문자 포함)
+	int len = WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, nullptr, 0, nullptr, nullptr);
+	if (len == 0)
+		throw std::runtime_error("WideCharToMultiByte 에러");
+
+	std::string str(len, '\0');
+	WideCharToMultiByte(CP_UTF8, 0, wstr.c_str(), -1, &str[0], len, nullptr, nullptr);
+	// 마지막 널 문자가 추가되어 있다면 제거
+	if (!str.empty() && str.back() == '\0')
+		str.pop_back();
+	return str;
 }
