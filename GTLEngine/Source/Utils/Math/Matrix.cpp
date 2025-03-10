@@ -52,7 +52,7 @@ bool FMatrix::Inverse(const FMatrix& src, FMatrix& dst)
 	// 우선 기존의 Determinant() 함수를 사용하여 행렬식을 계산합니다.
 	float determinant = src.Determinant();
 
-	if (determinant == 0)
+	if (determinant < SMALL_NUMBER)
 	{
 		dst = FMatrix::Identity;
 		return false;
@@ -171,6 +171,28 @@ FMatrix FMatrix::CreateRotationXYZ(const FVector& rotation)
 	return rotationMatrix;
 }
 
+FMatrix FMatrix::CreateRotationQuat(const FQuaternion& q)
+{
+	FQuaternion normalizedQuat = q.GetNormalizeQuaternion();
+
+	float xx = normalizedQuat.X * normalizedQuat.X;
+	float yy = normalizedQuat.Y * normalizedQuat.Y;
+	float zz = normalizedQuat.Z * normalizedQuat.Z;
+	float xy = normalizedQuat.X * normalizedQuat.Y;
+	float xz = normalizedQuat.X * normalizedQuat.Z;
+	float yz = normalizedQuat.Y * normalizedQuat.Z;
+	float wx = normalizedQuat.W * normalizedQuat.X;
+	float wy = normalizedQuat.W * normalizedQuat.Y;
+	float wz = normalizedQuat.W * normalizedQuat.Z;
+
+	return FMatrix(
+		1 - 2 * (yy + zz), 2 * (xy - wz), 2 * (xz + wy), 0,
+		2 * (xy + wz), 1 - 2 * (xx + zz), 2 * (yz - wx), 0,
+		2 * (xz - wy), 2 * (yz + wx), 1 - 2 * (xx + yy), 0,
+		0, 0, 0, 1
+	);
+}
+
 FMatrix FMatrix::CreateScaleMatrix(float scale)
 {
 	FMatrix S(
@@ -218,18 +240,6 @@ FMatrix FMatrix::CreateTranslationMatrix(const FVector& location)
 	);
 	return T;
 }
-
-//FMatrix FMatrix::CreateLookAtMatrixLeftHand(const FVector& eye, const FVector& at, const FVector& up)
-//{
-//	FVector eyeDir = at - eye;
-//	return CreateLookToMatrixLeftHand(eye, eyeDir, up);
-//}
-//
-//FMatrix FMatrix::CreateLookAtMatrixRightHand(const FVector& eye, const FVector& at, const FVector& up)
-//{
-//	FVector eyeDir = eye - at;
-//	return CreateLookAtMatrixRightHand(eye, eyeDir, up);
-//}
 
 FMatrix FMatrix::CreateLookToMatrixLeftHand(const FVector& eye, const FVector& toDir, const FVector& up)
 {

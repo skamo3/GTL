@@ -1,8 +1,19 @@
 ﻿#pragma once
-#include "Vector.h"
+#include <Math/MathFwd.h>
 
 struct FRay
 {
+
+private:
+	/// <summary>
+	/// Ray의 시작점
+	/// </summary>
+	FVector Origin;
+
+	/// <summary>
+	/// Ray의 방향
+	/// </summary>
+	FVector Direction;
 
 public:
 	FRay() : Origin(FVector::ZeroVector), Direction(FVector::UpVector) {}
@@ -64,12 +75,6 @@ public:
 			return Origin + Direction * rayParam;
 		}
 	}
-
-
-
-private:
-	FVector Origin;
-	FVector Direction;
 };
 
 struct FRayCast
