@@ -85,6 +85,9 @@
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp" />
     <ClCompile Include="Source\CoreUObject\World.cpp" />
+    <ClCompile Include="Source\Core\Asset\Asset.cpp" />
+    <ClCompile Include="Source\Core\Asset\AssetManager.cpp" />
+    <ClCompile Include="Source\Core\Asset\SceneAsset.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDDepthStencilView.cpp" />
@@ -97,9 +100,7 @@
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
     <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
-    <ClCompile Include="Source\Core\Resource\Asset.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
-    <ClCompile Include="Source\Core\Resource\Scene.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
     <ClCompile Include="Source\Core\UI\UIManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
@@ -154,6 +155,9 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h" />
     <ClInclude Include="Source\CoreUObject\World.h" />
+    <ClInclude Include="Source\Core\Asset\Asset.h" />
+    <ClInclude Include="Source\Core\Asset\AssetManager.h" />
+    <ClInclude Include="Source\Core\Asset\SceneAsset.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDDepthStencilView.h" />
@@ -166,9 +170,7 @@
     <ClInclude Include="Source\Core\Engine\Engine.h" />
     <ClInclude Include="Source\Core\Gizmo\Gizmo.h" />
     <ClInclude Include="Source\Core\Input\InputManager.h" />
-    <ClInclude Include="Source\Core\Resource\Asset.h" />
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
-    <ClInclude Include="Source\Core\Resource\Scene.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
