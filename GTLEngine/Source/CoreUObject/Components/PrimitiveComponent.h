@@ -1,7 +1,7 @@
 #pragma once
 
 #include "SceneComponent.h"
-#include "Core/Resource/VertexTypes.h"
+#include "Core/Resource/Types.h"
 
 class UPrimitiveComponent : public USceneComponent
 {

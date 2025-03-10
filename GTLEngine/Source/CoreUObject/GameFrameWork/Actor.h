@@ -44,6 +44,11 @@ public:
 	USceneComponent* GetRootComponent() const { return RootComponent; }
 	void SetOwner(AActor* InOwner);
 
+	// TODO: cpp 파일로
+	FVector GetActorLocation() const;
+	FVector GetActorRotation() const;
+	FVector GetActorScale() const;
+
 protected:
 	USceneComponent* RootComponent;
 

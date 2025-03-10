@@ -2,7 +2,7 @@
 
 #pragma warning(disable : 4305) // double -> float 값 잘림 경고 비활성화
 
-#include "Resource/VertexTypes.h"
+#include "Resource/Types.h"
 
 FVertexSimple TriangleVertices[] = {
     {0.5, -0.5, 0, 1, 0, 0, 1},

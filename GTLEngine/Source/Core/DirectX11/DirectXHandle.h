@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Resource/VertexTypes.h"
+#include "Resource/Types.h"
 
 class UDXDDevice;
 class UDXDSwapChain;
@@ -9,6 +9,7 @@ class UDXDDepthStencilView;
 class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
+class UDXDConstantBuffer;
 
 class UObject;
 class AActor;
@@ -44,15 +45,17 @@ private:
 	D3D11_VIEWPORT ViewportInfo;
 
 public:
-	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
-
-public:
 	ComPtr<ID3D11Device>	GetD3DDevice() const { return DXDDevice; }
 	ComPtr<ID3D11DeviceContext> GetD3DDeviceContext() const { return DXDDeviceContext; }
 	ComPtr<IDXGISwapChain> GetDXDSwapChain() const { return DXDSwapChain; }
 
+
+
+	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
+
 	void AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices);
-	void AddConstantBuffer(const std::wstring& Key, const TArray<FVertexSimple>& vertices);
+	
+	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
 private:
 	ComPtr<ID3D11Device> DXDDevice;
@@ -61,9 +64,9 @@ private:
 
 	TMap<std::wstring, UDXDRenderTarget*> RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
-	UDXDRasterizerState* RasterizerState; // 여러개 보류.
+	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
 
-	TMap<EPrimitiveType, FVertexInfo> VertexBuffer;
-	TMap<std::wstring, ID3D11Buffer*> ConstantBuffer;
+	TMap<EPrimitiveType, FVertexInfo> VertexBuffers;
+	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 };

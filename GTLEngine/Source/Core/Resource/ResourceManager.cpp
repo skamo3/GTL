@@ -10,30 +10,35 @@ UResourceManager::UResourceManager()
 
 UResourceManager::~UResourceManager()
 {
-    for (TPair<const std::wstring, FVertexSimple*>& Vertex : VertexInfos)
+    Release();
+}
+
+void UResourceManager::LoadPrimitives()
+{
+    VertexInfos[EPrimitiveType::Triangle] = TriangleVertices;
+    VertexInfos[EPrimitiveType::Sphere] = SphereVertices;
+    VertexInfos[EPrimitiveType::Cube] = CubeVertices;
+    VertexInfos[EPrimitiveType::Cylinder] = CylinderVertices;
+    VertexInfos[EPrimitiveType::Cone] = ConeVertices;
+}
+
+void UResourceManager::Release()
+{
+    for (auto& [Type, Info] : VertexInfos)
     {
-        if (Vertex.second)
+        if (Info)
         {
-            delete[] Vertex.second;
+            delete[] Info;
         }
     }
     VertexInfos.clear();
 }
 
-void UResourceManager::LoadPrimitives()
+const FVertexSimple* UResourceManager::GetVertexInfo(EPrimitiveType Type) const
 {
-    VertexInfos[L"Triangle"] = TriangleVertices;
-    VertexInfos[L"Cylinder"] = CylinderVertices;
-    VertexInfos[L"Cube"] = CubeVertices;
-    VertexInfos[L"Sphere"] = SphereVertices;
-    VertexInfos[L"Cone"] = ConeVertices;
-}
-
-const FVertexSimple* UResourceManager::GetVertexInfo(const std::wstring& PrimitiveName) const
-{
-    if (VertexInfos.find(PrimitiveName) != VertexInfos.end())
+    if (VertexInfos.contains(Type))
     {
-        return VertexInfos.at(PrimitiveName);
+        return VertexInfos.at(Type);
     }
     return nullptr;
 }

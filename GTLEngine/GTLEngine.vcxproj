@@ -170,7 +170,7 @@
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
     <ClInclude Include="Source\Core\Resource\Scene.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
-    <ClInclude Include="Source\Core\Resource\VertexTypes.h" />
+    <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
@@ -186,7 +186,11 @@
     <ClInclude Include="Source\Utils\pch.h" />
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resource\Shader\ShaderW0.hlsl">
+    <FxCompile Include="Resource\Shader\LineShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+    <FxCompile Include="Resource\Shader\PrimitiveShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
     </FxCompile>
   </ItemGroup>
