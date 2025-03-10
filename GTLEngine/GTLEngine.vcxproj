@@ -96,7 +96,9 @@
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
     <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
+    <ClCompile Include="Source\Core\Resource\Asset.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Source\Core\Resource\Scene.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
     <ClCompile Include="Source\Core\UI\UIManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
@@ -160,7 +162,9 @@
     <ClInclude Include="Source\Core\Engine\Engine.h" />
     <ClInclude Include="Source\Core\Gizmo\Gizmo.h" />
     <ClInclude Include="Source\Core\Input\InputManager.h" />
+    <ClInclude Include="Source\Core\Resource\Asset.h" />
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
+    <ClInclude Include="Source\Core\Resource\Scene.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\VertexTypes.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
