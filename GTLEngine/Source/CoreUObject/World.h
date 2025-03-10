@@ -6,10 +6,8 @@
 
 #include "Components/SceneComponent.h"
 
-
 class AActor;
 class ACamera;
-struct FSceneData;
 
 class UWorld : public UObject
 {
@@ -22,6 +20,10 @@ public:
 	{
 		T* newObj = new T();
 		AActor* newActor = dynamic_cast<AActor*>(newObj);
+		// newActor-> SetLocation, SetScale, SetRotation.
+		newActor->SetActorLocation(InLocation);
+		newActor->SetActorScale(InScale);
+		newActor->SetActorRotation(InRotation);
 
 		if (newActor != nullptr)
 		{
@@ -42,15 +44,16 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
+
+
 public:
 	TArray<AActor*> GetActors() const { return ActiveActors; }
 	ACamera* GetCamera() const { return MainCamera; }
 
 private:
-	void ApplySceneData(const FSceneData& InSceneAsset);
-private:
 	TArray<AActor*> ActiveActors;
 	ACamera* MainCamera;
-	FSceneData* currentSceneData;
+
+
 };
 
