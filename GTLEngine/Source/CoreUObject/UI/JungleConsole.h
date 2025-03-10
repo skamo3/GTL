@@ -24,6 +24,7 @@ private:
     bool                   scrollToBottom;
     bool                   copy_to_clipboard;
 
+
 private:
     void ClearLog();
     void AddLog(const char* category, int verbosity, const char* fmt, ...);
