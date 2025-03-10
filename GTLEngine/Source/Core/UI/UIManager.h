@@ -15,40 +15,35 @@ private:
 public:
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
-	void SetObjectTranslation(FVector& inTranslation);
+	void OnObjectTranslationChanged(FVector& inTranslation);
 
 	bool GetObjectRotation(FVector& outRotation);
-	void SetObjectRotation(FVector& inRotation);
+	void OnObjectRotationChanged(FVector& inRotation);
 
 	bool GetObjectScale(FVector& outScale);
-	void SetObjectScale(FVector& inScale);
+	void OnObjectScaleChanged(FVector& inScale);
 
 public:
 	// Control Panel Function
 	bool GetFPS(int& outFPS);
 	bool GetDeltaTime(int& outDeltaTime);
 
-	void SetPrimitive(int& inPrimitiveNum);
-
 	void SpawnPrimitive();
-
-	bool GetSpawnNum(int& outSpawnNum);
-	void SetSpawnNum(int& inSpawnNum);
 
 	void MakeNewScene();
 	void SaveScene(char* inSceneName);
 	void LoadScene(char* inSceneName);
 
 	bool GetFOV(float& outFOV);
-	void SetFOV(float& inFOV);
+	void OnFOVChanged(float& inFOV);
 
 	bool GetCameraLocation(FVector& outLocation);
-	void SetCameraLocation(FVector& inLocation);
+	void OnCameraLocationChanged(FVector& inLocation);
 
 	bool GetCameraRotation(FVector& outRotation);
-	void SetCameraRotation(FVector& inRotation);
+	void OnCameraRotationChanged(FVector& inRotation);
 
-	void ChangeGizmo(int modeNum);
+	void OnGizmoModeChanged(int modeNum);
 
 public:
 	// Console Function

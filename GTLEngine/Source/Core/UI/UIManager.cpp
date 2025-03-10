@@ -23,7 +23,7 @@ bool UUIManager::GetObjectTranslation(FVector& outTranslation)
 	return false;
 }
 
-void UUIManager::SetObjectTranslation(FVector& inTranslation)
+void UUIManager::OnObjectTranslationChanged(FVector& inTranslation)
 {
 
 }
@@ -39,7 +39,7 @@ bool UUIManager::GetObjectRotation(FVector& outRotation)
 	return false;
 }
 
-void UUIManager::SetObjectRotation(FVector& inRotation)
+void UUIManager::OnObjectRotationChanged(FVector& inRotation)
 {
 
 }
@@ -54,7 +54,7 @@ bool UUIManager::GetObjectScale(FVector& outScale)
 	return false;
 }
 
-void UUIManager::SetObjectScale(FVector& inScale)
+void UUIManager::OnObjectScaleChanged(FVector& inScale)
 {
 
 }
@@ -79,31 +79,12 @@ bool UUIManager::GetDeltaTime(int& outDeltaTime)
 	return false;
 }
 
-void UUIManager::SetPrimitive(int& inPrimitiveNum)
-{
-
-}
 
 void UUIManager::SpawnPrimitive()
 {
 
 }
 
-bool UUIManager::GetSpawnNum(int& outSpawnNum)
-{
-	if (true) 
-	{
-		// TODO: outSpawnNum 입력
-		outSpawnNum;
-		return true;
-	}
-	return false;
-}
-
-void UUIManager::SetSpawnNum(int& inSpawnNum)
-{
-
-}
 
 void UUIManager::MakeNewScene()
 {
@@ -131,7 +112,7 @@ bool UUIManager::GetFOV(float& outFOV)
 	return false;
 }
 
-void UUIManager::SetFOV(float& inFOV)
+void UUIManager::OnFOVChanged(float& inFOV)
 {
 	
 }
@@ -147,7 +128,7 @@ bool UUIManager::GetCameraLocation(FVector& outLocation)
 	return false;
 }
 
-void UUIManager::SetCameraLocation(FVector& inLocation)
+void UUIManager::OnCameraLocationChanged(FVector& inLocation)
 {
 }
 
@@ -162,12 +143,12 @@ bool UUIManager::GetCameraRotation(FVector& outRotation)
 	return false;
 }
 
-void UUIManager::SetCameraRotation(FVector& inRotation)
+void UUIManager::OnCameraRotationChanged(FVector& inRotation)
 {
 
 }
 
-void UUIManager::ChangeGizmo(int modeNum)
+void UUIManager::OnGizmoModeChanged(int modeNum)
 {
 	switch (modeNum) {
 	case 0:
