@@ -208,6 +208,12 @@
     <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\ImGuiStringLibrary.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -356,6 +362,15 @@
     </ClInclude>
     <ClInclude Include="Plugins\SimpleJSON\json.hpp">
       <Filter>Plugins\SimpleJSON</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\UIBase.h">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\ImGuiStringLibrary.h">
+      <Filter>Utils</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\JungleLog.h">
+      <Filter>Utils</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

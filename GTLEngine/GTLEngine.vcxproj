@@ -83,6 +83,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp" />
     <ClCompile Include="Source\CoreUObject\World.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp" />
@@ -102,6 +103,7 @@
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
+    <ClCompile Include="Source\Utils\ImGuiStringLibrary.cpp" />
     <ClCompile Include="Source\Utils\Math\Math.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
     </ClCompile>
@@ -147,6 +149,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\UIBase.h" />
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />
@@ -167,6 +170,8 @@
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
+    <ClInclude Include="Source\Utils\ImGuiStringLibrary.h" />
+    <ClInclude Include="Source\Utils\JungleLog.h" />
     <ClInclude Include="Source\Utils\Math\Math.h" />
     <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />
