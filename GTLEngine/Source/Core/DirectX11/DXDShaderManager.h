@@ -23,6 +23,7 @@ public:
 
 	HRESULT AddPixelShader(const std::wstring& Key, const std::wstring& FileName);
 
+	ComPtr<ID3D11InputLayout> GetInputLayoutByKey(const std::wstring& Key) const;
 	ComPtr<ID3D11VertexShader> GetVertexShaderByKey(const std::wstring& Key) const;
 	ComPtr<ID3D11PixelShader> GetPixelShaderByKey(const std::wstring& Key) const;
 

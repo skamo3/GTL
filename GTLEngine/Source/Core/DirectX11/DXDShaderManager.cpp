@@ -101,6 +101,15 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
     return S_OK;
 }
 
+ComPtr<ID3D11InputLayout> UDXDShaderManager::GetInputLayoutByKey(const std::wstring& Key) const
+{
+    if (InputLayouts.contains(Key))
+    {
+        return InputLayouts.at(Key);
+    }
+    return nullptr;
+}
+
 ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Key) const
 {
     if (VertexShaders.contains(Key))

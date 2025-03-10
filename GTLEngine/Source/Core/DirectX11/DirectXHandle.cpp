@@ -259,11 +259,15 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         return;
     }
 
+
+
     ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get();
     ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get();
 
     DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get(), NULL, 0);
     DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get(), NULL, 0);
+
+    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")).Get());
 
     // Begin Object Matrix Update
 
@@ -288,7 +292,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 
     EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
-    //uint Stride = 84;
+    //uint Stride = 84;6
     UINT offset = 0;
     FVertexInfo Info = VertexBuffers[Type];
     ID3D11Buffer* VB = Info.VertexBuffer;
@@ -344,6 +348,7 @@ void UDirectXHandle::InitView()
     DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
 
     DXDDeviceContext->OMSetRenderTargets(1, &RenderTarget->GetFrameBufferRTV(), DepthStencilView->GetDepthStencilView().Get());
+
 }
 
 HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
