@@ -2,6 +2,8 @@
 #include "JunglePropertyWindow.h"
 
 #include "ImGui/imgui.h"
+#include "UI/UIManager.h"
+#include "Utils/Math/Vector.h"
 
 UJunglePropertyWindow::UJunglePropertyWindow(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
@@ -26,14 +28,29 @@ void UJunglePropertyWindow::Draw()
 
 void UJunglePropertyWindow::DrawObjectTranslation()
 {
+    FVector objectTranslation;
+    std::string strFormat = "%.3f";
+    if (UIManager->GetObjectTranslation(objectTranslation))
+    {
+        strFormat = "-";
+    }
     ImGui::PushItemWidth(67);
     ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
-    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.X, -10.f, 10.f, "%.3f");
+
+    bool valueChanged = false;
+    if (ImGui::SliderFloat("##objectTranslationX", &objectTranslation.X, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Y, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Y, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Z, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectTranslationX", &objectTranslation.Z, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
+
+    if (valueChanged)
+        UIManager->OnObjectTranslationChanged(objectTranslation);
+
     ImGui::Text("Translation");
     ImGui::PopStyleVar();
     ImGui::PopItemWidth();
@@ -41,14 +58,29 @@ void UJunglePropertyWindow::DrawObjectTranslation()
 
 void UJunglePropertyWindow::DrawObjectRotation()
 {
+    FVector objectRotation;
+    std::string strFormat = "%.3f";
+    if (UIManager->GetObjectRotation(objectRotation))
+    {
+        strFormat = "-";
+    }
     ImGui::PushItemWidth(67);
     ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
-    ImGui::SliderFloat("##objectRotationX", &objectRotation.X, -10.f, 10.f, "%.3f");
+
+    bool valueChanged = false;
+    if (ImGui::SliderFloat("##objectRotationX", &objectRotation.X, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectRotationY", &objectRotation.Y, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectRotationY", &objectRotation.Y, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectRotationZ", &objectRotation.Z, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectRotationZ", &objectRotation.Z, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
+
+    if (valueChanged)
+        UIManager->OnObjectRotationChanged(objectRotation);
+
     ImGui::Text("Rotation");
     ImGui::PopStyleVar();
     ImGui::PopItemWidth();
@@ -56,14 +88,29 @@ void UJunglePropertyWindow::DrawObjectRotation()
 
 void UJunglePropertyWindow::DrawObjectScale()
 {
+    FVector objectScale;
+    std::string strFormat = "%.3f";
+    if (UIManager->GetObjectScale(objectScale))
+    {
+        strFormat = "-";
+    }
     ImGui::PushItemWidth(67);
     ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
-    ImGui::SliderFloat("##objectScaleX", &objectScale.X, -10.f, 10.f, "%.3f");
+
+    bool valueChanged = false;
+    if (ImGui::SliderFloat("##objectScaleX", &objectScale.X, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectScaleY", &objectScale.Y, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectScaleY", &objectScale.Y, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
-    ImGui::SliderFloat("##objectScaleZ", &objectScale.Z, -10.f, 10.f, "%.3f");
+    if (ImGui::SliderFloat("##objectScaleZ", &objectScale.Z, -10.f, 10.f, strFormat.c_str()))
+        valueChanged = true;
     ImGui::SameLine();
+
+    if (valueChanged)
+        UIManager->OnObjectScaleChanged(objectScale);
+
     ImGui::Text("Scale");
     ImGui::PopStyleVar();
     ImGui::PopItemWidth();

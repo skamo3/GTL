@@ -100,13 +100,24 @@ void UJungleConsole::DrawExplain()
 
 void UJungleConsole::DrawEditButtons()
 {
-    if (ImGui::SmallButton("Add Debug Text")) { AddLog("LogTemp", 0, "verbosity 0 text", logEntries.size()); AddLog("LogTemp", 1, "verbosity 1 text"); AddLog("LogTemp", 2, "verbosity 2 Text!"); }
+    if (ImGui::SmallButton("Add Debug Text")) 
+    { 
+        AddLog("LogTemp", 0, "verbosity 0 text", logEntries.size()); 
+        AddLog("LogTemp", 1, "verbosity 1 text"); 
+        AddLog("LogTemp", 2, "verbosity 2 Text!");
+    }
     ImGui::SameLine();
-    if (ImGui::SmallButton("Add Debug Error")) {
+
+    if (ImGui::SmallButton("Add Debug Error")) 
+    {
         AddLog("LogTemp", 2, "something went wrong");
     }
     ImGui::SameLine();
-    if (ImGui::SmallButton("Clear")) { ClearLog(); }
+
+    if (ImGui::SmallButton("Clear")) 
+    { 
+        ClearLog(); 
+    }
     ImGui::SameLine();
     copy_to_clipboard = ImGui::SmallButton("Copy");
     //static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
@@ -155,15 +166,19 @@ void UJungleConsole::DrawLogField()
             ImGui::LogToClipboard();
         for (const auto& entry : logEntries)
         {
-            if (textFilter.IsActive() && categoryFilter.IsActive()) {
-                if (!textFilter.PassFilter(entry.message.c_str()) && !categoryFilter.PassFilter(entry.category.c_str()))
+            if (textFilter.IsActive() && categoryFilter.IsActive()) 
+            {
+                if (!textFilter.PassFilter(entry.message.c_str()) 
+                    && !categoryFilter.PassFilter(entry.category.c_str()))
                     continue;
             }
-            else if (textFilter.IsActive()) {
+            else if (textFilter.IsActive()) 
+            {
                 if (!textFilter.PassFilter(entry.message.c_str()))
                     continue;
             }
-            else if (categoryFilter.IsActive()) {
+            else if (categoryFilter.IsActive()) 
+            {
                 if (!categoryFilter.PassFilter(entry.category.c_str()))
                     continue;
             }
@@ -173,14 +188,16 @@ void UJungleConsole::DrawLogField()
 
             std::string out = "";
 
-            if (entry.category != "") {
+            if (entry.category != "") 
+            {
                 out += entry.category + ": ";
             }
 
             // verbosity 변환
             std::string verbosityStr = verbosityLevels[(entry.verbosity > 7) ? 8 : entry.verbosity];
 
-            if (entry.verbosity != 0) {
+            if (entry.verbosity != 0) 
+            {
                 out += verbosityStr + ": ";
             }
 
