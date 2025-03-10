@@ -1,6 +1,6 @@
 ﻿
 #pragma once
-#include <Math/MathFwd.h>
+#include <cmath>
 
 #define SMALL_NUMBER 1.e-8f
 #define PI 3.1415926535897932384626433832795f

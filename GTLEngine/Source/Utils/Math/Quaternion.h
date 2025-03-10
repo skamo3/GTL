@@ -1,5 +1,5 @@
 #pragma once
-#include <Math/MathFwd.h>
+#include "Vector.h"
 
 struct FQuaternion
 {

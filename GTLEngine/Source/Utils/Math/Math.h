@@ -1,5 +1,6 @@
 ﻿#pragma once
-#include <Math/MathFwd.h>
+#include "Matrix.h"
+#include "Ray.h"
 
 struct FMath
 {
