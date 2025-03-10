@@ -26,11 +26,15 @@ public:
 		T* FoundComponent = nullptr;
 		for (UActorComponent* Comp : OwnedComponent)
 		{
-			if (Comp)
+			if (Comp == nullptr)
 			{
-				FoundComponent = dynamic_cast<T>(Comp);
-				if (FoundComponent != nullptr)
-					return FoundComponent;
+				continue;
+			}
+
+			FoundComponent = dynamic_cast<T*>(Comp);
+			if (FoundComponent != nullptr)
+			{
+				return FoundComponent;
 			}
 		}
 		return FoundComponent;
@@ -54,12 +58,12 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 {
 	T* NewComp = new T();
 	// ActorComponent 하위 클래스가 아니라면 에러.
-	if (dynamic_cast<UActorComponent>(NewComp) == nullptr)
+	if (dynamic_cast<UActorComponent*>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
 		return nullptr;
 	}
-	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent>(NewComp);
+	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent*>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
 		return nullptr;

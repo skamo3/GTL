@@ -1,7 +1,7 @@
 #pragma once
 #include "CoreUObject/Object.h"
-#include "UI/UIManager.h"
-#include "Utils/JungleLog.h"
+
+class UUIManager;
 
 class UUIBase : public UObject
 {

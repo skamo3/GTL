@@ -9,8 +9,6 @@ public:
 	explicit UJunglePropertyWindow(UUIManager* InUIManager);
 	void Destroy() override;
 
-
-
 private:
 	FVector objectTranslation = { -0.140f, 0.030f, 0.0f };
 	FVector objectRotation = { 0.0f, 0.0f, 0.0f };

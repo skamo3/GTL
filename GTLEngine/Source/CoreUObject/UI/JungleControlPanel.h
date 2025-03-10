@@ -3,14 +3,13 @@
 #include "Math/Vector.h"
 #include "UI/UIBase.h"
 
-const char* primitives[] = { "Sphere", "Cube", "Triangle" };
+const char* primitives[] = { "Sphere", "Cube", "Triangle" }; // TODO:
 
 class UJungleControlPanel: public UUIBase
 {
 public:
 	explicit UJungleControlPanel(UUIManager* InUIManager);
 	void Destroy() override;
-
 
 private:
 	int fps = 7777;

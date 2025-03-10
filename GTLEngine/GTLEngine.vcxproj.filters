@@ -214,6 +214,9 @@
     <ClCompile Include="Source\Utils\ImGuiStringLibrary.cpp">
       <Filter>Utils</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\JungleLog.cpp">
+      <Filter>Utils</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">

@@ -1,7 +1,6 @@
 #pragma once
-#include <string>
-#include "ImGui/imgui.h"
 
+struct ImVec4;
 
 struct FLogEntry
 {
@@ -10,13 +9,6 @@ struct FLogEntry
     int verbosity;        // 로그 레벨 (0: Verbose, 1: Log, 2: Warning, 3: Error)
 };
 
-const char* verbosityLevels[] = {
-    "", "Log", "Warning", "Error", "Display", "Fatal", "Verbose", "VeryVerbose", "Unkown"
-};
+extern const char* verbosityLevels[];
 
-ImVec4 verbosityColors[] = {
-    ImVec4(0.4f, 0.4f, 0.4f, 1.0f),
-    ImVec4(0.8f, 0.8f, 0.8f, 1.0f),
-    ImVec4(1.0f, 0.647f, 0.0f, 1.0f),
-    ImVec4(1.0f, 0.8f, 0.6f, 1.0f),
-};
+extern ImVec4 verbosityColors[];

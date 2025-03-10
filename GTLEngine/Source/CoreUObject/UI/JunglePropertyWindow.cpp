@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "JunglePropertyWindow.h"
 
-
+#include "ImGui/imgui.h"
 
 UJunglePropertyWindow::UJunglePropertyWindow(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
