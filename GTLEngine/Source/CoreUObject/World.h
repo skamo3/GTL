@@ -6,8 +6,10 @@
 
 #include "Components/SceneComponent.h"
 
+
 class AActor;
 class ACamera;
+struct FSceneData;
 
 class UWorld : public UObject
 {
@@ -18,12 +20,8 @@ public:
 	template<typename T>
 	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FVector& InRotation, const FVector& InScale, UObject* InOwner)
 	{
-		T* newObj = T();
-		AActor* newActor = dynamic_pointer_cast<AActor>(newObj);
-		// newActor-> SetLocation, SetScale, SetRotation.
-		newActor->SetLocation(InLocation);
-		newActor->SetScale(InScale);
-		newActor->SetRotation(InRotation);
+		T* newObj = new T();
+		AActor* newActor = dynamic_cast<AActor*>(newObj);
 
 		if (newActor != nullptr)
 		{
@@ -44,16 +42,15 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
-
-
 public:
 	TArray<AActor*> GetActors() const { return ActiveActors; }
 	ACamera* GetCamera() const { return MainCamera; }
 
 private:
+	void ApplySceneData(const FSceneData& InSceneAsset);
+private:
 	TArray<AActor*> ActiveActors;
 	ACamera* MainCamera;
-
-
+	FSceneData* currentSceneData;
 };
 
