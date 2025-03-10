@@ -18,7 +18,8 @@ HRESULT UDXDDepthStencilView::CreateDepthStencilView(ComPtr<ID3D11Device> Device
 
     HRESULT hr = S_OK;
 
-    D3D11_TEXTURE2D_DESC DepthStencilBufferDesc;
+    D3D11_TEXTURE2D_DESC DepthStencilBufferDesc = {};
+    // TODO: SwapChain에서 받아서 똑같이 맞춰줘야 함.
     DepthStencilBufferDesc.Width = Width;
     DepthStencilBufferDesc.Height = Height;
     DepthStencilBufferDesc.MipLevels = 1;
@@ -37,13 +38,13 @@ HRESULT UDXDDepthStencilView::CreateDepthStencilView(ComPtr<ID3D11Device> Device
         return hr;
     }
 
-    D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc;
+    D3D11_DEPTH_STENCIL_VIEW_DESC DepthStencilViewDesc = {};
     ZeroMemory(&DepthStencilViewDesc, sizeof(DepthStencilViewDesc));
     DepthStencilViewDesc.Format = DepthStencilBufferDesc.Format;
     DepthStencilViewDesc.ViewDimension = D3D11_DSV_DIMENSION_TEXTURE2D;
     DepthStencilViewDesc.Texture2D.MipSlice = 0;
 
-    hr = Device->CreateDepthStencilView(DepthStencilBuffer.Get(), &DepthStencilViewDesc, &DepthStencilView);
+    hr = Device->CreateDepthStencilView(DepthStencilBuffer, &DepthStencilViewDesc, &DepthStencilView);
     if (FAILED(hr))
     {
         return hr;
@@ -57,12 +58,12 @@ void UDXDDepthStencilView::ReleaseDepthStencilView()
     if (DepthStencilBuffer)
     {
         DepthStencilBuffer->Release();
-        DepthStencilBuffer.Reset();
+        delete DepthStencilBuffer;
     }
 
     if (DepthStencilView)
     {
         DepthStencilView->Release();
-        DepthStencilView.Reset();
+        delete DepthStencilView;
     }
 }

@@ -27,8 +27,8 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
     DXGI_SWAP_CHAIN_DESC swapchaindesc = {};
-    swapchaindesc.BufferDesc.Width = 0; // 창 크기에 맞게 자동으로 설정
-    swapchaindesc.BufferDesc.Height = 0; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Width = 1024; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Height = 1024; // 창 크기에 맞게 자동으로 설정
     swapchaindesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // 색상 포맷
     swapchaindesc.SampleDesc.Count = 1; // 멀티 샘플링 비활성화
     swapchaindesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 렌더 타겟으로 사용
@@ -343,15 +343,15 @@ void UDirectXHandle::InitView()
     DXDDeviceContext->ClearRenderTargetView(RenderTarget->GetFrameBufferRTV().Get(), ClearColor);
 
     // 뎁스/스텐실 뷰 클리어. 뷰, DEPTH만 클리어, 깊이 버퍼 클리어 할 값, 스텐실 버퍼 클리어 할 값.
-    DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView().Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+    DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
     DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
-
-    DXDDeviceContext->OMSetRenderTargets(1, &RenderTarget->GetFrameBufferRTV(), DepthStencilView->GetDepthStencilView().Get());
-
+    
+    // TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
+    DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
 }
 
 HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
