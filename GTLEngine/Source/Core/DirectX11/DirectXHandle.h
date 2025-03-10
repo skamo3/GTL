@@ -14,6 +14,7 @@ class UObject;
 class AActor;
 class ACamera;
 class UGizmo;
+class UPrimitiveComponent;
 
 class UDirectXHandle
 {
@@ -32,6 +33,7 @@ public:
 
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmo* Gizmo);
+	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObejct(const TArray<AActor*> Actors);
 
 private:
@@ -49,8 +51,7 @@ public:
 	ComPtr<ID3D11DeviceContext> GetD3DDeviceContext() const { return DXDDeviceContext; }
 	ComPtr<IDXGISwapChain> GetDXDSwapChain() const { return DXDSwapChain; }
 
-	void AddNormalVertexBuffer(const TArray<FVertexSimple>& vertices);
-	void AddLineVertexBuffer(const TArray<FVertexSimple>& vertices);
+	void AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices);
 	void AddConstantBuffer(const std::wstring& Key, const TArray<FVertexSimple>& vertices);
 
 private:
@@ -63,6 +64,6 @@ private:
 	UDXDRasterizerState* RasterizerState; // 여러개 보류.
 	UDXDShaderManager* ShaderManager;
 
-	TMap<std::wstring, ID3D11Buffer*> VertexBuffer;
+	TMap<EPrimitiveType, FVertexInfo> VertexBuffer;
 	TMap<std::wstring, ID3D11Buffer*> ConstantBuffer;
 };

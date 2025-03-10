@@ -1,16 +1,17 @@
 #include "pch.h"
 #include "JungleConsole.h"
-#include <iostream>
 #include <format>
 
 // ImGui include.
-#include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "ImGui/imgui_impl_win32.h"
+#include "ImGuiStringLibrary.h"
+
+#include "Utils/JungleLog.h"
 
 
-UJungleConsole::UJungleConsole()
+UJungleConsole::UJungleConsole(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
     ClearLog();
     memset(inputBuf, 0, sizeof(inputBuf));
@@ -26,11 +27,13 @@ UJungleConsole::UJungleConsole()
     AddLog("", 1, "Welcome to Dear ImGui!");
 }
 
-UJungleConsole::~UJungleConsole()
+void UJungleConsole::Destroy()
 {
     ClearLog();
     for (int i = 0; i < history.Size; i++)
         ImGui::MemFree(history[i]);
+
+    UUIBase::Destroy();
 }
 
 void UJungleConsole::ClearLog()
@@ -56,10 +59,11 @@ void UJungleConsole::AddLog(const char* category, int verbosity, const char* fmt
 }
 
 
-void UJungleConsole::Draw(const char* title, bool* p_open)
+void UJungleConsole::Draw()
 {
     ImGui::SetNextWindowSize(ImVec2(520, 600), ImGuiCond_FirstUseEver);
-    if (!ImGui::Begin(title, p_open))
+    bool p_open = true;
+    if (!ImGui::Begin("JungleConsole", &p_open))
     {
         ImGui::End();
         return;
@@ -71,16 +75,31 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     if (ImGui::BeginPopupContextItem())
     {
         if (ImGui::MenuItem("Close Console"))
-            *p_open = false;
+            p_open = false;
         ImGui::EndPopup();
     }
 
+    DrawExplain();
+    DrawEditButtons();
+    DrawOptionButton();
+    DrawFilters();
+    DrawLogField();
+    DrawInputField();
+
+
+    ImGui::End();
+}
+
+void UJungleConsole::DrawExplain()
+{
     ImGui::TextWrapped(
         "This example implements a console with basic coloring, completion (TAB key) and history (Up/Down keys). A more elaborate "
         "implementation may want to store entries along with extra data such as timestamp, emitter, etc.");
     ImGui::TextWrapped("Enter 'HELP' for help.");
+}
 
-
+void UJungleConsole::DrawEditButtons()
+{
     if (ImGui::SmallButton("Add Debug Text")) { AddLog("LogTemp", 0, "verbosity 0 text", logEntries.size()); AddLog("LogTemp", 1, "verbosity 1 text"); AddLog("LogTemp", 2, "verbosity 2 Text!"); }
     ImGui::SameLine();
     if (ImGui::SmallButton("Add Debug Error")) {
@@ -89,11 +108,14 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     ImGui::SameLine();
     if (ImGui::SmallButton("Clear")) { ClearLog(); }
     ImGui::SameLine();
-    bool copy_to_clipboard = ImGui::SmallButton("Copy");
+    copy_to_clipboard = ImGui::SmallButton("Copy");
     //static float t = 0.0f; if (ImGui::GetTime() - t > 0.02f) { t = ImGui::GetTime(); AddLog("Spam %f", t); }
 
     ImGui::Separator();
+}
 
+void UJungleConsole::DrawOptionButton()
+{
     // Options menu
     if (ImGui::BeginPopup("Options"))
     {
@@ -105,11 +127,18 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     if (ImGui::Button("Options"))
         ImGui::OpenPopup("Options");
     ImGui::SameLine();
+}
+
+void UJungleConsole::DrawFilters()
+{
     textFilter.Draw("Text Filter", 180);
     ImGui::SameLine();
     categoryFilter.Draw("Category Filter", 180);
     ImGui::Separator();
+}
 
+void UJungleConsole::DrawLogField()
+{
     // Reserve enough left-over height for 1 separator + 1 input text
     const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
     if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
@@ -174,7 +203,10 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     ImGui::EndChild();
     ImGui::Separator();
 
+}
 
+void UJungleConsole::DrawInputField()
+{
     // Command-line
     bool reclaim_focus = false;
     bool showRelatedWindow = false;
@@ -185,8 +217,7 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     if (ImGui::InputText("Input", inputBuf, IM_ARRAYSIZE(inputBuf), input_text_flags, &TextEditCallbackStub, (void*)this))
     {
         char* s = inputBuf;
-
-        Strtrim(s);
+        UImGuiStringLibrary::Strtrim(s);
         if (s[0]) {
             ExecCommand(s);
         }
@@ -237,8 +268,6 @@ void UJungleConsole::Draw(const char* title, bool* p_open)
     ImGui::SetItemDefaultFocus();
     if (reclaim_focus)
         ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
-
-    ImGui::End();
 }
 
 void UJungleConsole::ExecCommand(const char* command_line)
@@ -249,26 +278,26 @@ void UJungleConsole::ExecCommand(const char* command_line)
     // This isn't trying to be smart or optimal.
     historyPos = -1;
     for (int i = history.Size - 1; i >= 0; i--)
-        if (Stricmp(history[i], command_line) == 0)
+        if (UImGuiStringLibrary::Stricmp(history[i], command_line) == 0)
         {
             ImGui::MemFree(history[i]);
             history.erase(history.begin() + i);
             break;
         }
-    history.push_back(Strdup(command_line));
+    history.push_back(UImGuiStringLibrary::Strdup(command_line));
 
     // Process command
-    if (Stricmp(command_line, "CLEAR") == 0)
+    if (UImGuiStringLibrary::Stricmp(command_line, "CLEAR") == 0)
     {
         ClearLog();
     }
-    else if (Stricmp(command_line, "HELP") == 0)
+    else if (UImGuiStringLibrary::Stricmp(command_line, "HELP") == 0)
     {
         AddLog("", 1, "Commands:");
         for (int i = 0; i < commands.Size; i++)
             AddLog("", 1, "- %s", commands[i]);
     }
-    else if (Stricmp(command_line, "HISTORY") == 0)
+    else if (UImGuiStringLibrary::Stricmp(command_line, "HISTORY") == 0)
     {
         int first = history.Size - 10;
         for (int i = first > 0 ? first : 0; i < history.Size; i++)
@@ -313,7 +342,7 @@ int UJungleConsole::TextEditCallback(ImGuiInputTextCallbackData* data)
         // Build a list of candidates
         ImVector<const char*> candidates;
         for (int i = 0; i < commands.Size; i++)
-            if (Strnicmp(commands[i], word_start, (int)(word_end - word_start)) == 0)
+            if (UImGuiStringLibrary::Strnicmp(commands[i], word_start, (int)(word_end - word_start)) == 0)
                 candidates.push_back(commands[i]);
 
         if (candidates.Size == 0)

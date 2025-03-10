@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include <Math/MathFwd.h>
+#include "Quaternion.h"
 
 struct alignas(16) FMatrix
 {

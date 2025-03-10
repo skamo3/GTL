@@ -7,7 +7,7 @@
 UWorld* UWorld::CreateWorld()
 {
 	UWorld* NewWorld = new UWorld();
-	MainCamera = new ACamera();
+	NewWorld->MainCamera = new ACamera();
     return NewWorld;
 }
 

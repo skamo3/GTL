@@ -1,27 +1,41 @@
 #include "pch.h"
 #include "JungleControlPanel.h"
 
-// ImGui include.
 #include "ImGui/imgui.h"
 
-UJungleControlPanel::UJungleControlPanel()
+UJungleControlPanel::UJungleControlPanel(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
+    
 }
 
-UJungleControlPanel::~UJungleControlPanel()
+void UJungleControlPanel::Destroy()
 {
+    UUIBase::Destroy();
 }
 
 void UJungleControlPanel::Draw()
 {
     ImGui::Begin("Jungle Control Panel");
     ImGui::Text("Hello Jungle World!");
-    int fps = 7777;
-    int deltaTime = 1;
+
+
+    DrawFPS();
+    DrawSpawnPrimitive();
+    DrawSceneManage();
+    DrawCameraSetting();
+
+
+    ImGui::End();
+}
+
+void UJungleControlPanel::DrawFPS()
+{
     ImGui::Text("FPS %d (%d ms)", fps, deltaTime);
     ImGui::Separator();
+}
 
-    // 위쪽에 선언함
+void UJungleControlPanel::DrawSpawnPrimitive()
+{
     ImGui::PushItemWidth(200);
     ImGui::Combo("Primitive", &currentPrimitive, primitives, IM_ARRAYSIZE(primitives));
     ImGui::PopItemWidth();
@@ -31,62 +45,59 @@ void UJungleControlPanel::Draw()
     if (spawnNum < 1) spawnNum = 1;
     // 숫자를 문자열로 변환
 
-    ChangeNumToStrWithMargin(10, spawnNum);
     ImGui::PushItemWidth(148);
-    ImGui::InputText("Number of spawn", strOut, bufSize);
-    spawnNum = atoi(strOut);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderInt("Number of spawn", &spawnNum, 1, 50);
+    ImGui::PopStyleVar();
     ImGui::PopItemWidth();
     ImGui::Separator();
+}
 
+void UJungleControlPanel::DrawSceneManage()
+{
     ImGui::PushItemWidth(200);
     ImGui::InputText("Scene Name", sceneName, IM_ARRAYSIZE(sceneName));
     ImGui::PopItemWidth();
     ImGui::Button("New Scene");
     ImGui::Button("Save Scene");
     ImGui::Button("Load Scene");
-
     ImGui::Separator();
+}
 
+void UJungleControlPanel::DrawCameraSetting()
+{
     bool bOrthogonal = false;
     ImGui::Checkbox("Orthogonal", &bOrthogonal);
 
-    ChangeNumToStrWithMargin(10, fovValue);
     ImGui::PushItemWidth(200);
-    ImGui::InputText("FOV", strOut, bufSize);
-    fovValue = atof(strOut);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("FOV", &fovValue, 0.0f, 90.0f);
+    ImGui::PopStyleVar();
     ImGui::PopItemWidth();
 
     ImGui::PushItemWidth(67);
-    ChangeNumToStrWithMargin(4, cameraLocation.X);
-    ImGui::InputText("##cameraLocationX", strOut, bufSize);
-    cameraLocation.X = atof(strOut);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("##cameraLocationX", &cameraLocation.X, -10.f, 10.f);
     ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, cameraLocation.Y);
-    ImGui::InputText("##cameraLocationY", strOut, bufSize);
-    cameraLocation.Y = atof(strOut);
+    ImGui::SliderFloat("##cameraLocationY", &cameraLocation.Y, -10.f, 10.f);
     ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, cameraLocation.Z);
-    ImGui::InputText("##cameraLocationZ", strOut, bufSize);
-    cameraLocation.Z = atof(strOut);
+    ImGui::SliderFloat("##cameraLocationZ", &cameraLocation.Z, -10.f, 10.f);
     ImGui::SameLine();
     ImGui::Text("Camera Location");
+    ImGui::PopStyleVar();
     ImGui::PopItemWidth();
 
 
     ImGui::PushItemWidth(67);
-    ChangeNumToStrWithMargin(4, cameraRotation.X);
-    ImGui::InputText("##cameraRotationX", strOut, bufSize);
-    cameraRotation.X = atof(strOut);
+    ImGui::PushStyleVar(ImGuiStyleVar_GrabMinSize, 0.0f);
+    ImGui::SliderFloat("##cameraRotationX", &cameraRotation.X, -10.f, 10.f);
     ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, cameraRotation.Y);
-    ImGui::InputText("##cameraRotationY", strOut, bufSize);
-    cameraRotation.Y = atof(strOut);
+    ImGui::SliderFloat("##cameraRotationY", &cameraRotation.Y, -10.f, 10.f);
     ImGui::SameLine();
-    ChangeNumToStrWithMargin(4, cameraRotation.Z);
-    ImGui::InputText("##cameraRotationZ", strOut, bufSize);
-    cameraRotation.Z = atof(strOut);
+    ImGui::SliderFloat("##cameraRotationZ", &cameraRotation.Z, -10.f, 10.f);
     ImGui::SameLine();
     ImGui::Text("Camera Rotation");
+    ImGui::PopStyleVar();
     ImGui::PopItemWidth();
 
     ImGui::Separator();
@@ -98,6 +109,4 @@ void UJungleControlPanel::Draw()
     ImGui::SameLine();
     ImGui::Button("Scale", ImVec2(105, 25));
 
-
-    ImGui::End();
 }

@@ -7,8 +7,11 @@ UObject::UObject()
 {
 	UUID = UEngineStatics::GenUUID();
 	InternalIndex = 0;
-	// string(typeid(*this).name()) + "_" + to_string(UUID);
-	NamePrivate = L"";
+	// TODO: class prefix 제거
+	const char* ClassName = typeid(*this).name();
+	std::wstring ClassNameWide = std::wstring(ClassName, ClassName + strlen(ClassName));
+	ClassNameWide.push_back(*std::to_wstring(UUID).c_str());
+	NamePrivate = ClassNameWide;
 }
 
 UObject::~UObject()
