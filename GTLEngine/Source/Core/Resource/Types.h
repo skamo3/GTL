@@ -29,8 +29,20 @@ struct FVertexInfo
 };
 
 //////////
+// 
 // Constant Buffers
+// 
 //////////
+enum class EConstantBufferType
+{
+    None,
+    ChangesOnResize,
+    ChangesEveryFrame,
+    ChangesEveryObject,
+
+    Max,
+};
+
 struct FCbChangesOnResize
 {
     FMatrix ProjectionMatrix;
@@ -49,5 +61,7 @@ struct FCbChangesEveryObject
 struct FCbLine
 {
     FVector Position;
+    float Padding;
+
     float R, G, B, A;
 };

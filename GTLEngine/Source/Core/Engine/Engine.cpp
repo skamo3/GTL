@@ -59,13 +59,13 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 void UEngine::Tick()
 {
     // TimeManager.
+    
 
     // InputManager.
 
     // World 오브젝트 값들 없데이트.
     World->CameraTick(0.3f);
     World->Tick(0.3f); // TODO: TickTime 값 수정 필요.
-
 }
 
 void UEngine::Render()

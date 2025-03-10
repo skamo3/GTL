@@ -30,6 +30,8 @@ void UDXDShaderManager::ReleaseAllShader()
         }
     }
     PixelShaders.clear();
+
+    DXDDevice.Reset();
 }
 
 HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::wstring& FileName)
