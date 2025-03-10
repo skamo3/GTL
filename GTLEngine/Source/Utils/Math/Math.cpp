@@ -18,7 +18,13 @@ FMatrix FMath::CreateRotationMatrix(float pitch, float yaw, float roll)
 
 FMatrix FMath::CreateRotationMatrix(const FVector& rotation)
 {
-	return FMatrix::CreateRotationXYZ(rotation);
+	return FMatrix::CreateRotationQuat(FQuaternion(rotation));
+	//return FMatrix::CreateRotationXYZ(rotation);
+}
+
+FMatrix FMath::CreateRotationMatrix(const FQuaternion& quaternion)
+{
+	return FMatrix::CreateRotationQuat(quaternion);
 }
 
 FMatrix FMath::CreateTranslationMatrix(const FVector& location)
@@ -108,13 +114,13 @@ FMatrix FMath::CreateMVP(const FMatrix& modelMat, const FMatrix& viewMat, const 
 	return modelMat * viewMat * projMat;
 }
 
-FVector FMath::TransformPosition(const FVector& pos, const FMatrix& m, OUT float& w)
+FVector FMath::TransformPosition(const FVector& pos, const FMatrix& m, float& outW)
 {
 	FVector result;
 	result.X = m.M[0][0] * pos.X + m.M[1][0] * pos.Y + m.M[2][0] * pos.Z + m.M[3][0];
 	result.Y = m.M[0][1] * pos.X + m.M[1][1] * pos.Y + m.M[2][1] * pos.Z + m.M[3][1];
 	result.Z = m.M[0][2] * pos.X + m.M[1][2] * pos.Y + m.M[2][2] * pos.Z + m.M[3][2];
-	w = m.M[0][3] * pos.X + m.M[1][3] * pos.Y + m.M[2][3] * pos.Z + m.M[3][3];
+	outW = m.M[0][3] * pos.X + m.M[1][3] * pos.Y + m.M[2][3] * pos.Z + m.M[3][3];
 
 	return result;
 }

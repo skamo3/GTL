@@ -1,5 +1,5 @@
 ﻿#pragma once
-#include "Vector.h"
+#include <Math/MathFwd.h>
 
 struct alignas(16) FMatrix
 {
@@ -409,14 +409,22 @@ public:
 	static FMatrix CreateRotationXYZ(const FVector& rotation);
 
 	/// <summary>
+	/// Quaternion을 받아서 회전 행렬을 생성
+	/// </summary>
+	static FMatrix CreateRotationQuat(const FQuaternion& q);
+
+	/// <summary>
 	/// Rotation 벡터를 받아서 X, Y, Z 축을 기준으로 회전
 	/// </summary>
 	inline void Rotate(const FVector& Rotation)
 	{
-		// 1) 오일러 각도(도 단위) → 4×4 회전 행렬
-		FMatrix rotMat = CreateRotationXYZ(Rotation);
+		// 오일러 각도(도 단위) → 4×4 회전 행렬
+		//FMatrix rotMat = CreateRotationXYZ(Rotation);
 
-		// 2) 현재 행렬에 곱해 누적
+		// 쿼터니언 → 4×4 회전 행렬
+		FMatrix rotMat = FMatrix::CreateRotationQuat(FQuaternion(Rotation));
+
+		// 현재 행렬에 곱해 누적
 		*this *= rotMat;
 	}
 

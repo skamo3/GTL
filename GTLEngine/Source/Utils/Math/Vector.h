@@ -1,6 +1,6 @@
 ﻿
 #pragma once
-#include <cmath>
+#include <Math/MathFwd.h>
 
 #define SMALL_NUMBER 1.e-8f
 #define PI 3.1415926535897932384626433832795f
@@ -8,6 +8,9 @@
 
 struct FVector
 {
+    /// <summary>
+	/// X == Pitch, Y == Yaw, Z == Roll
+    /// </summary>
     float X, Y, Z;
 
 	// Vector(0, 0, 0)

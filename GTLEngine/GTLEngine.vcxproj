@@ -108,6 +108,7 @@
     <ClCompile Include="Source\Utils\Math\Matrix.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Quaternion.cpp" />
     <ClCompile Include="Source\Utils\Math\Ray.cpp" />
     <ClCompile Include="Source\Utils\Math\Vector.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
@@ -167,7 +168,9 @@
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
     <ClInclude Include="Source\Utils\Math\Math.h" />
+    <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />
+    <ClInclude Include="Source\Utils\Math\Quaternion.h" />
     <ClInclude Include="Source\Utils\Math\Ray.h" />
     <ClInclude Include="Source\Utils\Math\Vector.h" />
     <ClInclude Include="Source\Utils\pch.h" />
