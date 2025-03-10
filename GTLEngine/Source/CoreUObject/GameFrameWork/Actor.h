@@ -73,9 +73,9 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	{
 		NewSceneComp->SetupAttachment(RootComponent);
 	}
-	NewSceneComp->SetRelativeLocation(InLocation);
-	NewSceneComp->SetRelativeRotation(InRotation);
-	NewSceneComp->SetRelativeScale3D(InScale);
+	NewSceneComp->SetRelativeLocation(InRelativeLocation);
+	NewSceneComp->SetRelativeRotation(InRelativeRotation);
+	NewSceneComp->SetRelativeScale3D(InRelativeScale);
 
 	OwnedComponent.push_back(NewComp);
 	return NewComp;

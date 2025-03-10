@@ -44,6 +44,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	// TODO: vertex 배열 만들어서 버텍스 버퍼 생성 로직 추가. 
 	//DirectX11Handle->AddNormalVertexBuffer();
 	//DirectX11Handle->AddLineVertexBuffer();
+	
 	// 콘스탄트 버퍼 추가.
 	// TODO: Constant 배열 만들어서 Constant 버퍼 생성 로직 추가. 
 	//DirectX11Handle->AddConstantBuffer();

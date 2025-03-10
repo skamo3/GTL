@@ -148,8 +148,12 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
 	if (PrimitiveComp)
 	{
-		TArray<FVertexSimple*> Vertices = PrimitiveComp->GetVertices();
+		EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
 
+		VertexBuffer[Type]; // 버텍스 버퍼 이용해서 그려주기.
+		uint Stride = sizeof(FVertexSimple);
+		DXDDeviceContext->IASetVertexBuffers(0, 1, &VertexBuffer[Type].VertexBuffer, &Stride, 0);
+		DXDDeviceContext->Draw(VertexBuffer[Type].NumVertices, 0);
 	}
 }
 
@@ -160,11 +164,10 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 
 	for (AActor* Actor : Actors)
 	{
-		UPrimitiveComponent* Primitive = Actor->GetComponentByClass<UPrimitiveComponent>();
-		RenderPrimitive(Primitive);
+		RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
 		// PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
-		
 	}
+
 	// 셰이더 준비.
 	// 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
 	// 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.
@@ -212,7 +215,7 @@ HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_REN
 	return S_OK;
 }
 
-void UDirectXHandle::AddNormalVertexBuffer(const TArray<FVertexSimple>& vertices)
+void UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices)
 {
 	ID3D11Buffer* NewVertexBuffer;
 	// 버텍스 버퍼 생성
@@ -226,26 +229,8 @@ void UDirectXHandle::AddNormalVertexBuffer(const TArray<FVertexSimple>& vertices
 	initData.pSysMem = vertices.data();
 
 	DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
-
-	VertexBuffer.insert({ L"Normal", NewVertexBuffer });
-}
-
-void UDirectXHandle::AddLineVertexBuffer(const TArray<FVertexSimple>& vertices)
-{
-	ID3D11Buffer* NewVertexBuffer;
-	// 버텍스 버퍼 생성
-	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(FVertexSimple) * vertices.size();
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA initData = {};
-	initData.pSysMem = vertices.data();
-
-	DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
-
-	VertexBuffer.insert({ L"Line", NewVertexBuffer });
+	FVertexInfo Info = { vertices.size(), NewVertexBuffer };
+	VertexBuffer.insert({ KeyType, Info });
 }
 
 // TODO: FVertexSimple Constant로 변경 필요.

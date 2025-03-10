@@ -9,12 +9,10 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
-
 public:
-	const TArray<FVertexSimple*> GetVertices() const { return Vertices; }
+	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
 private:
 	EPrimitiveType PrimitiveType;
-	TArray<FVertexSimple*> Vertices;
 
 
 };
