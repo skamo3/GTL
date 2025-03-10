@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Resource/VertexTypes.h"
+#include "Resource/Types.h"
 
 class UDXDDevice;
 class UDXDSwapChain;
@@ -61,7 +61,7 @@ private:
 
 	TMap<std::wstring, UDXDRenderTarget*> RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
-	UDXDRasterizerState* RasterizerState; // 여러개 보류.
+	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates; // 여러개 보류.
 	UDXDShaderManager* ShaderManager;
 
 	TMap<EPrimitiveType, FVertexInfo> VertexBuffer;

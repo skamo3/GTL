@@ -5,93 +5,114 @@
 #include "Engine/Engine.h"
 
 UDXDShaderManager::UDXDShaderManager(ComPtr<ID3D11Device> Device)
-	: DXDDevice(Device)
+    : DXDDevice(Device)
 {
-	VertexShaders.clear();
-	PixelShaders.clear();
+    VertexShaders.clear();
+    PixelShaders.clear();
 }
 
 void UDXDShaderManager::ReleaseAllShader()
 {
-	for (auto Shader : VertexShaders)
-	{
-		if (Shader.second)
-			Shader.second.Reset();
-	}
+    for (auto& [Key, Shader] : VertexShaders)
+    {
+        if (Shader)
+        {
+            Shader.Reset();
+        }
+    }
+    VertexShaders.clear();
 
-	for (auto Shader : PixelShaders)
-	{
-		if (Shader.second)
-			Shader.second.Reset();
-	}
-
-	PixelShaders.clear();
-	if (PixelShaderCSO)
-	{
-		PixelShaderCSO.Reset();
-	}
+    for (auto& [Key, Shader] : PixelShaders)
+    {
+        if (Shader)
+        {
+            Shader.Reset();
+        }
+    }
+    PixelShaders.clear();
 }
 
-HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Name, const std::wstring& FileName)
+HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::wstring& FileName)
 {
-	HRESULT hr;
+    HRESULT hr = S_OK;
 
-	if (DXDDevice == nullptr)
-		return S_FALSE;
+    if (DXDDevice == nullptr)
+        return S_FALSE;
 
-	hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FileName).c_str(), nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PixelShaderCSO, nullptr);
-	if (FAILED(hr))
-		return hr;
+    ID3DBlob* PsBlob = nullptr;
+    hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FileName).c_str(), nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PsBlob, nullptr);
+    if (FAILED(hr))
+        return hr;
 
-	ComPtr<ID3D11PixelShader> NewPixelShader;
-	hr = DXDDevice->CreatePixelShader(PixelShaderCSO->GetBufferPointer(), PixelShaderCSO->GetBufferSize(), nullptr, &NewPixelShader);
-	if (FAILED(hr))
-		return hr;
+    ComPtr<ID3D11PixelShader> NewPixelShader;
+    hr = DXDDevice->CreatePixelShader(PsBlob->GetBufferPointer(), PsBlob->GetBufferSize(), nullptr, &NewPixelShader);
+    if (PsBlob)
+    {
+        PsBlob->Release();
+    }
+    if (FAILED(hr))
+        return hr;
 
-	PixelShaders.insert(make_pair(Name, NewPixelShader));
+    PixelShaders[Key] = NewPixelShader;
 
-	return S_OK;
+    return S_OK;
 }
 
-HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Name, const std::wstring& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
-	if (DXDDevice == nullptr)
-		return S_FALSE;
-	HRESULT hr;
+    if (DXDDevice == nullptr)
+        return S_FALSE;
 
-	ComPtr<ID3DBlob> VertexShaderCSO;
+    HRESULT hr = S_OK;
 
-	hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FilePath).c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
-	if (FAILED(hr))
-		return hr;
+    ComPtr<ID3DBlob> VertexShaderCSO = nullptr;
 
-	ComPtr<ID3D11VertexShader> NewVertexShader;
-	hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
-	if (FAILED(hr))
-		return hr;
-	VertexShaders.insert(make_pair(Name, NewVertexShader));
+    hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FilePath).c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
+    if (FAILED(hr))
+        return hr;
 
-	ComPtr<ID3D11InputLayout> NewInputLayout;
-	hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &NewInputLayout);
-	if (FAILED(hr))
-		return hr;
+    ComPtr<ID3D11VertexShader> NewVertexShader;
+    hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
+    if (FAILED(hr))
+    {
+        if (VertexShaderCSO)
+        {
+            VertexShaderCSO->Release();
+        }
+        return hr;
+    }
 
-	InputLayouts.insert(make_pair(Name, NewInputLayout));
-	
+    ComPtr<ID3D11InputLayout> NewInputLayout;
+    hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &NewInputLayout);
+    if (FAILED(hr))
+    {
+        if (VertexShaderCSO)
+        {
+            VertexShaderCSO->Release();
+        }
+        return hr;
+    }
 
-	return S_OK;
+    VertexShaders.insert(make_pair(Key, NewVertexShader));
+    InputLayouts.insert(make_pair(Key, NewInputLayout));
+    
+    return S_OK;
 }
 
-ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Name) const
+ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Key) const
 {
-	if (VertexShaders.find(Name) == VertexShaders.end())
-		return nullptr;
-	return VertexShaders.at(Name);
+    if (VertexShaders.contains(Key))
+    {
+        return VertexShaders.at(Key);
+    }
+    return nullptr;
 }
 
-ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const std::wstring& Name) const
+ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const std::wstring& Key) const
 {
-	if (PixelShaders.find(Name) == PixelShaders.end())
-		return nullptr;
-	return PixelShaders.at(Name);
+    if (PixelShaders.contains(Key))
+    {
+        return PixelShaders.at(Key);
+    }
+    return nullptr;
 }

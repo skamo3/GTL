@@ -38,7 +38,10 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 	uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 
 	// Direct3D 장치와 스왑 체인을 생성
-	HRESULT hr = D3D11CreateDeviceAndSwapChain(nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels), D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext);
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(
+		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels),
+		D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext
+	);
 
 	if (FAILED(hr))
 		return hr;
@@ -62,12 +65,12 @@ HRESULT UDirectXHandle::CreateShaderManager()
 	D3D11_INPUT_ELEMENT_DESC layout[] =
 	{
 		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
-		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
 	};
 
-	HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/ShaderW0.hlsl", layout, ARRAYSIZE(layout));
+	HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
 
-	hr = ShaderManager->AddPixelShader(L"DefaultPX", L"Resource/Shader/ShaderW0.hlsl");
+	hr = ShaderManager->AddPixelShader(L"DefaultPS", L"Resource/Shader/PrimitiveShader.hlsl");
 	if (FAILED(hr))
 		return hr;
 
@@ -83,22 +86,54 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		return hr;
 
 	// 래스터라이저 스테이트 생성.
-	RasterizerState = new UDXDRasterizerState();
-	if (RasterizerState == nullptr)
-		return S_FALSE;
-	hr = RasterizerState->CreateRasterizerState(DXDDevice);
-	if (FAILED(hr))
-		return hr;
+	{
+		// 일반 메시용 레스터라이저
+		UDXDRasterizerState* NormalRasterizer = new UDXDRasterizerState();
+		if (NormalRasterizer == nullptr)
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC NormalRasterizerDesc = {};
+		NormalRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
+		NormalRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
+		hr = NormalRasterizer->CreateRasterizerState(DXDDevice, &NormalRasterizerDesc);
+		if (FAILED(hr))
+			return hr;
+		RasterizerStates[TEXT("Normal")] = NormalRasterizer;
+	}
+	{
+		// 기즈모 레스터라이저
+		UDXDRasterizerState* GizmoRasterizer = new UDXDRasterizerState();
+		if (GizmoRasterizer == nullptr)
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC GizmoRasterizerDesc = {};
+		GizmoRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
+		GizmoRasterizerDesc.CullMode = D3D11_CULL_FRONT; // 백 페이스 컬링
+		hr = GizmoRasterizer->CreateRasterizerState(DXDDevice, &GizmoRasterizerDesc);
+		if (FAILED(hr))
+			return hr;
+		RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
+	}
 
 	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
 	// VertexShader, InputLayout 는 쌍으로 생성 및 이름으로 관리.
 	hr = CreateShaderManager();
+
+	// TODO: 상수 버퍼 생성 및 버텍스 쉐이더와 픽셀 쉐이더에 바인딩
 	
 	// 뎁스 스텐실 뷰 생성.
 	DepthStencilView = new UDXDDepthStencilView();
 	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle);
 	if (FAILED(hr))
 		return hr;
+
+	/**
+	* TODO: 뎁스 스텐실 스테이트 생성 권장.
+	*       생성하지 않는 경우 기본값이 적용되므로, 현재 프로젝트에서는 따로 생성하지 않아도 됨.
+	*       기본값:
+	*         깊이 테스트 = TRUE
+	*         깊이 비교 함수 = LESS (깊이값이 더 작을 때만 그려짐. 즉 더 가까이 있는 경우)
+	*         깊이 쓰기 = TRUE
+	*         스텐실 테스트 = FALSE
+	*/
 
 	return S_OK;
 }
@@ -193,7 +228,7 @@ void UDirectXHandle::InitView()
 	DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-	DXDDeviceContext->RSSetState(RasterizerState->GetRasterizerState().Get());
+	DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get()); // TODO: null check
 
 	for (auto& Target : RenderTarget)
 	{
@@ -221,7 +256,7 @@ void UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVerte
 	// 버텍스 버퍼 생성
 	D3D11_BUFFER_DESC bufferDesc = {};
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(FVertexSimple) * vertices.size();
+	bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
 	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
 	bufferDesc.CPUAccessFlags = 0;
 
@@ -229,7 +264,7 @@ void UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVerte
 	initData.pSysMem = vertices.data();
 
 	DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
-	FVertexInfo Info = { vertices.size(), NewVertexBuffer };
+	FVertexInfo Info = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
 	VertexBuffer.insert({ KeyType, Info });
 }
 

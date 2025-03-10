@@ -306,7 +306,7 @@
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h">
       <Filter>Source\Core\Resource\Shape</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Resource\VertexTypes.h">
+    <ClInclude Include="Source\Core\Resource\Types.h">
       <Filter>Source\Core\Resource</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\JungleConsole.h">
@@ -377,7 +377,10 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <FxCompile Include="Resource\Shader\ShaderW0.hlsl">
+    <FxCompile Include="Resource\Shader\PrimitiveShader.hlsl">
+      <Filter>Resource\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\Shader\LineShader.hlsl">
       <Filter>Resource\Shader</Filter>
     </FxCompile>
   </ItemGroup>

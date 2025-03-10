@@ -67,7 +67,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     
     FWindowInfo WindowInfo = { 0, hWnd, Width, Height };
 
-	UEngine& Engine = UEngine::GetEngine();
+    UEngine& Engine = UEngine::GetEngine();
     bool GameLoopState = Engine.InitEngine(WindowInfo);
 
     while (GameLoopState)
@@ -86,7 +86,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
         }
 
         Engine.Tick();
-		Engine.Render();
+        Engine.Render();
     }
 
     Engine.ClearEngine();

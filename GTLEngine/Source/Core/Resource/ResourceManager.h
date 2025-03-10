@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Resource/VertexTypes.h"
+#include "Resource/Types.h"
 
 class UResourceManager
 {
@@ -10,10 +10,12 @@ public:
 
     void LoadPrimitives();
 
-    const FVertexSimple* GetVertexInfo(const std::wstring& PrimitiveName) const;
+    void Release();
+
+    const FVertexSimple* GetVertexInfo(EPrimitiveType Type) const;
 
 private:
-    TMap<std::wstring, FVertexSimple*> VertexInfos;
+    TMap<EPrimitiveType, FVertexSimple*> VertexInfos;
 
 private:
     UResourceManager(const UResourceManager& InResourceManager) = delete;
