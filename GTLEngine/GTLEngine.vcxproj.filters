@@ -163,6 +163,9 @@
     <ClCompile Include="Source\CoreUObject\UI\JunglePropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Quaternion.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -275,6 +278,12 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\JunglePropertyWindow.h">
       <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\MathFwd.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Quaternion.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

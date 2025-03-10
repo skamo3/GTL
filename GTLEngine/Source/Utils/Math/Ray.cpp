@@ -34,7 +34,7 @@ bool FRayCast::InserSectRaySphere(const FRay& ray, const FVector& sphereCenter, 
 	float D = b * b - 4 * c;
 
 	// 판별식이 음수인 경우 교차점이 없음
-	if (D < 0)
+	if (D < SMALL_NUMBER)
 	{
 		return false;
 	}
@@ -153,7 +153,7 @@ bool FRayCast::IntersectRayTrianglePlane(const FRay& ray, const FVector& v0, con
     float v = (dot00 * dot12 - dot01 * dot02) * invDenom;
 
     // u와 v가 모두 0 이상이고, u+v가 1 이하이면 삼각형 내부에 있음
-    if (u < 0 || v < 0 || (u + v) > 1)
+    if (u < SMALL_NUMBER || v < SMALL_NUMBER || (u + v) > 1)
         return false;
 
     outT = t;
@@ -173,7 +173,7 @@ bool FRayCast::IntersectRayPlane(const FRay& ray, const FVector& planePoint, con
 
 	// 교차점이 평면 위에 있는지 확인
 	float t = (planePoint - ray.GetOrigin()).Dot(planeNormal) / denom;
-	if (t < 0)
+	if (t < SMALL_NUMBER)
 	{
 		return false;
 	}

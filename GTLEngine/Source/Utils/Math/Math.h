@@ -1,7 +1,5 @@
 ﻿#pragma once
-#include "Matrix.h"
-#include "Vector.h"
-#include "Ray.h"
+#include <Math/MathFwd.h>
 
 struct FMath
 {
@@ -34,6 +32,8 @@ struct FMath
 	/// rotation 벡터를 사용하여 회전 행렬을 생성
 	/// </summary>
 	static FMatrix CreateRotationMatrix(const FVector& rotation);
+
+	static FMatrix CreateRotationMatrix(const FQuaternion& quaternion);
 
 	/// <summary>
 	/// Location 벡터를 사용하여 이동 행렬을 생성
@@ -118,7 +118,7 @@ struct FMath
 	/// <summary>
 	/// (위치 벡터) x (행렬) = 변환된 위치 연산을 수행하고, 결과적인 새 위치 벡터(회전·스케일 반영, 평행이동 포함)를 반환
 	/// </summary>
-	static FVector TransformPosition(const FVector& pos, const FMatrix& m, OUT float& w);
+	static FVector TransformPosition(const FVector& pos, const FMatrix& m, float& outW);
 
 	/// <summary>
 	/// (법선·방향 벡터) × (행렬) = 변환된 방향 연산을 수행하고, 결과적인 새 방향 벡터(회전·스케일 반영, 평행이동 무시)를 반환
