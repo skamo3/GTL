@@ -12,10 +12,10 @@ public:
 
     void Release();
 
-    const FVertexSimple* GetVertexInfo(EPrimitiveType Type) const;
+    const TArray<FVertexSimple>* GetVertexData(EPrimitiveType Type) const;
 
 private:
-    TMap<EPrimitiveType, FVertexSimple*> VertexInfos;
+    TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
 
 private:
     UResourceManager(const UResourceManager& InResourceManager) = delete;

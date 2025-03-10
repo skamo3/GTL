@@ -70,9 +70,11 @@ HRESULT UDirectXHandle::CreateShaderManager()
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
+    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"C:/Users/Jungle/Desktop/Folder/GTL/GTLEngine/Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
+    if (FAILED(hr))
+        return hr;
 
-    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"Resource/Shader/PrimitiveShader.hlsl");
+    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"C:/Users/Jungle/Desktop/Folder/GTL/GTLEngine/Resource/Shader/PrimitiveShader.hlsl");
     if (FAILED(hr))
         return hr;
 
@@ -196,12 +198,7 @@ void UDirectXHandle::ReleaseDirectX11Handle()
     }
 
 
-    for (auto Target : RenderTarget)
-    {
-        if (Target.second)
-            Target.second->ReleaseRenderTarget();
-    }
-    RenderTarget.clear();
+    RenderTarget->ReleaseRenderTarget();
 
     ShaderManager->ReleaseAllShader();
 }
@@ -257,15 +254,47 @@ void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
-    if (PrimitiveComp)
+    if (!PrimitiveComp)
     {
-        EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
-
-        VertexBuffers[Type]; // 버텍스 버퍼 이용해서 그려주기.
-        uint Stride = sizeof(FVertexSimple);
-        DXDDeviceContext->IASetVertexBuffers(0, 1, &VertexBuffers[Type].VertexBuffer, &Stride, 0);
-        DXDDeviceContext->Draw(VertexBuffers[Type].NumVertices, 0);
+        return;
     }
+
+    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get();
+    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get();
+
+    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get(), NULL, 0);
+    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get(), NULL, 0);
+
+    // Begin Object Matrix Update
+
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if (!CbChangesEveryObject)
+    {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData;
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
+    {
+        FVector ActorLocation = PrimitiveComp->GetOwner()->GetActorLocation();
+        FVector ActorRotation = PrimitiveComp->GetOwner()->GetActorRotation();
+        FVector ActorScale = PrimitiveComp->GetOwner()->GetActorScale();
+
+        Buffer->WorldMatrix = FMath::CreateWorldMatrix(ActorLocation, ActorRotation, ActorScale);
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    // End Object Matrix Update
+
+    EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
+    uint Stride = sizeof(FVertexSimple);
+    //uint Stride = 84;
+    UINT offset = 0;
+    FVertexInfo Info = VertexBuffers[Type];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+    DXDDeviceContext->Draw(Num, 0);
 }
 
 void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
@@ -288,15 +317,23 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
     DXDSwapChain->Present(1, 0);
 }
 
+void UDirectXHandle::DrawLine(const TArray<TPair<FVector, FVector>>& Lines)
+{
+    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+
+    UINT stride = sizeof(FCbLine);
+    UINT offset = 0;
+
+    // TODO: 인풋 레이아웃을 line 전용으로 변경해야하는데 지금은 동일한 정보이므로 바꾸지 않아도 될듯함.
+    //       for 루프로 순회하면서 버텍스 버퍼 업데이트 및 draw.
+}
+
 void UDirectXHandle::InitView()
 {
     // 렌더 타겟 클리어 및 클리어에 적용할 색.
-    FLOAT ClearColor[4] = { 0.25f, 0.25f, 0.25f, 1.0f };
+    FLOAT ClearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 
-    for (auto& Target : RenderTarget)
-    {
-        DXDDeviceContext->ClearRenderTargetView(Target.second->GetFrameBufferRTV().Get(), ClearColor);
-    }
+    DXDDeviceContext->ClearRenderTargetView(RenderTarget->GetFrameBufferRTV().Get(), ClearColor);
 
     // 뎁스/스텐실 뷰 클리어. 뷰, DEPTH만 클리어, 깊이 버퍼 클리어 할 값, 스텐실 버퍼 클리어 할 값.
     DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView().Get(), D3D11_CLEAR_DEPTH, 1.0f, 0);
@@ -304,29 +341,23 @@ void UDirectXHandle::InitView()
     DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-    DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get()); // TODO: null check
+    DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
 
-    for (auto& Target : RenderTarget)
-    {
-        DXDDeviceContext->OMSetRenderTargets(1, &Target.second->GetFrameBufferRTV(), DepthStencilView->GetDepthStencilView().Get());
-    }
-
-    DXDDeviceContext->OMSetBlendState(nullptr, nullptr, 0xffffffff);
+    DXDDeviceContext->OMSetRenderTargets(1, &RenderTarget->GetFrameBufferRTV(), DepthStencilView->GetDepthStencilView().Get());
 }
 
 HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
-    UDXDRenderTarget* NewRenderTarget = new UDXDRenderTarget();
+    RenderTarget = new UDXDRenderTarget();
     
-    HRESULT hr = NewRenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
+    HRESULT hr = RenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
     if (FAILED(hr))
         return hr;
-    RenderTarget.insert(std::make_pair(TargetName, NewRenderTarget));
 
     return S_OK;
 }
 
-void UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices)
+HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices)
 {
     ID3D11Buffer* NewVertexBuffer;
     // 버텍스 버퍼 생성
@@ -337,11 +368,16 @@ void UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVerte
     bufferDesc.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA initData = {};
-    initData.pSysMem = vertices.data();
+    initData.pSysMem = (void*)(vertices.data());
 
-    DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+    HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+    if (FAILED(hr))
+        return hr;
+
     FVertexInfo Info = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
     VertexBuffers.insert({ KeyType, Info });
+    
+    return S_OK;
 }
 
 HRESULT UDirectXHandle::AddConstantBuffer(EConstantBufferType Type)

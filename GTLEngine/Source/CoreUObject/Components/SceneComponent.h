@@ -13,7 +13,7 @@ public:
 public:
 	void SetRelativeLocation(const FVector& Loc);
 	void SetRelativeRotation(const FVector& Rot);
-	void SetRelativeScale3D(const FVector& Scale);
+	void SetRelativeScale(const FVector& Scale);
 
 	FVector GetComponentLocation() const { return RelativeLocation; }
 	FVector GetComponentRotation() const { return RelativeRotation; }

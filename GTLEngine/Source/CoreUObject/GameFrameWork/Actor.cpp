@@ -4,7 +4,8 @@
 #include "Components/SceneComponent.h"
 
 AActor::AActor()
-	: Owner(nullptr)
+	: UObject()
+	, Owner(nullptr)
 {
 	RootComponent = AddComponent<USceneComponent>(this);
 }
@@ -47,20 +48,15 @@ FVector AActor::GetActorScale() const
 
 void AActor::SetActorLocation(FVector InLocation)
 {
-	// TODO:
+	RootComponent->SetRelativeLocation(InLocation);
 }
 
 void AActor::SetActorRotation(FVector InRotation)
 {
-	// TODO:
+	RootComponent->SetRelativeRotation(InRotation);
 }
 
 void AActor::SetActorScale(FVector InScale)
 {
-	// TODO:
-}
-
-void AActor::SetOwner(UObject* InOwner)
-{
-	// TODO:
+	RootComponent->SetRelativeScale(InScale);
 }

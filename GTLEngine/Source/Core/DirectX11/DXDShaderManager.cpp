@@ -42,7 +42,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::ws
         return S_FALSE;
 
     ID3DBlob* PsBlob = nullptr;
-    hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FileName).c_str(), nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PsBlob, nullptr);
+    hr = D3DCompileFromFile(FileName.c_str(), nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PsBlob, nullptr);
     if (FAILED(hr))
         return hr;
 
@@ -69,7 +69,7 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
 
     ComPtr<ID3DBlob> VertexShaderCSO = nullptr;
 
-    hr = D3DCompileFromFile(UGTLStringLibrary::StringToWString(FilePath).c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
+    hr = D3DCompileFromFile(FilePath.c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
     if (FAILED(hr))
         return hr;
 

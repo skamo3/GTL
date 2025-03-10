@@ -16,7 +16,7 @@ public:
 	static UWorld* CreateWorld();
 
 	template<typename T>
-	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FVector& InRotation, const FVector& InScale, UObject* InOwner)
+	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FVector& InRotation, const FVector& InScale, AActor* InOwner)
 	{
 		T* newObj = new T();
 		AActor* newActor = dynamic_cast<AActor*>(newObj);
@@ -32,7 +32,7 @@ public:
 			USceneComponent* Comp = newActor->GetRootComponent();
 			Comp->SetRelativeLocation(InLocation);
 			Comp->SetRelativeRotation(InRotation);
-			Comp->SetRelativeScale3D(InScale);
+			Comp->SetRelativeScale(InScale);
 
 			ActiveActors.push_back(newActor);
 		}

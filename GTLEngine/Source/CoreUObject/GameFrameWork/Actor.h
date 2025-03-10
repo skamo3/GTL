@@ -18,7 +18,7 @@ public:
 
 public:
 	template<typename T>
-	T* AddComponent(AActor* Owner, const FVector& InRelativeLocation = FVector::ZeroVector, const FVector& InRelativeRotation = FVector::ZeroVector, const FVector& InRelativeScale = FVector::ZeroVector);
+	T* AddComponent(AActor* Owner, const FVector& InRelativeLocation = FVector::ZeroVector, const FVector& InRelativeRotation = FVector::ZeroVector, const FVector& InRelativeScale = FVector::OneVector);
 
 	template<typename T>
 	T* GetComponentByClass() const
@@ -52,8 +52,6 @@ public:
 	void SetActorRotation(FVector InRotation);
 	void SetActorScale(FVector InScale);
 
-	void SetOwner(UObject* InOwner);
-
 protected:
 	USceneComponent* RootComponent;
 
@@ -67,12 +65,16 @@ template<typename T>
 inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FVector& InRelativeRotation, const FVector& InRelativeScale)
 {
 	T* NewComp = new T();
+
 	// ActorComponent 하위 클래스가 아니라면 에러.
+	UActorComponent* NewActorComp = dynamic_cast<UActorComponent*>(NewComp);
 	if (dynamic_cast<UActorComponent*>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
 		return nullptr;
 	}
+	NewActorComp->SetOwner(Owner);
+
 	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent*>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
@@ -89,7 +91,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	}
 	NewSceneComp->SetRelativeLocation(InRelativeLocation);
 	NewSceneComp->SetRelativeRotation(InRelativeRotation);
-	NewSceneComp->SetRelativeScale3D(InRelativeScale);
+	NewSceneComp->SetRelativeScale(InRelativeScale);
 
 	OwnedComponent.push_back(NewComp);
 	return NewComp;

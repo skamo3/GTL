@@ -12,7 +12,8 @@ public:
 	virtual void Destroy() override;
 
 public:
-	AActor* GetOwner() const { return OwnerPrivate; }
+	inline AActor* GetOwner() const { return OwnerPrivate; }
+	inline void SetOwner(AActor* InOwner) { OwnerPrivate = InOwner; }
 
 private:
 	AActor* OwnerPrivate;

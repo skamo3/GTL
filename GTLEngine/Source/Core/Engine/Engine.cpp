@@ -17,6 +17,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     WindowInfo = InWindowInfo;
 
     // 리소스 매니저 추가.
+    ResourceManager = new UResourceManager();
 
     DirectX11Handle = new UDirectXHandle();
     HRESULT hr = DirectX11Handle->CreateDirectX11Handle(WindowInfo.WindowHandle);
@@ -40,13 +41,12 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 셰이더 추가.
 
     // 버텍스 버퍼 추가.
-    // TODO: vertex 배열 만들어서 버텍스 버퍼 생성 로직 추가. 
-    //DirectX11Handle->AddNormalVertexBuffer();
-    //DirectX11Handle->AddLineVertexBuffer();
-    
-    // 콘스탄트 버퍼 추가.
-    // TODO: Constant 배열 만들어서 Constant 버퍼 생성 로직 추가. 
-    //DirectX11Handle->AddConstantBuffer();
+    hr = AddAllPrimitiveVertexBuffers();
+    if (FAILED(hr))
+    {
+        MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
+        return false;
+    }
 
     // 월드 추가.
     World = UWorld::CreateWorld();
@@ -80,6 +80,9 @@ void UEngine::Render()
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
     DirectX11Handle->RenderGizmo(SelectedObject, Gizmo);
     DirectX11Handle->RenderObejct(World->GetActors());
+
+    // TODO: Draw Line
+    DirectX11Handle->DrawLine(Lines);
 }
 
 void UEngine::ClearEngine()
@@ -112,6 +115,25 @@ void UEngine::ClearEngine()
 		delete TimeManager;
 		TimeManager = nullptr;
 	}
+}
+
+HRESULT UEngine::AddAllPrimitiveVertexBuffers()
+{
+    HRESULT hr = S_OK;
+    for (uint32 i = 0; i < static_cast<uint32>(EPrimitiveType::Max); ++i)
+    {
+        EPrimitiveType Type = static_cast<EPrimitiveType>(i);
+        if (Type != EPrimitiveType::None)
+        {
+            hr = DirectX11Handle->AddVertexBuffer(Type, *ResourceManager->GetVertexData(Type));
+            if (FAILED(hr))
+            {
+                return hr;
+            }
+        }
+    }
+    
+    return S_OK;
 }
 
 void UEngine::AddTotalAllocationBytes(uint32 Bytes)

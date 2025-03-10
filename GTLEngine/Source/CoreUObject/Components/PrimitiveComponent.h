@@ -11,7 +11,8 @@ public:
 
 public:
 	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
-private:
+
+protected:
 	EPrimitiveType PrimitiveType;
 
 

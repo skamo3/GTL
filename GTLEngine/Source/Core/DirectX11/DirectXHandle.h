@@ -37,6 +37,8 @@ public:
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObejct(const TArray<AActor*> Actors);
 
+	void DrawLine(const TArray<TPair<FVector, FVector>>& Lines);
+
 private:
 	void InitView();
 
@@ -53,7 +55,7 @@ public:
 
 	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
-	void AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices);
+	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices);
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
@@ -62,7 +64,7 @@ private:
 	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
 	ComPtr<IDXGISwapChain> DXDSwapChain;
 
-	TMap<std::wstring, UDXDRenderTarget*> RenderTarget;
+	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
 	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;

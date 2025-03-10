@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Math/Math.h"
+
 class UDirectXHandle;
 class UResourceManager;
 class UWorld;
@@ -35,6 +37,8 @@ public:
     void Render();
 	void ClearEngine();
 
+    HRESULT AddAllPrimitiveVertexBuffers();
+
     // Getter
     UDirectXHandle* GetDirectX11Handle() const { return DirectX11Handle; }
     UResourceManager* GetResourceManager() const { return ResourceManager; }
@@ -59,6 +63,8 @@ private:
     UGizmo* Gizmo;
 
     UObject* SelectedObject;
+
+    TArray<TPair<FVector, FVector>> Lines;
 
 public:
     const FWindowInfo& GetWindowInfo() const { return WindowInfo; }

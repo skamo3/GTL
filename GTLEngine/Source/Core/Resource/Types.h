@@ -6,8 +6,7 @@ enum class EPrimitiveType
 {
     None,
     Line,
-    Triangle,
-    Rectangle,
+    Plane,
     Sphere,
     Cube,
     Cylinder,
@@ -61,7 +60,5 @@ struct FCbChangesEveryObject
 struct FCbLine
 {
     FVector Position;
-    float Padding;
-
     float R, G, B, A;
 };
