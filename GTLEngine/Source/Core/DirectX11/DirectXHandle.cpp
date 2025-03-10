@@ -70,11 +70,11 @@ HRESULT UDirectXHandle::CreateShaderManager()
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"C:/Users/Jungle/Desktop/Folder/GTL/GTLEngine/Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
+    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
     if (FAILED(hr))
         return hr;
 
-    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"C:/Users/Jungle/Desktop/Folder/GTL/GTLEngine/Resource/Shader/PrimitiveShader.hlsl");
+    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"Resource/Shader/PrimitiveShader.hlsl");
     if (FAILED(hr))
         return hr;
 
@@ -267,6 +267,8 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get(), NULL, 0);
     DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get(), NULL, 0);
 
+    auto a = ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS"));
+
     DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")).Get());
 
     // Begin Object Matrix Update
@@ -298,6 +300,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+    
     DXDDeviceContext->Draw(Num, 0);
 }
 
