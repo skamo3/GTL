@@ -9,6 +9,7 @@ class UTimeManager;
 class UInputManager;
 class UGizmo;
 class UObject;
+class UAssetManager;
 
 class UEngineStatics
 {
@@ -44,7 +45,7 @@ public:
     UResourceManager* GetResourceManager() const { return ResourceManager; }
     UWorld* GetWorld() const { return World; }
     UInputManager* GetInputManager() const { return InputManager; }
-
+	UAssetManager* GetAssetManager() const { return AssetManager; }
 
 private:
     UEngine() = default;
@@ -65,6 +66,8 @@ private:
     UObject* SelectedObject;
 
     TArray<TPair<FVector, FVector>> Lines;
+
+	UAssetManager* AssetManager;
 
 public:
     const FWindowInfo& GetWindowInfo() const { return WindowInfo; }

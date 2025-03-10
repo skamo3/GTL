@@ -18,7 +18,7 @@ private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
 
 private:
-    UResourceManager(const UResourceManager& InResourceManager) = delete;
+    UResourceManager(const UResourceManager& InResourceManager) = delete;  
     UResourceManager(UResourceManager&& InResourceManager) = delete;
     UResourceManager& operator=(const UResourceManager& InResourceManager) = delete;
     UResourceManager& operator=(UResourceManager&& InResourceManager) = delete;
