@@ -3,6 +3,7 @@
 class UDirectXHandle;
 class UResourceManager;
 class UWorld;
+class UTimeManager;
 class UInputManager;
 class UGizmo;
 class UObject;
@@ -53,6 +54,7 @@ private:
 	UDirectXHandle* DirectX11Handle;
 	UResourceManager* ResourceManager;
     UWorld* World;
+    UTimeManager* TimeManager;
     UInputManager* InputManager;
     UGizmo* Gizmo;
 
