@@ -3,15 +3,15 @@
 class UTimeManager
 {
 public:
-	static void Initialize();
-	static void Update();
+	void Initialize();
+	void Update();
 
-	inline static float DeltaTime() { return DeltaTimeValue; }
+	inline float DeltaTime() { return DeltaTimeValue; }
 
 private:
-	static LARGE_INTEGER CpuFrequency;
-	static LARGE_INTEGER PrevFrequency;
-	static LARGE_INTEGER CurrentFrequency;
-	static float DeltaTimeValue;
+	LARGE_INTEGER CpuFrequency;
+	LARGE_INTEGER PrevFrequency;
+	LARGE_INTEGER CurrentFrequency;
+	float DeltaTimeValue;
 };
 
