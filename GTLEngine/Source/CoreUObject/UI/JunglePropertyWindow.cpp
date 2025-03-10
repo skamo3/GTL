@@ -1,17 +1,16 @@
 #include "pch.h"
 #include "JunglePropertyWindow.h"
 
-// ImGui include.
-#include "ImGui/imgui.h"
 
-UJunglePropertyWindow::UJunglePropertyWindow()
+
+UJunglePropertyWindow::UJunglePropertyWindow(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
 
 }
 
-UJunglePropertyWindow::~UJunglePropertyWindow()
+void UJunglePropertyWindow::Destroy()
 {
-
+    UUIBase::Destroy();
 }
 
 void UJunglePropertyWindow::Draw()

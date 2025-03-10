@@ -1,18 +1,15 @@
 #pragma once
 
 #include "Math/Vector.h"
+#include "UI/UIBase.h"
 
-#include "UI/UIManager.h"
-
-class UUIManager;
-
-class UJunglePropertyWindow {
+class UJunglePropertyWindow: public UUIBase
+{
 public:
-	UJunglePropertyWindow();
-	~UJunglePropertyWindow();
+	explicit UJunglePropertyWindow(UUIManager* InUIManager);
+	void Destroy() override;
 
-private:
-	UUIManager* UIManager;
+
 
 private:
 	FVector objectTranslation = { -0.140f, 0.030f, 0.0f };
@@ -20,7 +17,7 @@ private:
 	FVector objectScale = { 1.0f, 1.0f, 1.0f };
 
 private:
-	void Draw();
+	void Draw() override;
 	void DrawObjectTranslation();
 	void DrawObjectRotation();
 	void DrawObjectScale();

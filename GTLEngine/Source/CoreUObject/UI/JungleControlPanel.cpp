@@ -1,15 +1,16 @@
 #include "pch.h"
 #include "JungleControlPanel.h"
 
-// ImGui include.
-#include "ImGui/imgui.h"
 
-UJungleControlPanel::UJungleControlPanel()
+
+UJungleControlPanel::UJungleControlPanel(UUIManager* InUIManager) : UUIBase(InUIManager)
 {
+    
 }
 
-UJungleControlPanel::~UJungleControlPanel()
+void UJungleControlPanel::Destroy()
 {
+    UUIBase::Destroy();
 }
 
 void UJungleControlPanel::Draw()

@@ -1,21 +1,16 @@
 #pragma once
 
 #include "Math/Vector.h"
-
-#include "UI/UIManager.h"
+#include "UI/UIBase.h"
 
 const char* primitives[] = { "Sphere", "Cube", "Triangle" };
 
-class UUIManager;
-
-class UJungleControlPanel 
+class UJungleControlPanel: public UUIBase
 {
 public:
-	UJungleControlPanel();
-	~UJungleControlPanel();
+	explicit UJungleControlPanel(UUIManager* InUIManager);
+	void Destroy() override;
 
-private:
-	UUIManager* UIManager;
 
 private:
 	int fps = 7777;
@@ -28,7 +23,7 @@ private:
 	FVector cameraRotation = { 0.680f, 1.970f, 0.000f };
 
 
-	void Draw();
+	void Draw() override;
 	void DrawFPS();
 	void DrawSpawnPrimitive();
 	void DrawSceneManage();
