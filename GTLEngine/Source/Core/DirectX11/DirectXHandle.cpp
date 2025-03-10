@@ -11,6 +11,7 @@
 #include "CoreUObject/GameFrameWork/Camera.h"
 
 #include "CoreUObject/Components/PrimitiveComponent.h"
+#include "CoreUObject/Components/CameraComponent.h"
 
 #include "Engine.h"
 
@@ -118,21 +119,20 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
     // VertexShader, InputLayout 는 쌍으로 생성 및 이름으로 관리.
     hr = CreateShaderManager();
 
-    // TODO: 상수 버퍼 생성 및 버텍스 쉐이더와 픽셀 쉐이더에 바인딩
-    hr = AddConstantBuffer(EConstantBufferType::ChangesOnResize);
-    if (FAILED(hr))
+    // 상수 버퍼 생성 및 버텍스 쉐이더와 픽셀 쉐이더에 바인딩
+    for (uint32 i = 0; i < static_cast<uint32>(EConstantBufferType::Max); i++)
     {
-        return hr;
-    }
-    hr = AddConstantBuffer(EConstantBufferType::ChangesOnResize);
-    if (FAILED(hr))
-    {
-        return hr;
-    }
-    hr = AddConstantBuffer(EConstantBufferType::ChangesOnResize);
-    if (FAILED(hr))
-    {
-        return hr;
+        EConstantBufferType Type = static_cast<EConstantBufferType>(i);
+        if (Type == EConstantBufferType::None)
+        {
+            continue;
+        }
+
+        hr = AddConstantBuffer(Type);
+        if (FAILED(hr))
+        {
+            return hr;
+        }
     }
 
     // 쉐이더에 상수 버퍼 바인딩
@@ -211,6 +211,43 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     // Camera->GetCameraComponent.
     // MVP 계산 행렬 구하고
     // 카메라 상수버퍼로 바로 전달.
+    if (!Camera)
+    {
+        return;
+    }
+
+    // 카메라 컴포넌트의 로컬 트랜스폼은 변경되지 않는다고 가정
+    ID3D11Buffer* CbChangesEveryFrame = ConstantBuffers[EConstantBufferType::ChangesEveryFrame]->GetConstantBuffer();
+    if (!CbChangesEveryFrame)
+    {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData;
+    DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(MappedData.pData))
+    {
+        FVector CameraLocation = Camera->GetActorLocation();
+        FVector CameraRotation = Camera->GetActorRotation();
+        FMatrix RotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
+        FVector CameraFoward = FMath::TransformDirection(FVector::ForwardVector, RotationMatrix);
+        FVector CameraUp = FMath::TransformDirection(FVector::UpVector, RotationMatrix);
+        FMatrix CameraViewMatrix = FMath::CreateViewMatrixByDirection(CameraLocation, CameraFoward, CameraUp);
+        
+        Buffer->ViewMatrix = CameraViewMatrix;
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
+
+    // TODO: Test. 프로젝션 matrix는 리사이즈 할때만
+    ID3D11Buffer* CbChangesOnResize = ConstantBuffers[EConstantBufferType::ChangesOnResize]->GetConstantBuffer();
+    if (!CbChangesEveryFrame)
+    {
+        return;
+    }
+    FCbChangesOnResize ChangesOnResize;
+    float Width = ViewportInfo.Width;
+    float Height = ViewportInfo.Height;
+    ChangesOnResize.ProjectionMatrix = FMatrix::CreatePerspectiveProjectionMatrixLeftHand(90.f, Width / Height, 1.f, 100.f);
+    DXDDeviceContext->UpdateSubresource(CbChangesOnResize, 0, NULL, &CbChangesOnResize, 0, 0);
 }
 
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)

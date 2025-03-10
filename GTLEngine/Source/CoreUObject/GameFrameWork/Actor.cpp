@@ -29,3 +29,18 @@ void AActor::SetOwner(AActor* InOwner)
 {
 	Owner = InOwner;
 }
+
+FVector AActor::GetActorLocation() const
+{
+	return RootComponent->GetComponentLocation();
+}
+
+FVector AActor::GetActorRotation() const
+{
+	return RootComponent->GetComponentRotation();
+}
+
+FVector AActor::GetActorScale() const
+{
+	return RootComponent->GetComponentScale();
+}
