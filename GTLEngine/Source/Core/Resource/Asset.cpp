@@ -11,6 +11,10 @@ UAsset::UAsset()
 
 }
 
+UAsset::~UAsset()
+{
+}
+
 void UAsset::Tick(float TickTime)
 {
 }

@@ -53,8 +53,8 @@ bool UScene::LoadAsset()
 
 	json::JSON sceneData = json::JSON::Load(jsonStr);
 
-	long version = sceneData["Version"].ToInt();
-	long nextUUID = sceneData["NextUUID"].ToInt();
+	uint64 version = sceneData["Version"].ToInt();
+	uint64 nextUUID = sceneData["NextUUID"].ToInt();
 
 	json::JSON primitives = sceneData["Primitives"];
 

@@ -37,7 +37,7 @@ public:
 
 	struct FSceneData
 	{
-		FSceneData(UINT InVersion, UINT InNextUUID, TMap<std::string, Primitive> InPrimitives)
+		FSceneData(uint64 InVersion, uint64 InNextUUID, TMap<std::string, Primitive> InPrimitives)
 			: Version(InVersion), NextUUID(InNextUUID), Primitives(InPrimitives)
 		{
 		}
@@ -47,8 +47,8 @@ public:
 		{
 		}
 
-		UINT Version;
-		UINT NextUUID;
+		uint64 Version;
+		uint64 NextUUID;
 		TMap<std::string, Primitive> Primitives;
 	};
 
