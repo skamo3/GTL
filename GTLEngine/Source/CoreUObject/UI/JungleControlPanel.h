@@ -1,13 +1,12 @@
 #pragma once
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
 
-#include "Utils/Math/Vector.h"
-#include "Manager/UIManager.h"
+#include "Math/Vector.h"
+
+#include "UI/UIManager.h"
 
 const char* primitives[] = { "Sphere", "Cube", "Triangle" };
+
+class UUIManager;
 
 class UJungleControlPanel 
 {
@@ -16,7 +15,7 @@ public:
 	~UJungleControlPanel();
 
 private:
-	UUIManager uUIManager;
+	UUIManager* UIManager;
 
 private:
 	int currentPrimitive = 0;
@@ -26,9 +25,19 @@ private:
 	FVector cameraLocation = { -1.037f, 0.716f, 0.330f };
 	FVector cameraRotation = { 0.680f, 1.970f, 0.000f };
 
-	char strOut[32] = "";
+	char* strOut;
+	size_t bufSize;
 
 	void Draw();
 	template<typename T>
 	void ChangeNumToStrWithMargin(int marginNum, T num);
 };
+
+template<typename T>
+void UJungleControlPanel::ChangeNumToStrWithMargin(int marginNum, T num)
+{
+	bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
+	//strOut = new char[bufSize];
+	//std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+	//strOut[bufSize - 1] = '\0';
+}

@@ -85,7 +85,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
             }
         }
 
-
         Engine.Tick();
 		Engine.Render();
     }

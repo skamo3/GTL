@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Resource/VertexTypes.h"
+
 class UDXDDevice;
 class UDXDSwapChain;
 class UDXDRenderTarget;
@@ -11,6 +13,7 @@ class UDXDInputLayout;
 class UObject;
 class AActor;
 class ACamera;
+class UGizmo;
 
 class UDirectXHandle
 {
@@ -28,7 +31,8 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
-	void Render(const TArray<AActor*> Actors);
+	void RenderGizmo(UObject* Selected, UGizmo* Gizmo);
+	void RenderObejct(const TArray<AActor*> Actors);
 
 private:
 	void InitView();
@@ -45,6 +49,10 @@ public:
 	ComPtr<ID3D11DeviceContext> GetD3DDeviceContext() const { return DXDDeviceContext; }
 	ComPtr<IDXGISwapChain> GetDXDSwapChain() const { return DXDSwapChain; }
 
+	void AddNormalVertexBuffer(const TArray<FVertexSimple>& vertices);
+	void AddLineVertexBuffer(const TArray<FVertexSimple>& vertices);
+	void AddConstantBuffer(const std::wstring& Key, const TArray<FVertexSimple>& vertices);
+
 private:
 	ComPtr<ID3D11Device> DXDDevice;
 	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
@@ -55,4 +63,6 @@ private:
 	UDXDRasterizerState* RasterizerState; // 여러개 보류.
 	UDXDShaderManager* ShaderManager;
 
+	TMap<std::wstring, ID3D11Buffer*> VertexBuffer;
+	TMap<std::wstring, ID3D11Buffer*> ConstantBuffer;
 };

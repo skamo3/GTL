@@ -11,6 +11,8 @@
 
 #include "Engine.h"
 
+#include "Gizmo/Gizmo.h"
+
 UDirectXHandle::~UDirectXHandle()
 {
 	ReleaseDirectX11Handle();
@@ -135,7 +137,12 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 	// 카메라 상수버퍼로 바로 전달.
 }
 
-void UDirectXHandle::Render(const TArray<AActor*> Actors)
+void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
+{
+	// Selected 오브젝트 기반으로 기즈모 그리가.
+}
+
+void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
 	// 그릴 렌더 타겟뷰 초기화.
 	InitView();
@@ -185,3 +192,55 @@ HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_REN
 
 	return S_OK;
 }
+
+void UDirectXHandle::AddNormalVertexBuffer(const TArray<FVertexSimple>& vertices)
+{
+	ID3D11Buffer* NewVertexBuffer;
+	// 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(FVertexSimple) * vertices.size();
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
+
+	DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+
+	VertexBuffer.insert({ L"Normal", NewVertexBuffer });
+}
+
+void UDirectXHandle::AddLineVertexBuffer(const TArray<FVertexSimple>& vertices)
+{
+	ID3D11Buffer* NewVertexBuffer;
+	// 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(FVertexSimple) * vertices.size();
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
+
+	DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+
+	VertexBuffer.insert({ L"Line", NewVertexBuffer });
+}
+
+// TODO: FVertexSimple Constant로 변경 필요.
+void UDirectXHandle::AddConstantBuffer(const std::wstring& Key, const TArray<FVertexSimple>& vertices)
+{
+	ID3D11Buffer* NewConstantBuffer;
+	D3D11_BUFFER_DESC constantbufferdesc = {};
+	constantbufferdesc.ByteWidth = sizeof(FVertexSimple) + 0xf & 0xfffffff0; // ensure constant buffer size is multiple of 16 bytes
+	constantbufferdesc.Usage = D3D11_USAGE_DYNAMIC; // will be updated from CPU every frame
+	constantbufferdesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+	constantbufferdesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+
+	DXDDevice->CreateBuffer(&constantbufferdesc, nullptr, &NewConstantBuffer);
+	ConstantBuffer.insert({ Key, NewConstantBuffer });
+}
+
+

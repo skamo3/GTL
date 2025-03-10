@@ -2,18 +2,23 @@
 #include "Engine.h"
 
 #include "DirectX11/DirectXHandle.h"
-#include "Manager/InputManager.h"
+#include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
-#include "GameFrameWork/Camera.h"
+#include "Gizmo/Gizmo.h"
+
+#include "Gizmo/Gizmo.h"
 
 uint32 UEngineStatics::NextUUID = 0;
 
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
 	WindowInfo = InWindowInfo;
+
+	// 리소스 매니저 추가.
+
 	DirectX11Handle = new UDirectXHandle();
 	HRESULT hr = DirectX11Handle->CreateDirectX11Handle(WindowInfo.WindowHandle);
 	if (FAILED(hr))
@@ -35,10 +40,16 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 
 	// 셰이더 추가.
 
-    // 리소스 매니저 추가.
+	// 버텍스 버퍼 추가.
+	// TODO: vertex 배열 만들어서 버텍스 버퍼 생성 로직 추가. 
+	//DirectX11Handle->AddNormalVertexBuffer();
+	//DirectX11Handle->AddLineVertexBuffer();
+	// 콘스탄트 버퍼 추가.
+	// TODO: Constant 배열 만들어서 Constant 버퍼 생성 로직 추가. 
+	//DirectX11Handle->AddConstantBuffer();
 
     // 월드 추가.
-	World = UWorld::CreateWorld(L"MainWorld");
+	World = UWorld::CreateWorld();
 
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
@@ -60,9 +71,10 @@ void UEngine::Tick()
 
 void UEngine::Render()
 {
-	DirectX11Handle->UpdateCameraMatrix(MainCamera);
+	DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
 	// 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
-	DirectX11Handle->Render(World->GetActors());
+	DirectX11Handle->RenderGizmo(SelectedObject, Gizmo);
+	DirectX11Handle->RenderObejct(World->GetActors());
 }
 
 void UEngine::ClearEngine()
@@ -72,17 +84,17 @@ void UEngine::ClearEngine()
 		DirectX11Handle->ReleaseDirectX11Handle();
 	}
 
+	if (World)
+	{
+		delete World;
+		World = nullptr;
+	}
+
 	if (ResourceManager)
 	{
         delete ResourceManager;
 		ResourceManager = nullptr;
 	}
-
-    if (World)
-    {
-        delete World;
-		World = nullptr;
-    }
 
     if (InputManager)
     {

@@ -4,6 +4,7 @@
 #include "Components/SceneComponent.h"
 
 AActor::AActor()
+	: Owner(nullptr)
 {
 	RootComponent = new USceneComponent();
 }
@@ -16,4 +17,15 @@ void AActor::Tick(float TickTime)
 
 void AActor::Destroy()
 {
+	if (RootComponent)
+	{
+		RootComponent->Destroy();
+		delete RootComponent;
+		RootComponent = nullptr;
+	}
+}
+
+void AActor::SetOwner(AActor* InOwner)
+{
+	Owner = InOwner;
 }

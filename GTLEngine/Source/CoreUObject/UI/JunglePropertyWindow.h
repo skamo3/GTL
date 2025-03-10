@@ -1,11 +1,10 @@
 #pragma once
-#include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
 
-#include "Utils/Math/Vector.h"
-#include "Manager/UIManager.h"
+#include "Math/Vector.h"
+
+#include "UI/UIManager.h"
+
+class UUIManager;
 
 class UJunglePropertyWindow {
 public:
@@ -13,17 +12,26 @@ public:
 	~UJunglePropertyWindow();
 
 private:
-	UUIManager uUIManager;
+	UUIManager* UIManager;
 
 private:
 	FVector objectTranslation = { -0.140f, 0.030f, 0.0f };
 	FVector objectRotation = { 0.0f, 0.0f, 0.0f };
 	FVector objectScale = { 1.0f, 1.0f, 1.0f };
 
-	char strOut[32] = "";
+	char* strOut;
+	size_t bufSize;
 
 private:
 	void Draw();
 	template<typename T>
 	void ChangeNumToStrWithMargin(int marginNum, T num);
 };
+
+template<typename T>
+void UJunglePropertyWindow::ChangeNumToStrWithMargin(int marginNum, T num) {
+	bufSize = UIManager->ChangeNumToStrWithMargin(4, num).size() + 1;
+	//strOut = new char[bufSize];
+	//std::strncpy(strOut, UIManager.ChangeNumToStrWithMargin(4, num).c_str(), bufSize);
+	//strOut[bufSize - 1] = '\0';
+}

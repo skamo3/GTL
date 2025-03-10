@@ -1,4 +1,8 @@
+#include "pch.h"
 #include "JungleControlPanel.h"
+
+// ImGui include.
+#include "ImGui/imgui.h"
 
 UJungleControlPanel::UJungleControlPanel()
 {
@@ -27,10 +31,9 @@ void UJungleControlPanel::Draw()
     if (spawnNum < 1) spawnNum = 1;
     // 숫자를 문자열로 변환
 
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(10, spawnNum).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
+    ChangeNumToStrWithMargin(10, spawnNum);
     ImGui::PushItemWidth(148);
-    ImGui::InputText("Number of spawn", strOut, IM_ARRAYSIZE(strOut));
+    ImGui::InputText("Number of spawn", strOut, bufSize);
     spawnNum = atoi(strOut);
     ImGui::PopItemWidth();
     ImGui::Separator();
@@ -47,27 +50,23 @@ void UJungleControlPanel::Draw()
     bool bOrthogonal = false;
     ImGui::Checkbox("Orthogonal", &bOrthogonal);
 
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(10, fovValue).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
+    ChangeNumToStrWithMargin(10, fovValue);
     ImGui::PushItemWidth(200);
-    ImGui::InputText("FOV", strOut, IM_ARRAYSIZE(strOut));
+    ImGui::InputText("FOV", strOut, bufSize);
     fovValue = atof(strOut);
     ImGui::PopItemWidth();
 
     ImGui::PushItemWidth(67);
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraLocation.X).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraLocationX", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraLocation.X);
+    ImGui::InputText("##cameraLocationX", strOut, bufSize);
     cameraLocation.X = atof(strOut);
     ImGui::SameLine();
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraLocation.Y).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraLocationY", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraLocation.Y);
+    ImGui::InputText("##cameraLocationY", strOut, bufSize);
     cameraLocation.Y = atof(strOut);
     ImGui::SameLine();
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraLocation.Z).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraLocationZ", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraLocation.Z);
+    ImGui::InputText("##cameraLocationZ", strOut, bufSize);
     cameraLocation.Z = atof(strOut);
     ImGui::SameLine();
     ImGui::Text("Camera Location");
@@ -75,19 +74,16 @@ void UJungleControlPanel::Draw()
 
 
     ImGui::PushItemWidth(67);
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraRotation.X).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraRotationX", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraRotation.X);
+    ImGui::InputText("##cameraRotationX", strOut, bufSize);
     cameraRotation.X = atof(strOut);
     ImGui::SameLine();
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraRotation.Y).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraRotationY", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraRotation.Y);
+    ImGui::InputText("##cameraRotationY", strOut, bufSize);
     cameraRotation.Y = atof(strOut);
     ImGui::SameLine();
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, cameraRotation.Z).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
-    ImGui::InputText("##cameraRotationZ", strOut, IM_ARRAYSIZE(strOut));
+    ChangeNumToStrWithMargin(4, cameraRotation.Z);
+    ImGui::InputText("##cameraRotationZ", strOut, bufSize);
     cameraRotation.Z = atof(strOut);
     ImGui::SameLine();
     ImGui::Text("Camera Rotation");
@@ -104,11 +100,4 @@ void UJungleControlPanel::Draw()
 
 
     ImGui::End();
-}
-
-template<typename T>
-void UJungleControlPanel::ChangeNumToStrWithMargin(int marginNum, T num)
-{
-    strncpy(strOut, uUIManager.ChangeNumToStrWithMargin(4, num).c_str(), sizeof(strOut) - 1);
-    strOut[sizeof(strOut) - 1] = '\0';
 }

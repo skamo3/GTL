@@ -1,13 +1,7 @@
 #pragma once
-#include "pch.h"
-#include <string>
-#include <vector>
 
+// ImGui include.
 #include "ImGui/imgui.h"
-#include "ImGui/imgui_internal.h"
-#include "ImGui/imgui_impl_dx11.h"
-#include "ImGui/imgui_impl_win32.h"
-
 
 const char* verbosityLevels[] = {
     "", "Log", "Warning", "Error", "Display", "Fatal", "Verbose", "VeryVerbose", "Unkown"
@@ -22,8 +16,8 @@ ImVec4 verbosityColors[] = {
 
 struct FLogEntry
 {
-    string category; // 로그 카테고리 (예: "LogTemp")
-    string message;  // 로그 메시지
+    std::string category; // 로그 카테고리 (예: "LogTemp")
+    std::string message;  // 로그 메시지
     int verbosity;        // 로그 레벨 (0: Verbose, 1: Log, 2: Warning, 3: Error)
 };
 
@@ -34,7 +28,7 @@ public:
 
 private:
     char                  inputBuf[256];
-    vector<FLogEntry> logEntries;
+    std::vector<FLogEntry> logEntries;
     ImVector<const char*> commands;
     ImVector<char*>       history;
     int                   historyPos;    // -1: new line, 0..History.Size-1 browsing history.

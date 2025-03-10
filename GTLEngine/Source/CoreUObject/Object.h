@@ -11,16 +11,13 @@ public:
 	void operator delete(void* ptr);
 	void operator delete[](void* ptr);
 
-
 public:
 	virtual void Tick(float TickTime) = 0;
 	virtual void Destroy() = 0;
 
 public:
+	
 	std::wstring GetName() const { return NamePrivate; }
-
-protected:// 자기 자신만 스스로를 바꿀 수 있도록.
-	void SetName(const std::wstring& NewName) { NamePrivate = NewName; } 
 
 private:
 	// Name of this object.
@@ -39,4 +36,4 @@ private:
 
 };
 
-//TArray<UObject*> GUObjectArray;
+extern TArray<UObject*> GUObjectArray;

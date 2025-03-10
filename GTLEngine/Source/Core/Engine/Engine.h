@@ -4,13 +4,11 @@ class UDirectXHandle;
 class UResourceManager;
 class UWorld;
 class UInputManager;
-class ACamera;
+class UGizmo;
+class UObject;
 
 class UEngineStatics
 {
-public:
-    UEngineStatics();
-
 public:
     static uint32 GenUUID()
     {
@@ -55,8 +53,10 @@ private:
 	UDirectXHandle* DirectX11Handle;
 	UResourceManager* ResourceManager;
     UWorld* World;
-    ACamera* MainCamera;
     UInputManager* InputManager;
+    UGizmo* Gizmo;
+
+    UObject* SelectedObject;
 
 public:
     const FWindowInfo& GetWindowInfo() const { return WindowInfo; }
