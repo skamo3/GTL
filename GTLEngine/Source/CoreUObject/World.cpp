@@ -24,7 +24,6 @@ UWorld* UWorld::CreateWorld()
 
 
 	NewWorld->MainCamera->SetActorLocation(FVector(0.f, 0.f, -10.f));
-	NewWorld->MainCamera->SetActorRotation(FVector(0.f, 90.f, 0.f));
 
     return NewWorld;
 }

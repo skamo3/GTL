@@ -1,6 +1,8 @@
 #pragma once
 
 #include "Resource/Types.h"
+#include <d3d11.h>
+#include <d3dcompiler.h>
 
 class UDXDDevice;
 class UDXDSwapChain;
