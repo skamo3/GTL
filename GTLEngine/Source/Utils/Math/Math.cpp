@@ -178,3 +178,23 @@ FRay FMath::CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, floa
 
 	return resultRay;
 }
+
+void FMath::CaclulateAABB(const TArray<FVector>& vertices, FVector& outMin, FVector& outMax)
+{
+	if (vertices.empty())
+	{
+		return;
+	}
+
+	outMin = outMax = vertices[0];
+	for (const FVector& vertex : vertices)
+	{
+		outMin.X = std::min(outMin.X, vertex.X);
+		outMin.Y = std::min(outMin.Y, vertex.Y);
+		outMin.Z = std::min(outMin.Z, vertex.Z);
+
+		outMax.X = std::max(outMax.X, vertex.X);
+		outMax.Y = std::max(outMax.Y, vertex.Y);
+		outMax.Z = std::max(outMax.Z, vertex.Z);
+	}
+}

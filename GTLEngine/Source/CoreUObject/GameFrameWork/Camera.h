@@ -21,6 +21,8 @@ public:
 	FMatrix GetProjectionMatrix(float width, float height) const;
 
 private:
+	void RayCasting();
+
 	UCameraComponent* CameraComponent;
 
 };

@@ -18,6 +18,7 @@
 #include "Gizmo/Gizmo.h"
 #include "DirectXMath.h"
 #include "World.h"
+#include "Input/InputManager.h"
 
 using namespace DirectX;
 

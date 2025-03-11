@@ -137,5 +137,7 @@ struct FMath
 	/// <param name="ndcMouseX">ndc 좌표로 변환된 MouseX</param>
 	/// <param name="ndcMouseY">ndc 좌표로 변환된 MouseY</param>
 	static FRay CreateRay(const FMatrix& viewMatrix, const FMatrix& projMatrix, float ndcMouseX, float ndcMouseY, float screenWidth, float screenHeight);
+
+	static void CaclulateAABB(const TArray<FVector>& vertices, FVector& outMin, FVector& outMax);
 };
 

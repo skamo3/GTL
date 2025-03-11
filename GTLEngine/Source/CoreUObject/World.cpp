@@ -19,9 +19,18 @@ UWorld* UWorld::CreateWorld()
 	 
 	AActor* CubePrimitive = NewWorld->SpawnActor<AActor>(TEXT(""), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 	CubePrimitive->SetName(TEXT("CubePrimitive"));
-	CubePrimitive->AddComponent<UPlaneComponent>(CubePrimitive);
-	CubePrimitive->GetComponentByClass<UPlaneComponent>()->SetName(TEXT("UCubeComponent"));
+	CubePrimitive->AddComponent<UCubeComponent>(CubePrimitive);
+	CubePrimitive->GetComponentByClass<UCubeComponent>()->SetName(TEXT("UCubeComponent"));
 
+	AActor* SpherePrimitive = NewWorld->SpawnActor<AActor>(TEXT(""), FVector(5.f, 5.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+	SpherePrimitive->AddComponent<USphereComponent>(SpherePrimitive);
+	SpherePrimitive->GetComponentByClass<USphereComponent>()->SetName(TEXT("USphereComponent"));
+	SpherePrimitive->SetName(TEXT("SpherePrimitive"));
+
+	AActor* PlanePrimitive = NewWorld->SpawnActor<AActor>(TEXT(""), FVector(-5.f, -5.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+	PlanePrimitive->AddComponent<UPlaneComponent>(PlanePrimitive);
+	PlanePrimitive->GetComponentByClass<UPlaneComponent>()->SetName(TEXT("UPlaneComponent"));
+	PlanePrimitive->SetName(TEXT("PlanePrimitive"));
 
 	NewWorld->MainCamera->SetActorLocation(FVector(0.f, 0.f, -10.f));
 
@@ -40,7 +49,6 @@ void UWorld::Tick(float TickTime)
 	for (AActor* Actor : ActiveActors)
 	{
 		Actor->Tick(TickTime);
-
 	}
 }
 

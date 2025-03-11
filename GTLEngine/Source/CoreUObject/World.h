@@ -20,19 +20,13 @@ public:
 	{
 		T* newObj = new T();
 		AActor* newActor = dynamic_cast<AActor*>(newObj);
-		// newActor-> SetLocation, SetScale, SetRotation.
-		newActor->SetActorLocation(InLocation);
-		newActor->SetActorScale(InScale);
-		newActor->SetActorRotation(InRotation);
 
 		if (newActor != nullptr)
 		{
 			newActor->SetOwner(InOwner);
-			
-			USceneComponent* Comp = newActor->GetRootComponent();
-			Comp->SetRelativeLocation(InLocation);
-			Comp->SetRelativeRotation(InRotation);
-			Comp->SetRelativeScale(InScale);
+			newActor->SetActorLocation(InLocation);
+			newActor->SetActorRotation(InRotation);
+			newActor->SetActorScale(InScale);
 
 			ActiveActors.push_back(newActor);
 		}
