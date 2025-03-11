@@ -29,27 +29,27 @@ void ACamera::Tick(float TickTime)
 
 	if (engine.GetInputManager()->GetKey('W'))
 	{
-		CameraLocation += FVector(0, 0, 10) * TickTime;
+		CameraLocation += FVector::ForwardVector * 10 * TickTime;
 	}
 	if (engine.GetInputManager()->GetKey('S'))
 	{
-		CameraLocation += FVector(0, 0, -10) * TickTime;
+		CameraLocation += FVector::BackwardVector * 10 * TickTime;
 	}
 	if (engine.GetInputManager()->GetKey('A'))
 	{
-		CameraLocation += FVector(-10, 0, 0) * TickTime;
+		CameraLocation += FVector::LeftVector * 10 * TickTime;
 	}
 	if (engine.GetInputManager()->GetKey('D'))
 	{
-		CameraLocation += FVector(10, 0, 0) * TickTime;
+		CameraLocation += FVector::RightVector * 10 * TickTime;
 	}
 	if (engine.GetInputManager()->GetKey('Q'))
 	{
-		CameraLocation += FVector(0, -10, 0) * TickTime;
+		CameraLocation += FVector::UpVector * 10 * TickTime;
 	}
 	if (engine.GetInputManager()->GetKey('E'))
 	{
-		CameraLocation += FVector(0, 10, 0) * TickTime;
+		CameraLocation += FVector::DownVector * 10 * TickTime;
 	}
 
 	if (engine.GetInputManager()->GetMouseButton(UInputManager::EMouseButton::RIGHT))
@@ -57,7 +57,7 @@ void ACamera::Tick(float TickTime)
 		float MouseDeltaX = engine.GetInputManager()->GetMouseDeltaX();
 		float MouseDeltaY = engine.GetInputManager()->GetMouseDeltaY();
 
-		CameraRotation += FVector(-MouseDeltaY, -MouseDeltaX , 0) * TickTime;
+		CameraRotation -= FVector(MouseDeltaY, MouseDeltaX,  0) * 0.1f;
 	}
 
 	if (engine.GetInputManager()->GetMouseButton(UInputManager::EMouseButton::LEFT))
@@ -78,7 +78,7 @@ FMatrix ACamera::GetViewMatrix() const
 	const FVector CameraLocation = GetActorLocation();
 	const FVector CameraRotation = GetActorRotation();
 	FMatrix rotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
-	FVector CameraDir = FMath::TransformDirection(FVector::RightVector, rotationMatrix);
+	FVector CameraDir = FMath::TransformDirection(FVector::ForwardVector, rotationMatrix);
 	FVector CameraUp = FMath::TransformDirection(FVector::UpVector, rotationMatrix);
 
 	return FMath::CreateViewMatrixByDirection(CameraLocation, CameraDir, CameraUp);
@@ -117,7 +117,6 @@ void ACamera::RayCasting()
 			{
 				float outW;
 				FVector localOrigin = FMath::TransformPosition(ray.GetOrigin(), invPrimWorldMat, outW);
-				localOrigin /= outW;
 				FVector localDir = FMath::TransformDirection(ray.GetDirection(), invPrimWorldMat);
 
 				FRay localRay = FRay(localOrigin, localDir);
