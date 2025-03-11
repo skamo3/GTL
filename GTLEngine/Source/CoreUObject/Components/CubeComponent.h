@@ -5,7 +5,11 @@
 class UCubeComponent : public UPrimitiveComponent
 {
 public:
-	UCubeComponent();
+	UCubeComponent()
+		: UPrimitiveComponent()
+	{
+		PrimitiveType = EPrimitiveType::Cube;
+	}
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

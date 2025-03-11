@@ -12,7 +12,7 @@ public:
 
     void Release();
 
-    const TArray<FVertexSimple>* GetVertexData(EPrimitiveType Type) const;
+    const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
 
 private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;

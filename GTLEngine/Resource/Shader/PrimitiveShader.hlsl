@@ -14,6 +14,11 @@ cbuffer CbChangesEveryObject : register(b2)
     matrix WorldMatrix; // 오브젝트 스페이스 -> 월드 스페이스
 };
 
+cbuffer CbMVP : register(b3)
+{
+    matrix MVP; // 오브젝트 스페이스 -> NDC
+};
+
 struct VS_INPUT
 {
     float4 Position : POSITION; // Input position from vertex buffer
@@ -30,11 +35,13 @@ PS_INPUT mainVS(VS_INPUT Input)
 {
     Input.Position.w = 1.f;
     
-    PS_INPUT Output;
-    Output.Position = Input.Position;
-    Output.Position = mul(Output.Position, WorldMatrix); // 오브젝트 스페이스 -> 월드 스페이스
-    Output.Position = mul(Output.Position, ViewMatrix); // 월드 스페이스 -> 뷰 스페이스
-    Output.Position = mul(Output.Position, ProjectionMatrix); // 뷰 스페이스 -> NDC
+    PS_INPUT Output = (PS_INPUT) 0.0f;
+    Output.Position = mul(Input.Position, MVP); // 오브젝트 스페이스 -> NDC
+    
+    //Output.Position = Input.Position;
+    //Output.Position = mul(Output.Position, WorldMatrix); // 오브젝트 스페이스 -> 월드 스페이스
+    //Output.Position = mul(Output.Position, ViewMatrix); // 월드 스페이스 -> 뷰 스페이스
+    //Output.Position = mul(Output.Position, ProjectionMatrix); // 뷰 스페이스 -> NDC
     
     Output.Color = Input.Color;
     

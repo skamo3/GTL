@@ -6,6 +6,11 @@
 class UPrimitiveComponent : public USceneComponent
 {
 public:
+	UPrimitiveComponent()
+		: USceneComponent()
+	{
+		PrimitiveType = EPrimitiveType::None;
+	}
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 

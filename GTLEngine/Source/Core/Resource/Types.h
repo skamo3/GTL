@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Utils/Math/MathFwd.h"
+#include "DirectXMath.h"
 
 enum class EPrimitiveType
 {
@@ -38,23 +39,32 @@ enum class EConstantBufferType
     ChangesOnResize,
     ChangesEveryFrame,
     ChangesEveryObject,
-
+    MVP,
     Max,
 };
 
-struct FCbChangesOnResize
+ struct alignas(16) FCbChangesOnResize
 {
     FMatrix ProjectionMatrix;
+	//DirectX::XMMATRIX ProjectionMatrix;
 };
 
-struct FCbChangesEveryFrame
+
+struct alignas(16) FCbChangesEveryFrame
 {
     FMatrix ViewMatrix;
+    //DirectX::XMMATRIX ViewMatrix;
 };
 
-struct FCbChangesEveryObject
+struct alignas(16)  FCbChangesEveryObject
 {
     FMatrix WorldMatrix;
+    //DirectX::XMMATRIX WorldMatrix;
+};
+
+struct alignas(16) FMVP
+{
+    FMatrix MVP;
 };
 
 struct FCbLine

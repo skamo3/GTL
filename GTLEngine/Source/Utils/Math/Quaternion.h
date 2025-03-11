@@ -1,6 +1,5 @@
 #pragma once
 #include "Vector.h"
-
 struct FQuaternion
 {
 	float X, Y, Z, W;
@@ -8,33 +7,16 @@ struct FQuaternion
 	FQuaternion(float x, float y, float z, float w) : X(x), Y(y), Z(z), W(w) {}
 	FQuaternion(const FQuaternion& q) : X(q.X), Y(q.Y), Z(q.Z), W(q.W) {}
 
-	/// <summary>
-	/// 주어진 회전 축(axis)과 회전 각도(angle)를 이용하여 axis-angle 표현법의 Quaternion을 생성합니다.
-	/// </summary>
 	FQuaternion(const FVector& axis, float angle)
 	{
-		// 회전 각도의 절반 값을 계산합니다.
 		float halfAngle = angle * 0.5f;
-
-		// 절반 각도의 사인 값을 계산합니다.
 		float s = sin(halfAngle);
-
-		// Quaternion의 벡터 부분은 회전 축을 sin(halfAngle)로 스케일링한 값입니다.
 		X = axis.X * s;
 		Y = axis.Y * s;
 		Z = axis.Z * s;
-
-		// Quaternion의 스칼라 부분은 cos(halfAngle) 값입니다.
 		W = cos(halfAngle);
 	}
 
-	/// <summary>
-	/// <para>오일러 각도를 이용하여 Quaternion을 생성합니다.</para>
-	/// <para>- X: Pitch (X축 회전)
-	/// - Y: Yaw   (Y축 회전)
-	/// - Z: Roll  (Z축 회전)</para>
-	/// 회전 순서는 내부 회전(Intrinsic Rotation) 방식으로 Pitch → Yaw → Roll 순으로 적용됩니다.
-	/// </summary>
 	FQuaternion(const FVector& euler)
 	{
 		// 도 -> 라디안 변환
@@ -55,7 +37,6 @@ struct FQuaternion
 		float cy = cos(halfYaw);
 		float sy = sin(halfYaw);
 
-		// 내부 회전 순서 (Pitch → Yaw → Roll)를 가정한 Euler 각도에서 Quaternion으로의 변환 수식입니다.
 		W = cr * cy * cp + sr * sy * sp;
 		X = cr * cy * sp - sr * sy * cp;
 		Y = cr * sy * cp + sr * cy * sp;
@@ -136,10 +117,6 @@ struct FQuaternion
 		return *this;
 	}
 
-	/// <summary>
-	/// 길이가 1인 정규화된 쿼터니언을 반환
-	/// </summary>
-	/// <returns></returns>
 	inline FQuaternion GetNormalizeQuaternion() const
 	{
 		float norm = sqrtf(X * X + Y * Y + Z * Z + W * W);
@@ -151,4 +128,3 @@ struct FQuaternion
 		return FQuaternion(X * invNorm, Y * invNorm, Z * invNorm, W * invNorm);
 	}
 };
-

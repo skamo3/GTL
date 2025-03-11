@@ -81,10 +81,12 @@ void UEngine::Tick()
 
 void UEngine::Render()
 {
+    // 그릴 렌더 타겟뷰 초기화.
+    DirectX11Handle->InitView();
+    DirectX11Handle->RenderObejct(World->GetActors());
     DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
     DirectX11Handle->RenderGizmo(SelectedObject, Gizmo);
-    DirectX11Handle->RenderObejct(World->GetActors());
 
     // TODO: Draw Line
     DirectX11Handle->DrawLine(Lines);
@@ -130,7 +132,7 @@ HRESULT UEngine::AddAllPrimitiveVertexBuffers()
         EPrimitiveType Type = static_cast<EPrimitiveType>(i);
         if (Type != EPrimitiveType::None)
         {
-            hr = DirectX11Handle->AddVertexBuffer(Type, *ResourceManager->GetVertexData(Type));
+            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type));
             if (FAILED(hr))
             {
                 return hr;

@@ -8,11 +8,11 @@ UDXDRenderTarget::~UDXDRenderTarget()
 
 HRESULT UDXDRenderTarget::CreateRenderTarget(ComPtr<ID3D11Device> DXDDevice, ComPtr<IDXGISwapChain> SwapChain, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
-    HRESULT hr = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&FrameBuffer);
+    HRESULT hr = SwapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)FrameBuffer.GetAddressOf());
     if(FAILED(hr))
         return hr;
 
-    hr = DXDDevice->CreateRenderTargetView(FrameBuffer.Get(), &RenderTargetViewDesc, &FrameBufferRTV);
+    hr = DXDDevice->CreateRenderTargetView(FrameBuffer.Get(), &RenderTargetViewDesc, FrameBufferRTV.GetAddressOf());
     if (FAILED(hr))
         return hr;
 

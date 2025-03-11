@@ -18,7 +18,7 @@ public:
 public:
 	
 	std::wstring GetName() const { return NamePrivate; }
-
+	void SetName(const std::wstring& Name) { NamePrivate = Name; }
 private:
 	// Name of this object.
 	std::wstring NamePrivate;

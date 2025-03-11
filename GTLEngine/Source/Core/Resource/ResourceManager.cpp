@@ -45,11 +45,11 @@ void UResourceManager::Release()
     VertexDataMap.clear();
 }
 
-const TArray<FVertexSimple>* UResourceManager::GetVertexData(EPrimitiveType Type) const
+const TArray<FVertexSimple> UResourceManager::GetVertexData(EPrimitiveType Type) const
 {
     if (VertexDataMap.contains(Type))
     {
-        return &VertexDataMap.at(Type);
+        return VertexDataMap.find(Type)->second;
     }
-    return nullptr;
+	return TArray<FVertexSimple>();
 }

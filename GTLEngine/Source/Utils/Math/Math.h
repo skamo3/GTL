@@ -52,7 +52,7 @@ struct FMath
 	/// position, rotation, scale 벡터를 사용하여 World 행렬을 생성
 	/// </summary>
 	static FMatrix CreateWorldMatrix(const FVector& position, const FVector& rotation, const FVector& scale);
-	 
+
 	/// <summary>
 	/// <para>주어진 세 개의 축 벡터(X, Y, Z)와 원점 벡터를 사용하여 기저 행렬(새로운 좌표계(기저, Basis)를 나타내는 4×4 행렬)을 생성.</para>
 	/// 좌표계에서 정의된 점(벡터)을 월드(또는 상위) 좌표계로 변환할 수 있음

@@ -16,6 +16,10 @@
 #include "Engine.h"
 
 #include "Gizmo/Gizmo.h"
+#include "DirectXMath.h"
+#include "World.h"
+
+using namespace DirectX;
 
 UDirectXHandle::~UDirectXHandle()
 {
@@ -27,8 +31,8 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
     DXGI_SWAP_CHAIN_DESC swapchaindesc = {};
-    swapchaindesc.BufferDesc.Width = 1024; // 창 크기에 맞게 자동으로 설정
-    swapchaindesc.BufferDesc.Height = 1024; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Width = 1600; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Height = 900; // 창 크기에 맞게 자동으로 설정
     swapchaindesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // 색상 포맷
     swapchaindesc.SampleDesc.Count = 1; // 멀티 샘플링 비활성화
     swapchaindesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 렌더 타겟으로 사용
@@ -42,7 +46,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     // Direct3D 장치와 스왑 체인을 생성
     HRESULT hr = D3D11CreateDeviceAndSwapChain(
         nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels),
-        D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext
+        D3D11_SDK_VERSION, &swapchaindesc, DXDSwapChain.GetAddressOf(), DXDDevice.GetAddressOf(), nullptr, DXDDeviceContext.GetAddressOf()
     );
 
     if (FAILED(hr))
@@ -159,10 +163,17 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
             DXDDeviceContext->VSSetConstantBuffers(2, 1, &CbChangesEveryObject);
         }
     }
+	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::MVP])
+	{
+		if (ID3D11Buffer* CbMVP = DXDCB->GetConstantBuffer())
+		{
+			DXDDeviceContext->VSSetConstantBuffers(3, 1, &CbMVP);
+		}
+	}
     
     // 뎁스 스텐실 뷰 생성.
     DepthStencilView = new UDXDDepthStencilView();
-    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle);
+    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle, UEngine::GetEngine().GetWindowInfo().Width, UEngine::GetEngine().GetWindowInfo().Height);
     if (FAILED(hr))
         return hr;
 
@@ -219,9 +230,9 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     {
         return;
     }
-    D3D11_MAPPED_SUBRESOURCE MappedData;
-    DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
-    if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(MappedData.pData))
+    D3D11_MAPPED_SUBRESOURCE viewMappedData;
+    DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &viewMappedData);
+    if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(viewMappedData.pData))
     {
         FVector CameraLocation = Camera->GetActorLocation();
         FVector CameraRotation = Camera->GetActorRotation();
@@ -229,8 +240,11 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
         FVector CameraFoward = FMath::TransformDirection(FVector::ForwardVector, RotationMatrix);
         FVector CameraUp = FMath::TransformDirection(FVector::UpVector, RotationMatrix);
         FMatrix CameraViewMatrix = FMath::CreateViewMatrixByDirection(CameraLocation, CameraFoward, CameraUp);
-        
-        Buffer->ViewMatrix = CameraViewMatrix;
+        //XMVECTOR Eye = XMVectorSet(0.f, 0.f, -10.f, 1.f);
+        //XMVECTOR At = XMVectorSet(0.f, 0.f, 0.f, 1.f);
+        //XMVECTOR Up = XMVectorSet(0.f, 1.f, 0.f, 0.f);
+
+        Buffer->ViewMatrix = CameraViewMatrix;//XMMatrixLookAtLH(Eye, At, Up);
     }
     DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
 
@@ -240,11 +254,16 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     {
         return;
     }
-    FCbChangesOnResize ChangesOnResize;
-    float Width = ViewportInfo.Width;
-    float Height = ViewportInfo.Height;
-    ChangesOnResize.ProjectionMatrix = FMatrix::CreatePerspectiveProjectionMatrixLeftHand(90.f, Width / Height, 1.f, 100.f);
-    DXDDeviceContext->UpdateSubresource(CbChangesOnResize, 0, NULL, &CbChangesOnResize, 0, 0);
+    D3D11_MAPPED_SUBRESOURCE projectionMappedData;
+    DXDDeviceContext->Map(CbChangesOnResize, 0, D3D11_MAP_WRITE_DISCARD, 0, &projectionMappedData);
+    if (FCbChangesOnResize* Buffer = reinterpret_cast<FCbChangesOnResize*>(projectionMappedData.pData))
+    {
+        float Width = ViewportInfo.Width;
+        float Height = ViewportInfo.Height;
+        Buffer->ProjectionMatrix = FMatrix::CreatePerspectiveProjectionMatrixLeftHand(60.f, Width / Height, 1.f, 1000.f);
+    }
+    DXDDeviceContext->Unmap(CbChangesOnResize, 0);
+    //XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
 }
 
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
@@ -259,6 +278,9 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         return;
     }
 
+	FMatrix worldMat = FMatrix::Identity;
+	FMatrix viewMat = FMatrix::Identity;
+	FMatrix projMat = FMatrix::Identity;
 
 
     ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get();
@@ -278,7 +300,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     {
         return;
     }
-    D3D11_MAPPED_SUBRESOURCE MappedData;
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
@@ -286,9 +308,32 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         FVector ActorRotation = PrimitiveComp->GetOwner()->GetActorRotation();
         FVector ActorScale = PrimitiveComp->GetOwner()->GetActorScale();
 
-        Buffer->WorldMatrix = FMath::CreateWorldMatrix(ActorLocation, ActorRotation, ActorScale);
+		//XMMATRIX worldMat = XMMatrixScaling(ActorScale.X, ActorScale.Y, ActorScale.Z) *	XMMatrixRotationRollPitchYaw(ActorRotation.X, ActorRotation.Y, ActorRotation.Z) * XMMatrixTranslation(ActorLocation.X, ActorLocation.Y, ActorLocation.Z);*/
+
+        worldMat = FMath::CreateWorldMatrix(ActorLocation, ActorRotation, ActorScale);//worldMat;
+		Buffer->WorldMatrix = worldMat;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+
+    ID3D11Buffer* CbMVP = ConstantBuffers[EConstantBufferType::MVP]->GetConstantBuffer();
+	if (!CbMVP)
+	{
+		return;
+	}
+    D3D11_MAPPED_SUBRESOURCE MappedDataMVP = {};
+	DXDDeviceContext->Map(CbMVP, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedDataMVP);
+    if (FMVP* Buffer = reinterpret_cast<FMVP*>(MappedDataMVP.pData))
+    {
+
+        ACamera* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+        FMatrix CameraViewMatrix = camera->GetViewMatrix();
+		FMatrix projMat = FMath::CreatePerspectiveProjectionMatrix(60.f, ViewportInfo.Width / ViewportInfo.Height, 1.f, 1000.f);
+
+		FMatrix mvp = FMath::CreateMVP(worldMat, CameraViewMatrix, projMat);
+        Buffer->MVP = mvp;
+    }
+    DXDDeviceContext->Unmap(CbMVP, 0);
 
     // End Object Matrix Update
 
@@ -306,9 +351,6 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 
 void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
-    // 그릴 렌더 타겟뷰 초기화.
-    InitView();
-
     for (AActor* Actor : Actors)
     {
         RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
@@ -365,7 +407,7 @@ HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_REN
     return S_OK;
 }
 
-HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices)
+HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices)
 {
     ID3D11Buffer* NewVertexBuffer;
     // 버텍스 버퍼 생성
@@ -376,7 +418,7 @@ HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVe
     bufferDesc.CPUAccessFlags = 0;
 
     D3D11_SUBRESOURCE_DATA initData = {};
-    initData.pSysMem = (void*)(vertices.data());
+    initData.pSysMem = vertices.data();
 
     HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
     if (FAILED(hr))

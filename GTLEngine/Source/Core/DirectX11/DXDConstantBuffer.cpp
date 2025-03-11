@@ -25,16 +25,16 @@ HRESULT UDXDConstantBuffer::CreateBuffer(EConstantBufferType Type)
 
     HRESULT hr = S_OK;
 
-    D3D11_BUFFER_DESC BufferDesc;
-    ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
+    D3D11_BUFFER_DESC BufferDesc = {};
+    //ZeroMemory(&BufferDesc, sizeof(D3D11_BUFFER_DESC));
 
     switch (Type)
     {
     case EConstantBufferType::ChangesOnResize:
-        BufferDesc.Usage = D3D11_USAGE_DEFAULT;
+        BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
         BufferDesc.ByteWidth = sizeof(FCbChangesOnResize) + 0xf & 0xfffffff0; // ensure constant buffer size is multiple of 16 bytes
         BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
-        BufferDesc.CPUAccessFlags = 0;
+        BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
         BufferDesc.MiscFlags = 0;
         BufferDesc.StructureByteStride = 0;
         break;
@@ -54,8 +54,17 @@ HRESULT UDXDConstantBuffer::CreateBuffer(EConstantBufferType Type)
         BufferDesc.MiscFlags = 0;
         BufferDesc.StructureByteStride = 0;
         break;
+	case EConstantBufferType::MVP:
+		BufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+		BufferDesc.ByteWidth = sizeof(FMVP) + 0xf & 0xfffffff0; // ensure constant buffer size is multiple of 16 bytes
+		BufferDesc.BindFlags = D3D11_BIND_CONSTANT_BUFFER;
+		BufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+		//BufferDesc.MiscFlags = 0;
+		//BufferDesc.StructureByteStride = 0;
+		break;
     default:
         return S_FALSE;
+        break;
     }   
 
     hr = DXDDevice->CreateBuffer(&BufferDesc, NULL, &ConstantBuffer);

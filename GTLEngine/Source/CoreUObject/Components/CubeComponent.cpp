@@ -3,11 +3,6 @@
 
 #include "Resource/Types.h"
 
-UCubeComponent::UCubeComponent()
-    : UPrimitiveComponent()
-{
-    PrimitiveType = EPrimitiveType::Cube;
-}
 
 void UCubeComponent::Tick(float TickTime)
 {

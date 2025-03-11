@@ -14,6 +14,15 @@ void AActor::Tick(float TickTime)
 {
 	// RootComponent 기준으로 Child 불러서 업데이트.
 	RootComponent->Tick(TickTime);
+
+	for (UActorComponent* Comp : OwnedComponent)
+	{
+		if (Comp == nullptr)
+		{
+			continue;
+		}
+		Comp->Tick(TickTime);
+	}
 }
 
 void AActor::Destroy()

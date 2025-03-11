@@ -74,29 +74,21 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
         return hr;
 
     ComPtr<ID3D11VertexShader> NewVertexShader;
-    hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
+    hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, NewVertexShader.GetAddressOf());
     if (FAILED(hr))
     {
-        if (VertexShaderCSO)
-        {
-            VertexShaderCSO->Release();
-        }
         return hr;
     }
 
     ComPtr<ID3D11InputLayout> NewInputLayout;
-    hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &NewInputLayout);
+    hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), NewInputLayout.GetAddressOf());
     if (FAILED(hr))
     {
-        if (VertexShaderCSO)
-        {
-            VertexShaderCSO->Release();
-        }
         return hr;
     }
 
-    VertexShaders.insert(make_pair(Key, NewVertexShader));
-    InputLayouts.insert(make_pair(Key, NewInputLayout));
+	VertexShaders[Key] = NewVertexShader;
+	InputLayouts[Key] = NewInputLayout;
     
     return S_OK;
 }
@@ -105,7 +97,7 @@ ComPtr<ID3D11InputLayout> UDXDShaderManager::GetInputLayoutByKey(const std::wstr
 {
     if (InputLayouts.contains(Key))
     {
-        return InputLayouts.at(Key);
+        return InputLayouts.find(Key)->second;
     }
     return nullptr;
 }
@@ -114,7 +106,7 @@ ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::ws
 {
     if (VertexShaders.contains(Key))
     {
-        return VertexShaders.at(Key);
+        return VertexShaders.find(Key)->second;
     }
     return nullptr;
 }
@@ -123,7 +115,7 @@ ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const std::wstr
 {
     if (PixelShaders.contains(Key))
     {
-        return PixelShaders.at(Key);
+        return PixelShaders.find(Key)->second;
     }
     return nullptr;
 }

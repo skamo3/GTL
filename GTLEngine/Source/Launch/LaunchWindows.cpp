@@ -57,8 +57,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     // 윈도우 클래스 등록
     RegisterClassW(&wndclass);
 
-    uint32 Width = 1024;
-    uint32 Height = 1024;
+    uint32 Width = 1600;
+    uint32 Height = 900;
 
     // 1024 x 1024 크기에 윈도우 생성
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,

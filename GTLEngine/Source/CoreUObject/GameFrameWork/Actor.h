@@ -2,6 +2,7 @@
 
 #include "CoreUObject/Object.h"
 #include "Math/Math.h"
+#include "CoreUObject/Components/SceneComponent.h"
 
 class UActorComponent;
 class USceneComponent;
@@ -84,6 +85,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	if (RootComponent == nullptr)
 	{
 		RootComponent = NewSceneComp;
+		NewSceneComp->SetName(TEXT("RootComponent"));
 	}
 	else
 	{

@@ -39,7 +39,7 @@ public:
 
 	void DrawLine(const TArray<TPair<FVector, FVector>>& Lines);
 
-private:
+public:
 	void InitView();
 
 
@@ -55,7 +55,7 @@ public:
 
 	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
-	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple>& vertices);
+	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices);
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
