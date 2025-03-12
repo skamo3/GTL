@@ -8,6 +8,8 @@
 #include "Resource/Types.h"
 
 #include "World.h"
+#include "GameFrameWork/Shapes/Plane.h"
+#include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
 
 UControlPanel::UControlPanel()
@@ -68,16 +70,19 @@ void UControlPanel::DrawSpawnPrimitive()
 		// 액터 스폰.
 		switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
 		{
+		case EPrimitiveType::Plane:
+			World->SpawnActor<APlane>(TEXT("Plane"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+			break;
+		case EPrimitiveType::Sphere:
+			World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+			break;
 		case EPrimitiveType::Cube:
 			World->SpawnActor<ACube>(TEXT("Cube"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 			break;
-		/*case EPrimitiveType::Plane:
-			World->SpawnActor<APlane>(TEXT("Plane"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+		case EPrimitiveType::Cylinder:
 			break;
-		case EPrimitiveType::Sphere:
-			World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;*/
-
+		case EPrimitiveType::Cone:
+			break;
 		default:
 			break;
 		}

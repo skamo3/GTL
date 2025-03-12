@@ -237,7 +237,8 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     {
         FVector CameraLocation = Camera->GetActorLocation();
         FVector CameraRotation = Camera->GetActorRotation();
-        FMatrix RotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
+        //FMatrix RotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
+		FMatrix RotationMatrix = FMath::CreateRotationMatrix(CameraRotation.Y, CameraRotation.Z, CameraRotation.X);
         FVector CameraFoward = FMath::TransformDirection(FVector::ForwardVector, RotationMatrix);
         FVector CameraUp = FMath::TransformDirection(FVector::UpVector, RotationMatrix);
         FMatrix CameraViewMatrix = FMath::CreateViewMatrixByDirection(CameraLocation, CameraFoward, CameraUp);
@@ -249,7 +250,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     }
     DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
 
-    // TODO: Test. 프로젝션 matrix는 리사이즈 할때만
+    // TODO: Test. 프로젝션 matrix는 리사이즈 할 때, FOV 변환할 때.
     ID3D11Buffer* CbChangesOnResize = ConstantBuffers[EConstantBufferType::ChangesOnResize]->GetConstantBuffer();
     if (!CbChangesEveryFrame)
     {
@@ -294,8 +295,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 
     DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")).Get());
 
-    // Begin Object Matrix Update
-
+    // Begin Object Matrix Update. Model 변환
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if (!CbChangesEveryObject)
     {
@@ -316,28 +316,14 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
+    // View 변환 Constant.
+    
+    // Projection 변환 Constant.
 
-    ID3D11Buffer* CbMVP = ConstantBuffers[EConstantBufferType::MVP]->GetConstantBuffer();
-	if (!CbMVP)
-	{
-		return;
-	}
-    D3D11_MAPPED_SUBRESOURCE MappedDataMVP = {};
-	DXDDeviceContext->Map(CbMVP, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedDataMVP);
-    if (FMVP* Buffer = reinterpret_cast<FMVP*>(MappedDataMVP.pData))
-    {
-
-        ACamera* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-        FMatrix CameraViewMatrix = camera->GetViewMatrix();
-		FMatrix projMat = FMath::CreatePerspectiveProjectionMatrix(60.f, ViewportInfo.Width / ViewportInfo.Height, 1.f, 1000.f);
-
-		FMatrix mvp = FMath::CreateMVP(worldMat, CameraViewMatrix, projMat);
-        Buffer->MVP = mvp;
-    }
-    DXDDeviceContext->Unmap(CbMVP, 0);
 
     // End Object Matrix Update
-
+    
+    
     EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     //uint Stride = 84;6

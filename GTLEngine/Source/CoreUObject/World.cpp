@@ -4,9 +4,9 @@
 #include "GameFrameWork/Actor.h"
 #include "GameFrameWork/Camera.h"
 
-#include "Components/CubeComponent.h"
-#include <Components/SphereComponent.h>
-#include "Components/PlaneComponent.h"
+#include "GameFrameWork/Shapes/Plane.h"
+#include "GameFrameWork/Shapes/Sphere.h"
+#include "GameFrameWork/Shapes/Cube.h"
 
 #include "Engine.h"
 #include "UI/UIManager.h"
@@ -17,19 +17,12 @@ UWorld* UWorld::CreateWorld()
 	UWorld* NewWorld = new UWorld();
 	NewWorld->MainCamera = new ACamera();
 
-	// TODO: PlayerState는 임시 액터로, 월드의 멤버 변수로 변경해야함.
-	AActor* PlayerState = NewWorld->SpawnActor<AActor>(TEXT("PlayerState"), FVector(), FVector(), FVector(), nullptr);
-	PlayerState->SetName(TEXT("PlayerState"));
-	 
-	AActor* CubePrimitive = NewWorld->SpawnActor<AActor>(TEXT(""), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-	CubePrimitive->SetName(TEXT("CubePrimitive"));
-	CubePrimitive->AddComponent<UPlaneComponent>(CubePrimitive);
-	CubePrimitive->GetComponentByClass<UPlaneComponent>()->SetName(TEXT("UCubeComponent"));
+	NewWorld->SpawnActor<ASphere>(TEXT("Default"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 
-	// TODO: 나중에 따로 추가.
+	// TODO: 나중에 분리.
 	NewWorld->CreateDefaultUI();
 
-	NewWorld->MainCamera->SetActorLocation(FVector(0.f, 0.f, -10.f));
+	NewWorld->MainCamera->SetActorLocation(FVector(-10.f, 0.f, 0.0f));
 
     return NewWorld;
 }

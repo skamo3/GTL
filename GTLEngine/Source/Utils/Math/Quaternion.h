@@ -20,9 +20,9 @@ struct FQuaternion
 	FQuaternion(const FVector& euler)
 	{
 		// 도 -> 라디안 변환
-		float radRoll = euler.Z * (PI / 180.0f);
-		float radPitch = euler.X * (PI / 180.0f);;
-		float radYaw = euler.Y * (PI / 180.0f);
+		float radRoll = euler.X * (PI / 180.0f);  // X축은 Roll
+		float radPitch = euler.Z * (PI / 180.0f); // Z축은 Pitch
+		float radYaw = euler.Y * (PI / 180.0f);   // Y축은 Yaw
 
 		// 반각 계산
 		float halfRoll = radRoll / 2.0f;
@@ -37,6 +37,7 @@ struct FQuaternion
 		float cy = cos(halfYaw);
 		float sy = sin(halfYaw);
 
+		// 쿼터니언 계산 (왼손 좌표계에 맞게 수정)
 		W = cr * cy * cp + sr * sy * sp;
 		X = cr * cy * sp - sr * sy * cp;
 		Y = cr * sy * cp + sr * cy * sp;

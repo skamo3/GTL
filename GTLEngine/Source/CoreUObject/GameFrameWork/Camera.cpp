@@ -51,8 +51,8 @@ void ACamera::Tick(float TickTime)
 		float MouseDeltaX = InputManager->GetMouseDeltaX();
 		float MouseDeltaY = InputManager->GetMouseDeltaY();
 
-		CameraRotation += FVector(-MouseDeltaY, -MouseDeltaX, 0) * TickTime;
-		CameraRotation -= FVector(MouseDeltaY, MouseDeltaX, 0) * TickTime;
+		CameraRotation += FVector(0, MouseDeltaX, MouseDeltaY) * TickTime;
+		std::cout << CameraRotation.X << " " << CameraRotation.Y << " " << CameraRotation.Z << std::endl;
 	}
 
 	SetActorLocation(CameraLocation);
@@ -68,7 +68,7 @@ FMatrix ACamera::GetViewMatrix() const
 	const FVector CameraLocation = GetActorLocation();
 	const FVector CameraRotation = GetActorRotation();
 	FMatrix rotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
-	FVector CameraDir = FMath::TransformDirection(FVector::RightVector, rotationMatrix);
+	FVector CameraDir = FMath::TransformDirection(FVector::ForwardVector, rotationMatrix);
 	FVector CameraUp = FMath::TransformDirection(FVector::UpVector, rotationMatrix);
 
 	return FMath::CreateViewMatrixByDirection(CameraLocation, CameraDir, CameraUp);

@@ -229,6 +229,12 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -388,6 +394,12 @@
       <Filter>Source\Core\Asset</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
   </ItemGroup>

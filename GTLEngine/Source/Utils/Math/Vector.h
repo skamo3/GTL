@@ -135,25 +135,16 @@ struct FVector
 		return X * X + Y * Y + Z * Z;
 	}
 
-	/// <summary>
-	/// �� ���Ϳ� �ٸ� ������ ������ ��ȯ
-	/// </summary>
 	inline float Dot(const FVector& v) const
 	{
 		return X * v.X + Y * v.Y + Z * v.Z;
 	}
 
-	/// <summary>
-	/// v1�� v2�� ������ ��ȯ
-	/// </summary>
-	inline static float DotProduct(const FVector& v1, const FVector& v2)
+	inline static float Dot(const FVector& v1, const FVector& v2)
 	{
 		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
 	}
 
-	/// <summary>
-	/// �� ���Ϳ� �ٸ� ������ ������ ��ȯ
-	/// </summary>
 	inline FVector Cross(const FVector& v) const
 	{
 		return FVector(
@@ -163,10 +154,7 @@ struct FVector
 		);
 	}
 
-	/// <summary>
-	/// v1�� v2�� ������ ��ȯ
-	/// </summary>
-	inline static FVector CrossProduct(const FVector& v1, const FVector& v2)
+	inline static FVector Cross(const FVector& v1, const FVector& v2)
 	{
 		return FVector(
 			v1.Y * v2.Z - v1.Z * v2.Y,
@@ -180,25 +168,16 @@ struct FVector
 		X = _x; Y = _y; Z = _z;
 	}
 
-	/// <summary>
-	/// ���� ���е��� ���밪���� ��ȯ
-	/// </summary>
 	inline FVector GetAbs() const
 	{
 		return FVector(std::abs(X), std::abs(Y), std::abs(Z));
 	}
 
-	/// <summary>
-	/// x, y�� ����� 2D ������ ���̸� ��ȯ
-	/// </summary>
 	inline float Length2D() const
 	{
 		return sqrtf(X * X + Y * Y);
 	}
 
-	/// <summary>
-	/// x, y�� ����� 2D ������ ������ ������ ��ȯ
-	/// </summary>
 	inline float SquaredLength2D() const
 	{
 		return X * X + Y * Y;
@@ -209,9 +188,6 @@ struct FVector
 		return X == 0.f && Y == 0.f && Z == 0.f;
 	}
 
-	/// <summary>
-	/// ����ȭ(���̰� 1��)���ͷ� ��ȯ)
-	/// </summary>
 	inline FVector GetNormalizedVector() const
 	{
 		float len = Length();
@@ -222,9 +198,6 @@ struct FVector
 		return FVector(X / len, Y / len, Z / len);
 	}
 
-	/// <summary>
-	/// ���͸� ����ȭ�� ���� ����(Unit Direction Vector)�� ��ȯ�ϰ�, ������ ���� ����(Length)�� �Բ� ��ȯ�մϴ�.
-	/// </summary>
 	void ToDirectionAndLength(FVector& outDir, float& outLength)
 	{
 		outLength = Length();
@@ -239,18 +212,12 @@ struct FVector
 		}
 	}
 
-	/// <summary>
-	/// ���͸� Z�� �������� ����(XY ��� ���� ���͸� Projection)�� ���͸� ��ȯ
-	/// </summary>
 	inline FVector Projection() const
 	{
 		const float RZ = 1.f / Z;
 		return FVector(X * RZ, Y * RZ, 1.f);
 	}
 
-	/// <summary>
-	/// �� ������ �� ���п� ���� ����(1/src.X, 1/src.Y, 1/src.Z)�� ��ȯ
-	/// </summary>
 	static bool Reciprocal(const FVector& src, FVector& dst);
 };
 

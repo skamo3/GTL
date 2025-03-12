@@ -323,9 +323,9 @@ FMatrix FMatrix::CreateLookToMatrixLeftHand(const FVector& eye, const FVector& t
 {
 	FVector zAxis = toDir.GetNormalizedVector();
 
-	FVector xAxis = FVector::CrossProduct(up, zAxis).GetNormalizedVector();
+	FVector xAxis = FVector::Cross(up, zAxis).GetNormalizedVector();
 
-	FVector yAxis = FVector::CrossProduct(zAxis, xAxis);
+	FVector yAxis = FVector::Cross(zAxis, xAxis);
 
 	FMatrix viewMatrix;
 
