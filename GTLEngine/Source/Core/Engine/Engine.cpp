@@ -6,10 +6,12 @@
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
 #include "Asset/AssetManager.h"
+#include "UI/UIManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/Gizmo.h"
+
 
 uint32 UEngineStatics::NextUUID = 0;
 
@@ -53,15 +55,19 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	AssetManager->RegistryAssetMetaDatas();
 	AssetManager->LoadAssets();
 
-    // 월드 추가.
-    World = UWorld::CreateWorld();
-
 	// TimeManager 추가
 	TimeManager = new UTimeManager();
 	TimeManager->Initialize();
 
     // 인풋 매니저 추가.
     InputManager = new UInputManager();
+
+    // UI 매니저 추가.
+	UIManager = new UUIManager();
+	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice().Get(), DirectX11Handle->GetD3DDeviceContext().Get());
+
+    // 월드 추가.
+    World = UWorld::CreateWorld();
 
     return true;
 }
@@ -73,6 +79,9 @@ void UEngine::Tick()
 
 	// InputManager.
     InputManager->Tick(TimeManager->DeltaTime());
+
+    // UIManager
+    UIManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
     World->CameraTick(TimeManager->DeltaTime());
@@ -90,6 +99,12 @@ void UEngine::Render()
 
     // TODO: Draw Line
     DirectX11Handle->DrawLine(Lines);
+
+    
+    // UI 그리기.
+    UIManager->RenderUI();
+	// 최종적으로 그린 결과물을 화면에 출력.
+	DirectX11Handle->GetDXDSwapChain()->Present(1, 0);
 }
 
 void UEngine::ClearEngine()
@@ -111,8 +126,16 @@ void UEngine::ClearEngine()
         ResourceManager = nullptr;
     }
 
+    if (UIManager)
+	{
+        UIManager->Destroy();
+		delete UIManager;
+		UIManager = nullptr;
+	}
+
     if (InputManager)
     {
+		InputManager->Destroy();
         delete InputManager;
         InputManager = nullptr;
     }

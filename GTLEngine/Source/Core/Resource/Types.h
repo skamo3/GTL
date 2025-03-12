@@ -16,6 +16,7 @@ enum class EPrimitiveType
     Max,
 };
 
+
 struct FVertexSimple
 {
     float X = 0.f, Y = 0.f, Z = 0.f;

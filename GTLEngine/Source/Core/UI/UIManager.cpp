@@ -2,15 +2,58 @@
 #include "UIManager.h"
 
 #include "Math/Matrix.h"
-#include "UI/JungleConsole.h"
+#include "UI/UIBase.h"
 
+#include "ImGui/imgui.h"
+#include "ImGui/imgui_internal.h"
+#include "ImGui/imgui_impl_dx11.h"
+#include "ImGui/imgui_impl_win32.h"
 
-void UUIManager::RegisterJungleConsole(UJungleConsole& inJungleConsole)
+void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext)
 {
-	JungleConsole = &inJungleConsole;
+	// ImGui 생성.
+	IMGUI_CHECKVERSION();
+	ImGui::CreateContext();
+	ImGuiIO& IO = ImGui::GetIO();
+
+	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
+	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);
+
 }
 
+void UUIManager::RegistUI(UUIBase* NewUI)
+{
+	UIList.push_back(NewUI);
+}
 
+void UUIManager::Tick(float DeltaTime)
+{
+	ImGui_ImplDX11_NewFrame();
+	ImGui_ImplWin32_NewFrame();
+	ImGui::NewFrame();
+
+	for (UUIBase* UI : UIList)
+	{
+		if (UI)
+		{
+			UI->Tick(DeltaTime);
+		}
+	}
+
+}
+
+void UUIManager::RenderUI()
+{
+	ImGui::Render();
+	ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+}
+
+void UUIManager::Destroy()
+{
+	ImGui_ImplDX11_Shutdown();
+	ImGui_ImplWin32_Shutdown();
+	ImGui::DestroyContext();
+}
 
 bool UUIManager::GetObjectTranslation(FVector& outTranslation)
 {
@@ -58,27 +101,6 @@ void UUIManager::OnObjectScaleChanged(FVector& inScale)
 {
 
 }
-
-bool UUIManager::GetFPS(int& outFPS)
-{
-	if (true) {
-		// TODO: OutFPS 입력
-		outFPS;
-		return true;
-	}
-	return false;
-}
-
-bool UUIManager::GetDeltaTime(int& outDeltaTime)
-{
-	if (true) {
-		// TODO: outDeltaTime 입력
-		outDeltaTime;
-		return true;
-	}
-	return false;
-}
-
 
 void UUIManager::SpawnPrimitive()
 {

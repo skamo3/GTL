@@ -22,26 +22,37 @@ void ACamera::Tick(float TickTime)
 	FVector CameraLocation = GetActorLocation();
 	FVector CameraRotation = GetActorRotation();
 
-	if (UEngine::GetEngine().GetInputManager()->GetKey('W'))
+	// 현재 카메라 회전을 기준으로 바꿔줘야 함.
+	FVector Forward = GetActorRotation();
+	FVector ForwardDirection = FMath::TransformDirection(FVector::ForwardVector, FMath::CreateRotationMatrix(CameraRotation));
+	FVector RightDirection = FMath::TransformDirection(FVector::RightVector, FMath::CreateRotationMatrix(CameraRotation));
+	
+	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
+	
+	if (InputManager->GetKey('W'))
 	{
-		CameraLocation += FVector(0, 0, 10) * TickTime;
+		CameraLocation += ForwardDirection * 10 * TickTime;
 	}
-	if (UEngine::GetEngine().GetInputManager()->GetKey('S'))
+	if (InputManager->GetKey('S'))
 	{
-		CameraLocation += FVector(0, 0, -10) * TickTime;
+		CameraLocation -= ForwardDirection * 10 * TickTime;
 	}
-	if (UEngine::GetEngine().GetInputManager()->GetKey('A'))
+	if (InputManager->GetKey('A'))
 	{
-		CameraLocation += FVector(-10, 0, 0) * TickTime;
+		CameraLocation -= RightDirection * 10 * TickTime;
 	}
-	if (UEngine::GetEngine().GetInputManager()->GetKey('D'))
+	if (InputManager->GetKey('D'))
 	{
-		CameraLocation += FVector(10, 0, 0) * TickTime;
+		CameraLocation += RightDirection * 10 * TickTime;
 	}
 
-	if (UEngine::GetEngine().GetInputManager()->GetMouseButton(UInputManager::EMouseButton::RIGHT))
+	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
-		CameraRotation += FVector(0, UEngine::GetEngine().GetInputManager()->GetMouseDeltaX(), UEngine::GetEngine().GetInputManager()->GetMouseDeltaY()) * TickTime;
+		float MouseDeltaX = InputManager->GetMouseDeltaX();
+		float MouseDeltaY = InputManager->GetMouseDeltaY();
+
+		CameraRotation += FVector(-MouseDeltaY, -MouseDeltaX, 0) * TickTime;
+		CameraRotation -= FVector(MouseDeltaY, MouseDeltaX, 0) * TickTime;
 	}
 
 	SetActorLocation(CameraLocation);

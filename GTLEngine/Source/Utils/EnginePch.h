@@ -2,6 +2,9 @@
 
 #define NOMINMAX
 
+#pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
+#include <iostream>
+
 // STL include
 #include <windows.h>
 #include <tchar.h>
@@ -15,7 +18,6 @@
 #include <queue>
 #include <set>
 #include <cmath>
-
 
 // D3D include
 #pragma comment(lib, "user32")
@@ -53,6 +55,8 @@ using TQueue = std::queue<T>;
 
 template <typename T>
 using TSet = std::set<T>;
+
+using FString = std::wstring;
 
 struct FWindowInfo
 {

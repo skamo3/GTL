@@ -10,6 +10,7 @@ class UInputManager;
 class UGizmo;
 class UObject;
 class UAssetManager;
+class UUIManager;
 
 class UEngineStatics
 {
@@ -45,7 +46,8 @@ public:
     UResourceManager* GetResourceManager() const { return ResourceManager; }
     UWorld* GetWorld() const { return World; }
     UInputManager* GetInputManager() const { return InputManager; }
-	UAssetManager* GetAssetManager() const { return AssetManager; }
+    UAssetManager* GetAssetManager() const { return AssetManager; }
+    UUIManager* GetUIManager() const { return UIManager; }
 
 private:
     UEngine() = default;
@@ -61,6 +63,7 @@ private:
     UWorld* World;
     UTimeManager* TimeManager;
     UInputManager* InputManager;
+    UUIManager* UIManager;
     UGizmo* Gizmo;
 
     UObject* SelectedObject;
@@ -74,6 +77,13 @@ public:
 
 private:
     FWindowInfo WindowInfo;
+
+public:
+	float GetFPS() const { return FPS; }
+	void SetFPS(float InFPS) { FPS = InFPS; }
+
+private:
+    float FPS;
 
 public:
     uint32 GetTotalAllocationBytes() const { return TotalAllocationBytes; }

@@ -8,6 +8,10 @@
 #include <Components/SphereComponent.h>
 #include "Components/PlaneComponent.h"
 
+#include "Engine.h"
+#include "UI/UIManager.h"
+#include "UI/ControlPanel.h"
+
 UWorld* UWorld::CreateWorld()
 {
 	UWorld* NewWorld = new UWorld();
@@ -22,6 +26,8 @@ UWorld* UWorld::CreateWorld()
 	CubePrimitive->AddComponent<UPlaneComponent>(CubePrimitive);
 	CubePrimitive->GetComponentByClass<UPlaneComponent>()->SetName(TEXT("UCubeComponent"));
 
+	// TODO: 나중에 따로 추가.
+	NewWorld->CreateDefaultUI();
 
 	NewWorld->MainCamera->SetActorLocation(FVector(0.f, 0.f, -10.f));
 
@@ -52,4 +58,14 @@ void UWorld::Destroy()
 			Actor->Destroy();
 	}
 	ActiveActors.clear();
+}
+
+void UWorld::CreateDefaultUI()
+{
+	UUIManager* UIManager = UEngine::GetEngine().GetUIManager();
+	if (UIManager)
+	{
+		UIManager->RegistUI(new UControlPanel());
+
+	}
 }

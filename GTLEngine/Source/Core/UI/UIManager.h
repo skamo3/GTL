@@ -1,17 +1,25 @@
 #pragma once
 
+#include "Object.h"
 #include "Math/Vector.h"
-class UJungleConsole;
 
-class UUIManager {
+class UUIBase;
+
+class UUIManager : public UObject
+{
 
 public:
-	void RegisterJungleConsole(UJungleConsole& inJungleConsole);
+	void InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext);
+
+	virtual void Tick(float DeltaTime) override;
+	void RenderUI();
+	virtual void Destroy() override;
+
+	void RegistUI(UUIBase* NewUI);
 
 private:
-	UJungleConsole* JungleConsole;
+	TArray<UUIBase*> UIList;
 
-	
 public:
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
@@ -22,11 +30,6 @@ public:
 
 	bool GetObjectScale(FVector& outScale);
 	void OnObjectScaleChanged(FVector& inScale);
-
-public:
-	// Control Panel Function
-	bool GetFPS(int& outFPS);
-	bool GetDeltaTime(int& outDeltaTime);
 
 	void SpawnPrimitive();
 

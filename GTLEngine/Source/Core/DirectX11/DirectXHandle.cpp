@@ -19,6 +19,7 @@
 #include "DirectXMath.h"
 #include "World.h"
 
+
 using namespace DirectX;
 
 UDirectXHandle::~UDirectXHandle()
@@ -361,9 +362,7 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
     // 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
     // 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.
     // 액터에 해당하는 오브젝트 렌더링.
-
-
-    DXDSwapChain->Present(1, 0);
+    
 }
 
 void UDirectXHandle::DrawLine(const TArray<TPair<FVector, FVector>>& Lines)

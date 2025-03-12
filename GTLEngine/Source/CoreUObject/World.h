@@ -44,8 +44,6 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
-
-
 public:
 	TArray<AActor*> GetActors() const { return ActiveActors; }
 	ACamera* GetCamera() const { return MainCamera; }
@@ -53,6 +51,9 @@ public:
 private:
 	TArray<AActor*> ActiveActors;
 	ACamera* MainCamera;
+
+private:
+	void CreateDefaultUI();
 
 
 };

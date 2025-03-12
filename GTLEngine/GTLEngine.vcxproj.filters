@@ -74,6 +74,9 @@
     <Filter Include="Source\Core\Asset">
       <UniqueIdentifier>{1cd82e48-94a8-45e6-b5c2-a221359f1fcf}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\CoreUObject\GameFrameWork\Shapes">
+      <UniqueIdentifier>{faa802ce-4518-4db8-b875-28c6db235a1b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -163,13 +166,10 @@
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp">
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\JungleConsole.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\JungleControlPanel.cpp">
-      <Filter>Source\CoreUObject\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\JunglePropertyWindow.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Utils\Math\Quaternion.cpp">
@@ -214,12 +214,6 @@
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\ImGuiStringLibrary.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\JungleLog.cpp">
-      <Filter>Utils</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Asset\Asset.cpp">
       <Filter>Source\Core\Asset</Filter>
     </ClCompile>
@@ -231,6 +225,9 @@
     </ClCompile>
     <ClCompile Include="Source\Core\Asset\SceneAsset.cpp">
       <Filter>Source\Core\Asset</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,13 +321,10 @@
     <ClInclude Include="Source\Core\Resource\Types.h">
       <Filter>Source\Core\Resource</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\JungleConsole.h">
+    <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\JungleControlPanel.h">
-      <Filter>Source\CoreUObject\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\JunglePropertyWindow.h">
+    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\MathFwd.h">
@@ -384,12 +378,6 @@
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\ImGuiStringLibrary.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\JungleLog.h">
-      <Filter>Utils</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Core\Asset\AssetManager.h">
       <Filter>Source\Core\Asset</Filter>
     </ClInclude>
@@ -398,6 +386,9 @@
     </ClInclude>
     <ClInclude Include="Source\Core\Asset\SceneAsset.h">
       <Filter>Source\Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

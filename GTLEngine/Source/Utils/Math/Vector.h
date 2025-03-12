@@ -14,17 +14,17 @@ struct FVector
 	static const FVector ZeroVector;
 	// Vector(1, 1, 1)
 	static const FVector OneVector;
-	// Vector(0, 1, 0)
-	static const FVector UpVector;
-	// Vector(0, -1, 0)
-	static const FVector DownVector;
 	// Vector(0, 0, 1)
-	static const FVector ForwardVector;
+	static const FVector UpVector;
 	// Vector(0, 0, -1)
-	static const FVector BackwardVector;
+	static const FVector DownVector;
 	// Vector(1, 0, 0)
+	static const FVector ForwardVector;
+	// Vector(1, 0, 0)
+	static const FVector BackwardVector;
+	// Vector(0, 1, 0)
 	static const FVector RightVector;
-	// Vector(-1, 0, 0)
+	// Vector(0, -1, 0)
 	static const FVector LeftVector;
 
 	// Unit X Axis Vector (1, 0, 0)
