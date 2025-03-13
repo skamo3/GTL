@@ -25,9 +25,9 @@ struct FMath
 	static FMatrix CreateScaleMatrix(const FVector& scale);
 
 	/// <summary>
-	/// pitch(X), yaw(Y), roll(Z) 각도를 사용하여 회전 행렬을 생성
+	/// roll(X), yaw(Y), pitch(Z) 각도를 사용하여 회전 행렬을 생성
 	/// </summary>
-	static FMatrix CreateRotationMatrix(float pitch, float yaw, float roll);
+	static FMatrix CreateRotationMatrix(float roll, float yaw, float pitch);
 
 	/// <summary>
 	/// rotation 벡터를 사용하여 회전 행렬을 생성

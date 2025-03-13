@@ -11,9 +11,9 @@ FMatrix FMath::CreateScaleMatrix(const FVector& scale)
 	return FMatrix::CreateScaleMatrix(scale);
 }
 
-FMatrix FMath::CreateRotationMatrix(float pitch, float yaw, float roll)
+FMatrix FMath::CreateRotationMatrix(float roll, float yaw, float pitch)
 {
-	return FMatrix::CreateRotationXYZ(FVector(pitch, yaw, roll));
+	return FMatrix::CreateRotationXYZ(FVector(roll, yaw, pitch));
 }
 
 FMatrix FMath::CreateRotationMatrix(const FVector& rotation)

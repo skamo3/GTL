@@ -246,7 +246,7 @@ FMatrix FMatrix::CreateRotationZ(float angle)
 
 FMatrix FMatrix::CreateRotationXYZ(const FVector& rotation)
 {
-	FMatrix rotationMatrix = CreateRotationX(rotation.X) * CreateRotationY(rotation.Y) * CreateRotationZ(rotation.Z);
+	FMatrix rotationMatrix = CreateRotationZ(rotation.Z) * CreateRotationY(rotation.Y) * CreateRotationX(rotation.X);
 	return rotationMatrix;
 }
 
