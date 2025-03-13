@@ -25,20 +25,9 @@ void ACamera::Tick(float TickTime)
 	FVector CameraLocation = GetActorLocation();
 	FVector CameraRotation = GetActorRotation();
 
-<<<<<<< Updated upstream
 	UEngine& engine = UEngine::GetEngine();
 
 	if (engine.GetInputManager()->GetKey('W'))
-=======
-	// 현재 카메라 회전을 기준으로 바꿔줘야 함.
-	FVector Forward = GetActorRotation();
-	FVector ForwardDirection = FMath::TransformDirection(FVector::ForwardVector, FMath::CreateRotationMatrix(CameraRotation.X, CameraRotation.Y, CameraRotation.Z));
-	FVector RightDirection = FMath::TransformDirection(FVector::RightVector, FMath::CreateRotationMatrix(CameraRotation.X, CameraRotation.Y, CameraRotation.Z));
-	
-	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
-	
-	if (InputManager->GetKey('W'))
->>>>>>> Stashed changes
 	{
 		CameraLocation += FVector::ForwardVector * 10 * TickTime;
 	}
@@ -68,17 +57,12 @@ void ACamera::Tick(float TickTime)
 		float MouseDeltaX = engine.GetInputManager()->GetMouseDeltaX();
 		float MouseDeltaY = engine.GetInputManager()->GetMouseDeltaY();
 
-<<<<<<< Updated upstream
 		CameraRotation -= FVector(MouseDeltaY, MouseDeltaX,  0) * 0.1f;
 	}
 
 	if (engine.GetInputManager()->GetMouseButton(UInputManager::EMouseButton::LEFT))
 	{
 		RayCasting();
-=======
-		CameraRotation += FVector(MouseDeltaX, 0, MouseDeltaY) * TickTime;
-		std::cout << CameraRotation.X << " " << CameraRotation.Y << " " << CameraRotation.Z << std::endl;
->>>>>>> Stashed changes
 	}
 
 	SetActorLocation(CameraLocation);
