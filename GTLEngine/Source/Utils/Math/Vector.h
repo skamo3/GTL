@@ -1,14 +1,13 @@
 ﻿
 #pragma once
 #include <cmath>
-
-#define SMALL_NUMBER 1.e-8f
-#define PI 3.1415926535897932384626433832795f
-#define PI2 6.283185307179586476925286766559f
+#include "MathUtils.h"
 
 struct FVector
 {
 	float X, Y, Z;
+	FVector() : X(0), Y(0), Z(0) {}
+	FVector(float InX, float InY, float InZ) : X(InX), Y(InY), Z(InZ) {}
 
 	// Vector(0, 0, 0)
 	static const FVector ZeroVector;
@@ -41,189 +40,200 @@ struct FVector
 	static inline FVector UnitY() { return YAxisVector; }
 	static inline FVector UnitZ() { return ZAxisVector; }
 
-	FVector(float _x = 0, float _y = 0, float _z = 0) : X(_x), Y(_y), Z(_z) {}
+	static float DotProduct(const FVector& A, const FVector& B);
+	static FVector CrossProduct(const FVector& A, const FVector& B);
 
-	inline FVector operator+(const FVector& v) const
-	{
-		return FVector(X + v.X, Y + v.Y, Z + v.Z);
-	}
+	static float Distance(const FVector& V1, const FVector& V2);
 
-	inline FVector operator+=(const FVector& v)
-	{
-		X += v.X; Y += v.Y; Z += v.Z;
-		return *this;
-	}
+	float Length() const;
+	float LengthSquared() const;
 
-	inline FVector operator-(const FVector& v) const
-	{
-		return FVector(X - v.X, Y - v.Y, Z - v.Z);
-	}
+	bool Normalize(float Tolerance = 1.e-8f);
 
-	inline FVector operator-=(const FVector& v)
-	{
-		X -= v.X; Y -= v.Y; Z -= v.Z;
-		return *this;
-	}
+	FVector GetUnsafeNormal() const;
+	FVector GetSafeNormal(float Tolerance = 1.e-8f) const;
 
-	inline FVector operator-() const
-	{
-		return FVector(-X, -Y, -Z);
-	}
+	float Dot(const FVector& Other) const;
+	FVector Cross(const FVector& Other) const;
 
-	inline FVector operator*(const float s) const
-	{
-		return FVector(X * s, Y * s, Z * s);
-	}
+	FVector operator+(const FVector& Other) const;
+	FVector& operator+=(const FVector& Other);
 
-	inline FVector operator*=(const float s)
-	{
-		X *= s; Y *= s; Z *= s;
-		return *this;
-	}
+	FVector operator-(const FVector& Other) const;
+	FVector& operator-=(const FVector& Other);
 
-	inline FVector operator/(const float s) const
-	{
-		return FVector(X / s, Y / s, Z / s);
-	}
+	FVector operator*(const FVector& Other) const;
+	FVector operator*(float Scalar) const;
+	FVector& operator*=(float Scalar);
 
-	inline FVector operator/=(const float s)
-	{
-		X /= s; Y /= s; Z /= s;
-		return *this;
-	}
+	FVector operator/(const FVector& Other) const;
+	FVector operator/(float Scalar) const;
+	FVector& operator/=(float Scalar);
 
-	inline FVector operator/(const FVector& v) const
-	{
-		return FVector(X / v.X, Y / v.Y, Z / v.Z);
-	}
-	inline FVector operator/=(const FVector& v)
-	{
-		X /= v.X; Y /= v.Y; Z /= v.Z;
-		return *this;
-	}
+	FVector operator-() const;
 
-	inline bool operator==(const FVector& v) const
-	{
-		return X == v.X && Y == v.Y && Z == v.Z;
-	}
+	bool operator==(const FVector& Other) const;
+	bool operator!=(const FVector& Other) const;
 
-	inline bool operator!=(const FVector& v) const
-	{
-		return X != v.X || Y != v.Y || Z != v.Z;
-	}
-
-	inline float operator[](int index) const
-	{
-		if (index == 0) return X;
-		if (index == 1) return Y;
-		if (index == 2) return Z;
-	}
-	inline float& operator[](int index)
-	{
-		if (index == 0) return X;
-		if (index == 1) return Y;
-		if (index == 2) return Z;
-	}
-
-	inline float Length() const
-	{
-		return sqrtf(X * X + Y * Y + Z * Z);
-	}
-
-	inline float SquaredLength() const
-	{
-		return X * X + Y * Y + Z * Z;
-	}
-
-	inline float Dot(const FVector& v) const
-	{
-		return X * v.X + Y * v.Y + Z * v.Z;
-	}
-
-	inline static float Dot(const FVector& v1, const FVector& v2)
-	{
-		return v1.X * v2.X + v1.Y * v2.Y + v1.Z * v2.Z;
-	}
-
-	inline FVector Cross(const FVector& v) const
-	{
-		return FVector(
-			Y * v.Z - Z * v.Y,
-			Z * v.X - X * v.Z,
-			X * v.Y - Y * v.X
-		);
-	}
-
-	inline static FVector Cross(const FVector& v1, const FVector& v2)
-	{
-		return FVector(
-			v1.Y * v2.Z - v1.Z * v2.Y,
-			v1.Z * v2.X - v1.X * v2.Z,
-			v1.X * v2.Y - v1.Y * v2.X
-		);
-	}
-
-	inline void Set(float _x, float _y, float _z)
-	{
-		X = _x; Y = _y; Z = _z;
-	}
-
-	inline FVector GetAbs() const
-	{
-		return FVector(std::abs(X), std::abs(Y), std::abs(Z));
-	}
-
-	inline float Length2D() const
-	{
-		return sqrtf(X * X + Y * Y);
-	}
-
-	inline float SquaredLength2D() const
-	{
-		return X * X + Y * Y;
-	}
-
-	inline bool IsZero() const
-	{
-		return X == 0.f && Y == 0.f && Z == 0.f;
-	}
-
-	inline FVector GetNormalizedVector() const
-	{
-		float len = Length();
-		if (len < SMALL_NUMBER)
-		{
-			return FVector(0.f, 0.f, 0.f);
-		}
-		return FVector(X / len, Y / len, Z / len);
-	}
-
-	void ToDirectionAndLength(FVector& outDir, float& outLength)
-	{
-		outLength = Length();
-		if (outLength < SMALL_NUMBER)
-		{
-			outDir = FVector::ZeroVector;
-		}
-		else
-		{
-			float invLength = 1.f / outLength;
-			outDir = FVector(X * invLength, Y * invLength, Z * invLength);
-		}
-	}
-
-	inline FVector Projection() const
-	{
-		const float RZ = 1.f / Z;
-		return FVector(X * RZ, Y * RZ, 1.f);
-	}
-
-	static bool Reciprocal(const FVector& src, FVector& dst);
 };
 
 
-// 비멤버 오퍼레이터: float * FVector
-inline FVector operator*(float s, const FVector& v)
+inline float FVector::DotProduct(const FVector& A, const FVector& B)
 {
-	return FVector(v.X * s, v.Y * s, v.Z * s);
+	return A.X * B.X + A.Y * B.Y + A.Z * B.Z;
 }
+
+inline FVector FVector::CrossProduct(const FVector& A, const FVector& B)
+{
+	return {
+		A.Y * B.Z - A.Z * B.Y,
+		A.Z * B.X - A.X * B.Z,
+		A.X * B.Y - A.Y * B.X
+	};
+}
+
+inline float FVector::Distance(const FVector& V1, const FVector& V2)
+{
+	return FMath::Sqrt(FMath::Square(V2.X - V1.X) + FMath::Square(V2.Y - V1.Y) + FMath::Square(V2.Z - V1.Z));
+}
+
+inline float FVector::Length() const
+{
+	return FMath::Sqrt(X * X + Y * Y + Z * Z);
+}
+
+inline float FVector::LengthSquared() const
+{
+	return X * X + Y * Y + Z * Z;
+}
+
+inline FVector FVector::GetUnsafeNormal() const
+{
+	const float Scale = FMath::InvSqrt(X * X + Y * Y + Z * Z);
+	return { X * Scale, Y * Scale, Z * Scale };
+}
+
+inline FVector FVector::GetSafeNormal(float Tolerance) const
+{
+	const float SquareSum = X * X + Y * Y + Z * Z;
+
+	// Not sure if it's safe to add tolerance in there. Might introduce too many errors
+	if (SquareSum == 1.f)
+	{
+		return *this;
+	}
+	else if (SquareSum < Tolerance)
+	{
+		return ZeroVector;
+	}
+	const float Scale = FMath::InvSqrt(SquareSum);
+	return { X * Scale, Y * Scale, Z * Scale };
+}
+
+inline bool FVector::Normalize(float Tolerance)
+{
+	const float SquareSum = X * X + Y * Y + Z * Z;
+	if (SquareSum > Tolerance)
+	{
+		const float Scale = FMath::InvSqrt(SquareSum);
+		X *= Scale; Y *= Scale; Z *= Scale;
+		return true;
+	}
+	return false;
+}
+
+inline float FVector::Dot(const FVector& Other) const
+{
+	return DotProduct(*this, Other);
+}
+
+inline FVector FVector::Cross(const FVector& Other) const
+{
+	return CrossProduct(*this, Other);
+}
+
+inline FVector FVector::operator+(const FVector& Other) const
+{
+	return { X + Other.X, Y + Other.Y, Z + Other.Z };
+}
+
+inline FVector& FVector::operator+=(const FVector& Other)
+{
+	X += Other.X; Y += Other.Y; Z += Other.Z;
+	return *this;
+}
+
+inline FVector FVector::operator-(const FVector& Other) const
+{
+	return { X - Other.X, Y - Other.Y, Z - Other.Z };
+}
+
+inline FVector& FVector::operator-=(const FVector& Other)
+{
+	X -= Other.X; Y -= Other.Y; Z -= Other.Z;
+	return *this;
+}
+
+inline FVector FVector::operator*(const FVector& Other) const
+{
+	return { X * Other.X, Y * Other.Y, Z * Other.Z };
+}
+
+inline FVector FVector::operator*(float Scalar) const
+{
+	return { X * Scalar, Y * Scalar, Z * Scalar };
+}
+
+inline FVector& FVector::operator*=(float Scalar)
+{
+	X *= Scalar; Y *= Scalar; Z *= Scalar;
+	return *this;
+}
+
+inline FVector FVector::operator/(const FVector& Other) const
+{
+	return { X / Other.X, Y / Other.Y, Z / Other.Z };
+}
+
+inline FVector FVector::operator/(float Scalar) const
+{
+	return { X / Scalar, Y / Scalar, Z / Scalar };
+}
+
+inline FVector& FVector::operator/=(float Scalar)
+{
+	X /= Scalar; Y /= Scalar; Z /= Scalar;
+	return *this;
+}
+
+inline FVector FVector::operator-() const
+{
+	return { -X, -Y, -Z };
+}
+
+inline bool FVector::operator==(const FVector& Other) const
+{
+	return X == Other.X && Y == Other.Y && Z == Other.Z;
+}
+
+inline bool FVector::operator!=(const FVector& Other) const
+{
+	return X != Other.X || Y != Other.Y || Z != Other.Z;
+}
+
+struct alignas(16) FVector4 : public FVector
+{
+	using FVector::X;
+	using FVector::Y;
+	using FVector::Z;
+
+	float W;
+	FVector4()
+		: FVector(0, 0, 0), W(0)
+	{
+	}
+	FVector4(float InX, float InY, float InZ, float InW)
+		: FVector(InX, InY, InZ), W(InW)
+	{
+	}
+};

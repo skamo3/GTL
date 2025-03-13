@@ -1,7 +1,6 @@
 #pragma once
 
 #include "CoreUObject/Object.h"
-#include "Math/Math.h"
 #include "CoreUObject/Components/SceneComponent.h"
 
 class UActorComponent;
@@ -46,12 +45,12 @@ public:
 	void SetOwner(AActor* InOwner);
 
 	FVector GetActorLocation() const;
-	FVector GetActorRotation() const;
+	FRotator GetActorRotation() const;
 	FVector GetActorScale() const;
 
-	void SetActorLocation(FVector InLocation);
-	void SetActorRotation(FVector InRotation);
-	void SetActorScale(FVector InScale);
+	void SetActorLocation(const FVector& InLocation);
+	void SetActorRotation(const FRotator& InRotation);
+	void SetActorScale(const FVector& InScale);
 
 protected:
 	USceneComponent* RootComponent;
@@ -60,7 +59,7 @@ private:
 	AActor* Owner;
 	TArray<UActorComponent*> OwnedComponent;
 
-};
+}; 
 
 template<typename T>
 inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FVector& InRelativeRotation, const FVector& InRelativeScale)

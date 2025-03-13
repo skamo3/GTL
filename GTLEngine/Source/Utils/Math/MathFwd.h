@@ -1,7 +1,9 @@
 #pragma once
 #include <cmath>
-#include <Math/Vector.h>
-#include <Math/Matrix.h>
-#include <Math/Quaternion.h>
-#include <Math/Ray.h>
-#include <Math/Math.h>
+
+#define SMALL_NUMBER         (1.e-8f)
+#define KINDA_SMALL_NUMBER   (1.e-4f)
+#define PI (3.1415926535897932f)
+#define PI2 (6.283185307179586476925286766559f)
+
+#define PI_DOUBLE            (3.141592653589793238462643383279502884197169399)

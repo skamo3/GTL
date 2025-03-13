@@ -12,6 +12,9 @@ ACube::ACube()
 void ACube::Tick(float TickTime)
 {
 	AActor::Tick(TickTime);
+
+	FRotator Rotation = GetActorRotation();
+	SetActorRotation(Rotation + FVector(0.0, 0.0, 1.0f));
 }
 
 void ACube::Destroy()

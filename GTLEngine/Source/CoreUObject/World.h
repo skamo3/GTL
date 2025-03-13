@@ -2,8 +2,6 @@
 
 #include "Object.h"
 
-#include "Math/Math.h"
-
 #include "Components/SceneComponent.h"
 
 class AActor;

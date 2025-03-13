@@ -30,7 +30,8 @@
 
 using namespace Microsoft::WRL;
 
-// typedef default int type.
+// typedef default int type. 
+// TODO: std로 바꿔주기.
 typedef UINT		uint;
 typedef	UINT8		uint8;
 typedef	UINT16		uint16;
@@ -58,6 +59,13 @@ using TSet = std::set<T>;
 
 using FString = std::wstring;
 
+// inline을 강제하는 매크로
+#define FORCEINLINE __forceinline
+
+// inline을 하지않는 매크로
+#define FORCENOINLINE __declspec(noinline)
+
+
 struct FWindowInfo
 {
 	uint Id;
@@ -65,3 +73,4 @@ struct FWindowInfo
 	uint Width;
 	uint Height;
 };
+

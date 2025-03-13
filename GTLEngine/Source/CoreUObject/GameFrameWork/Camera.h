@@ -17,8 +17,6 @@ public:
 public:
 	UCameraComponent* GetCameraComponent() const { return CameraComponent; }
 
-	FMatrix GetViewMatrix() const;
-	FMatrix GetProjectionMatrix(float width, float height) const;
 
 private:
 	UCameraComponent* CameraComponent;

@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Utils/Math/MathFwd.h"
-#include "DirectXMath.h"
+#include "Math/Vector.h"
+#include "Math/Matrix.h"
 
 enum class EPrimitiveType
 {
@@ -15,7 +15,6 @@ enum class EPrimitiveType
 
     Max,
 };
-
 
 struct FVertexSimple
 {
@@ -47,20 +46,17 @@ enum class EConstantBufferType
  struct alignas(16) FCbChangesOnResize
 {
     FMatrix ProjectionMatrix;
-	//DirectX::XMMATRIX ProjectionMatrix;
 };
 
 
 struct alignas(16) FCbChangesEveryFrame
 {
     FMatrix ViewMatrix;
-    //DirectX::XMMATRIX ViewMatrix;
 };
 
 struct alignas(16)  FCbChangesEveryObject
 {
     FMatrix WorldMatrix;
-    //DirectX::XMMATRIX WorldMatrix;
 };
 
 struct alignas(16) FMVP

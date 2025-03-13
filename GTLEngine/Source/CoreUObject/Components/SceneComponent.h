@@ -1,7 +1,8 @@
 #pragma once
 
 #include "ActorComponent.h"
-#include "Math/Math.h"
+#include "Math/Vector.h"
+#include "Math/Rotator.h"
 
 class USceneComponent : public UActorComponent
 {
@@ -12,16 +13,16 @@ public:
 
 public:
 	void SetRelativeLocation(const FVector& Loc);
-	void SetRelativeRotation(const FVector& Rot);
+	void SetRelativeRotation(const FRotator& Rot);
 	void SetRelativeScale(const FVector& Scale);
 
 	FVector GetComponentLocation() const { return RelativeLocation; }
-	FVector GetComponentRotation() const { return RelativeRotation; }
+	FRotator GetComponentRotation() const { return RelativeRotation; }
 	FVector GetComponentScale() const { return RelativeScale3D; }
 
 private:
 	FVector RelativeLocation;
-	FVector RelativeRotation;
+	FRotator RelativeRotation;
 	FVector RelativeScale3D;
 
 public:

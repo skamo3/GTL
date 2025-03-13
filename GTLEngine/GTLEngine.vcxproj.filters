@@ -142,16 +142,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Math.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Matrix.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Utils\Math\Vector.cpp">
-      <Filter>Utils\Math</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Ray.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp">
@@ -171,9 +162,6 @@
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Quaternion.cpp">
-      <Filter>Utils\Math</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp">
       <Filter>Source\Core\Gizmo</Filter>
@@ -234,6 +222,15 @@
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Matrix.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Quat.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Rotator.cpp">
+      <Filter>Utils\Math</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -297,16 +294,7 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h">
       <Filter>Source\CoreUObject\GameFrameWork</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Utils\Math\Matrix.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
     <ClInclude Include="Source\Utils\Math\Vector.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Math\Math.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Math\Ray.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h">
@@ -334,9 +322,6 @@
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\MathFwd.h">
-      <Filter>Utils\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Utils\Math\Quaternion.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Gizmo\Gizmo.h">
@@ -401,6 +386,21 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\MathUtils.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Matrix.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Quat.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Transform.h">
+      <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Rotator.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
