@@ -7,7 +7,7 @@ class UResourceManager;
 class UWorld;
 class UTimeManager;
 class UInputManager;
-class UGizmo;
+class UGizmoManager;
 class UObject;
 class UAssetManager;
 class UUIManager;
@@ -41,14 +41,6 @@ public:
 
     HRESULT AddAllPrimitiveVertexBuffers();
 
-    // Getter
-    UDirectXHandle* GetDirectX11Handle() const { return DirectX11Handle; }
-    UResourceManager* GetResourceManager() const { return ResourceManager; }
-    UWorld* GetWorld() const { return World; }
-    UInputManager* GetInputManager() const { return InputManager; }
-    UAssetManager* GetAssetManager() const { return AssetManager; }
-    UUIManager* GetUIManager() const { return UIManager; }
-
 private:
     UEngine() = default;
     ~UEngine() = default;
@@ -57,6 +49,19 @@ private:
     UEngine(UEngine&&) = delete;
     UEngine& operator=(UEngine&&) = delete;
 
+public:
+    // Getter
+    UDirectXHandle* GetDirectX11Handle() const { return DirectX11Handle; }
+    UResourceManager* GetResourceManager() const { return ResourceManager; }
+    UWorld* GetWorld() const { return World; }
+	UTimeManager* GetTimeManager() const { return TimeManager; }
+    UInputManager* GetInputManager() const { return InputManager; }
+    UUIManager* GetUIManager() const { return UIManager; }
+    UAssetManager* GetAssetManager() const { return AssetManager; }
+	UGizmoManager* GetGizmo() const { return GizmoManager; }
+    
+
+
 private:
 	UDirectXHandle* DirectX11Handle;
 	UResourceManager* ResourceManager;
@@ -64,11 +69,7 @@ private:
     UTimeManager* TimeManager;
     UInputManager* InputManager;
     UUIManager* UIManager;
-    UGizmo* Gizmo;
-
-    UObject* SelectedObject;
-
-    TArray<TPair<FVector, FVector>> Lines;
+    UGizmoManager* GizmoManager;
 
 	UAssetManager* AssetManager;
 

@@ -77,6 +77,9 @@
     <Filter Include="Source\CoreUObject\GameFrameWork\Shapes">
       <UniqueIdentifier>{faa802ce-4518-4db8-b875-28c6db235a1b}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source\CoreUObject\Gizmo">
+      <UniqueIdentifier>{a49f61d3-b10e-4d36-8c89-971ec9baa71a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -163,7 +166,7 @@
     <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp">
+    <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp">
       <Filter>Source\Core\Gizmo</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Time\TimeManager.cpp">
@@ -231,6 +234,15 @@
     </ClCompile>
     <ClCompile Include="Source\Utils\Math\Rotator.cpp">
       <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -324,7 +336,7 @@
     <ClInclude Include="Source\Utils\Math\MathFwd.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Gizmo\Gizmo.h">
+    <ClInclude Include="Source\Core\Gizmo\GizmoManager.h">
       <Filter>Source\Core\Gizmo</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\Time\TimeManager.h">
@@ -401,6 +413,15 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\Rotator.h">
       <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -20,6 +20,7 @@ UWorld* UWorld::CreateWorld()
 	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 	NewWorld->SpawnActor<APlane>(TEXT("DefaultPlane"), FVector(0.f, 0.f, 2.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 
+
 	// TODO: 나중에 분리.
 	NewWorld->CreateDefaultUI();
 
@@ -52,6 +53,13 @@ void UWorld::Destroy()
 			Actor->Destroy();
 	}
 	ActiveActors.clear();
+}
+
+void UWorld::InitViewInfo()
+{
+	CachedViewInfo.ViewMatrix = FMatrix();
+	CachedViewInfo.ProjectionMatrix = FMatrix();
+	CachedViewInfo.ViewProjectionMatrix = FMatrix();
 }
 
 void UWorld::CreateDefaultUI()

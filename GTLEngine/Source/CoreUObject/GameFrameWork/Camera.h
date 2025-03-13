@@ -17,6 +17,9 @@ public:
 public:
 	UCameraComponent* GetCameraComponent() const { return CameraComponent; }
 
+	float GetFieldOfView() const;
+	float GetNearClip() const;
+	float GetFarClip() const;
 
 private:
 	UCameraComponent* CameraComponent;

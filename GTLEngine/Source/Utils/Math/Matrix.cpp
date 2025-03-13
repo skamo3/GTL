@@ -254,6 +254,11 @@ FMatrix FMatrix::GetScaleMatrix(const FVector& InScale)
 	return GetScaleMatrix(InScale.X, InScale.Y, InScale.Z);
 }
 
+FMatrix FMatrix::GetRotateMatrix(const FRotator& Rot)
+{
+	return FMatrix(Rot);
+}
+
 FMatrix FMatrix::GetRotateMatrix(const FQuat& Q)
 {
 	// 쿼터니언 요소 추출
@@ -357,14 +362,6 @@ FVector FMatrix::TransformVector(const FVector& Vector) const
 			Vector.X * M[0][1] + Vector.Y * M[1][1] + Vector.Z * M[2][1],
 			Vector.X * M[0][2] + Vector.Y * M[1][2] + Vector.Z * M[2][2]
 	};
-
-	// 행 우선 계산.
-	return {
-			Vector.X * M[0][0] + Vector.Y * M[0][1] + Vector.Z * M[0][2],
-			Vector.X * M[1][0] + Vector.Y * M[1][1] + Vector.Z * M[1][2],
-			Vector.X * M[2][0] + Vector.Y * M[2][1] + Vector.Z * M[2][2]
-	};
-
 }
 
 FVector4 FMatrix::TransformVector4(const FVector4& Vector) const

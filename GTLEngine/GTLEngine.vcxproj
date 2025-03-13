@@ -73,6 +73,9 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Object.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -97,7 +100,7 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
-    <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp" />
+    <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
@@ -135,6 +138,9 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h" />
     <ClInclude Include="Source\CoreUObject\Object.h" />
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -159,7 +165,7 @@
     <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />
-    <ClInclude Include="Source\Core\Gizmo\Gizmo.h" />
+    <ClInclude Include="Source\Core\Gizmo\GizmoManager.h" />
     <ClInclude Include="Source\Core\Input\InputManager.h" />
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />

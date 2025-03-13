@@ -160,8 +160,8 @@ inline FRotator FRotator::GetInverse() const
 
 inline FQuat FRotator::Quaternion() const
 {
-	float DegToRad = PI / 180.0;
-	float Div = DegToRad / 2.0;
+	float DegToRad = PI / 180.0f;
+	float Div =  DegToRad / 2.0f;
 	float SP, SY, SR;
 	float CP, CY, CR;
 
@@ -183,9 +183,9 @@ inline FVector FRotator::Euler() const
 	return FVector(Roll, Pitch, Yaw);
 }
 
+// Rotate a vector rotated by this rotator
 inline FVector FRotator::RotateVector(const FVector& V) const
 {
-	// .Inverse()
 	return (FMatrix(*this).TransformVector(V));
 }
 

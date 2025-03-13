@@ -19,6 +19,7 @@ struct alignas(16) FMatrix
 	static FMatrix GetTranslateMatrix(FVector Translation); // 이동행렬.
 	static FMatrix GetScaleMatrix(float X, float Y, float Z); // 스케일링 행렬.
 	static FMatrix GetScaleMatrix(const FVector& InScale); // 스케일링 행렬.
+	static FMatrix GetRotateMatrix(const FRotator& Q); // 회전행렬.
 	static FMatrix GetRotateMatrix(const FQuat& Q); // 회전행렬.
 	static FMatrix LookAtLH(const FVector& EyePosition, const FVector& FocusPoint, const FVector& WorldUp); // 뷰 변환 행렬.
 	static FMatrix PerspectiveFovLH(float FieldOfView, float AspectRatio, float NearPlane, float FarPlane); // 투영 행렬.
@@ -45,5 +46,5 @@ struct alignas(16) FMatrix
 
 	FVector4 TransformVector4(const FVector4& Vector) const; // 4차원 벡터 변환.
 
-	class FTransform GetTransform() const; // 변환 행렬을 FTransform으로 변환.
+	struct FTransform GetTransform() const; // 변환 행렬을 FTransform으로 변환.
 };

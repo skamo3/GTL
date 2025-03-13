@@ -10,7 +10,7 @@
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
-#include "Gizmo/Gizmo.h"
+#include "Gizmo/GizmoManager.h"
 
 
 uint32 UEngineStatics::NextUUID = 0;
@@ -30,10 +30,10 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
         return false;
     }
 
+	// Render Target 추가.
     D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
     framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // 색상 포맷
     framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
-
     hr = DirectX11Handle->AddRenderTarget(TEXT("MainRenderTarget"), framebufferRTVdesc);
     if (FAILED(hr))
     {
@@ -64,10 +64,12 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 
     // UI 매니저 추가.
 	UIManager = new UUIManager();
-	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice().Get(), DirectX11Handle->GetD3DDeviceContext().Get());
+	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice(), DirectX11Handle->GetD3DDeviceContext());
 
     // 월드 추가.
     World = UWorld::CreateWorld();
+
+	GizmoManager = new UGizmoManager();
 
     return true;
 }
@@ -86,6 +88,8 @@ void UEngine::Tick()
     // World 오브젝트 값들 없데이트.
     World->CameraTick(TimeManager->DeltaTime());
     World->Tick(TimeManager->DeltaTime());
+
+	GizmoManager->Tick(TimeManager->DeltaTime());
 }
 
 void UEngine::Render()
@@ -95,11 +99,7 @@ void UEngine::Render()
     DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
     DirectX11Handle->RenderObejct(World->GetActors());
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
-    DirectX11Handle->RenderGizmo(SelectedObject, Gizmo);
-
-    // TODO: Draw Line
-    DirectX11Handle->DrawLine(Lines);
-
+    //DirectX11Handle->RenderGizmo(Gizmo);
     
     // UI 그리기.
     UIManager->RenderUI();

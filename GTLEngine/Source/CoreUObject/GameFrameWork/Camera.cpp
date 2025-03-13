@@ -49,8 +49,8 @@ void ACamera::Tick(float TickTime)
 
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
-		float MouseDeltaX = InputManager->GetMouseDeltaX();
-		float MouseDeltaY = InputManager->GetMouseDeltaY();
+		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
+		float MouseDeltaY = static_cast<float>(InputManager->GetMouseDeltaY());
 
 		// Pitch, Yaw, Roll == Y, Z, X
 		// TODO: 회전 시 Roll 회전이 적용되는 문제가 생김. Rotator 문제일 수도 있음.
@@ -66,4 +66,25 @@ void ACamera::Tick(float TickTime)
 
 void ACamera::Destroy()
 {
+}
+
+float ACamera::GetFieldOfView() const
+{
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetFieldOfView();
+}
+
+float ACamera::GetNearClip() const
+{
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetNearClip();
+}
+
+float ACamera::GetFarClip() const
+{
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetFarClip();
 }

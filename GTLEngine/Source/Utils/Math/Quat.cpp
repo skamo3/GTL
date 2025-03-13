@@ -14,26 +14,26 @@ FQuat FQuat::AxisAngleToQuaternion(const FVector& Axis, float AngleInDegrees) {
     );
 }
 
-FQuat FQuat::EulerToQuaternion(FVector Euler)
-{
-    float roll = FMath::DegreesToRadians(Euler.X);
-    float pitch = FMath::DegreesToRadians(Euler.Y);
-    float yaw = FMath::DegreesToRadians(Euler.Z);
+FQuat FQuat::EulerToQuaternion(FVector Euler)  
+{  
+   float roll = FMath::DegreesToRadians(Euler.X);  
+   float pitch = FMath::DegreesToRadians(Euler.Y);  
+   float yaw = FMath::DegreesToRadians(Euler.Z);  
 
-    double cr = cos(roll * 0.5);
-    double sr = sin(roll * 0.5);
-    double cp = cos(pitch * 0.5);
-    double sp = sin(pitch * 0.5);
-    double cy = cos(yaw * 0.5);
-    double sy = sin(yaw * 0.5);
+   float cr = cosf(roll * 0.5f);  
+   float sr = sinf(roll * 0.5f);  
+   float cp = cosf(pitch * 0.5f);  
+   float sp = sinf(pitch * 0.5f);  
+   float cy = cosf(yaw * 0.5f);  
+   float sy = sinf(yaw * 0.5f);  
 
-    FQuat q;
-    q.W = cr * cp * cy + sr * sp * sy;
-    q.X = sr * cp * cy - cr * sp * sy;
-    q.Y = cr * sp * cy + sr * cp * sy;
-    q.Z = cr * cp * sy - sr * sp * cy;
+   FQuat q;  
+   q.W = cr * cp * cy + sr * sp * sy;  
+   q.X = sr * cp * cy - cr * sp * sy;  
+   q.Y = cr * sp * cy + sr * cp * sy;  
+   q.Z = cr * cp * sy - sr * sp * cy;  
 
-    return q;
+   return q;  
 }
 
 FVector FQuat::QuaternionToEuler(const FQuat& Quat) {
@@ -42,17 +42,17 @@ FVector FQuat::QuaternionToEuler(const FQuat& Quat) {
     // roll (x-axis rotation)
     double sinr_cosp = 2 * (Quat.W * Quat.X + Quat.Y * Quat.Z);
     double cosr_cosp = 1 - 2 * (Quat.X * Quat.X + Quat.Y * Quat.Y);
-    angles.X = std::atan2(sinr_cosp, cosr_cosp);
+    angles.X = static_cast<float>(std::atan2(sinr_cosp, cosr_cosp));
 
     // pitch (y-axis rotation)
     double sinp = std::sqrt(1 + 2 * (Quat.W * Quat.Y - Quat.X * Quat.Z));
     double cosp = std::sqrt(1 - 2 * (Quat.W * Quat.Y - Quat.X * Quat.Z));
-    angles.Y = 2 * std::atan2(sinp, cosp) - PI / 2;
+    angles.Y = 2 * static_cast<float>(std::atan2(sinp, cosp)) - PI / 2.0f;
 
     // yaw (z-axis rotation)
     double siny_cosp = 2 * (Quat.W * Quat.Z + Quat.X * Quat.Y);
     double cosy_cosp = 1 - 2 * (Quat.Y * Quat.Y + Quat.Z * Quat.Z);
-    angles.Z = std::atan2(siny_cosp, cosy_cosp);
+    angles.Z = static_cast<float>(std::atan2(siny_cosp, cosy_cosp));
 
     angles.X = FMath::RadiansToDegrees(angles.X);
     angles.Y = FMath::RadiansToDegrees(angles.Y);
