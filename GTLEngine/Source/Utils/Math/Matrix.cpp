@@ -412,5 +412,5 @@ FMatrix FMatrix::RotateToMatrix(float X, float Y, float Z)
 	{
 		return RotateRoll(X) * RotatePitch(Y) * RotateYaw(Z);
 	}
-	return  RotateRoll(X) * RotateYaw(Z) * RotatePitch(Y);
+	return  RotateRoll(X) *  RotatePitch(Y) * RotateYaw(Z)*;
 }
