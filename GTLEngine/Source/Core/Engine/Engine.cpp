@@ -98,6 +98,7 @@ void UEngine::Render()
     DirectX11Handle->InitView();
     DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
     DirectX11Handle->RenderObject(World->GetActors());
+    DirectX11Handle->RenderLine();
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
     //DirectX11Handle->RenderGizmo(Gizmo);
     

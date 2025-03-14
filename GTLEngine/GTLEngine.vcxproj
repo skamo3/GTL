@@ -68,11 +68,9 @@
     <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SceneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp" />
-    <ClCompile Include="Source\CoreUObject\Components\GridComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Camera.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Grid.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
@@ -135,11 +133,9 @@
     <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SceneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h" />
-    <ClInclude Include="Source\CoreUObject\Components\GridComponent.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Camera.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Grid.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />

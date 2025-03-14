@@ -244,12 +244,6 @@
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Components\GridComponent.cpp">
-      <Filter>Source\CoreUObject\Components</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Grid.cpp">
-      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -428,12 +422,6 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Components\GridComponent.h">
-      <Filter>Source\CoreUObject\Components</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Grid.h">
-      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

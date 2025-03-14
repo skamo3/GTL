@@ -35,6 +35,7 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
+	void RenderWorldPlane();
 	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObject(const TArray<AActor*> Actors);

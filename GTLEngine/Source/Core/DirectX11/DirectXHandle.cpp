@@ -243,7 +243,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     // 카메라 Projection 변환
     // TODO: Test. 프로젝션 matrix는 리사이즈 할 때, FOV 변환할 때.
     ID3D11Buffer* CbChangesOnResize = ConstantBuffers[EConstantBufferType::ChangesOnResize]->GetConstantBuffer();
-    if (!CbChangesEveryFrame)
+    if (!CbChangesOnResize )
     {
         return;
     }
@@ -256,6 +256,39 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     }
     DXDDeviceContext->Unmap(CbChangesOnResize, 0);
     //XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
+}
+
+// use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
+void UDirectXHandle::RenderWorldPlane() {
+
+    /** state check
+    D3D11_PRIMITIVE_TOPOLOGY topology;
+    DXDDeviceContext->IAGetPrimitiveTopology(&topology);
+    if ( topology != D3D11_PRIMITIVE_TOPOLOGY_LINELIST )
+        DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    */
+
+    // set matrix to origin
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if ( !CbChangesEveryObject ) {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
+        Buffer->WorldMatrix = FMatrix::Identity();
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    EPrimitiveType Type = EPrimitiveType::Grid;
+    uint Stride = sizeof(FVertexSimple);
+    uint offset = 0;
+    FVertexInfo Info = VertexBuffers[Type];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+    DXDDeviceContext->Draw(Num, 0);
+
 }
 
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
@@ -343,17 +376,14 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
-    if (Type == EPrimitiveType::Line || Type == EPrimitiveType::Grid) {
-        DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
-    } else {
-        DXDDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
-    }
     
     DXDDeviceContext->Draw(Num, 0);
 }
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
+    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
     for (AActor* Actor : Actors)
     {
         RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
@@ -373,6 +403,8 @@ void UDirectXHandle::RenderLine()
 
     UINT stride = sizeof(FCbLine);
     UINT offset = 0;
+
+    RenderWorldPlane();
 
     // TODO: 인풋 레이아웃을 line 전용으로 변경해야하는데 지금은 동일한 정보이므로 바꾸지 않아도 될듯함.
     //       for 루프로 순회하면서 버텍스 버퍼 업데이트 및 draw.
