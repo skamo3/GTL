@@ -7,6 +7,7 @@
 #include "GameFrameWork/Shapes/Plane.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
+#include "GameFrameWork/Shapes/Grid.h"
 
 #include "Engine.h"
 #include "UI/UIManager.h"
@@ -19,7 +20,7 @@ UWorld* UWorld::CreateWorld()
 
 	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
 	NewWorld->SpawnActor<APlane>(TEXT("DefaultPlane"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-
+	NewWorld->SpawnActor<AGrid>(TEXT("DefaultGrid"), FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 
 	// TODO: 나중에 분리.
 	NewWorld->CreateDefaultUI();

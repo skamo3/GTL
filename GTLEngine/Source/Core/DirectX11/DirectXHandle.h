@@ -37,7 +37,7 @@ public:
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
-	void RenderObejct(const TArray<AActor*> Actors);
+	void RenderObject(const TArray<AActor*> Actors);
 
 	void RenderLine();
 

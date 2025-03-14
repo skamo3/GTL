@@ -34,6 +34,18 @@ void UResourceManager::LoadPrimitives()
 
     uint64 ConeVertexNum = sizeof(ConeVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::Cone] = TArray<FVertexSimple>(ConeVertices, ConeVertices + ConeVertexNum);
+
+    uint64 GridVertexNum = 500;
+    float offset = static_cast<float>(GridVertexNum / 2) / 4;
+    TArray<FVertexSimple>& grid = VertexDataMap[EPrimitiveType::Grid] = TArray<FVertexSimple>();
+    grid.reserve(GridVertexNum);
+    for ( int i = 0; i < GridVertexNum / 4; ++i ) {
+        float f = static_cast<float>(i);
+        grid.push_back({ f - offset, offset,  0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ f - offset, -offset, 0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ offset, f - offset,  0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ -offset, f - offset, 0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+    }
 }
 
 void UResourceManager::Release()

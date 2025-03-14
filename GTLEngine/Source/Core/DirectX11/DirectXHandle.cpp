@@ -343,11 +343,16 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+    if (Type == EPrimitiveType::Line || Type == EPrimitiveType::Grid) {
+        DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    } else {
+        DXDDeviceContext->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    }
     
     DXDDeviceContext->Draw(Num, 0);
 }
 
-void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
+void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
     for (AActor* Actor : Actors)
     {

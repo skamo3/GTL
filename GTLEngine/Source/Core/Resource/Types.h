@@ -12,7 +12,7 @@ enum class EPrimitiveType
     Cube,
     Cylinder,
     Cone,
-
+    Grid,
     Max,
 };
 
