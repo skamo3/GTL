@@ -69,3 +69,15 @@ struct FCbLine
     FVector Position;
     float R, G, B, A;
 };
+
+struct FRay {
+    FVector Origin;
+    FVector Direction;
+    FRay(FVector origin, FVector direction) : Origin(origin), Direction(direction) {};
+};
+
+struct FAABB {
+    FVector min;
+    FVector max;
+    FAABB(FVector min, FVector max) : min(min), max(max) {};
+};

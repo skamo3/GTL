@@ -9,3 +9,7 @@ void UActorComponent::Tick(float TickTime)
 void UActorComponent::Destroy()
 {
 }
+
+FAABB UActorComponent::GetAABB() {
+	return FAABB(FVector::Zero(), FVector::Zero());
+}

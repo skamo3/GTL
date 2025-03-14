@@ -10,6 +10,12 @@
 #include "GameFrameWork/Actor.h"
 
 #include "DirectXMath.h"
+#include "Core/Resource/Types.h"
+
+#include <algorithm>
+
+using std::max;
+using std::min;
 
 UGizmoManager::UGizmoManager()
 	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr)
@@ -40,16 +46,18 @@ void UGizmoManager::Destroy()
 {
 }
 
-void UGizmoManager::RayCast2Dto3D(float MouseX, float MouseY)
+FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY)
 {
 	FWindowInfo WInfo = UEngine::GetEngine().GetWindowInfo();
 
-	float ViewX = (2.0f * MouseX) / WInfo.Width - 1.0f;
-	float ViewY = (-2.0f * MouseY) / WInfo.Height;
+	//float ViewX = (2.0f * MouseX) / WInfo.Width - 1.0f;
+	//float ViewY = (-2.0f * MouseY) / WInfo.Height + 1.0f;
+	float NDCX = MouseX;
+	float NDCY = MouseY;
 
 	// Projection 공간으로 변환
-	FVector4 RayOrigin = FVector4(ViewX, ViewY, 0.0f, 1.0f);
-	FVector4 RayEnd = FVector4(ViewX, ViewY, 1.0f, 1.0f);
+	FVector4 RayOrigin = FVector4(NDCX, NDCY, 0.0f, 1.0f);
+	FVector4 RayEnd = FVector4(NDCX, NDCY, 1.0f, 1.0f);
 
 	// View 공간으로 변환
 	FMatrix InvProjMat = UEngine::GetEngine().GetWorld()->GetProjectionMatrix().Inverse();
@@ -71,15 +79,57 @@ void UGizmoManager::RayCast2Dto3D(float MouseX, float MouseY)
 	// Ray 생성.
 	FVector RayDir = (RayEnd - RayOrigin).GetSafeNormal();
 
+	return FRay(RayOrigin, RayDir);
 	// Picking 로직 구현.
 
 
 	// or
 	
 	// 기즈모 이동.
-	float Distance = FVector::Distance(RayOrigin, SelectedActor->GetActorLocation());
+	// float Distance = FVector::Distance(RayOrigin, SelectedActor->GetActorLocation());
 	
 
 
 	// 현재 카메라의 MVP 정보.
+}
+
+void UGizmoManager::PickActor(float MouseX, float MouseY) {
+	FRay ray = CreateRayWithMouse(MouseX, MouseY);
+
+	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
+	OutputDebugString(L"\n");
+	for(const AActor* actor: actors) {
+		FAABB aabb = actor->GetAABB();
+		if ( IsRayItersectAABB(aabb, ray, 100.f) ) {
+			OutputDebugString(L"hit\n");
+		}
+	}
+}
+
+bool UGizmoManager::IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) const {
+
+	// reference: https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
+	FVector dirfrac(1 / ray.Direction.X, 1 / ray.Direction.Y, 1 / ray.Direction.Z);
+
+	float t1 = (aabb.min.X - ray.Origin.X) * dirfrac.X;
+	float t2 = (aabb.max.X - ray.Origin.X) * dirfrac.X;
+	float t3 = (aabb.min.Y - ray.Origin.Y) * dirfrac.Y;
+	float t4 = (aabb.max.Y - ray.Origin.Y) * dirfrac.Y;
+	float t5 = (aabb.min.Z - ray.Origin.Z) * dirfrac.Z;
+	float t6 = (aabb.max.Z - ray.Origin.Z) * dirfrac.Z;
+
+	float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
+	float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
+
+	// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
+	if ( tmax < 0 ) {
+		return false;
+	}
+
+	// if tmin > tmax, ray doesn't intersect AABB
+	if ( tmin > tmax ) {
+		return false;
+	}
+
+	return true;
 }

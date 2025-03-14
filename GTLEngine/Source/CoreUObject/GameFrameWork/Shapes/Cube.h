@@ -12,7 +12,6 @@ public:
 public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-
 private:
 	UCubeComponent* CubeComponent;
 

@@ -5,6 +5,7 @@
 
 class UActorComponent;
 class USceneComponent;
+struct FAABB;
 	
 class AActor : public UObject
 {
@@ -51,6 +52,8 @@ public:
 	void SetActorLocation(const FVector& InLocation);
 	void SetActorRotation(const FRotator& InRotation);
 	void SetActorScale(const FVector& InScale);
+
+	FAABB GetAABB() const;
 
 protected:
 	USceneComponent* RootComponent;

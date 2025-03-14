@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Core/Resource/Types.h"
 
 class AActor;
 
@@ -16,6 +17,7 @@ public:
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
+	virtual FAABB GetAABB();
 
 public:
 	inline AActor* GetOwner() const { return OwnerPrivate; }

@@ -279,7 +279,7 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        Buffer->WorldMatrix = FMatrix::GetTranslateMatrix(truncpos);
+        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(2, 2, 0)) * FMatrix::GetTranslateMatrix(truncpos * 2);
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -419,7 +419,7 @@ void UDirectXHandle::InitView()
     // 뎁스/스텐실 뷰 클리어. 뷰, DEPTH만 클리어, 깊이 버퍼 클리어 할 값, 스텐실 버퍼 클리어 할 값.
     DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
-    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+    //DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
     DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
