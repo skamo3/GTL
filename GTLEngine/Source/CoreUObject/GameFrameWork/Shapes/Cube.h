@@ -3,6 +3,7 @@
 #include "GameFrameWork/Actor.h"
 
 class UCubeComponent;
+class USphereComponent;
 
 class ACube : public AActor
 {
@@ -15,5 +16,6 @@ public:
 
 private:
 	UCubeComponent* CubeComponent;
+	UCubeComponent* CubeComponent2;
 
 };

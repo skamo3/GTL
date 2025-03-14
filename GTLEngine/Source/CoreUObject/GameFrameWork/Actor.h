@@ -18,7 +18,7 @@ public:
 
 public:
 	template<typename T>
-	T* AddComponent(AActor* Owner, const FVector& InRelativeLocation = FVector::ZeroVector, const FVector& InRelativeRotation = FVector::ZeroVector, const FVector& InRelativeScale = FVector::OneVector);
+	T* AddComponent(AActor* Owner, const FVector& InRelativeLocation = FVector::ZeroVector, const FRotator& InRelativeRotation = FRotator::ZeroRotator, const FVector& InRelativeScale = FVector::OneVector);
 
 	template<typename T>
 	T* GetComponentByClass() const
@@ -55,6 +55,9 @@ public:
 protected:
 	USceneComponent* RootComponent;
 
+public:
+	TArray<UActorComponent*> GetOwnedComponent() const { return OwnedComponent; }
+
 private:
 	AActor* Owner;
 	TArray<UActorComponent*> OwnedComponent;
@@ -62,7 +65,7 @@ private:
 }; 
 
 template<typename T>
-inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FVector& InRelativeRotation, const FVector& InRelativeScale)
+inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FRotator& InRelativeRotation, const FVector& InRelativeScale)
 {
 	T* NewComp = new T();
 

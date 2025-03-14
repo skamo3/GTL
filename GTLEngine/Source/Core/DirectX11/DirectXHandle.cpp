@@ -307,23 +307,26 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
-        FVector ActorScale = PrimitiveComp->GetOwner()->GetActorScale();
-        FRotator ActorRotation = PrimitiveComp->GetOwner()->GetActorRotation();
-        FVector ActorLocation = PrimitiveComp->GetOwner()->GetActorLocation();
+		FMatrix ScaleMat = FMatrix::GetScaleMatrix(PrimitiveComp->GetComponentScale());
+        FMatrix RotMat =  FMatrix::GetRotateMatrix(PrimitiveComp->GetComponentRotation());
+		FMatrix TransMat = FMatrix::GetTranslateMatrix(PrimitiveComp->GetComponentLocation());
 
-        /*FMatrix RotationMatrix(ActorRotation);
-        FVector ForwardVector = ActorRotation.RotateVector(FVector::ForwardVector);
-        FVector UpVector = ActorRotation.RotateVector(FVector::UpVector);*/
+		FMatrix RotTrs = RotMat * TransMat;
+		USceneComponent* Parent = PrimitiveComp->GetParent();
+        while (Parent != nullptr)
+        {
+            FMatrix ParScaleMat = FMatrix::GetScaleMatrix(Parent->GetComponentScale());
+            FMatrix ParRotMat = FMatrix::GetRotateMatrix(Parent->GetComponentRotation());
+            FMatrix ParTransMat = FMatrix::GetTranslateMatrix(Parent->GetComponentLocation());
 
-		FMatrix RotationMat = FMatrix::RotateToMatrix(ActorRotation.Roll, ActorRotation.Pitch, ActorRotation.Yaw);
+            ScaleMat = ScaleMat * ParScaleMat;
 
-        // 오브젝트 MVP 변환.
-		FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.
-		FMatrix RotationMatrix = FMatrix::GetRotateMatrix(ActorRotation); // 회전.
-		FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation); // 위치.
-		
-        FMatrix WorldMatrix = ScaleMatrix * RotationMat * TranslationMatrix;
-		Buffer->WorldMatrix = WorldMatrix;
+			FMatrix RTTemp = ParRotMat * ParTransMat;
+            RotTrs = RotTrs * RTTemp;
+			Parent = Parent->GetParent();
+        }
+
+		Buffer->WorldMatrix = ScaleMat * RotTrs;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -351,7 +354,13 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 {
     for (AActor* Actor : Actors)
     {
-        RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
+        for (UActorComponent* Comp : Actor->GetOwnedComponent())
+        {
+            RenderPrimitive(dynamic_cast<UPrimitiveComponent*>(Comp));
+        }
+
+		// 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
+        //RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
         // PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
     }
 
