@@ -383,8 +383,8 @@ FMatrix FMatrix::RotatePitch(float Angle)
 	float S = sin(Angle);
 
 	Result.M[0][0] = C;
-	Result.M[0][2] = -S;
-	Result.M[2][0] = S;
+	Result.M[0][2] = S;
+	Result.M[2][0] = -S;
 	Result.M[2][2] = C;
 	return Result;
 }
@@ -397,10 +397,10 @@ FMatrix FMatrix::RotateYaw(float Angle)
 	float C = cos(Angle);
 	float S = sin(Angle);
 
-	Result.M[0][0] = C;  // ù ��° ���� ù ��° ��
-	Result.M[0][1] = -S;  // ù ��° ���� �� ��° ��
-	Result.M[1][0] = S; // �� ��° ���� ù ��° ��
-	Result.M[1][1] = C;  // �� ��° ���� �� ��° ��
+	Result.M[0][0] = C;
+	Result.M[0][1] = S;
+	Result.M[1][0] = -S;
+	Result.M[1][1] = C;
 
 	return Result;
 }
@@ -412,5 +412,5 @@ FMatrix FMatrix::RotateToMatrix(float X, float Y, float Z)
 	{
 		return RotateRoll(X) * RotatePitch(Y) * RotateYaw(Z);
 	}
-	return  RotateRoll(X) * RotateYaw(Z) * RotatePitch(Y);
+	return  RotateRoll(X) *  RotatePitch(Y) * RotateYaw(Z);
 }
