@@ -21,7 +21,7 @@ public:
 	static UWorld* CreateWorld();
 
 	template<typename T>
-	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FVector& InRotation, const FVector& InScale, AActor* InOwner)
+	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FRotator& InRotation, const FVector& InScale, AActor* InOwner)
 	{
 		T* newObj = new T();
 		AActor* newActor = dynamic_cast<AActor*>(newObj);

@@ -5,6 +5,8 @@ struct FVector;
 struct FRotator;
 struct FQuat;
 
+#include "MathUtils.h"
+
 struct alignas(16) FMatrix
 {
 	float M[4][4];
@@ -47,4 +49,12 @@ struct alignas(16) FMatrix
 	FVector4 TransformVector4(const FVector4& Vector) const; // 4차원 벡터 변환.
 
 	struct FTransform GetTransform() const; // 변환 행렬을 FTransform으로 변환.
+
+	static FMatrix RotateRoll(float Angle);
+
+	static FMatrix RotatePitch(float Angle);
+
+	static FMatrix RotateYaw(float Angle);
+
+	static FMatrix Rotate(float X, float Y, float Z);
 };

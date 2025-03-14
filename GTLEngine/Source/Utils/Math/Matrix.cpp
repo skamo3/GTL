@@ -28,31 +28,7 @@ FMatrix::FMatrix(const FVector4& InX, const FVector4& InY, const FVector4& InZ, 
 
 FMatrix::FMatrix(const FRotator& Rotation)
 {
-	const float SP = FMath::Sin(Rotation.Pitch * PI / 180.0f);
-	const float SY = FMath::Sin(Rotation.Yaw * PI / 180.0f);
-	const float SR = FMath::Sin(Rotation.Roll * PI / 180.0f);
-	const float CP = FMath::Cos(Rotation.Pitch * PI / 180.0f);
-	const float CY = FMath::Cos(Rotation.Yaw * PI / 180.0f);
-	const float CR = FMath::Cos(Rotation.Roll * PI / 180.0f);
-	M[0][0] = CP * CY;
-	M[0][1] = CP * SY;
-	M[0][2] = SP;
-	M[0][3] = 0.0f;
-
-	M[1][0] = SR * SP * CY - CR * SY;
-	M[1][1] = SR * SP * SY + CR * CY;
-	M[1][2] = -SR * CP;
-	M[1][3] = 0.0f;
-
-	M[2][0] = -(CR * SP * CY + SR * SY);
-	M[2][1] = CR * SP * SY - SR * CY;
-	M[2][2] = CR * CP;
-	M[2][3] = 0.0f;
-
-	M[3][0] = 0.0f;
-	M[3][1] = 0.0f;
-	M[3][2] = 0.0f;
-	M[3][3] = 1.0f;
+	*this = FMatrix::Rotate(Rotation.Roll, Rotation.Pitch, Rotation.Yaw);
 }
 
 FMatrix FMatrix::Identity()
@@ -378,4 +354,63 @@ FTransform FMatrix::GetTransform() const
 {
 	FQuat RotationQuat = FQuat::MakeFromRotationMatrix(*this);
 	return FTransform(GetTranslation(), RotationQuat, GetScale());
+}
+
+FMatrix FMatrix::RotateRoll(float Angle)
+{
+	Angle = FMath::DegreesToRadians(Angle);
+
+	FMatrix Result;
+
+	float C = cos(Angle);
+	float S = sin(Angle);
+
+	Result.M[1][1] = C;
+	Result.M[1][2] = -S;
+	Result.M[2][1] = S;
+	Result.M[2][2] = C;
+
+	return Result;
+}
+
+FMatrix FMatrix::RotatePitch(float Angle)
+{
+	Angle = FMath::DegreesToRadians(Angle);
+
+	FMatrix Result;
+
+	float C = cos(Angle);
+	float S = sin(Angle);
+
+	Result.M[0][0] = C;
+	Result.M[0][2] = -S;
+	Result.M[2][0] = S;
+	Result.M[2][2] = C;
+	return Result;
+}
+
+FMatrix FMatrix::RotateYaw(float Angle)
+{
+	Angle = FMath::DegreesToRadians(Angle);
+	FMatrix Result;
+
+	float C = cos(Angle);
+	float S = sin(Angle);
+
+	Result.M[0][0] = C;  // ù ��° ���� ù ��° ��
+	Result.M[0][1] = -S;  // ù ��° ���� �� ��° ��
+	Result.M[1][0] = S; // �� ��° ���� ù ��° ��
+	Result.M[1][1] = C;  // �� ��° ���� �� ��° ��
+
+	return Result;
+}
+
+// TODO: 벡터 받아서 Rotate 해주는 것이니까 네이밍 제대로 해주기.
+FMatrix FMatrix::Rotate(float X, float Y, float Z)
+{
+	if (abs(Y) == 90)
+	{
+		return RotateRoll(X) * RotatePitch(Y) * RotateYaw(Z);
+	}
+	return  RotateRoll(X) * RotateYaw(Z) * RotatePitch(Y);
 }

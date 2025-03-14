@@ -28,8 +28,9 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void Destroy() override;
 
-	void RayCast2Dto3D(float MouseX, float MouseY);
-
+public:
+	ESelectedAxis GetESelectedAxis() const { return SelectedAxis; }
+	EGizmoType GetGizmoType() const { return GizmoType; }
 
 private:
 	ESelectedAxis SelectedAxis;
@@ -38,6 +39,7 @@ private:
 	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
 
+	void RayCast2Dto3D(float MouseX, float MouseY);
 
 };
 

@@ -48,7 +48,7 @@ struct FRotator
 	FQuat Quaternion() const;
 	FVector Euler() const;
 
-	FVector RotateVector(const FVector& V) const;
+	FVector TransformRotVecToMatrix(const FVector& V) const;
 	FVector UnrotateVector(const FVector& V) const;
 	FMatrix ToMatrix() const;
 
@@ -184,9 +184,9 @@ inline FVector FRotator::Euler() const
 }
 
 // Rotate a vector rotated by this rotator
-inline FVector FRotator::RotateVector(const FVector& V) const
+inline FVector FRotator::TransformRotVecToMatrix(const FVector& V) const
 {
-	return (FMatrix(*this).TransformVector(V));
+	return FMatrix(*this).TransformVector(V);
 }
 
 inline FVector FRotator::UnrotateVector(const FVector& V) const

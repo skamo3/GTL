@@ -261,6 +261,18 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
 {
     // Selected 오브젝트 기반으로 기즈모 그리가.
+
+    switch (GizmoManager->GetGizmoType())
+    {
+	case EGizmoType::Translate: // 이동 모양 그리기.
+		break;
+	case EGizmoType::Rotate: // 회전 모양 그리기.
+		break;
+	case EGizmoType::Scale: // 크기 조절 모양 그리기.
+		break;
+    default:
+        break;
+    } 
 }
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
@@ -302,14 +314,15 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         /*FMatrix RotationMatrix(ActorRotation);
         FVector ForwardVector = ActorRotation.RotateVector(FVector::ForwardVector);
         FVector UpVector = ActorRotation.RotateVector(FVector::UpVector);*/
-		FVector RotMat = FVector(ActorRotation.Pitch, ActorRotation.Yaw, ActorRotation.Roll);
+
+		FMatrix RotationMat = FMatrix::Rotate(ActorRotation.Roll, ActorRotation.Pitch, ActorRotation.Yaw);
 
         // 오브젝트 MVP 변환.
 		FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.
 		FMatrix RotationMatrix = FMatrix::GetRotateMatrix(ActorRotation); // 회전.
 		FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation); // 위치.
 		
-        FMatrix WorldMatrix = ScaleMatrix * RotationMatrix * TranslationMatrix;
+        FMatrix WorldMatrix = ScaleMatrix * RotationMat * TranslationMatrix;
 		Buffer->WorldMatrix = WorldMatrix;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
@@ -440,12 +453,10 @@ void UDirectXHandle::UpdateWorldViewMatrix(ACamera* Camera)
     FRotator CameraRotation = Camera->GetActorRotation();
 
     // Rotation Matrix 생성.
-    FMatrix RotationMatrix(CameraRotation);
-    FVector ForwardVector = CameraRotation.RotateVector(FVector::ForwardVector);
-    FVector UpVector = CameraRotation.RotateVector(FVector::UpVector);
+    FVector ForwardVector = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector).GetSafeNormal();
 
     //XMMatrixLookAtLH(Eye, At, Up);
-    FMatrix CameraViewMatrix = FMatrix::LookAtLH(CameraLocation, CameraLocation + ForwardVector, UpVector);
+    FMatrix CameraViewMatrix = FMatrix::LookAtLH(CameraLocation, CameraLocation + ForwardVector, FVector::UpVector);
 	UEngine::GetEngine().GetWorld()->SetViewMatrix(CameraViewMatrix);
 
 }
