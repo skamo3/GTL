@@ -26,7 +26,7 @@ void USceneComponent::SetRelativeLocation(const FVector& Loc)
 	RelativeLocation = Loc;
 }
 
-void USceneComponent::SetRelativeRotation(const FVector& Rot)
+void USceneComponent::SetRelativeRotation(const FRotator& Rot)
 {
 	RelativeRotation = Rot;
 }

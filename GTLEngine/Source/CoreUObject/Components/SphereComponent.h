@@ -5,11 +5,8 @@
 class USphereComponent : public UPrimitiveComponent
 {
 public:
-	USphereComponent()
-		: UPrimitiveComponent()
-	{
-		PrimitiveType = EPrimitiveType::Sphere;
-	}
+	USphereComponent();
+
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 };
