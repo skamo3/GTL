@@ -7,7 +7,7 @@
 
 #include "Math/MathUtils.h"
 
-ACamera::ACamera()
+ACamera::ACamera() : MouseSensitive(5.f)
 {
 	CameraComponent = AddComponent<UCameraComponent>(this);
 	CameraComponent->SetupAttachment(RootComponent);
@@ -54,8 +54,8 @@ void ACamera::Tick(float TickTime)
 
 		// Pitch, Yaw, Roll == Y, Z, X
 		// TODO: 회전 시 Roll 회전이 적용되는 문제가 생김. Rotator 문제일 수도 있음.
-		CameraRotation.Pitch += MouseDeltaY * 5 * TickTime;
-		CameraRotation.Yaw -= MouseDeltaX * 5 * TickTime;
+		CameraRotation.Pitch += MouseDeltaY * MouseSensitive * TickTime;
+		CameraRotation.Yaw -= MouseDeltaX * MouseSensitive * TickTime;
 		CameraRotation.Roll = 0;
 	}
 

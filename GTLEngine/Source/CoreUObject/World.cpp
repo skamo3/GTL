@@ -20,7 +20,6 @@ UWorld* UWorld::CreateWorld()
 	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
 	NewWorld->SpawnActor<APlane>(TEXT("DefaultPlane"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 
-
 	// TODO: 나중에 분리.
 	NewWorld->CreateDefaultUI();
 

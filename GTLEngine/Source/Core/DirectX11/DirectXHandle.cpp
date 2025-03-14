@@ -243,7 +243,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     // 카메라 Projection 변환
     // TODO: Test. 프로젝션 matrix는 리사이즈 할 때, FOV 변환할 때.
     ID3D11Buffer* CbChangesOnResize = ConstantBuffers[EConstantBufferType::ChangesOnResize]->GetConstantBuffer();
-    if (!CbChangesEveryFrame)
+    if (!CbChangesOnResize )
     {
         return;
     }
@@ -256,6 +256,42 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     }
     DXDDeviceContext->Unmap(CbChangesOnResize, 0);
     //XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
+}
+
+// use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
+void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
+
+    /** state check
+    D3D11_PRIMITIVE_TOPOLOGY topology;
+    DXDDeviceContext->IAGetPrimitiveTopology(&topology);
+    if ( topology != D3D11_PRIMITIVE_TOPOLOGY_LINELIST )
+        DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
+    */
+
+    // set position
+    FVector campos = Camera->GetActorLocation();
+    FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
+
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if ( !CbChangesEveryObject ) {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
+        Buffer->WorldMatrix = FMatrix::GetTranslateMatrix(truncpos);
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    EPrimitiveType Type = EPrimitiveType::Grid;
+    uint Stride = sizeof(FVertexSimple);
+    uint offset = 0;
+    FVertexInfo Info = VertexBuffers[Type];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+    DXDDeviceContext->Draw(Num, 0);
+
 }
 
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
@@ -347,8 +383,9 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->Draw(Num, 0);
 }
 
-void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
+void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
+
     for (AActor* Actor : Actors)
     {
         RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
@@ -364,7 +401,6 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
 
 void UDirectXHandle::RenderLine()
 {
-    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
     UINT stride = sizeof(FCbLine);
     UINT offset = 0;
