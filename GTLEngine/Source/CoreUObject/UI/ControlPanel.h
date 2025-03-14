@@ -26,7 +26,7 @@ private:
 private:
 	int32 CurrentPrimitiveType;
 	uint32 SpawnNum;
-	FString SceneName;
+	std::string SceneName;
 
 	bool* blsOrthogonal;
 
