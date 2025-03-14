@@ -27,7 +27,7 @@ void ACamera::Tick(float TickTime)
 	
 	FVector ForwardDirection = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector);
 	FVector RightDirection = CameraRotation.TransformRotVecToMatrix(FVector::RightVector);
-	
+
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
 	
 	if (InputManager->GetKey('W'))
@@ -54,8 +54,12 @@ void ACamera::Tick(float TickTime)
 
 		// Pitch, Yaw, Roll == Y, Z, X
 		// TODO: 회전 시 Roll 회전이 적용되는 문제가 생김. Rotator 문제일 수도 있음.
-		CameraRotation.Pitch += MouseDeltaY * 5 * TickTime;
-		CameraRotation.Yaw -= MouseDeltaX * 5 * TickTime;
+		CameraRotation.Pitch -= MouseDeltaY * 5 * TickTime;
+		CameraRotation.Yaw += MouseDeltaX * 5 * TickTime;
+
+		float MaxPitch = (89.0f);
+		float MinPitch = (-89.0f);
+		CameraRotation.Pitch = (CameraRotation.Pitch < MinPitch) ? MinPitch : (CameraRotation.Pitch > MaxPitch) ? MaxPitch : CameraRotation.Pitch;
 		CameraRotation.Roll = 0;
 	}
 
