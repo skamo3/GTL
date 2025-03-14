@@ -35,12 +35,14 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
-	void RenderWorldPlane();
+	void RenderWorldPlane(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObject(const TArray<AActor*> Actors);
 
 	void RenderLine();
+	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
+	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 
 public:
 	void InitView();

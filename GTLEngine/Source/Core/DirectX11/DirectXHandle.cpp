@@ -259,7 +259,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 }
 
 // use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
-void UDirectXHandle::RenderWorldPlane() {
+void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
     /** state check
     D3D11_PRIMITIVE_TOPOLOGY topology;
@@ -268,7 +268,10 @@ void UDirectXHandle::RenderWorldPlane() {
         DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
     */
 
-    // set matrix to origin
+    // set position
+    FVector campos = Camera->GetActorLocation();
+    FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
+
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {
         return;
@@ -276,7 +279,7 @@ void UDirectXHandle::RenderWorldPlane() {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        Buffer->WorldMatrix = FMatrix::Identity();
+        Buffer->WorldMatrix = FMatrix::GetTranslateMatrix(truncpos);
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -382,7 +385,6 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
-    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
     for (AActor* Actor : Actors)
     {
@@ -399,12 +401,9 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
 void UDirectXHandle::RenderLine()
 {
-    DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
     UINT stride = sizeof(FCbLine);
     UINT offset = 0;
-
-    RenderWorldPlane();
 
     // TODO: 인풋 레이아웃을 line 전용으로 변경해야하는데 지금은 동일한 정보이므로 바꾸지 않아도 될듯함.
     //       for 루프로 순회하면서 버텍스 버퍼 업데이트 및 draw.
