@@ -11,6 +11,8 @@
 #include "GameFrameWork/Shapes/Plane.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
+#include "GameFrameWork/Shapes/Cylinder.h"
+#include "GameFrameWork/Shapes/Cone.h"
 
 UControlPanel::UControlPanel()
 	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), Location{ 0.f, 0.f, 0.f }
@@ -80,8 +82,10 @@ void UControlPanel::DrawSpawnPrimitive()
 			World->SpawnActor<ACube>(TEXT("Cube"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 			break;
 		case EPrimitiveType::Cylinder:
+			World->SpawnActor<ACylinder>(TEXT("Cylinder"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 			break;
 		case EPrimitiveType::Cone:
+			World->SpawnActor<ACone>(TEXT("Cone"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 			break;
 		default:
 			break;
