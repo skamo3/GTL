@@ -16,7 +16,7 @@ class UDXDConstantBuffer;
 class UObject;
 class AActor;
 class ACamera;
-class UGizmo;
+class UGizmoManager;
 class UPrimitiveComponent;
 
 class UDirectXHandle
@@ -35,11 +35,11 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
-	void RenderGizmo(UObject* Selected, UGizmo* Gizmo);
+	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderObejct(const TArray<AActor*> Actors);
 
-	void DrawLine(const TArray<TPair<FVector, FVector>>& Lines);
+	void RenderLine();
 
 public:
 	void InitView();
@@ -49,11 +49,9 @@ private:
 	D3D11_VIEWPORT ViewportInfo;
 
 public:
-	ComPtr<ID3D11Device>	GetD3DDevice() const { return DXDDevice; }
-	ComPtr<ID3D11DeviceContext> GetD3DDeviceContext() const { return DXDDeviceContext; }
-	ComPtr<IDXGISwapChain> GetDXDSwapChain() const { return DXDSwapChain; }
-
-
+	ID3D11Device*	GetD3DDevice() const { return DXDDevice; }
+	ID3D11DeviceContext* GetD3DDeviceContext() const { return DXDDeviceContext; }
+	IDXGISwapChain* GetDXDSwapChain() const { return DXDSwapChain; }
 
 	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
@@ -62,9 +60,13 @@ public:
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
 private:
-	ComPtr<ID3D11Device> DXDDevice;
-	ComPtr<ID3D11DeviceContext> DXDDeviceContext;
-	ComPtr<IDXGISwapChain> DXDSwapChain;
+	void UpdateWorldViewMatrix(ACamera* Camera);
+	void UpdateWorldProjectionMatrix(ACamera* Camera);
+
+private:
+	ID3D11Device* DXDDevice;
+	ID3D11DeviceContext* DXDDeviceContext;
+	IDXGISwapChain* DXDSwapChain;
 
 	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.

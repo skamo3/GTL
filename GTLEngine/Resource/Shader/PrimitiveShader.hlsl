@@ -14,11 +14,6 @@ cbuffer CbChangesEveryObject : register(b2)
     row_major matrix WorldMatrix; // 오브젝트 스페이스 -> 월드 스페이스
 };
 
-cbuffer CbMVP : register(b3)
-{
-    row_major matrix MVP; // 오브젝트 스페이스 -> NDC
-};
-
 struct VS_INPUT
 {
     float4 Position : POSITION; // Input position from vertex buffer

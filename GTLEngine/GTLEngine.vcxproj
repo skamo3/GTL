@@ -71,6 +71,11 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Camera.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Object.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -95,7 +100,7 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
-    <ClCompile Include="Source\Core\Gizmo\Gizmo.cpp" />
+    <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
@@ -103,14 +108,9 @@
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
-    <ClCompile Include="Source\Utils\Math\Math.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Matrix.cpp">
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
-    </ClCompile>
-    <ClCompile Include="Source\Utils\Math\Quaternion.cpp" />
-    <ClCompile Include="Source\Utils\Math\Ray.cpp" />
+    <ClCompile Include="Source\Utils\Math\Matrix.cpp" />
+    <ClCompile Include="Source\Utils\Math\Quat.cpp" />
+    <ClCompile Include="Source\Utils\Math\Rotator.cpp" />
     <ClCompile Include="Source\Utils\Math\Vector.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
@@ -136,6 +136,11 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Camera.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h" />
     <ClInclude Include="Source\CoreUObject\Object.h" />
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -160,7 +165,7 @@
     <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />
-    <ClInclude Include="Source\Core\Gizmo\Gizmo.h" />
+    <ClInclude Include="Source\Core\Gizmo\GizmoManager.h" />
     <ClInclude Include="Source\Core\Input\InputManager.h" />
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
@@ -169,11 +174,12 @@
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
-    <ClInclude Include="Source\Utils\Math\Math.h" />
+    <ClInclude Include="Source\Utils\Math\MathUtils.h" />
     <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />
-    <ClInclude Include="Source\Utils\Math\Quaternion.h" />
-    <ClInclude Include="Source\Utils\Math\Ray.h" />
+    <ClInclude Include="Source\Utils\Math\Quat.h" />
+    <ClInclude Include="Source\Utils\Math\Rotator.h" />
+    <ClInclude Include="Source\Utils\Math\Transform.h" />
     <ClInclude Include="Source\Utils\Math\Vector.h" />
     <ClInclude Include="Source\Utils\pch.h" />
   </ItemGroup>
@@ -289,6 +295,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -307,6 +314,7 @@
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
       <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
+      <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>

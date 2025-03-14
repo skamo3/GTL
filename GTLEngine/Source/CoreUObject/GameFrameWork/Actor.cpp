@@ -45,7 +45,7 @@ FVector AActor::GetActorLocation() const
 	return RootComponent->GetComponentLocation();
 }
 
-FVector AActor::GetActorRotation() const
+FRotator AActor::GetActorRotation() const
 {
 	return RootComponent->GetComponentRotation();
 }
@@ -55,17 +55,17 @@ FVector AActor::GetActorScale() const
 	return RootComponent->GetComponentScale();
 }
 
-void AActor::SetActorLocation(FVector InLocation)
+void AActor::SetActorLocation(const FVector& InLocation)
 {
 	RootComponent->SetRelativeLocation(InLocation);
 }
 
-void AActor::SetActorRotation(FVector InRotation)
+void AActor::SetActorRotation(const FRotator& InRotation)
 {
 	RootComponent->SetRelativeRotation(InRotation);
 }
 
-void AActor::SetActorScale(FVector InScale)
+void AActor::SetActorScale(const FVector& InScale)
 {
 	RootComponent->SetRelativeScale(InScale);
 }

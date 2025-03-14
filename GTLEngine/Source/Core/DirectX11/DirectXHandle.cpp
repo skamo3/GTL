@@ -15,12 +15,11 @@
 
 #include "Engine.h"
 
-#include "Gizmo/Gizmo.h"
-#include "DirectXMath.h"
+#include "Gizmo/GizmoManager.h"
 #include "World.h"
 
+#include "Math/Matrix.h"
 
-using namespace DirectX;
 
 UDirectXHandle::~UDirectXHandle()
 {
@@ -46,9 +45,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 
     // Direct3D 장치와 스왑 체인을 생성
     HRESULT hr = D3D11CreateDeviceAndSwapChain(
-        nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels),
-        D3D11_SDK_VERSION, &swapchaindesc, DXDSwapChain.GetAddressOf(), DXDDevice.GetAddressOf(), nullptr, DXDDeviceContext.GetAddressOf()
-    );
+        nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels), D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext);
 
     if (FAILED(hr))
         return hr;
@@ -171,10 +168,10 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 			DXDDeviceContext->VSSetConstantBuffers(3, 1, &CbMVP);
 		}
 	}
-    
+
     // 뎁스 스텐실 뷰 생성.
     DepthStencilView = new UDXDDepthStencilView();
-    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle, UEngine::GetEngine().GetWindowInfo().Width, UEngine::GetEngine().GetWindowInfo().Height);
+    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle, static_cast<float>(UEngine::GetEngine().GetWindowInfo().Width), static_cast<float>(UEngine::GetEngine().GetWindowInfo().Height));
     if (FAILED(hr))
         return hr;
 
@@ -196,19 +193,21 @@ void UDirectXHandle::ReleaseDirectX11Handle()
     if (DXDDeviceContext)
     {
         DXDDeviceContext->Flush();
-        DXDDeviceContext.Reset();
+        DXDDeviceContext->Release();
+		DXDDeviceContext = nullptr;
     }
 
     if (DXDDevice)
     {
-        DXDDevice.Reset();
+		DXDDevice->Release();
+		DXDDevice = nullptr;
     }
 
     if (DXDSwapChain)
     {
-        DXDSwapChain.Reset();
+		DXDSwapChain->Release();
+		DXDSwapChain = nullptr;
     }
-
 
     RenderTarget->ReleaseRenderTarget();
 
@@ -225,6 +224,7 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
         return;
     }
 
+    // 카메라 View 변환.
     // 카메라 컴포넌트의 로컬 트랜스폼은 변경되지 않는다고 가정
     ID3D11Buffer* CbChangesEveryFrame = ConstantBuffers[EConstantBufferType::ChangesEveryFrame]->GetConstantBuffer();
     if (!CbChangesEveryFrame)
@@ -235,21 +235,13 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &viewMappedData);
     if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(viewMappedData.pData))
     {
-        FVector CameraLocation = Camera->GetActorLocation();
-        FVector CameraRotation = Camera->GetActorRotation();
-        FMatrix RotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
-        FVector CameraFoward = FMath::TransformDirection(FVector::ForwardVector, RotationMatrix);
-        FVector CameraUp = FMath::TransformDirection(FVector::UpVector, RotationMatrix);
-        FMatrix CameraViewMatrix = FMath::CreateViewMatrixByDirection(CameraLocation, CameraFoward, CameraUp);
-        //XMVECTOR Eye = XMVectorSet(0.f, 0.f, -10.f, 1.f);
-        //XMVECTOR At = XMVectorSet(0.f, 0.f, 0.f, 1.f);
-        //XMVECTOR Up = XMVectorSet(0.f, 1.f, 0.f, 0.f);
-
-        Buffer->ViewMatrix = CameraViewMatrix;//XMMatrixLookAtLH(Eye, At, Up);
+        UpdateWorldViewMatrix(Camera);
+        Buffer->ViewMatrix = UEngine::GetEngine().GetWorld()->GetViewMatrix();
     }
     DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
 
-    // TODO: Test. 프로젝션 matrix는 리사이즈 할때만
+    // 카메라 Projection 변환
+    // TODO: Test. 프로젝션 matrix는 리사이즈 할 때, FOV 변환할 때.
     ID3D11Buffer* CbChangesOnResize = ConstantBuffers[EConstantBufferType::ChangesOnResize]->GetConstantBuffer();
     if (!CbChangesEveryFrame)
     {
@@ -259,17 +251,28 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     DXDDeviceContext->Map(CbChangesOnResize, 0, D3D11_MAP_WRITE_DISCARD, 0, &projectionMappedData);
     if (FCbChangesOnResize* Buffer = reinterpret_cast<FCbChangesOnResize*>(projectionMappedData.pData))
     {
-        float Width = ViewportInfo.Width;
-        float Height = ViewportInfo.Height;
-        Buffer->ProjectionMatrix = FMatrix::CreatePerspectiveProjectionMatrixLeftHand(60.f, Width / Height, 1.f, 1000.f);
+        UpdateWorldProjectionMatrix(Camera);
+		Buffer->ProjectionMatrix = UEngine::GetEngine().GetWorld()->GetProjectionMatrix();
     }
     DXDDeviceContext->Unmap(CbChangesOnResize, 0);
     //XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
 }
 
-void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmo* Gizmo)
+void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
 {
     // Selected 오브젝트 기반으로 기즈모 그리가.
+
+    switch (GizmoManager->GetGizmoType())
+    {
+	case EGizmoType::Translate: // 이동 모양 그리기.
+		break;
+	case EGizmoType::Rotate: // 회전 모양 그리기.
+		break;
+	case EGizmoType::Scale: // 크기 조절 모양 그리기.
+		break;
+    default:
+        break;
+    } 
 }
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
@@ -279,23 +282,22 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         return;
     }
 
-	FMatrix worldMat = FMatrix::Identity;
-	FMatrix viewMat = FMatrix::Identity;
-	FMatrix projMat = FMatrix::Identity;
+	FMatrix worldMat = FMatrix::Identity();
+	FMatrix viewMat = FMatrix::Identity();
+	FMatrix projMat = FMatrix::Identity();
 
 
-    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get();
-    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get();
+    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS"));
+    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS"));
 
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")).Get(), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")).Get(), NULL, 0);
+    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
 
     auto a = ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS"));
 
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")).Get());
+    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
-    // Begin Object Matrix Update
-
+    // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if (!CbChangesEveryObject)
     {
@@ -305,39 +307,34 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
-        FVector ActorLocation = PrimitiveComp->GetOwner()->GetActorLocation();
-        FVector ActorRotation = PrimitiveComp->GetOwner()->GetActorRotation();
         FVector ActorScale = PrimitiveComp->GetOwner()->GetActorScale();
+        FRotator ActorRotation = PrimitiveComp->GetOwner()->GetActorRotation();
+        FVector ActorLocation = PrimitiveComp->GetOwner()->GetActorLocation();
 
-		//XMMATRIX worldMat = XMMatrixScaling(ActorScale.X, ActorScale.Y, ActorScale.Z) *	XMMatrixRotationRollPitchYaw(ActorRotation.X, ActorRotation.Y, ActorRotation.Z) * XMMatrixTranslation(ActorLocation.X, ActorLocation.Y, ActorLocation.Z);*/
+        /*FMatrix RotationMatrix(ActorRotation);
+        FVector ForwardVector = ActorRotation.RotateVector(FVector::ForwardVector);
+        FVector UpVector = ActorRotation.RotateVector(FVector::UpVector);*/
 
-        worldMat = FMath::CreateWorldMatrix(ActorLocation, ActorRotation, ActorScale);//worldMat;
-		Buffer->WorldMatrix = worldMat;
+		FMatrix RotationMat = FMatrix::Rotate(ActorRotation.Roll, ActorRotation.Pitch, ActorRotation.Yaw);
+
+        // 오브젝트 MVP 변환.
+		FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.
+		FMatrix RotationMatrix = FMatrix::GetRotateMatrix(ActorRotation); // 회전.
+		FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation); // 위치.
+		
+        FMatrix WorldMatrix = ScaleMatrix * RotationMat * TranslationMatrix;
+		Buffer->WorldMatrix = WorldMatrix;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
+    // View 변환 Constant.
+    
+    // Projection 변환 Constant.
 
-    ID3D11Buffer* CbMVP = ConstantBuffers[EConstantBufferType::MVP]->GetConstantBuffer();
-	if (!CbMVP)
-	{
-		return;
-	}
-    D3D11_MAPPED_SUBRESOURCE MappedDataMVP = {};
-	DXDDeviceContext->Map(CbMVP, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedDataMVP);
-    if (FMVP* Buffer = reinterpret_cast<FMVP*>(MappedDataMVP.pData))
-    {
-
-        ACamera* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-        FMatrix CameraViewMatrix = camera->GetViewMatrix();
-		FMatrix projMat = FMath::CreatePerspectiveProjectionMatrix(60.f, ViewportInfo.Width / ViewportInfo.Height, 1.f, 1000.f);
-
-		FMatrix mvp = FMath::CreateMVP(worldMat, CameraViewMatrix, projMat);
-        Buffer->MVP = mvp;
-    }
-    DXDDeviceContext->Unmap(CbMVP, 0);
 
     // End Object Matrix Update
-
+    
+    
     EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     //uint Stride = 84;6
@@ -365,7 +362,7 @@ void UDirectXHandle::RenderObejct(const TArray<AActor*> Actors)
     
 }
 
-void UDirectXHandle::DrawLine(const TArray<TPair<FVector, FVector>>& Lines)
+void UDirectXHandle::RenderLine()
 {
     DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
 
@@ -448,6 +445,28 @@ HRESULT UDirectXHandle::AddConstantBuffer(EConstantBufferType Type)
     ConstantBuffers.insert({ Type, NewConstantBuffer });
 
     return S_OK;
+}
+
+void UDirectXHandle::UpdateWorldViewMatrix(ACamera* Camera)
+{
+    FVector CameraLocation = Camera->GetActorLocation();
+    FRotator CameraRotation = Camera->GetActorRotation();
+
+    // Rotation Matrix 생성.
+    FVector ForwardVector = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector).GetSafeNormal();
+
+    //XMMatrixLookAtLH(Eye, At, Up);
+    FMatrix CameraViewMatrix = FMatrix::LookAtLH(CameraLocation, CameraLocation + ForwardVector, FVector::UpVector);
+	UEngine::GetEngine().GetWorld()->SetViewMatrix(CameraViewMatrix);
+
+}
+
+void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
+{
+    float FOVRad = FMath::DegreesToRadians(Camera->GetFieldOfView());
+    UEngine::GetEngine().GetWorld()->SetProjectionMatrix(
+        FMatrix::PerspectiveFovLH(FOVRad, ViewportInfo.Width / ViewportInfo.Height, Camera->GetNearClip(), Camera->GetFarClip())
+    );
 }
 
 

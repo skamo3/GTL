@@ -4,7 +4,7 @@
 
 #include "Engine/Engine.h"
 
-UDXDShaderManager::UDXDShaderManager(ComPtr<ID3D11Device> Device)
+UDXDShaderManager::UDXDShaderManager(ID3D11Device* Device)
     : DXDDevice(Device)
 {
     VertexShaders.clear();
@@ -17,7 +17,8 @@ void UDXDShaderManager::ReleaseAllShader()
     {
         if (Shader)
         {
-            Shader.Reset();
+            Shader->Release();
+			Shader = nullptr;
         }
     }
     VertexShaders.clear();
@@ -26,12 +27,12 @@ void UDXDShaderManager::ReleaseAllShader()
     {
         if (Shader)
         {
-            Shader.Reset();
+            Shader->Release();
+			Shader = nullptr;
         }
     }
     PixelShaders.clear();
 
-    DXDDevice.Reset();
 }
 
 HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::wstring& FileName)
@@ -46,7 +47,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::ws
     if (FAILED(hr))
         return hr;
 
-    ComPtr<ID3D11PixelShader> NewPixelShader;
+    ID3D11PixelShader* NewPixelShader;
     hr = DXDDevice->CreatePixelShader(PsBlob->GetBufferPointer(), PsBlob->GetBufferSize(), nullptr, &NewPixelShader);
     if (PsBlob)
     {
@@ -60,6 +61,16 @@ HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::ws
     return S_OK;
 }
 
+HRESULT UDXDShaderManager::AddVertexShader(const std::wstring& Key, const std::wstring& FileName)
+{
+    return E_NOTIMPL;
+}
+
+HRESULT UDXDShaderManager::AddInputLayout(const std::wstring& Key, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+{
+    return E_NOTIMPL;
+}
+
 HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
     if (DXDDevice == nullptr)
@@ -67,21 +78,21 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
 
     HRESULT hr = S_OK;
 
-    ComPtr<ID3DBlob> VertexShaderCSO = nullptr;
+    ID3DBlob* VertexShaderCSO = nullptr;
 
     hr = D3DCompileFromFile(FilePath.c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
     if (FAILED(hr))
         return hr;
 
-    ComPtr<ID3D11VertexShader> NewVertexShader;
-    hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, NewVertexShader.GetAddressOf());
+    ID3D11VertexShader* NewVertexShader;
+    hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
     if (FAILED(hr))
     {
         return hr;
     }
 
-    ComPtr<ID3D11InputLayout> NewInputLayout;
-    hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), NewInputLayout.GetAddressOf());
+    ID3D11InputLayout* NewInputLayout;
+    hr = DXDDevice->CreateInputLayout(Layout, LayoutSize, VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), &NewInputLayout);
     if (FAILED(hr))
     {
         return hr;
@@ -93,7 +104,7 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
     return S_OK;
 }
 
-ComPtr<ID3D11InputLayout> UDXDShaderManager::GetInputLayoutByKey(const std::wstring& Key) const
+ID3D11InputLayout* UDXDShaderManager::GetInputLayoutByKey(const std::wstring& Key) const
 {
     if (InputLayouts.contains(Key))
     {
@@ -102,7 +113,7 @@ ComPtr<ID3D11InputLayout> UDXDShaderManager::GetInputLayoutByKey(const std::wstr
     return nullptr;
 }
 
-ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Key) const
+ID3D11VertexShader* UDXDShaderManager::GetVertexShaderByKey(const std::wstring& Key) const
 {
     if (VertexShaders.contains(Key))
     {
@@ -111,7 +122,7 @@ ComPtr<ID3D11VertexShader> UDXDShaderManager::GetVertexShaderByKey(const std::ws
     return nullptr;
 }
 
-ComPtr<ID3D11PixelShader> UDXDShaderManager::GetPixelShaderByKey(const std::wstring& Key) const
+ID3D11PixelShader* UDXDShaderManager::GetPixelShaderByKey(const std::wstring& Key) const
 {
     if (PixelShaders.contains(Key))
     {

@@ -4,9 +4,8 @@
 #include "Components/CameraComponent.h"
 #include "Engine/Engine.h"
 #include "Input/InputManager.h"
-#include "DirectXMath.h"
 
-using namespace DirectX;
+#include "Math/MathUtils.h"
 
 ACamera::ACamera()
 {
@@ -20,12 +19,14 @@ ACamera::ACamera()
 void ACamera::Tick(float TickTime)
 {
 	FVector CameraLocation = GetActorLocation();
-	FVector CameraRotation = GetActorRotation();
+	FRotator CameraRotation = GetActorRotation();
 
 	// 현재 카메라 회전을 기준으로 바꿔줘야 함.
-	FVector Forward = GetActorRotation();
-	FVector ForwardDirection = FMath::TransformDirection(FVector::ForwardVector, FMath::CreateRotationMatrix(CameraRotation));
-	FVector RightDirection = FMath::TransformDirection(FVector::RightVector, FMath::CreateRotationMatrix(CameraRotation));
+	FRotator Forward = GetActorRotation();
+	// 카메라 기준 Forward, Right, Up Vector 구하기
+	
+	FVector ForwardDirection = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector);
+	FVector RightDirection = CameraRotation.TransformRotVecToMatrix(FVector::RightVector);
 	
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
 	
@@ -48,11 +49,14 @@ void ACamera::Tick(float TickTime)
 
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
-		float MouseDeltaX = InputManager->GetMouseDeltaX();
-		float MouseDeltaY = InputManager->GetMouseDeltaY();
+		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
+		float MouseDeltaY = static_cast<float>(InputManager->GetMouseDeltaY());
 
-		CameraRotation += FVector(-MouseDeltaY, -MouseDeltaX, 0) * TickTime;
-		CameraRotation -= FVector(MouseDeltaY, MouseDeltaX, 0) * TickTime;
+		// Pitch, Yaw, Roll == Y, Z, X
+		// TODO: 회전 시 Roll 회전이 적용되는 문제가 생김. Rotator 문제일 수도 있음.
+		CameraRotation.Pitch += MouseDeltaY * 5 * TickTime;
+		CameraRotation.Yaw -= MouseDeltaX * 5 * TickTime;
+		CameraRotation.Roll = 0;
 	}
 
 	SetActorLocation(CameraLocation);
@@ -63,20 +67,23 @@ void ACamera::Destroy()
 {
 }
 
-FMatrix ACamera::GetViewMatrix() const
+float ACamera::GetFieldOfView() const
 {
-	const FVector CameraLocation = GetActorLocation();
-	const FVector CameraRotation = GetActorRotation();
-	FMatrix rotationMatrix = FMath::CreateRotationMatrix(CameraRotation);
-	FVector CameraDir = FMath::TransformDirection(FVector::RightVector, rotationMatrix);
-	FVector CameraUp = FMath::TransformDirection(FVector::UpVector, rotationMatrix);
-
-	return FMath::CreateViewMatrixByDirection(CameraLocation, CameraDir, CameraUp);
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetFieldOfView();
 }
 
-FMatrix ACamera::GetProjectionMatrix(float width, float height) const
+float ACamera::GetNearClip() const
 {
-	const float AspectRatio = width / height;
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetNearClip();
+}
 
-	return FMatrix::CreatePerspectiveProjectionMatrixLeftHand(60.f, AspectRatio, 1.f, 1000.f);
+float ACamera::GetFarClip() const
+{
+	if (!CameraComponent)
+		return 0.0f;
+	return CameraComponent->GetFarClip();
 }
