@@ -3,7 +3,7 @@
 
 USceneComponent::USceneComponent()
 	: UActorComponent()
-	, RelativeLocation(FVector::ZeroVector), RelativeRotation(FVector::ZeroVector), RelativeScale3D(FVector::OneVector)
+	, RelativeLocation(FVector::ZeroVector), RelativeRotation(FVector::ZeroVector), RelativeScale(FVector::OneVector)
 {
 	AttachParent = nullptr;
 }
@@ -33,7 +33,7 @@ void USceneComponent::SetRelativeRotation(const FRotator& Rot)
 
 void USceneComponent::SetRelativeScale(const FVector& Scale)
 {
-	RelativeScale3D = Scale;
+	RelativeScale = Scale;
 }
 
 void USceneComponent::SetupAttachment(USceneComponent* InParent)
