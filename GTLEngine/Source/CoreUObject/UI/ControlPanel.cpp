@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "ControlPanel.h"
 
+#include "UI/UIIcon.h"
+
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 
@@ -19,89 +21,13 @@
 #include "GameFrameWork/Shapes/Cone.h"
 
 UControlPanel::UControlPanel()
-	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, 
+	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, Scale{ 1.f,1.f,1.f },
     FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f), NewScene(false), LoadScene(false), SaveScene(false)
 {
 
 }
 
 void UControlPanel::Tick(float DeltaTime)
-{
- //   ImGui::Begin("Control Panel");
- //   ImGui::Text("Hello Jungle World!");
-
- //   // FPS 출력.
- //   DrawFPS();
- //   ImGui::Separator();
-	//DrawSpawnPrimitive();
- //   /*
-	//	Spawn Primitive,
-
-	//	Save, Load, New Scene,
-
-	//	Camera Setting
-	//	Orthogonal,
-	//	FOV, Location, Rotation,
-
- //   */
-
- //   ImGui::End();
-    Render();
-}
-
-void UControlPanel::Destroy()
-{
-}
-
-//void UControlPanel::DrawFPS()
-//{
-//	ImGui::Text("FPS %.2f", UEngine::GetEngine().GetFPS());
-//}
-//
-//const char* primitives[] = { "Sphere", "Cube", "Plane" }; 
-//
-//void UControlPanel::DrawSpawnPrimitive()
-//{
-//	
-//	ImGui::PushItemWidth(200);
-//	ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
-//	ImGui::PopItemWidth();
-//
-//	if (ImGui::Button("Spawn"))
-//	{
-//		std::cout << "Spawn Actor : " << CurrentPrimitiveType << std::endl;
-//
-//		UWorld* World = UEngine::GetEngine().GetWorld();
-//		if (!World)
-//			return;
-//
-//		// 액터 스폰.
-//		switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
-//		{
-//		case EPrimitiveType::Plane:
-//			World->SpawnActor<APlane>(TEXT("Plane"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-//			break;
-//		case EPrimitiveType::Sphere:
-//			World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-//			break;
-//		case EPrimitiveType::Cube:
-//			World->SpawnActor<ACube>(TEXT("Cube"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-//			break;
-//		case EPrimitiveType::Cylinder:
-//			World->SpawnActor<ACylinder>(TEXT("Cylinder"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-//			break;
-//		case EPrimitiveType::Cone:
-//			World->SpawnActor<ACone>(TEXT("Cone"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-//			break;
-//		default:
-//			break;
-//		}
-//
-//	}
-//
-//}
-
-void UControlPanel::Render()
 {
     ImGuiIO& io = ImGui::GetIO();
 
@@ -113,33 +39,36 @@ void UControlPanel::Render()
     ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
 
+    // 제목.
     ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
+    ImGui::Text("HELLO GTL!!");
 
-    ImGui::Text("WILD ENGINE - KRFTON JUNGLE");
+    // FPS 출력.
     ImGui::Text("FPS %.0f (%.0f ms)", io.Framerate, 1000.0f / io.Framerate);
-
     ImGui::Separator();
 
+	// 폰트 설정.
     ImFont* UnicodeFont = io.Fonts->Fonts[FEATHER_FONT];
-
-    ImVec2 ControlButtonSize = ImVec2(32, 32);
-
     ImGui::PushFont(UnicodeFont);
+
+    // 버튼 사이즈.
+    ImVec2 ControlButtonSize = ImVec2(32, 32);
     ImVec4 ActiveColor = ImVec4(0, 0.5, 0, 0.6f);
 
     UWorld* World = UEngine::GetEngine().GetWorld();
-	if (!World)
-		return;
+    if (!World)
+        return;
 
     ACamera* Camera = World->GetCamera();
     UCameraComponent* camera = Camera->GetCameraComponent();
 
 
-    
-
     //if (isTranslationActive)
     //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
-    if (ImGui::Button("\ue9bc", ControlButtonSize)); // 기즈모 이동버튼
+    if (ImGui::Button(ICON_GIZMO_TRANSLATE, ControlButtonSize)) // 기즈모 이동버튼
+    {
+		//UEngine::GetEngine().GetGizmoManager()->SetCurrentGizmo(EGizmoType::Translation);
+    }
     //if (isTranslationActive)
     //    ImGui::PopStyleColor();
 
@@ -148,7 +77,7 @@ void UControlPanel::Render()
     //bool isRotationActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Rotation);
     //if (isRotationActive)
     //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
-    if (ImGui::Button("\ue9d3", ControlButtonSize));
+    if (ImGui::Button(ICON_GIZMO_ROTATE, ControlButtonSize));
     //if (isRotationActive)
     //    ImGui::PopStyleColor();
 
@@ -157,9 +86,9 @@ void UControlPanel::Render()
     //bool isScaleActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Scale);
     //if (isScaleActive)
     //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
-    if (ImGui::Button("\ue9ab", ControlButtonSize));
-        //if (isScaleActive)
-        //    ImGui::PopStyleColor();
+    if (ImGui::Button(ICON_GIZMO_SCALE, ControlButtonSize));
+    //if (isScaleActive)
+    //    ImGui::PopStyleColor();
 
     ImGui::SameLine();
     float windowContentWidth = ImGui::GetWindowContentRegionMax().x;
@@ -171,36 +100,32 @@ void UControlPanel::Render()
 
     ImGui::SetCursorPosX(posX);
 
-    if(ImGui::Button("\ue9b7", ControlButtonSize)); // console 창
+    if (ImGui::Button(ICON_BUTTON_CONSOLE, ControlButtonSize)); // console 창
 
     ImGui::SameLine(0, 5.0f);
 
-    if(ImGui::Button("\ue918", ControlButtonSize)); // stat 창
-
+    if (ImGui::Button(ICON_BUTTON_STAT, ControlButtonSize)); // stat 창
 
     ImGui::PopFont();
 
     ImGui::Separator();
 
-    ImGui::SetNextItemWidth(100);
-
-    ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
-
-    ImGui::SameLine(0, 5.0f);
-
-    if (CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNum, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal))
+    // Primitive Spawn 창.
+    DrawSpawnPrimitive();
 
     ImGui::Separator();
 
+
+	// Scene 로드 세이브.
     ImGui::PushFont(UnicodeFont);
 
-    NewScene = ImGui::Button("\ue96d", ControlButtonSize); // New Scene
+    NewScene = ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize); // New Scene
 
     ImGui::SameLine(0, 5.0f);
-    LoadScene = ImGui::Button("\ue950", ControlButtonSize); // Load Scene
+    LoadScene = ImGui::Button(ICON_BUTTON_LOAD_SCENE, ControlButtonSize); // Load Scene
 
     ImGui::SameLine(0, 5.0f);
-    SaveScene = ImGui::Button("\ue9d6", ControlButtonSize); // Save Scene
+    SaveScene = ImGui::Button(ICON_BUTTON_SAVE_SCENE, ControlButtonSize); // Save Scene
 
 
     ImGui::PopFont();
@@ -218,24 +143,67 @@ void UControlPanel::Render()
 
     ImGui::Separator();
 
-    //if (ImGui::Checkbox("Orthogonal", blsOrthogonal))
-    //{
+    ImGui::Separator();
 
-    //}
-
-    //if (ImGui::DragFloat("FOV", FOV, 1, 0, 120))
-    //{
-
-    //}
-
-    ImGui::DragFloat3("Camera Location", Location);
-
-
-    ImGui::DragFloat3("Camera Rotation", Rotation);
-
+    ImGui::Text("Allocation Bytes %d", UEngine::GetEngine().GetTotalAllocationBytes());
+    ImGui::Text("Allocation Count %d", UEngine::GetEngine().GetTotalAllocationCount());
 
     ImGui::End();
 }
+
+void UControlPanel::Destroy()
+{
+}
+
+const char* primitives[] = { "Sphere", "Cube", "Plane" }; 
+
+void UControlPanel::DrawSpawnPrimitive()
+{
+	
+    // 여기부터 Primitive
+
+    ImGui::SetNextItemWidth(100);
+
+    ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
+
+    ImGui::SameLine(0, 5.0f);
+
+    if (CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNum, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal))
+    {
+        std::cout << "SpawnNum : " << SpawnNum << std::endl;
+
+        UWorld* World = UEngine::GetEngine().GetWorld();
+        if (!World)
+            return;
+
+        // 액터 스폰.
+        switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
+        {
+        case EPrimitiveType::Plane:
+            World->SpawnActor<APlane>(TEXT("Plane"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+            break;
+        case EPrimitiveType::Sphere:
+            World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+            break;
+        case EPrimitiveType::Cube:
+            World->SpawnActor<ACube>(TEXT("Cube"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+            break;
+        case EPrimitiveType::Cylinder:
+            World->SpawnActor<ACylinder>(TEXT("Cylinder"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+            break;
+        case EPrimitiveType::Cone:
+            World->SpawnActor<ACone>(TEXT("Cone"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+            break;
+        default:
+            break;
+        }
+    }
+
+	ImGui::DragFloat3("Location", Location);
+	ImGui::DragFloat3("Rotation", Rotation);
+	ImGui::DragFloat3("Scale", Scale);
+}
+
 
 bool UControlPanel::CreateCustomInputInt(const char* label, ImGuiDataType data_type, void* p_data, const char* format, ImGuiInputTextFlags flags)
 {

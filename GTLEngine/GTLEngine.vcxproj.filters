@@ -453,6 +453,9 @@
     <ClInclude Include="Source\Core\Asset\RawFonts.h">
       <Filter>Source\Core\Asset</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\UI\UIIcon.h">
+      <Filter>Source\Core\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\Shader\PrimitiveShader.hlsl">

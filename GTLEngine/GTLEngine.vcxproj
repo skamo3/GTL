@@ -181,6 +181,7 @@
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
+    <ClInclude Include="Source\Core\UI\UIIcon.h" />
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />

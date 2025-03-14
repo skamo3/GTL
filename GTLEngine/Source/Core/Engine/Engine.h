@@ -58,7 +58,7 @@ public:
     UInputManager* GetInputManager() const { return InputManager; }
     UUIManager* GetUIManager() const { return UIManager; }
     UAssetManager* GetAssetManager() const { return AssetManager; }
-	UGizmoManager* GetGizmo() const { return GizmoManager; }
+	UGizmoManager* GetGizmoManager() const { return GizmoManager; }
     
 
 
