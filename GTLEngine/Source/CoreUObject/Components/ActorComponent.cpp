@@ -11,5 +11,5 @@ void UActorComponent::Destroy()
 }
 
 FAABB UActorComponent::GetAABB() {
-	return FAABB(FVector::Zero(), FVector::Zero());
+	return FAABB(FVector(FLT_MAX, FLT_MAX, FLT_MAX), FVector(FLT_MIN, FLT_MIN, FLT_MIN));
 }

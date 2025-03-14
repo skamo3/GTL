@@ -101,7 +101,7 @@ void UGizmoManager::PickActor(float MouseX, float MouseY) {
 	for(const AActor* actor: actors) {
 		FAABB aabb = actor->GetAABB();
 		if ( IsRayItersectAABB(aabb, ray, 100.f) ) {
-			OutputDebugString(L"hit\n");
+			OutputDebugString((actor->GetName() + L"\n").c_str());
 		}
 	}
 }

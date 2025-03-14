@@ -13,9 +13,7 @@ public:
 
 public:
 	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
-
+	FMatrix GetWorldMatrix() const;
 protected:
 	EPrimitiveType PrimitiveType;
-
-
 };

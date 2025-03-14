@@ -18,7 +18,7 @@ UWorld* UWorld::CreateWorld()
 	NewWorld->MainCamera = new ACamera();
 
 	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 2.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
-	NewWorld->SpawnActor<ASphere>(TEXT("DefaultSphere"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+	NewWorld->SpawnActor<ASphere>(TEXT("DefaultSphere"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 45.f), FVector(1.0f, 2.0f, 1.0f), nullptr);
 
 	// TODO: 나중에 분리.
 	NewWorld->CreateDefaultUI();

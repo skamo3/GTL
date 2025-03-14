@@ -343,26 +343,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
-		FMatrix ScaleMat = FMatrix::GetScaleMatrix(PrimitiveComp->GetComponentScale());
-        FMatrix RotMat =  FMatrix::GetRotateMatrix(PrimitiveComp->GetComponentRotation());
-		FMatrix TransMat = FMatrix::GetTranslateMatrix(PrimitiveComp->GetComponentLocation());
-
-		FMatrix RotTrs = RotMat * TransMat;
-		USceneComponent* Parent = PrimitiveComp->GetParent();
-        while (Parent != nullptr)
-        {
-            FMatrix ParScaleMat = FMatrix::GetScaleMatrix(Parent->GetComponentScale());
-            FMatrix ParRotMat = FMatrix::GetRotateMatrix(Parent->GetComponentRotation());
-            FMatrix ParTransMat = FMatrix::GetTranslateMatrix(Parent->GetComponentLocation());
-
-            ScaleMat = ScaleMat * ParScaleMat;
-
-			FMatrix RTTemp = ParRotMat * ParTransMat;
-            RotTrs = RotTrs * RTTemp;
-			Parent = Parent->GetParent();
-        }
-
-		Buffer->WorldMatrix = ScaleMat * RotTrs;
+        Buffer->WorldMatrix = PrimitiveComp->GetWorldMatrix();
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -395,12 +376,11 @@ void UDirectXHandle::RenderAABB(FAABB aabb) {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        FVector ActorScale = aabb.GetGap();
-        FRotator ActorRotation = FRotator();
-        FVector ActorLocation = aabb.min;
+        FVector AABBScale = aabb.GetGap();
+        FVector AABBLocation = aabb.min;
 
-        FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.
-        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation); // 위치.
+        FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(AABBScale); // 크기.
+        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(AABBLocation); // 위치.
 
         FMatrix WorldMatrix = ScaleMatrix * TranslationMatrix;
         Buffer->WorldMatrix = WorldMatrix;

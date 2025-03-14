@@ -334,9 +334,9 @@ FVector FMatrix::GetRotation() const
 FVector FMatrix::TransformVector(const FVector& Vector) const
 {
 	return {
-			Vector.X * M[0][0] + Vector.Y * M[1][0] + Vector.Z * M[2][0],
-			Vector.X * M[0][1] + Vector.Y * M[1][1] + Vector.Z * M[2][1],
-			Vector.X * M[0][2] + Vector.Y * M[1][2] + Vector.Z * M[2][2]
+			Vector.X * M[0][0] + Vector.Y * M[1][0] + Vector.Z * M[2][0] + M[3][0],
+			Vector.X * M[0][1] + Vector.Y * M[1][1] + Vector.Z * M[2][1] + M[3][1],
+			Vector.X * M[0][2] + Vector.Y * M[1][2] + Vector.Z * M[2][2] + M[3][2]
 	};
 }
 

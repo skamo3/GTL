@@ -12,6 +12,8 @@ ASphere::ASphere()
 void ASphere::Tick(float TickTime)
 {
 	AActor::Tick(TickTime);
+
+	SetActorRotation(GetActorRotation().Add(0.f, 0.f, 0.1f));
 }
 
 void ASphere::Destroy()
