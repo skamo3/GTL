@@ -400,7 +400,8 @@ void UDirectXHandle::RenderAABB(FAABB aabb) {
 void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
 
     for ( AActor* Actor : Actors ) {
-        RenderAABB(Actor->GetAABB());
+        if (Actor->IsSelected)
+            RenderAABB(Actor->GetAABB());
     }
 }
 

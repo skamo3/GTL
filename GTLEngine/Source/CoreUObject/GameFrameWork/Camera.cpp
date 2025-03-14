@@ -4,6 +4,8 @@
 #include "Components/CameraComponent.h"
 #include "Engine/Engine.h"
 #include "Input/InputManager.h"
+#include "Core/Gizmo/GizmoManager.h"
+#include "World.h"
 
 #include "Math/MathUtils.h"
 
@@ -66,6 +68,20 @@ void ACamera::Tick(float TickTime)
 
 	SetActorLocation(CameraLocation);
 	SetActorRotation(CameraRotation);
+
+	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
+	UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
+	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		for (auto& actor: UEngine::GetEngine().GetWorld()->GetActors() ) {
+			actor->IsSelected = false;
+		}
+		float mouse_x = inputManager->GetMouseNdcX();
+		float mouse_y = inputManager->GetMouseNdcY();
+		TArray<AActor*> selected = gizmoManager->PickActor(mouse_x, mouse_y);
+		for (auto& actor: selected) {
+			actor->IsSelected = true;
+		}
+	}
 }
 
 void ACamera::Destroy()

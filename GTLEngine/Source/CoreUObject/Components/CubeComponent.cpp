@@ -2,9 +2,6 @@
 #include "CubeComponent.h"
 
 #include "Resource/Types.h"
-#include "Engine.h"
-#include "Core/Gizmo/GizmoManager.h"
-#include "Input/InputManager.h"
 
 UCubeComponent::UCubeComponent()
 	: UPrimitiveComponent()
@@ -14,13 +11,7 @@ UCubeComponent::UCubeComponent()
 
 void UCubeComponent::Tick(float TickTime)
 {
-	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
-	UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
-	if (inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT)) {
-		float mouse_x = inputManager->GetMouseNdcX();
-		float mouse_y = inputManager->GetMouseNdcY();
-		gizmoManager->PickActor(mouse_x, mouse_y);
-	}
+
 }
 
 void UCubeComponent::Destroy()

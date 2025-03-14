@@ -93,17 +93,19 @@ FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY)
 	// 현재 카메라의 MVP 정보.
 }
 
-void UGizmoManager::PickActor(float MouseX, float MouseY) {
+TArray<AActor*> UGizmoManager::PickActor(float MouseX, float MouseY) {
 	FRay ray = CreateRayWithMouse(MouseX, MouseY);
-
+	TArray<AActor*> selected = TArray<AActor*>();
 	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
 	OutputDebugString(L"\n");
-	for(const AActor* actor: actors) {
+	for(AActor* actor: actors) {
 		FAABB aabb = actor->GetAABB();
 		if ( IsRayItersectAABB(aabb, ray, 100.f) ) {
+			selected.push_back(actor);
 			OutputDebugString((actor->GetName() + L"\n").c_str());
 		}
 	}
+	return selected;
 }
 
 bool UGizmoManager::IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) const {

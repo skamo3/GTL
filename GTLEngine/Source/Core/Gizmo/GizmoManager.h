@@ -45,6 +45,6 @@ private:
 	bool IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance) const;
 
 public:
-	void PickActor(float MouseX, float MouseY);
+	TArray<AActor*> PickActor(float MouseX, float MouseY);
 };
 

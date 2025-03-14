@@ -54,6 +54,7 @@ public:
 	void SetActorScale(const FVector& InScale);
 
 	FAABB GetAABB() const;
+	bool IsSelected = false;
 
 protected:
 	USceneComponent* RootComponent;
