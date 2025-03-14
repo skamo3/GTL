@@ -13,6 +13,7 @@ enum class EPrimitiveType
     Cylinder,
     Cone,
     Grid,
+    BoundingBox,
     Max,
 };
 
@@ -80,4 +81,5 @@ struct FAABB {
     FVector min;
     FVector max;
     FAABB(FVector min, FVector max) : min(min), max(max) {};
+    FVector GetGap() { return max - min; }
 };

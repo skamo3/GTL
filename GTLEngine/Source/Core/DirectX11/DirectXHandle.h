@@ -38,6 +38,7 @@ public:
 	void RenderWorldPlane(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
+	void RenderBoundingBox(const TArray<AActor*> Actors);
 	void RenderObject(const TArray<AActor*> Actors);
 
 	void RenderLine();
@@ -65,6 +66,8 @@ public:
 private:
 	void UpdateWorldViewMatrix(ACamera* Camera);
 	void UpdateWorldProjectionMatrix(ACamera* Camera);
+
+	void RenderAABB(FAABB aabb);
 
 private:
 	ID3D11Device* DXDDevice;

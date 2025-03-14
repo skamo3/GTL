@@ -383,6 +383,44 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->Draw(Num, 0);
 }
 
+void UDirectXHandle::RenderAABB(FAABB aabb) {
+    // Begin Object Matrix Update. 
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if ( !CbChangesEveryObject ) {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
+        FVector ActorScale = aabb.GetGap();
+        FRotator ActorRotation = FRotator();
+        FVector ActorLocation = aabb.min;
+
+        FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.
+        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation); // 위치.
+
+        FMatrix WorldMatrix = ScaleMatrix * TranslationMatrix;
+        Buffer->WorldMatrix = WorldMatrix;
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    uint Stride = sizeof(FVertexSimple);
+    UINT offset = 0;
+    FVertexInfo Info = VertexBuffers[EPrimitiveType::BoundingBox];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+
+    DXDDeviceContext->Draw(Num, 0);
+}
+
+void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
+
+    for ( AActor* Actor : Actors ) {
+        RenderAABB(Actor->GetAABB());
+    }
+}
+
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
 

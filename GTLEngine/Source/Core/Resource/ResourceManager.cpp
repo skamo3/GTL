@@ -46,6 +46,9 @@ void UResourceManager::LoadPrimitives()
         grid.push_back({ offset, f - offset,  0.f,    1.0f, 1.0f, 1.0f, 1.0f });
         grid.push_back({ -offset, f - offset, 0.f,    1.0f, 1.0f, 1.0f, 1.0f });
     }
+
+    uint64 BoundingBoxVertexNum = sizeof(BoundingBoxVertices) / sizeof(FVertexSimple);
+    VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
 }
 
 void UResourceManager::Release()
