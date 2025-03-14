@@ -56,5 +56,5 @@ struct alignas(16) FMatrix
 
 	static FMatrix RotateYaw(float Angle);
 
-	static FMatrix Rotate(float X, float Y, float Z);
+	static FMatrix RotateToMatrix(float X, float Y, float Z);
 };

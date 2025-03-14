@@ -315,7 +315,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         FVector ForwardVector = ActorRotation.RotateVector(FVector::ForwardVector);
         FVector UpVector = ActorRotation.RotateVector(FVector::UpVector);*/
 
-		FMatrix RotationMat = FMatrix::Rotate(ActorRotation.Roll, ActorRotation.Pitch, ActorRotation.Yaw);
+		FMatrix RotationMat = FMatrix::RotateToMatrix(ActorRotation.Roll, ActorRotation.Pitch, ActorRotation.Yaw);
 
         // 오브젝트 MVP 변환.
 		FMatrix ScaleMatrix = FMatrix::GetScaleMatrix(ActorScale); // 크기.

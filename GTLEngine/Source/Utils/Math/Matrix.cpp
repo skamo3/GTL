@@ -28,7 +28,7 @@ FMatrix::FMatrix(const FVector4& InX, const FVector4& InY, const FVector4& InZ, 
 
 FMatrix::FMatrix(const FRotator& Rotation)
 {
-	*this = FMatrix::Rotate(Rotation.Roll, Rotation.Pitch, Rotation.Yaw);
+	*this = FMatrix::RotateToMatrix(Rotation.Roll, Rotation.Pitch, Rotation.Yaw);
 }
 
 FMatrix FMatrix::Identity()
@@ -406,7 +406,7 @@ FMatrix FMatrix::RotateYaw(float Angle)
 }
 
 // TODO: 벡터 받아서 Rotate 해주는 것이니까 네이밍 제대로 해주기.
-FMatrix FMatrix::Rotate(float X, float Y, float Z)
+FMatrix FMatrix::RotateToMatrix(float X, float Y, float Z)
 {
 	if (abs(Y) == 90)
 	{
