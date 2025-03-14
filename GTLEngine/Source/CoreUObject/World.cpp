@@ -11,6 +11,7 @@
 #include "Engine.h"
 #include "UI/UIManager.h"
 #include "UI/ControlPanel.h"
+#include "UI/PropertyPanel.h"
 
 UWorld* UWorld::CreateWorld()
 {
@@ -68,6 +69,6 @@ void UWorld::CreateDefaultUI()
 	if (UIManager)
 	{
 		UIManager->RegistUI(new UControlPanel());
-
+		UIManager->RegistUI(new UPropertyPanel());
 	}
 }

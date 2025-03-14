@@ -2,12 +2,16 @@
 #include "ControlPanel.h"
 
 #include "ImGui/imgui.h"
+#include "ImGui/imgui_internal.h"
 
 #include "Engine.h"
 
 #include "Resource/Types.h"
 
 #include "World.h"
+#include "GameFrameWork/Camera.h"
+#include "Components/CameraComponent.h"
+
 #include "GameFrameWork/Shapes/Plane.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
@@ -15,84 +19,283 @@
 #include "GameFrameWork/Shapes/Cone.h"
 
 UControlPanel::UControlPanel()
-	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), Location{ 0.f, 0.f, 0.f }
+	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, 
+    FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f), NewScene(false), LoadScene(false), SaveScene(false)
 {
+
 }
 
 void UControlPanel::Tick(float DeltaTime)
 {
-    ImGui::Begin("Control Panel");
-    ImGui::Text("Hello Jungle World!");
+ //   ImGui::Begin("Control Panel");
+ //   ImGui::Text("Hello Jungle World!");
 
-    // FPS 출력.
-    DrawFPS();
-    ImGui::Separator();
-	DrawSpawnPrimitive();
-    /*
-		Spawn Primitive,
+ //   // FPS 출력.
+ //   DrawFPS();
+ //   ImGui::Separator();
+	//DrawSpawnPrimitive();
+ //   /*
+	//	Spawn Primitive,
 
-		Save, Load, New Scene,
+	//	Save, Load, New Scene,
 
-		Camera Setting
-		Orthogonal,
-		FOV, Location, Rotation,
+	//	Camera Setting
+	//	Orthogonal,
+	//	FOV, Location, Rotation,
 
-    */
+ //   */
 
-    ImGui::End();
+ //   ImGui::End();
+    Render();
 }
 
 void UControlPanel::Destroy()
 {
 }
 
-void UControlPanel::DrawFPS()
+//void UControlPanel::DrawFPS()
+//{
+//	ImGui::Text("FPS %.2f", UEngine::GetEngine().GetFPS());
+//}
+//
+//const char* primitives[] = { "Sphere", "Cube", "Plane" }; 
+//
+//void UControlPanel::DrawSpawnPrimitive()
+//{
+//	
+//	ImGui::PushItemWidth(200);
+//	ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
+//	ImGui::PopItemWidth();
+//
+//	if (ImGui::Button("Spawn"))
+//	{
+//		std::cout << "Spawn Actor : " << CurrentPrimitiveType << std::endl;
+//
+//		UWorld* World = UEngine::GetEngine().GetWorld();
+//		if (!World)
+//			return;
+//
+//		// 액터 스폰.
+//		switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
+//		{
+//		case EPrimitiveType::Plane:
+//			World->SpawnActor<APlane>(TEXT("Plane"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+//			break;
+//		case EPrimitiveType::Sphere:
+//			World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+//			break;
+//		case EPrimitiveType::Cube:
+//			World->SpawnActor<ACube>(TEXT("Cube"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+//			break;
+//		case EPrimitiveType::Cylinder:
+//			World->SpawnActor<ACylinder>(TEXT("Cylinder"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+//			break;
+//		case EPrimitiveType::Cone:
+//			World->SpawnActor<ACone>(TEXT("Cone"), FVector(0.f, 0.f, 0.f), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+//			break;
+//		default:
+//			break;
+//		}
+//
+//	}
+//
+//}
+
+void UControlPanel::Render()
 {
-	ImGui::Text("FPS %.2f", UEngine::GetEngine().GetFPS());
+    ImGuiIO& io = ImGui::GetIO();
+
+    float scaleX = io.DisplaySize.x / 1600.0f;
+    float scaleY = io.DisplaySize.y / 900.0f;
+
+    ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
+
+    ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
+    ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
+
+    ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
+
+    ImGui::Text("WILD ENGINE - KRFTON JUNGLE");
+    ImGui::Text("FPS %.0f (%.0f ms)", io.Framerate, 1000.0f / io.Framerate);
+
+    ImGui::Separator();
+
+    ImFont* UnicodeFont = io.Fonts->Fonts[FEATHER_FONT];
+
+    ImVec2 ControlButtonSize = ImVec2(32, 32);
+
+    ImGui::PushFont(UnicodeFont);
+    ImVec4 ActiveColor = ImVec4(0, 0.5, 0, 0.6f);
+
+    UWorld* World = UEngine::GetEngine().GetWorld();
+	if (!World)
+		return;
+
+    ACamera* Camera = World->GetCamera();
+    UCameraComponent* camera = Camera->GetCameraComponent();
+
+
+    
+
+    //if (isTranslationActive)
+    //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
+    if (ImGui::Button("\ue9bc", ControlButtonSize)); // 기즈모 이동버튼
+    //if (isTranslationActive)
+    //    ImGui::PopStyleColor();
+
+    ImGui::SameLine(0, 5.0f);
+
+    //bool isRotationActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Rotation);
+    //if (isRotationActive)
+    //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
+    if (ImGui::Button("\ue9d3", ControlButtonSize));
+    //if (isRotationActive)
+    //    ImGui::PopStyleColor();
+
+    ImGui::SameLine(0, 5.0f);
+
+    //bool isScaleActive = (PrimaryGizmo && PrimaryGizmo->GetCurrentGizmo() == EGizmoType::Scale);
+    //if (isScaleActive)
+    //    ImGui::PushStyleColor(ImGuiCol_Button, ActiveColor);
+    if (ImGui::Button("\ue9ab", ControlButtonSize));
+        //if (isScaleActive)
+        //    ImGui::PopStyleColor();
+
+    ImGui::SameLine();
+    float windowContentWidth = ImGui::GetWindowContentRegionMax().x;
+
+    float buttonsTotalWidth = ControlButtonSize.x * 2 + 5.0f;
+    float posX = windowContentWidth - buttonsTotalWidth;
+    if (posX < 0)
+        posX = 0;
+
+    ImGui::SetCursorPosX(posX);
+
+    if(ImGui::Button("\ue9b7", ControlButtonSize)); // console 창
+
+    ImGui::SameLine(0, 5.0f);
+
+    if(ImGui::Button("\ue918", ControlButtonSize)); // stat 창
+
+
+    ImGui::PopFont();
+
+    ImGui::Separator();
+
+    ImGui::SetNextItemWidth(100);
+
+    ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
+
+    ImGui::SameLine(0, 5.0f);
+
+    if (CreateCustomInputInt("Number Of Spawn", ImGuiDataType_S32, &SpawnNum, "%d", ImGuiInputTextFlags_::ImGuiInputTextFlags_CharsDecimal))
+
+    ImGui::Separator();
+
+    ImGui::PushFont(UnicodeFont);
+
+    NewScene = ImGui::Button("\ue96d", ControlButtonSize); // New Scene
+
+    ImGui::SameLine(0, 5.0f);
+    LoadScene = ImGui::Button("\ue950", ControlButtonSize); // Load Scene
+
+    ImGui::SameLine(0, 5.0f);
+    SaveScene = ImGui::Button("\ue9d6", ControlButtonSize); // Save Scene
+
+
+    ImGui::PopFont();
+
+    char buf[20];
+    strncpy_s(buf, SceneName.c_str(), sizeof(buf));
+    buf[sizeof(buf) - 1] = '\0';
+
+    ImGui::SetNextItemWidth(150);
+
+    if (ImGui::InputText("SceneName", buf, sizeof(buf)))
+    {
+        SceneName = buf;
+    }
+
+    ImGui::Separator();
+
+    //if (ImGui::Checkbox("Orthogonal", blsOrthogonal))
+    //{
+
+    //}
+
+    //if (ImGui::DragFloat("FOV", FOV, 1, 0, 120))
+    //{
+
+    //}
+
+    ImGui::DragFloat3("Camera Location", Location);
+
+
+    ImGui::DragFloat3("Camera Rotation", Rotation);
+
+
+    ImGui::End();
 }
 
-const char* primitives[] = { "Sphere", "Cube", "Plane" }; 
-
-void UControlPanel::DrawSpawnPrimitive()
+bool UControlPanel::CreateCustomInputInt(const char* label, ImGuiDataType data_type, void* p_data, const char* format, ImGuiInputTextFlags flags)
 {
-	
-	ImGui::PushItemWidth(200);
-	ImGui::DragFloat3("Location", Location);
-	ImGui::Combo("Primitive", &CurrentPrimitiveType, Items, IM_ARRAYSIZE(Items));
-	ImGui::PopItemWidth();
+    ImGuiWindow* window = ImGui::GetCurrentWindow();
+    if (window->SkipItems)
+        return false;
 
-	if (ImGui::Button("Spawn"))
-	{
-		std::cout << "Spawn Actor : " << CurrentPrimitiveType << std::endl;
+    ImGuiContext& g = *GImGui;
+    ImGuiStyle& style = g.Style;
+    IM_ASSERT((flags & ImGuiInputTextFlags_EnterReturnsTrue) == 0); // Not supported by InputScalar()!
 
-		UWorld* World = UEngine::GetEngine().GetWorld();
-		if (!World)
-			return;
+    if (format == NULL)
+        format = ImGui::DataTypeGetInfo(data_type)->PrintFmt;
 
-		// 액터 스폰.
-		switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
-		{
-		case EPrimitiveType::Plane:
-			World->SpawnActor<APlane>(TEXT("Plane"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;
-		case EPrimitiveType::Sphere:
-			World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;
-		case EPrimitiveType::Cube:
-			World->SpawnActor<ACube>(TEXT("Cube"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;
-		case EPrimitiveType::Cylinder:
-			World->SpawnActor<ACylinder>(TEXT("Cylinder"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;
-		case EPrimitiveType::Cone:
-			World->SpawnActor<ACone>(TEXT("Cone"), FVector(Location[0], Location[1], Location[2]), FVector(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-			break;
-		default:
-			break;
-		}
+    void* p_data_default = (g.NextItemData.HasFlags & ImGuiNextItemDataFlags_HasRefVal) ? &g.NextItemData.RefVal : &g.DataTypeZeroValue;
 
-	}
+    char buf[64];
+    if ((flags & ImGuiInputTextFlags_DisplayEmptyRefVal) && ImGui::DataTypeCompare(data_type, p_data, p_data_default) == 0)
+        buf[0] = 0;
+    else
+        ImGui::DataTypeFormatString(buf, IM_ARRAYSIZE(buf), data_type, p_data, format);
 
+    g.NextItemData.ItemFlags |= ImGuiItemFlags_NoMarkEdited;
+    flags |= ImGuiInputTextFlags_AutoSelectAll | (ImGuiInputTextFlags)ImGuiInputTextFlags_LocalizeDecimalPoint;
+
+    bool value_changed = false;
+    const float button_size = ImGui::GetFrameHeight();
+
+    ImGui::BeginGroup();
+    ImGui::PushID(label);
+    ImGui::SetNextItemWidth(ImMax(1.0f, ImGui::CalcItemWidth() - (button_size + style.ItemInnerSpacing.x) * 6 + 15));
+    if (ImGui::InputText("", buf, IM_ARRAYSIZE(buf), flags))
+        ImGui::DataTypeApplyFromText(buf, data_type, p_data, format, (flags & ImGuiInputTextFlags_ParseEmptyRefVal) ? p_data_default : NULL);
+    IMGUI_TEST_ENGINE_ITEM_INFO(g.LastItemData.ID, label, g.LastItemData.StatusFlags | ImGuiItemStatusFlags_Inputable);
+
+    const ImVec2 backup_frame_padding = style.FramePadding;
+    style.FramePadding.x = style.FramePadding.y;
+    if (flags & ImGuiInputTextFlags_ReadOnly)
+        ImGui::BeginDisabled();
+    ImGui::PushItemFlag(ImGuiItemFlags_ButtonRepeat, true);
+    ImGui::SameLine(0, style.ItemInnerSpacing.x);
+    if (ImGui::ButtonEx("Spawn", ImVec2(button_size * 4.2f, button_size)))
+    {
+        value_changed = true;
+    }
+    ImGui::PopItemFlag();
+    if (flags & ImGuiInputTextFlags_ReadOnly)
+        ImGui::EndDisabled();
+
+    style.FramePadding = backup_frame_padding;
+
+    ImGui::PopID();
+    ImGui::EndGroup();
+
+
+    g.LastItemData.ItemFlags &= ~ImGuiItemFlags_NoMarkEdited;
+    if (value_changed)
+        ImGui::MarkItemEdited(g.LastItemData.ID);
+
+    return value_changed;
 }
 
 

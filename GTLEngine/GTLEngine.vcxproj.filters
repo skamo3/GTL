@@ -163,7 +163,7 @@
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp">
@@ -342,7 +342,7 @@
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
+    <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\MathFwd.h">
@@ -446,6 +446,12 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Asset\IconDefs.h">
+      <Filter>Source\Core\Asset</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Asset\RawFonts.h">
+      <Filter>Source\Core\Asset</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -85,7 +85,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -154,7 +154,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
+    <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -162,6 +162,8 @@
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\Asset\Asset.h" />
     <ClInclude Include="Source\Core\Asset\AssetManager.h" />
+    <ClInclude Include="Source\Core\Asset\IconDefs.h" />
+    <ClInclude Include="Source\Core\Asset\RawFonts.h" />
     <ClInclude Include="Source\Core\Asset\SceneAsset.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />

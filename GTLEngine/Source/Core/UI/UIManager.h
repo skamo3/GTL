@@ -48,6 +48,10 @@ public:
 
 	void OnGizmoModeChanged(int modeNum);
 
+	void CreateUsingFont();
+
+	void PreferenceStyle();
+
 public:
 	// Console Function
 
