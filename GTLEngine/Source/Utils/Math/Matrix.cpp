@@ -104,25 +104,6 @@ FMatrix FMatrix::operator*(float Other) const
 	}
 	return Result;
 }
-FVector FMatrix::operator*(const FVector v) const
-{
-	const float* m = &M[0][0];
-	// v를 (v.X, v.Y, v.Z, 1.0f) 로 확장하여 곱셈 수행
-	float x = v.X * m[0 * 4 + 0] + v.Y * m[1 * 4 + 0] + v.Z * m[2 * 4 + 0] + 1.0f * m[3 * 4 + 0];
-	float y = v.X * m[0 * 4 + 1] + v.Y * m[1 * 4 + 1] + v.Z * m[2 * 4 + 1] + 1.0f * m[3 * 4 + 1];
-	float z = v.X * m[0 * 4 + 2] + v.Y * m[1 * 4 + 2] + v.Z * m[2 * 4 + 2] + 1.0f * m[3 * 4 + 2];
-	float w = v.X * m[0 * 4 + 3] + v.Y * m[1 * 4 + 3] + v.Z * m[2 * 4 + 3] + 1.0f * m[3 * 4 + 3];
-
-	// w가 0에 가까우면 분모가 0이 되는 것을 방지
-	if (std::fabs(w) > 1e-6f)
-	{
-		x /= w;
-		y /= w;
-		z /= w;
-	}
-
-	return FVector(x, y, z);
-}
 FMatrix FMatrix::operator*=(float Other)
 {
 	*this = *this * Other;
@@ -416,10 +397,10 @@ FMatrix FMatrix::RotateYaw(float Angle)
 	float C = cos(Angle);
 	float S = sin(Angle);
 
-	Result.M[0][0] = C;  // ù ��° ���� ù ��° ��
-	Result.M[0][1] = S;  // ù ��° ���� �� ��° ��
-	Result.M[1][0] = -S; // �� ��° ���� ù ��° ��
-	Result.M[1][1] = C;  // �� ��° ���� �� ��° ��
+	Result.M[0][0] = C;
+	Result.M[0][1] = S;
+	Result.M[1][0] = -S;
+	Result.M[1][1] = C;
 
 	return Result;
 }
