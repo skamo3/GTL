@@ -12,6 +12,7 @@
 
 #include "CoreUObject/Components/PrimitiveComponent.h"
 #include "CoreUObject/Components/CameraComponent.h"
+#include "CoreUObject/Components/LineComponent.h"
 
 #include "Engine.h"
 
@@ -283,10 +284,9 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    EPrimitiveType Type = EPrimitiveType::Grid;
     uint Stride = sizeof(FVertexSimple);
     uint offset = 0;
-    FVertexInfo Info = VertexBuffers[Type];
+    FVertexInfo Info = VertexBuffers[EPrimitiveType::Grid];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -314,8 +314,15 @@ void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
     if (!PrimitiveComp)
-    {
         return;
+
+    switch ( PrimitiveComp->GetPrimitiveType() ) {
+    case EPrimitiveType::None:
+    case EPrimitiveType::Line:
+    case EPrimitiveType::Grid:
+        return;
+    default:
+        break;
     }
 
 	FMatrix worldMat = FMatrix::Identity();
@@ -427,7 +434,7 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
     
 }
 
-void UDirectXHandle::RenderLine()
+void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
 
     UINT stride = sizeof(FCbLine);
@@ -435,6 +442,75 @@ void UDirectXHandle::RenderLine()
 
     // TODO: 인풋 레이아웃을 line 전용으로 변경해야하는데 지금은 동일한 정보이므로 바꾸지 않아도 될듯함.
     //       for 루프로 순회하면서 버텍스 버퍼 업데이트 및 draw.
+    
+
+    for ( AActor* Actor : Actors ) {
+        for ( UActorComponent* Comp : Actor->GetOwnedComponent() ) {
+            RenderLine(dynamic_cast<ULineComponent*>(Comp));
+        }
+
+        // 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
+        //RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
+        // PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
+    }
+    //
+}
+
+void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
+    if ( LineComp == nullptr )
+        return;
+
+    switch ( LineComp->GetPrimitiveType() ) {
+    case EPrimitiveType::Line:
+        break;
+    default:
+        return;
+    }
+
+    FMatrix worldMat = FMatrix::Identity();
+    FMatrix viewMat = FMatrix::Identity();
+    FMatrix projMat = FMatrix::Identity();
+
+
+    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS"));
+    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS"));
+
+    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+    auto a = ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS"));
+
+    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
+
+    // Begin Object Matrix Update. 
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if ( !CbChangesEveryObject ) {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
+        Buffer->WorldMatrix = LineComp->GetWorldMatrix();
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    // View 변환 Constant.
+
+    // Projection 변환 Constant.
+
+
+    // End Object Matrix Update
+
+
+    EPrimitiveType Type = LineComp->GetPrimitiveType();
+    uint Stride = sizeof(FVertexSimple);
+    UINT offset = 0;
+    FVertexInfo Info = VertexBuffers[Type];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+
+    DXDDeviceContext->Draw(Num, 0);
 }
 
 void UDirectXHandle::InitView()

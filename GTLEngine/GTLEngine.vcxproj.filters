@@ -259,6 +259,9 @@
     <ClCompile Include="Source\Utils\Math\Geometry.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\LineComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -452,6 +455,9 @@
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\Geometry.h">
       <Filter>Utils\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Components\LineComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -18,6 +18,7 @@ class AActor;
 class ACamera;
 class UGizmoManager;
 class UPrimitiveComponent;
+class ULineComponent;
 
 class UDirectXHandle
 {
@@ -40,8 +41,8 @@ public:
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderBoundingBox(const TArray<AActor*> Actors);
 	void RenderObject(const TArray<AActor*> Actors);
-
-	void RenderLine();
+	void RenderLines(const TArray<AActor*> Actors);
+	void RenderLine(ULineComponent* comp);
 	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
 	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 

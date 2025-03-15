@@ -2,10 +2,12 @@
 #include "Camera.h"
 
 #include "Components/CameraComponent.h"
+#include "Components/LineComponent.h"
 #include "Engine/Engine.h"
 #include "Input/InputManager.h"
 #include "Core/Gizmo/GizmoManager.h"
 #include "World.h"
+#include "Utils/Math/Geometry.h"
 
 #include "Math/MathUtils.h"
 
@@ -71,16 +73,30 @@ void ACamera::Tick(float TickTime)
 
 	// picking
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
-	UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
 	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
+
 		for (auto& actor: UEngine::GetEngine().GetWorld()->GetActors() ) {
 			actor->IsSelected = false;
 		}
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
+
+		// create line for debugging
+		UWorld* world = UEngine::GetEngine().GetWorld();
+		FRay ray = Geometry::CreateRayWithMouse(mouse_x, mouse_y);
+		FMatrix rot = FMatrix::MakeFromDirection(ray.Direction, FVector::UpVector);
+		AActor* lineActor = world->SpawnActor<AActor>(TEXT("DefaultLine"), FVector::ZeroVector, FRotator::ZeroRotator, FVector::OneVector, nullptr);
+		ULineComponent* lineComp = lineActor->AddComponent<ULineComponent>(lineActor, ray.Origin, FRotator::ZeroRotator, FVector(100.f, 1.f, 1.f));
+		lineComp->SetDirection(rot);
+		//lineActor->AddComponent<ULineComponent>(lineActor, FVector(1, 1, 1), FRotator::ZeroRotator, FVector(100.f, 0.f, 0.f));
+
 		AActor* selected = gizmoManager->PickActor(mouse_x, mouse_y);
-		if (selected)
+		if (selected) {
 			selected->IsSelected = true;
+			selected->GetRootComponent()->SetupAttachment(lineActor->GetRootComponent());
+		}
+		
 	}
 }
 

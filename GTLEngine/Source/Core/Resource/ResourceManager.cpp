@@ -20,6 +20,9 @@ void UResourceManager::LoadPrimitives()
         {0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f},
     };
 
+    uint64 LineVertexNum = sizeof(LineVertices) / sizeof(FVertexSimple);
+    VertexDataMap[EPrimitiveType::Line] = TArray<FVertexSimple>(LineVertices, LineVertices + LineVertexNum);
+
     uint64 TriangleVertexNum = sizeof(TriangleVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::Plane] = TArray<FVertexSimple>(TriangleVertices, TriangleVertices + TriangleVertexNum);
 

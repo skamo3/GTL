@@ -41,7 +41,7 @@ private:
 	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
 
-	FRay CreateRayWithMouse(float MouseX, float MouseY) const;
+	
 	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
 
 public:
