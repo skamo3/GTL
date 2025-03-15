@@ -14,6 +14,6 @@ FAABB UActorComponent::GetAABB() const {
 	return FAABB(FVector(FLT_MAX, FLT_MAX, FLT_MAX), FVector(FLT_MIN, FLT_MIN, FLT_MIN));
 }
 
-bool UActorComponent::IsIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
+bool UActorComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
 	return false;
 }

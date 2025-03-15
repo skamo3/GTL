@@ -112,6 +112,7 @@
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
+    <ClCompile Include="Source\Utils\Math\Geometry.cpp" />
     <ClCompile Include="Source\Utils\Math\Matrix.cpp" />
     <ClCompile Include="Source\Utils\Math\Quat.cpp" />
     <ClCompile Include="Source\Utils\Math\Rotator.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
+    <ClInclude Include="Source\Utils\Math\Geometry.h" />
     <ClInclude Include="Source\Utils\Math\MathUtils.h" />
     <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />

@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "PlaneComponent.h"
+#include "Utils/Math/Geometry.h"
 
 UPlaneComponent::UPlaneComponent()
 	: UPrimitiveComponent()
@@ -45,7 +46,7 @@ FAABB UPlaneComponent::GetAABB() const {
 	return FAABB(min, max);
 }
 
-bool UPlaneComponent::IsIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
+bool UPlaneComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
 	FVector vecs[3] = {
 		FVector(0.5f, -0.5f, 0.f),
 		FVector(-0.5f, -0.5f, 0.f),
@@ -57,5 +58,5 @@ bool UPlaneComponent::IsIntersect(FRay ray, float hitDistance, FVector& hitPoint
 		vecs[i] = transform.TransformVector(vecs[i]);
 	}
 	
-	return IsRayIntersectWithTriangle(ray, vecs[0], vecs[1], vecs[2], hitDistance, hitPoint);;
+	return Geometry::IsRayIntersectWithTriangle(ray, vecs[0], vecs[1], vecs[2], hitDistance, hitPoint);;
 }

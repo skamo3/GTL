@@ -2,6 +2,7 @@
 #include "CubeComponent.h"
 
 #include "Resource/Types.h"
+#include "Utils/Math/Geometry.h"
 
 UCubeComponent::UCubeComponent()
 	: UPrimitiveComponent()
@@ -45,4 +46,30 @@ FAABB UCubeComponent::GetAABB() const {
 	}
 	
 	return FAABB(min, max);
+}
+
+bool UCubeComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
+	// OBB (Transformed ray with AABB)
+	FMatrix transform = GetWorldMatrix().Inverse();
+	FRay transformedRay = FRay(transform.TransformVector(ray.Origin), transform.TransformVector(ray.Direction).GetSafeNormal());
+
+	FAABB AABBorigin = FAABB(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5));
+
+
+	auto ws = [](const FVector& v)->FString {
+		FString s = L"(";
+		s += std::to_wstring(v.X) + L", ";
+		s += std::to_wstring(v.Y) + L", ";
+		s += std::to_wstring(v.Z) + L")";
+		return s;
+	};
+	FString s = ws(transformedRay.Origin) + L"\t" + ws(transformedRay.Origin + transformedRay.Direction * hitDistance) + L"\n";
+	OutputDebugString(s.c_str());
+
+	bool result = Geometry::IsRayIntersectAABB(AABBorigin, transformedRay, hitDistance);
+	if (result) {
+		hitPoint = GetComponentLocation();
+	}
+	
+	return result;
 }

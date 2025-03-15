@@ -74,8 +74,8 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
     // 마우스 커서 위치를 NCD 좌표로 변환
     float HalfWidth = Width / 2.f;
     float HalfHeight = Height / 2.f;
-    CurrentMouseState.NdcX = (CurrentMouseState.ScreenX - HalfWidth) / HalfWidth;
-    CurrentMouseState.NdcY = (CurrentMouseState.ScreenY - HalfHeight) / HalfHeight * -1.f;
+    CurrentMouseState.NdcX = (CurrentMouseState.ClientX - HalfWidth) / HalfWidth;
+    CurrentMouseState.NdcY = (CurrentMouseState.ClientY - HalfHeight) / HalfHeight * -1.f;
 }
 
 bool UInputManager::GetMouseButton(EMouseButton button) const

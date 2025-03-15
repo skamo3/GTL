@@ -12,10 +12,7 @@
 #include "DirectXMath.h"
 #include "Core/Resource/Types.h"
 
-#include <algorithm>
-
-using std::max;
-using std::min;
+#include "Utils/Math/Geometry.h"
 
 UGizmoManager::UGizmoManager()
 	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr), SelectedActor(nullptr)
@@ -104,7 +101,7 @@ AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 	// aabb로 1차 검사
 	for (AActor* actor: actors) {
 		FAABB aabb = actor->GetAABB();
-		if ( IsRayIntersectAABB(aabb, ray, 100.f) ) {
+		if ( Geometry::IsRayIntersectAABB(aabb, ray, 100.f) ) {
 			selectedList.push_back(actor);
 		}
 	}
@@ -113,7 +110,7 @@ AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 	for (AActor* actor: selectedList) {
 		for (UActorComponent* comp: actor->GetOwnedComponent()) {
 			FVector hitpoint;
-			if (comp->IsIntersect(ray, 100.f, hitpoint) && 
+			if (comp->IsRayIntersect(ray, 100.f, hitpoint) && 
 				minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
 			) {
 				minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
@@ -123,34 +120,6 @@ AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 	}
 	
 	return selected;
-}
-
-bool UGizmoManager::IsRayIntersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) const {
-
-	// reference: https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
-	FVector dirfrac(1 / ray.Direction.X, 1 / ray.Direction.Y, 1 / ray.Direction.Z);
-
-	float t1 = (aabb.min.X - ray.Origin.X) * dirfrac.X;
-	float t2 = (aabb.max.X - ray.Origin.X) * dirfrac.X;
-	float t3 = (aabb.min.Y - ray.Origin.Y) * dirfrac.Y;
-	float t4 = (aabb.max.Y - ray.Origin.Y) * dirfrac.Y;
-	float t5 = (aabb.min.Z - ray.Origin.Z) * dirfrac.Z;
-	float t6 = (aabb.max.Z - ray.Origin.Z) * dirfrac.Z;
-
-	float tmin = max(max(min(t1, t2), min(t3, t4)), min(t5, t6));
-	float tmax = min(min(max(t1, t2), max(t3, t4)), max(t5, t6));
-
-	// if tmax < 0, ray (line) is intersecting AABB, but the whole AABB is behind us
-	if ( tmax < 0 ) {
-		return false;
-	}
-
-	// if tmin > tmax, ray doesn't intersect AABB
-	if ( tmin > tmax ) {
-		return false;
-	}
-
-	return true;
 }
 
 bool UGizmoManager::IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const {

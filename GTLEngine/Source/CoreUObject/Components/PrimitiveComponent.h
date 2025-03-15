@@ -17,5 +17,4 @@ public:
 
 protected:
 	EPrimitiveType PrimitiveType;
-	bool IsRayIntersectWithTriangle(const FRay& ray, const FVector& v0, const FVector& v1, const FVector& v2, float hitDistance, FVector& hitpoint) const;
 };

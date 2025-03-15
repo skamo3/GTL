@@ -256,6 +256,9 @@
     <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Geometry.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -446,6 +449,9 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Utils\Math\Geometry.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

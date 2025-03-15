@@ -9,5 +9,5 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 	virtual FAABB GetAABB() const override;
-	virtual bool IsIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
+	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
 };
