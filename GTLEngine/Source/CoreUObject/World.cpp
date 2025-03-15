@@ -4,9 +4,11 @@
 #include "GameFrameWork/Actor.h"
 #include "GameFrameWork/Camera.h"
 
-#include "GameFrameWork/Shapes/Plane.h"
+#include "GameFrameWork/Shapes/Triangle.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
+#include "GameFrameWork/Shapes/Cylinder.h"
+#include "GameFrameWork/Shapes/Cone.h"
 
 #include "Engine.h"
 #include "UI/UIManager.h"

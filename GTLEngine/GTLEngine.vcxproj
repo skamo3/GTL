@@ -66,7 +66,7 @@
     <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CylinderComponent.cpp" />
-    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\TriangleComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SceneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp" />
@@ -75,7 +75,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp" />
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp" />
@@ -135,7 +135,7 @@
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CylinderComponent.h" />
-    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\TriangleComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SceneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h" />
@@ -144,7 +144,7 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h" />
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h" />

@@ -2,10 +2,10 @@
 
 #include "PrimitiveComponent.h"
 
-class UPlaneComponent : public UPrimitiveComponent
+class UTriangleComponent : public UPrimitiveComponent
 {
 public:
-	UPlaneComponent();
+	UTriangleComponent();
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 };

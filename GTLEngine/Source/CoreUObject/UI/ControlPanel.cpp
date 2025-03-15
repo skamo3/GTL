@@ -15,7 +15,7 @@
 #include "GameFrameWork/Camera.h"
 #include "Components/CameraComponent.h"
 
-#include "GameFrameWork/Shapes/Plane.h"
+#include "GameFrameWork/Shapes/Triangle.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
 #include "GameFrameWork/Shapes/Cylinder.h"
@@ -126,20 +126,20 @@ void UControlPanel::Tick(float DeltaTime)
 
     if (ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize))     // New Scene
     {
-
+        ResourceManager->NewScene();
     }
 
     ImGui::SameLine(0, 5.0f);
     if (ImGui::Button(ICON_BUTTON_LOAD_SCENE, ControlButtonSize))   // Load Scene
     {
-
+        ResourceManager->LoadScene(SceneName);
     }
 
 
     ImGui::SameLine(0, 5.0f);
     if (ImGui::Button(ICON_BUTTON_SAVE_SCENE, ControlButtonSize))   // Save Scene
     {
-        ResourceManager->SaveScene("sdfdsf");
+        ResourceManager->SaveScene(SceneName);
     }
 
     ImGui::PopFont();
@@ -150,7 +150,7 @@ void UControlPanel::Tick(float DeltaTime)
 
     ImGui::SetNextItemWidth(150);
 
-    if (ImGui::InputText("SceneName", buf, sizeof(buf)))
+    if (ImGui::InputText(".Scene", buf, sizeof(buf)))
     {
         SceneName = buf;
     }
@@ -169,7 +169,7 @@ void UControlPanel::Destroy()
 {
 }
 
-const char* primitives[] = { "Sphere", "Cube", "Plane" }; 
+const char* primitives[] = { "Sphere", "Cube", "Triangle", "Cylinder", "Cone"};
 
 void UControlPanel::DrawSpawnPrimitive()
 {
@@ -193,8 +193,8 @@ void UControlPanel::DrawSpawnPrimitive()
         // 액터 스폰.
         switch (static_cast<EPrimitiveType>(CurrentPrimitiveType))
         {
-        case EPrimitiveType::Plane:
-            World->SpawnActor<APlane>(TEXT("Plane"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
+        case EPrimitiveType::Triangle:
+            World->SpawnActor<ATriangle>(TEXT("Triangle"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);
             break;
         case EPrimitiveType::Sphere:
             World->SpawnActor<ASphere>(TEXT("Sphere"), FVector(Location[0], Location[1], Location[2]), FRotator(Rotation[0], Rotation[1], Rotation[2]), FVector(Scale[0], Scale[1], Scale[2]), nullptr);

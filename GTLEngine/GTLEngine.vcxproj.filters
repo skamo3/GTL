@@ -136,7 +136,7 @@
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Components\TriangleComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp">
@@ -220,7 +220,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp">
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp">
@@ -309,7 +309,7 @@
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h">
+    <ClInclude Include="Source\CoreUObject\Components\TriangleComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h">
@@ -405,7 +405,7 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h">
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h">

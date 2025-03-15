@@ -2,18 +2,18 @@
 
 #include "GameFrameWork/Actor.h"
 
-class UPlaneComponent;
+class UTriangleComponent;
 
-class APlane : public AActor
+class ATriangle : public AActor
 {
 public:
-	APlane();
+	ATriangle();
 
 public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
 private:
-	UPlaneComponent* PlaneComponent;
+	UTriangleComponent* TriangleComponent;
 
 };

@@ -7,7 +7,7 @@ enum class EPrimitiveType
 {
     None,
     Line,
-    Plane,
+    Triangle,
     Sphere,
     Cube,
     Cylinder,

@@ -4,7 +4,7 @@
 #include "UI/UIBase.h"
 
 
-static const char* Items[] = {  "None", "Line", "Plane", "Sphere", "Cube", "Cylinder", "Cone" };
+static const char* Items[] = {  "None", "Line", "Triangle", "Sphere", "Cube", "Cylinder", "Cone" };
 
 class UControlPanel: public UUIBase
 {
