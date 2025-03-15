@@ -257,10 +257,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)Source;$(ProjectDir)Utils;$(ProjectDir)Plugins;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Plugins</IncludePath>
+    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)\Source;$(ProjectDir)Plugins;$(ProjectDir)\Utils;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)Plugins</IncludePath>
+    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -304,7 +306,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine;$(ProjectDir)Plugins</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -323,7 +325,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine;$(ProjectDir)Plugins</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>

@@ -2,9 +2,6 @@
 
 #define NOMINMAX
 
-#pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
-#include <iostream>
-
 // STL include
 #include <windows.h>
 #include <tchar.h>
@@ -22,7 +19,20 @@
 // D3D include
 #pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "d3dcompiler") 
+
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTK/Libs/Debug/DirectXTK.lib")
+#pragma comment(lib, "DirectXTex/Libs/Debug/DirectXTex.lib")
+
+// 디버깅 시 콘솔 찍기.
+#pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
+#include <iostream>
+
+#else
+#pragma comment(lib, "DirectXTK/Libs/Release/DirectXTK.lib")
+#pragma comment(lib, "DirectXTex/Libs/Release/DirectXTex.lib")
+#endif
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
