@@ -31,9 +31,10 @@ bool ULineComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoi
 FMatrix ULineComponent::GetWorldMatrix() const {
 	FMatrix ScaleMat = FMatrix::GetScaleMatrix(GetComponentScale());
 	FMatrix RotMat = rotation;
+	//FMatrix RotMat = FMatrix::GetRotateMatrix(GetComponentRotation());
 	FMatrix TransMat = FMatrix::GetTranslateMatrix(GetComponentLocation());
 
-	/*FMatrix RotTrs = RotMat * TransMat;
+	FMatrix RotTrs = RotMat * TransMat;
 	USceneComponent* Parent = GetParent();
 	while ( Parent != nullptr ) {
 		FMatrix ParScaleMat = FMatrix::GetScaleMatrix(Parent->GetComponentScale());
@@ -45,6 +46,6 @@ FMatrix ULineComponent::GetWorldMatrix() const {
 		FMatrix RTTemp = ParRotMat * ParTransMat;
 		RotTrs = RotTrs * RTTemp;
 		Parent = Parent->GetParent();
-	}*/
+	}
 	return ScaleMat * RotMat * TransMat;
 }
