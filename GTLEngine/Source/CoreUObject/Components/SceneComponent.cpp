@@ -38,5 +38,15 @@ void USceneComponent::SetRelativeScale(const FVector& Scale)
 
 void USceneComponent::SetupAttachment(USceneComponent* InParent)
 {
-	AttachParent = InParent;
+	if (AttachParent != nullptr)
+	{
+		AttachParent->AttachChildren.erase(std::remove(AttachParent->AttachChildren.begin(), AttachParent->AttachChildren.end(), this), AttachParent->AttachChildren.end());
+		AttachParent = nullptr;
+	}
+
+	if (InParent != AttachParent)
+	{
+		AttachParent = InParent;
+		InParent->AttachChildren.push_back(this);
+	}
 }
