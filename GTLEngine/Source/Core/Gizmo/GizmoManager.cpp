@@ -18,7 +18,7 @@ using std::max;
 using std::min;
 
 UGizmoManager::UGizmoManager()
-	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr)
+	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr), SelectedActor(nullptr)
 {
 	GizmoActor = new AGizmoActor();
 }
@@ -46,7 +46,7 @@ void UGizmoManager::Destroy()
 {
 }
 
-FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY)
+FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY) const
 {
 	FWindowInfo WInfo = UEngine::GetEngine().GetWindowInfo();
 
@@ -93,16 +93,29 @@ FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY)
 	// 현재 카메라의 MVP 정보.
 }
 
-TArray<AActor*> UGizmoManager::PickActor(float MouseX, float MouseY) {
+AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 	FRay ray = CreateRayWithMouse(MouseX, MouseY);
-	TArray<AActor*> selected = TArray<AActor*>();
+	AActor* selected = nullptr;
 	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
-	OutputDebugString(L"\n");
+
+	auto distancePow = [](AActor* a, AActor* b) -> float {
+		return (a->GetActorLocation() - b->GetActorLocation()).LengthSquared();
+	};
+	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	float minDistance = FLT_MAX;
+
 	for(AActor* actor: actors) {
 		FAABB aabb = actor->GetAABB();
 		if ( IsRayItersectAABB(aabb, ray, 100.f) ) {
-			selected.push_back(actor);
-			OutputDebugString((actor->GetName() + L"\n").c_str());
+			float distance;
+			if ( selected == nullptr ) {
+				minDistance = distancePow(actor, camera);
+				selected = actor;
+				
+			} else if ( minDistance > (distance = distancePow(actor, camera)) ) {
+				minDistance = distance;
+				selected = actor;
+			}
 		}
 	}
 	return selected;
@@ -134,4 +147,10 @@ bool UGizmoManager::IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance = 
 	}
 
 	return true;
+}
+
+bool UGizmoManager::IsRcayItersect(TArray<FVector> vertices, FRay ray, float maxDistance) const {
+
+
+	return false;
 }

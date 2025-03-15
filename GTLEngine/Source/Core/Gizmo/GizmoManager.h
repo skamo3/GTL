@@ -41,10 +41,11 @@ private:
 	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
 
-	FRay CreateRayWithMouse(float MouseX, float MouseY);
+	FRay CreateRayWithMouse(float MouseX, float MouseY) const;
 	bool IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance) const;
+	bool IsRcayItersect(TArray<FVector> vertices, FRay ray, float maxDistance) const;
 
 public:
-	TArray<AActor*> PickActor(float MouseX, float MouseY);
+	AActor* PickActor(float MouseX, float MouseY) const;
 };
 

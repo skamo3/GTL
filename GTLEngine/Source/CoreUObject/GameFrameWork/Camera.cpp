@@ -69,6 +69,7 @@ void ACamera::Tick(float TickTime)
 	SetActorLocation(CameraLocation);
 	SetActorRotation(CameraRotation);
 
+	// picking
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
 	UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
 	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
@@ -77,10 +78,9 @@ void ACamera::Tick(float TickTime)
 		}
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
-		TArray<AActor*> selected = gizmoManager->PickActor(mouse_x, mouse_y);
-		for (auto& actor: selected) {
-			actor->IsSelected = true;
-		}
+		AActor* selected = gizmoManager->PickActor(mouse_x, mouse_y);
+		if ( selected )
+			selected->IsSelected = true;
 	}
 }
 
