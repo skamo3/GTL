@@ -15,7 +15,7 @@ void UPlaneComponent::Destroy()
 {
 }
 
-FAABB UPlaneComponent::GetAABB() {
+FAABB UPlaneComponent::GetAABB() const {
 	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
 	FVector max = FVector(FLT_MIN, FLT_MIN, FLT_MIN);
 
@@ -43,4 +43,19 @@ FAABB UPlaneComponent::GetAABB() {
 	}
 
 	return FAABB(min, max);
+}
+
+bool UPlaneComponent::IsIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
+	FVector vecs[3] = {
+		FVector(0.5f, -0.5f, 0.f),
+		FVector(-0.5f, -0.5f, 0.f),
+		FVector(0.f, 0.5f, 0.f),
+	};
+
+	FMatrix transform = GetWorldMatrix();
+	for ( int i = 0; i < 3; i++ ) {
+		vecs[i] = transform.TransformVector(vecs[i]);
+	}
+	
+	return IsRayIntersectWithTriangle(ray, vecs[0], vecs[1], vecs[2], hitDistance, hitPoint);;
 }

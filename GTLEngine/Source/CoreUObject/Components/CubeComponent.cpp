@@ -18,7 +18,7 @@ void UCubeComponent::Destroy()
 {
 }
 
-FAABB UCubeComponent::GetAABB() {
+FAABB UCubeComponent::GetAABB() const {
 	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
 	FVector max = FVector(FLT_MIN, FLT_MIN, FLT_MIN);
 

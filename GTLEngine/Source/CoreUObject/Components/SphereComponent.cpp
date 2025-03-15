@@ -16,7 +16,7 @@ void USphereComponent::Destroy()
 {
 }
 
-FAABB USphereComponent::GetAABB() {
+FAABB USphereComponent::GetAABB() const {
 	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
 	FVector max = FVector(FLT_MIN, FLT_MIN, FLT_MIN);
 

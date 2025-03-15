@@ -95,33 +95,37 @@ FRay UGizmoManager::CreateRayWithMouse(float MouseX, float MouseY) const
 
 AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 	FRay ray = CreateRayWithMouse(MouseX, MouseY);
-	AActor* selected = nullptr;
 	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
-
-	auto distancePow = [](AActor* a, AActor* b) -> float {
-		return (a->GetActorLocation() - b->GetActorLocation()).LengthSquared();
-	};
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-	float minDistance = FLT_MAX;
+	AActor* selected = nullptr;
+	TArray<AActor*> selectedList = TArray<AActor*>();
+	float minDistancePow = FLT_MAX;
 
-	for(AActor* actor: actors) {
+	// aabb로 1차 검사
+	for (AActor* actor: actors) {
 		FAABB aabb = actor->GetAABB();
-		if ( IsRayItersectAABB(aabb, ray, 100.f) ) {
-			float distance;
-			if ( selected == nullptr ) {
-				minDistance = distancePow(actor, camera);
-				selected = actor;
-				
-			} else if ( minDistance > (distance = distancePow(actor, camera)) ) {
-				minDistance = distance;
+		if ( IsRayIntersectAABB(aabb, ray, 100.f) ) {
+			selectedList.push_back(actor);
+		}
+	}
+
+	// moller-trumbore algorithm으로 2차 검사
+	for (AActor* actor: selectedList) {
+		for (UActorComponent* comp: actor->GetOwnedComponent()) {
+			FVector hitpoint;
+			if (comp->IsIntersect(ray, 100.f, hitpoint) && 
+				minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
+			) {
+				minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
 				selected = actor;
 			}
 		}
 	}
+	
 	return selected;
 }
 
-bool UGizmoManager::IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) const {
+bool UGizmoManager::IsRayIntersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) const {
 
 	// reference: https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
 	FVector dirfrac(1 / ray.Direction.X, 1 / ray.Direction.Y, 1 / ray.Direction.Z);
@@ -149,7 +153,7 @@ bool UGizmoManager::IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance = 
 	return true;
 }
 
-bool UGizmoManager::IsRcayItersect(TArray<FVector> vertices, FRay ray, float maxDistance) const {
+bool UGizmoManager::IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const {
 
 
 	return false;

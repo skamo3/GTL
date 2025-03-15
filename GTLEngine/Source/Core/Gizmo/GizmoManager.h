@@ -42,8 +42,8 @@ private:
 	AActor* SelectedActor;
 
 	FRay CreateRayWithMouse(float MouseX, float MouseY) const;
-	bool IsRayItersectAABB(FAABB aabb, FRay ray, float maxDistance) const;
-	bool IsRcayItersect(TArray<FVector> vertices, FRay ray, float maxDistance) const;
+	bool IsRayIntersectAABB(FAABB aabb, FRay ray, float maxDistance) const;
+	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
 
 public:
 	AActor* PickActor(float MouseX, float MouseY) const;

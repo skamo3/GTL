@@ -79,7 +79,7 @@ void ACamera::Tick(float TickTime)
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
 		AActor* selected = gizmoManager->PickActor(mouse_x, mouse_y);
-		if ( selected )
+		if (selected)
 			selected->IsSelected = true;
 	}
 }

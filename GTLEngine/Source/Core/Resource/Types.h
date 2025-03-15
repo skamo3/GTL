@@ -75,6 +75,7 @@ struct FRay {
     FVector Origin;
     FVector Direction;
     FRay(FVector origin, FVector direction) : Origin(origin), Direction(direction) {};
+    inline FVector GetNormalizedDirection() const { return Direction.GetSafeNormal(); }
 };
 
 struct FAABB {
