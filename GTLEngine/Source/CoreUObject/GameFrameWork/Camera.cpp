@@ -75,6 +75,7 @@ void ACamera::Tick(float TickTime)
 	// picking
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
 	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
 		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmo();
 
 		for (auto& actor: UEngine::GetEngine().GetWorld()->GetActors() ) {

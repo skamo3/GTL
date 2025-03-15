@@ -72,5 +72,10 @@ struct FWindowInfo
 	HWND WindowHandle;
 	uint Width;
 	uint Height;
+	uint Top;
+	uint Bottom;
+	uint Left;
+	uint Right;
+	RECT screenRect;
 };
 

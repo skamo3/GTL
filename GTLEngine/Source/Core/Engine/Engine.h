@@ -36,6 +36,7 @@ public:
 
     bool InitEngine(const FWindowInfo& InWindowInfo);
 	void Tick();
+    void TickWindowInfo();
     void Render();
 	void ClearEngine();
 

@@ -76,6 +76,8 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 
 void UEngine::Tick()
 {
+    TickWindowInfo();
+
     // TimeManager.
     TimeManager->Update();
 
@@ -90,6 +92,18 @@ void UEngine::Tick()
     World->Tick(TimeManager->DeltaTime());
 
 	GizmoManager->Tick(TimeManager->DeltaTime());
+}
+
+void UEngine::TickWindowInfo() {
+    RECT rect;
+    if ( GetClientRect(WindowInfo.WindowHandle, &rect) ) {
+        WindowInfo.Left = rect.left;
+        WindowInfo.Right = rect.right;
+        WindowInfo.Top = rect.top;
+        WindowInfo.Bottom = rect.bottom;
+        WindowInfo.Width = rect.right - rect.left;
+        WindowInfo.Height = rect.bottom - rect.top;
+    }
 }
 
 void UEngine::Render()

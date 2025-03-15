@@ -58,16 +58,7 @@ bool UCubeComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoi
 	// OBB (Transformed ray with AABB)
 	FMatrix transform = GetWorldMatrix().Inverse();
 	FRay transformedRay = FRay(transform.TransformPositionVector(ray.Origin), transform.TransformDirectionVector(ray.Direction).GetSafeNormal());
-
 	FAABB AABBorigin = FAABB(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5));
-
-	// create line for debugging
-	//UWorld* world = UEngine::GetEngine().GetWorld();
-	//FMatrix rot = FMatrix::MakeFromDirection(transformedRay.Direction, FVector::UpVector);
-	//AActor* lineActor = world->SpawnActor<AActor>(TEXT("DefaultLine"), FVector::ZeroVector, FRotator::ZeroRotator, FVector::OneVector, nullptr);
-	//ULineComponent* lineComp = lineActor->AddComponent<ULineComponent>(lineActor, transformedRay.Origin, FRotator::ZeroRotator, FVector(100.f, 1.f, 1.f));
-	//lineComp->SetDirection(rot);
-	// ------------------------
 
 	bool result = Geometry::IsRayIntersectAABB(AABBorigin, transformedRay, hitDistance);
 	if (result) {

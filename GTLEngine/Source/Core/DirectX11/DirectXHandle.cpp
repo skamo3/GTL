@@ -32,8 +32,8 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
     DXGI_SWAP_CHAIN_DESC swapchaindesc = {};
-    swapchaindesc.BufferDesc.Width = 1600; // 창 크기에 맞게 자동으로 설정
-    swapchaindesc.BufferDesc.Height = 900; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Width = UEngine::GetEngine().GetWindowInfo().Width; // 창 크기에 맞게 자동으로 설정
+    swapchaindesc.BufferDesc.Height = UEngine::GetEngine().GetWindowInfo().Height; // 창 크기에 맞게 자동으로 설정
     swapchaindesc.BufferDesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM; // 색상 포맷
     swapchaindesc.SampleDesc.Count = 1; // 멀티 샘플링 비활성화
     swapchaindesc.BufferUsage = DXGI_USAGE_RENDER_TARGET_OUTPUT; // 렌더 타겟으로 사용
@@ -172,7 +172,8 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 
     // 뎁스 스텐실 뷰 생성.
     DepthStencilView = new UDXDDepthStencilView();
-    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, UEngine::GetEngine().GetWindowInfo().WindowHandle, static_cast<float>(UEngine::GetEngine().GetWindowInfo().Width), static_cast<float>(UEngine::GetEngine().GetWindowInfo().Height));
+    FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+    hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(winInfo.Width), static_cast<float>(winInfo.Height));
     if (FAILED(hr))
         return hr;
 

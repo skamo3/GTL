@@ -33,18 +33,17 @@ void UInputManager::Tick(float TickTime)
     CurrentMouseState.MiddleButton = (GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0;
 
     // 마우스 커서 위치 업데이트
+    FWindowInfo WindowInfo = UEngine::GetEngine().GetWindowInfo();
     POINT pt;
     if (GetCursorPos(&pt))
     {
         CurrentMouseState.ScreenX = pt.x;
         CurrentMouseState.ScreenY = pt.y;
 
-        
-        if (ScreenToClient(UEngine::GetEngine().GetWindowInfo().WindowHandle, &pt))
+        if (ScreenToClient(WindowInfo.WindowHandle, &pt))
         {
             CurrentMouseState.ClientX = pt.x;
             CurrentMouseState.ClientY = pt.y;
-            FWindowInfo WindowInfo = UEngine::GetEngine().GetWindowInfo();
             ConvertMouseToNDC(WindowInfo.WindowHandle, WindowInfo.Width, WindowInfo.Height);
         }
     }

@@ -59,7 +59,7 @@ AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
 		}
 	}
 
-	// moller-trumbore algorithm으로 2차 검사
+	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
 	for (AActor* actor: selectedList) {
 		for (UActorComponent* comp: actor->GetOwnedComponent()) {
 			FVector hitpoint;
