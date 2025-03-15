@@ -46,7 +46,8 @@ struct alignas(16) FMatrix
 	FVector GetTranslation() const; // 이동 벡터.
 	FVector GetScale() const; // 스케일 벡터.
 	FVector GetRotation() const; // 회전 벡터.
-	FVector TransformVector(const FVector& Vector) const; // 3차원 벡터 변환.
+	FVector TransformPositionVector(const FVector& Vector) const; // 3차원 위치벡터 변환.
+	FVector TransformDirectionVector(const FVector& Vector) const; // 3차원 방향벡터 변환.
 
 	FVector4 TransformVector4(const FVector4& Vector) const; // 4차원 벡터 변환.
 

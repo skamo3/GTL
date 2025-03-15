@@ -33,7 +33,7 @@ FAABB USphereComponent::GetAABB() const {
 
 	FMatrix transform = GetWorldMatrix();
 	for ( int i = 0; i < 8; i++ ) {
-		vecs[i] = transform.TransformVector(vecs[i]);
+		vecs[i] = transform.TransformPositionVector(vecs[i]);
 		if ( vecs[i].X < min.X ) min.X = vecs[i].X;
 		if ( vecs[i].Y < min.Y ) min.Y = vecs[i].Y;
 		if ( vecs[i].Z < min.Z ) min.Z = vecs[i].Z;

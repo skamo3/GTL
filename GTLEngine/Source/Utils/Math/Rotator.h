@@ -212,12 +212,12 @@ inline FVector FRotator::Euler() const
 // Rotate a vector rotated by this rotator
 inline FVector FRotator::TransformRotVecToMatrix(const FVector& V) const
 {
-	return FMatrix(*this).TransformVector(V);
+	return FMatrix(*this).TransformPositionVector(V);
 }
 
 inline FVector FRotator::UnrotateVector(const FVector& V) const
 {
-	return (FMatrix(*this).Inverse().TransformVector(V));
+	return (FMatrix(*this).Inverse().TransformPositionVector(V));
 }
 
 inline FMatrix FRotator::ToMatrix() const

@@ -410,6 +410,7 @@ void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
         if (Actor->IsSelected)
             RenderAABB(Actor->GetAABB());
     }
+    RenderAABB(FAABB(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5)));
 }
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)

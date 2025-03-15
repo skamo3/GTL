@@ -12,8 +12,8 @@ void ULineComponent::Destroy() {}
 FAABB ULineComponent::GetAABB() const {
 	FVector min, max;
 	FMatrix transformation = GetWorldMatrix();
-	FVector start = transformation.TransformVector(FVector::Zero());
-	FVector end = transformation.TransformVector(FVector(1.0f, 0.f, 0.f));
+	FVector start = transformation.TransformPositionVector(FVector::Zero());
+	FVector end = transformation.TransformPositionVector(FVector(1.0f, 0.f, 0.f));
 
 	min.X = (start.X < end.X) ? start.X : end.X;
 	min.Y = (start.Y < end.Y) ? start.Y : end.Y;
