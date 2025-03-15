@@ -11,6 +11,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <iostream>
+#include <Utils/Math/Rotator.h>
 
 namespace json {
 
@@ -646,4 +647,11 @@ JSON JSON::Load( const string &str ) {
     return std::move( parse_next( str, offset ) );
 }
 
+json::JSON FVectorToJSON(const FVector& vec) {
+    return json::Array(vec.X, vec.Y, vec.Z);
+}
+
+json::JSON FRotatorToJSON(const FRotator& rot) {
+    return json::Array(rot.Roll, rot.Pitch, rot.Yaw);
+}
 } // End Namespace json

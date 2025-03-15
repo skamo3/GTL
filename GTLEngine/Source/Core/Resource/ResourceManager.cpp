@@ -3,6 +3,13 @@
 
 #include "Resource/Shape/PrimitiveShape.h"
 
+#include "SimpleJSON/json.hpp"
+#include <fstream>
+
+#include "Engine.h"
+#include "World.h"
+#include "GameFrameWork/Actor.h"
+
 UResourceManager::UResourceManager()
 {
     LoadPrimitives();
@@ -52,4 +59,57 @@ const TArray<FVertexSimple> UResourceManager::GetVertexData(EPrimitiveType Type)
         return VertexDataMap.find(Type)->second;
     }
 	return TArray<FVertexSimple>();
+}
+
+void UResourceManager::NewScene()
+{
+
+}
+
+void UResourceManager::LoadScene(std::string SceneName)
+{
+
+}
+
+void UResourceManager::SaveScene(std::string SceneName)
+{
+    UWorld* World = UEngine::GetEngine().GetWorld();
+    if (!World)
+        return;
+
+    json::JSON Scene;
+
+    TArray<AActor*> Actors = World->GetActors();
+    TArray<USceneComponent*> RootComponents;
+    for (AActor* Element : Actors)
+        RootComponents.push_back(Element->GetRootComponent());
+
+    uint32 key = 0;
+    for (USceneComponent* Element : RootComponents)
+    {
+        Scene["Components"][key]["Location"] = json::FVectorToJSON(Element->GetComponentLocation());
+        Scene["Components"][key]["Rotation"] = json::FRotatorToJSON(Element->GetComponentRotation());
+        Scene["Components"][key]["Scale"] = json::FVectorToJSON(Element->GetComponentScale());
+
+        TArray<USceneComponent*> stack;
+
+
+        while (!Element->GetAllChildren().empty())
+        {
+            
+        }
+
+        key++;
+    }
+
+    std::string jsonData = Scene.dump();
+    std::ofstream outFile(SceneName + ".Scene");
+    if (outFile.is_open())
+    {
+        outFile << jsonData;
+        outFile.close();
+    }
+    else {
+    }
+    
 }

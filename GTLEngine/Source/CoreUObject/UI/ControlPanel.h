@@ -37,8 +37,4 @@ private:
 
 	float WindowWidth;
 	float WindowHeight;
-
-	bool NewScene;
-	bool LoadScene;
-	bool SaveScene;
 };

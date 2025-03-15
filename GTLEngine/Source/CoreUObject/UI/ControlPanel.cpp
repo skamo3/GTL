@@ -11,6 +11,7 @@
 #include "Resource/Types.h"
 
 #include "World.h"
+#include "Resource/ResourceManager.h"
 #include "GameFrameWork/Camera.h"
 #include "Components/CameraComponent.h"
 
@@ -22,7 +23,7 @@
 
 UControlPanel::UControlPanel()
 	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, Scale{ 1.f,1.f,1.f },
-    FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f), NewScene(false), LoadScene(false), SaveScene(false)
+    FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f)
 {
 
 }
@@ -119,14 +120,27 @@ void UControlPanel::Tick(float DeltaTime)
 	// Scene 로드 세이브.
     ImGui::PushFont(UnicodeFont);
 
-    NewScene = ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize); // New Scene
+    UResourceManager* ResourceManager = UEngine::GetEngine().GetResourceManager();
+    if (!ResourceManager)
+        return;
+
+    if (ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize))     // New Scene
+    {
+
+    }
 
     ImGui::SameLine(0, 5.0f);
-    LoadScene = ImGui::Button(ICON_BUTTON_LOAD_SCENE, ControlButtonSize); // Load Scene
+    if (ImGui::Button(ICON_BUTTON_LOAD_SCENE, ControlButtonSize))   // Load Scene
+    {
+
+    }
+
 
     ImGui::SameLine(0, 5.0f);
-    SaveScene = ImGui::Button(ICON_BUTTON_SAVE_SCENE, ControlButtonSize); // Save Scene
-
+    if (ImGui::Button(ICON_BUTTON_SAVE_SCENE, ControlButtonSize))   // Save Scene
+    {
+        ResourceManager->SaveScene("sdfdsf");
+    }
 
     ImGui::PopFont();
 

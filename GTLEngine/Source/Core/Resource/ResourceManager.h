@@ -14,6 +14,10 @@ public:
 
     const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
 
+    void NewScene();
+    void LoadScene(std::string SceneName);
+    void SaveScene(std::string SceneName);
+
 private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
 
