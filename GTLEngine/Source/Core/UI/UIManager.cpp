@@ -14,7 +14,7 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 	// ImGui 생성.
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
-	ImGuiIO& IO = ImGui::GetIO();
+	IO = &ImGui::GetIO();
 
 	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
 	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);

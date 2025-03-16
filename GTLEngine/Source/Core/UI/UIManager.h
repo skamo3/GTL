@@ -4,6 +4,7 @@
 #include "Math/Vector.h"
 
 class UUIBase;
+struct ImGuiIO;
 
 class UUIManager : public UObject
 {
@@ -19,6 +20,7 @@ public:
 
 private:
 	TArray<UUIBase*> UIList;
+	ImGuiIO* IO;
 
 public:
 	// Property Window Function
