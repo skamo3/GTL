@@ -664,7 +664,7 @@ HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVe
 		return hr;
 
 	FVertexInfo VertexInfo = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
-	VertexBuffers.insert({ KeyType, VertexInfo });
+	PrimitiveVertexBuffers.insert({ KeyType, VertexInfo });
 
 	if (indices.size() > 0)
 	{
