@@ -1,7 +1,11 @@
 #include "pch.h"
 #include "Actor.h"
 
+#include "Core/Engine/Engine.h"
+#include "CoreUObject/World.h"
+#include "Utils/Math/Geometry.h"
 #include "Components/SceneComponent.h"
+#include "CoreUObject/GameFrameWork/Camera.h"
 
 AActor::AActor()
 	: UObject()
@@ -83,4 +87,35 @@ FAABB AActor::GetAABB() const {
 		if ( compAABB.max.Z > max.Z ) max.Z = compAABB.max.Z;
 	}
 	return FAABB(min, max);
+}
+
+void AActor::OnRelease() {
+	IsSelected = false;
+}
+
+void AActor::OnClick() {
+	IsSelected = true;
+}
+
+bool AActor::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {
+	// aabb로 1차 검사
+	FAABB aabb = GetAABB();
+	if ( !Geometry::IsRayIntersectAABB(aabb, ray, 100.f) ) {
+		return false;
+	}
+	bool result = false;
+	float minDistancePow = FLT_MAX;
+	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
+	for ( UActorComponent* comp : GetOwnedComponent() ) {
+		FVector hitp;
+		if ( comp->IsRayIntersect(ray, 100.f, hitp) &&
+			minDistancePow > (camera->GetActorLocation() - hitp).LengthSquared()
+			) {
+			minDistancePow = (camera->GetActorLocation() - hitp).LengthSquared();
+			result = true;
+			hitpoint = hitp;
+		}
+	}
+	return result;
 }

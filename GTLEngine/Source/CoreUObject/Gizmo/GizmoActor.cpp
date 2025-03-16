@@ -6,6 +6,7 @@
 AGizmoActor::AGizmoActor()
 {
 	ArrowComponent = AddComponent<UGizmoArrowComponent>(this);
+	ArrowComponent->SetupAttachment(RootComponent);
 }
 
 void AGizmoActor::Tick(float TickTime)

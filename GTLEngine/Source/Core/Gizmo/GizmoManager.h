@@ -46,6 +46,6 @@ private:
 	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
 
 public:
-	AActor* PickActor(float MouseX, float MouseY) const;
+	IClickable* PickClickable(float MouseX, float MouseY) const;
 };
 

@@ -262,6 +262,9 @@
     <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIInterface.cpp">
+      <Filter>Source\Core\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -458,6 +461,9 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\UI\UIInterface.h">
+      <Filter>Source\Core\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

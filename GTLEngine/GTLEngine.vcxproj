@@ -118,6 +118,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Use</PrecompiledHeader>
     </ClCompile>
     <ClCompile Include="Source\Utils\pch.cpp" />
+    <ClCompile Include="UIInterface.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Plugins\ImGui\imconfig.h" />
@@ -176,6 +177,7 @@
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
+    <ClInclude Include="Source\Core\UI\UIInterface.h" />
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />

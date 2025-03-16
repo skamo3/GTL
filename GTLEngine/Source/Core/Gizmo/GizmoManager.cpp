@@ -43,35 +43,24 @@ void UGizmoManager::Destroy()
 {
 }
 
-AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
+IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
-	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-	AActor* selected = nullptr;
-	TArray<AActor*> selectedList = TArray<AActor*>();
-	float minDistancePow = FLT_MAX;
-
-	// aabb로 1차 검사
-	for (AActor* actor: actors) {
-		FAABB aabb = actor->GetAABB();
-		if ( Geometry::IsRayIntersectAABB(aabb, ray, 100.f) ) {
-			selectedList.push_back(actor);
-		}
-	}
-
-	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
-	for (AActor* actor: selectedList) {
-		for (UActorComponent* comp: actor->GetOwnedComponent()) {
-			FVector hitpoint;
-			if (comp->IsRayIntersect(ray, 100.f, hitpoint) && 
-				minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
-			) {
-				minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
-				selected = actor;
-			}
-		}
-	}
+	TArray<IClickable*> clickables = IClickable::GetClickableList();
+	IClickable* selected = nullptr;
+	TArray<IClickable*> selectedList = TArray<IClickable*>();
 	
+
+	float minDistancePow = FLT_MAX;
+	FVector hitpoint;
+	for (IClickable* clickable: clickables) {
+		if ( clickable->IsClicked(ray, 100.f, hitpoint) &&
+			minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
+			) {
+			minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
+			selected = clickable;
+		}
+	}
 	return selected;
 }
 

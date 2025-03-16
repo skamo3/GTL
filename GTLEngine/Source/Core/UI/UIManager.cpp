@@ -7,6 +7,12 @@
 #include "Asset/IconDefs.h"
 #include "Asset/RawFonts.h"
 
+#include "Engine/Engine.h"
+#include "Input/InputManager.h"
+#include "Core/Gizmo/GizmoManager.h"
+#include "World.h"
+#include "Utils/Math/Geometry.h"
+
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
@@ -43,7 +49,24 @@ void UUIManager::Tick(float DeltaTime)
 			UI->Tick(DeltaTime);
 		}
 	}
+	// picking
+	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
+	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmoManager();
 
+		for ( auto& clickable : IClickable::GetClickableList() ) {
+			//actor->IsSelected = false;
+			clickable->OnRelease();
+		}
+		float mouse_x = inputManager->GetMouseNdcX();
+		float mouse_y = inputManager->GetMouseNdcY();
+
+		//lineActor->AddComponent<ULineComponent>(lineActor, FVector(1, 1, 1), FRotator::ZeroRotator, FVector(100.f, 0.f, 0.f));
+		IClickable* picked = gizmoManager->PickClickable(mouse_x, mouse_y);
+		if (picked)
+			picked->OnClick();
+	}
 }
 
 void UUIManager::RenderUI()
