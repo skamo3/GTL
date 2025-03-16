@@ -21,6 +21,7 @@ UResourceManager::UResourceManager()
 {
     // 평면형 UV 데이터 생성.
     UVQuadData = TArray<FVertexUV>(QuadVertices, QuadVertices + sizeof(QuadVertices) / sizeof(FVertexUV));
+    LoadPrimitives();
     LoadArrowGizmos();
 }
 
@@ -68,8 +69,6 @@ void UResourceManager::LoadPrimitives()
 
     uint64 BoundingBoxVertexNum = sizeof(BoundingBoxVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
-
-    LoadArrowGizmos();
 }
 
 void UResourceManager::LoadArrowGizmos()
