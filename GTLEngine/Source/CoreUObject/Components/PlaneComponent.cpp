@@ -45,18 +45,3 @@ FAABB UPlaneComponent::GetAABB() const {
 
 	return FAABB(min, max);
 }
-
-bool UPlaneComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
-	FVector vecs[3] = {
-		FVector(0.5f, -0.5f, 0.f),
-		FVector(-0.5f, -0.5f, 0.f),
-		FVector(0.f, 0.5f, 0.f),
-	};
-
-	FMatrix transform = GetWorldMatrix();
-	for ( int i = 0; i < 3; i++ ) {
-		vecs[i] = transform.TransformPositionVector(vecs[i]);
-	}
-	
-	return Geometry::IsRayIntersectWithTriangle(ray, vecs[0], vecs[1], vecs[2], hitDistance, hitPoint);;
-}
