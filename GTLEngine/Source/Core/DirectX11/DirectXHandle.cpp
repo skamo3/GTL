@@ -408,8 +408,8 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
 
     // IndexBuffer가 존재하는지 확인하고, DrawIndexed 호출
-    auto indexIt = IndexBuffers.find(Type);
-    if (indexIt != IndexBuffers.end())
+    auto indexIt = PrimitiveIndexBuffers.find(Type);
+    if (indexIt != PrimitiveIndexBuffers.end())
     {
         FIndexInfo IndexInfo = indexIt->second;
         DXDDeviceContext->IASetIndexBuffer(IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
@@ -639,10 +639,10 @@ HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_REN
 	return S_OK;
 }
 
-HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices)
+HRESULT UDirectXHandle::AddPrimitiveVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices)
 {
 	ID3D11Buffer* NewVertexBuffer;
-	// 버텍스 버퍼 생성
+	// Primitive 버텍스 버퍼 생성
 	D3D11_BUFFER_DESC bufferDesc = {};
 	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
 	bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
@@ -676,7 +676,50 @@ HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVe
 			return hr;
 
 		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
-		IndexBuffers.insert({ KeyType, IndexInfo });
+		PrimitiveIndexBuffers.insert({ KeyType, IndexInfo });
+	}
+
+	return S_OK;
+}
+
+HRESULT UDirectXHandle::AddGizmoVertexBuffer(EGizmoViewType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices)
+{
+	ID3D11Buffer* NewVertexBuffer;
+	// Gizmo 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
+
+	HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+	if (FAILED(hr))
+		return hr;
+
+	FVertexInfo VertexInfo = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
+	GizmoVertexBuffers.insert({ KeyType, VertexInfo });
+
+	if (indices.size() > 0)
+	{
+		ID3D11Buffer* NewIndexBuffer = nullptr;
+		D3D11_BUFFER_DESC indexBufferDesc = {};
+		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		indexBufferDesc.ByteWidth = sizeof(uint32) * static_cast<uint32>(indices.size());
+		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		indexBufferDesc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA indexInitData = {};
+		indexInitData.pSysMem = indices.data();
+
+		hr = DXDDevice->CreateBuffer(&indexBufferDesc, &indexInitData, &NewIndexBuffer);
+		if (FAILED(hr))
+			return hr;
+
+		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
+		GizmoIndexBuffers.insert({ KeyType, IndexInfo });
 	}
 
 	return S_OK;

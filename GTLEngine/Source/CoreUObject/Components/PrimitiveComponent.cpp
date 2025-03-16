@@ -62,7 +62,7 @@ bool UPrimitiveComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& h
     FMatrix transform = GetWorldMatrix().Inverse();
     FRay transformedRay = FRay(transform.TransformPositionVector(ray.Origin), transform.TransformDirectionVector(ray.Direction).GetSafeNormal());
 
-    TArray<FVertexSimple> vertices = UEngine::GetEngine().GetResourceManager()->GetVertexData(PrimitiveType);
+    TArray<FVertexSimple> vertices = UEngine::GetEngine().GetResourceManager()->GetPrimitiveVertexData(PrimitiveType);
     int nIntersections = 0;
     if ( vertices.size() < 3 )
         return false;

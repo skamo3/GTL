@@ -41,6 +41,7 @@ public:
 	void ClearEngine();
 
     HRESULT AddAllPrimitiveVertexBuffers();
+    HRESULT AddAllGizmoVertexBuffers();
 
 private:
     UEngine() = default;

@@ -90,6 +90,12 @@ private:
 	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
 	TMap<std::wstring, FVertexInfo> VertexBuffers;
 	TMap<EPrimitiveType, FIndexInfo> IndexBuffers;
+	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
+	TMap<EPrimitiveType, FIndexInfo> PrimitiveIndexBuffers;
+
+	TMap<EGizmoViewType, FVertexInfo> GizmoVertexBuffers;
+	TMap<EGizmoViewType, FIndexInfo> GizmoIndexBuffers;
+
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 
 	// TODO: Texture 관리용 객체로 묶어서 관리.

@@ -43,11 +43,19 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 
     // 셰이더 추가.
 
-    // 버텍스 버퍼 추가.
+    // Primitive 버텍스 버퍼 추가.
     hr = AddAllPrimitiveVertexBuffers();
     if (FAILED(hr))
     {
-        MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
+        MessageBox(WindowInfo.WindowHandle, TEXT("Primitive 버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
+        return false;
+    }
+
+    // Gizmo 버텍스 버퍼 추가
+    hr = AddAllGizmoVertexBuffers();
+    if (FAILED(hr))
+    {
+        MessageBox(WindowInfo.WindowHandle, TEXT("Gizmo 버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
         return false;
     }
     
@@ -128,6 +136,9 @@ void UEngine::Render()
     DirectX11Handle->RenderWorldPlane(World->GetCamera());
     DirectX11Handle->RenderBoundingBox(World->GetActors());
     DirectX11Handle->RenderLines(World->GetActors());
+
+    //DirectX11Handle->RenderGizmo();
+
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
     //DirectX11Handle->RenderGizmo(Gizmo);
     
@@ -185,7 +196,7 @@ HRESULT UEngine::AddAllPrimitiveVertexBuffers()
         EPrimitiveType Type = static_cast<EPrimitiveType>(i);
         if (Type != EPrimitiveType::None)
         {
-            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type), ResourceManager->GetIndexData(Type));
+            hr = DirectX11Handle->AddPrimitiveVertexBuffer(Type, ResourceManager->GetPrimitiveVertexData(Type), ResourceManager->GetPrimitiveIndexData(Type));
             if (FAILED(hr))
             {
                 return hr;
@@ -193,6 +204,18 @@ HRESULT UEngine::AddAllPrimitiveVertexBuffers()
         }
     }
     
+    return S_OK;
+}
+
+HRESULT UEngine::AddAllGizmoVertexBuffers()
+{
+    HRESULT hr = S_OK;
+    for (uint32 i = 0; i < static_cast<uint32>(EGizmoViewType::Max); ++i)
+    {
+        EGizmoViewType Type = static_cast<EGizmoViewType>(i);
+        hr = DirectX11Handle->AddGizmoVertexBuffer(Type, ResourceManager->GetGizmoVertexData(Type), ResourceManager->GetGizmoIndexData(Type));
+    }
+
     return S_OK;
 }
 
