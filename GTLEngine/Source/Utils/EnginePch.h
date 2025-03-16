@@ -55,6 +55,9 @@ typedef	INT64		int64;
 template <typename T>
 using TArray = std::vector<T>;
 
+template <typename T>
+using TList = std::list<T>;
+
 template <typename T1, typename T2>
 using TPair = std::pair<T1, T2>;
 

@@ -89,12 +89,12 @@ FAABB AActor::GetAABB() const {
 	return FAABB(min, max);
 }
 
-void AActor::OnRelease() {
-	IsSelected = false;
+void AActor::OnClick(int mx, int my) {
+	IsSelected = true;
 }
 
-void AActor::OnClick() {
-	IsSelected = true;
+void AActor::OnRelease(int mx, int my) {
+	IsSelected = false;
 }
 
 bool AActor::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {

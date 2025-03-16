@@ -16,6 +16,7 @@ class UDXDConstantBuffer;
 class UObject;
 class AActor;
 class ACamera;
+class UGizmoBase;
 class UGizmoManager;
 class UPrimitiveComponent;
 class ULineComponent;
@@ -37,9 +38,9 @@ public:
 
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderWorldPlane(ACamera* Camera);
-	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderBoundingBox(const TArray<AActor*> Actors);
+	void RenderGizmo(const TArray<UGizmoBase*> gizmo);
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);

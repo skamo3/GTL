@@ -229,10 +229,10 @@
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp">
@@ -429,10 +429,10 @@
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h">
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBase.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h">
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrow.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h">

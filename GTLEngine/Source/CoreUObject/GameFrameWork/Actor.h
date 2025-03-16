@@ -68,8 +68,8 @@ private:
 	TArray<UActorComponent*> OwnedComponent;
 
 public:
-	void OnRelease() override;
-	void OnClick() override;
+	void OnClick(int mx, int my) override;
+	void OnRelease(int mx, int my) override;
 	bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
 
 };

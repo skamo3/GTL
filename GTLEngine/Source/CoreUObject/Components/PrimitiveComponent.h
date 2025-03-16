@@ -10,11 +10,10 @@ public:
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
+	FMatrix GetWorldMatrix() const override;
 
 public:
 	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
-
-	virtual FMatrix GetWorldMatrix() const;
 	virtual FAABB GetAABB() const override;
 	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
 protected:

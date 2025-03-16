@@ -42,9 +42,6 @@ private:
 	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
 
-	
-	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
-
 public:
 	IClickable* PickClickable(float MouseX, float MouseY) const;
 };

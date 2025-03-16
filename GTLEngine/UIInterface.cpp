@@ -1,5 +1,5 @@
 #include "pch.h"
 #include "UI/UIInterface.h"
 
-TArray<IClickable*> IClickable::ClickableList = TArray<IClickable*>();
-TArray<IDragable*> IDragable::DragableList = TArray<IDragable*>();
+TList<IClickable*> IClickable::ClickableList = TList<IClickable*>();
+TList<IDragable*> IDragable::DragableList = TList<IDragable*>();

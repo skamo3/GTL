@@ -4,37 +4,34 @@
 
 class IClickable {
 private:
-	static TArray<IClickable*> ClickableList;
+	static TList<IClickable*> ClickableList;
 	uint32 InternalIndex;
 public:
-	inline static TArray<IClickable*> GetClickableList() { return ClickableList; };
+	inline static TList<IClickable*> GetClickableList() { return ClickableList; };
 	IClickable() {
 		InternalIndex = static_cast<uint32>(ClickableList.size());
 		ClickableList.push_back(this);
 	}
 	virtual ~IClickable() {
-		ClickableList[InternalIndex] = nullptr;
+		ClickableList.remove(this);
 	}
-	virtual void OnRelease() abstract;
-	virtual void OnClick() abstract;
+	virtual void OnRelease(int mx, int my) abstract;
+	virtual void OnClick(int mx, int my) abstract;
 	virtual bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) abstract;
 };
 
-class IDragable {
+class IDragable: public IClickable {
 private:
-	static TArray<IDragable*> DragableList;
+	static TList<IDragable*> DragableList;
 	uint32 InternalIndex;
 public:
-	inline static TArray<IDragable*> GetDragableList() { return DragableList; };
+	inline static TList<IDragable*> GetDragableList() { return DragableList; };
 	IDragable() {
 		InternalIndex = static_cast<uint32>(DragableList.size());
 		DragableList.push_back(this);
 	}
 	virtual ~IDragable() {
-		DragableList[InternalIndex] = nullptr;
+		DragableList.remove(nullptr);
 	}
-	
-	virtual void OnDragStart(int mx, int my) abstract;
-	virtual void OnDragTick(int dmx, int dmy) abstract;
-	virtual void OnDragEnd(int mx, int my) abstract;
+	virtual void OnDragTick(int mx, int my) abstract;
 };

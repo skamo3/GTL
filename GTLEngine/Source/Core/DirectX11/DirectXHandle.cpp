@@ -17,6 +17,7 @@
 #include "Engine.h"
 
 #include "Gizmo/GizmoManager.h"
+#include "Gizmo/GizmoBase.h"
 #include "World.h"
 
 #include "Math/Matrix.h"
@@ -333,23 +334,6 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
 }
 
-void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
-{
-    // Selected 오브젝트 기반으로 기즈모 그리가.
-
-    switch (GizmoManager->GetGizmoType())
-    {
-	case EGizmoType::Translate: // 이동 모양 그리기.
-		break;
-	case EGizmoType::Rotate: // 회전 모양 그리기.
-		break;
-	case EGizmoType::Scale: // 크기 조절 모양 그리기.
-		break;
-    default:
-        break;
-    } 
-}
-
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
     if (!PrimitiveComp)
@@ -431,7 +415,13 @@ void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
         if (Actor->IsSelected)
             RenderAABB(Actor->GetAABB());
     }
-    RenderAABB(FAABB(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5)));
+}
+
+void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> gizmo) {
+
+    for ( UGizmoBase* g : gizmo ) {
+        RenderAABB(g->GetAABB());
+    }
 }
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)

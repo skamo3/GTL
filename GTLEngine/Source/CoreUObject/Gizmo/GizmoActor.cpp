@@ -1,12 +1,12 @@
 #include "pch.h"
 #include "GizmoActor.h"
 
-#include "GizmoArrowComponent.h"
+#include "GizmoArrow.h"
 
 AGizmoActor::AGizmoActor()
 {
-	ArrowComponent = AddComponent<UGizmoArrowComponent>(this);
-	ArrowComponent->SetupAttachment(RootComponent);
+	//ArrowComponent = AddComponent<UGizmoArrow>(this);
+	//ArrowComponent->SetupAttachment(RootComponent);
 }
 
 void AGizmoActor::Tick(float TickTime)

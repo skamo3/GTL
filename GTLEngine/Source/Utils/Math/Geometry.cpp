@@ -50,7 +50,7 @@ bool Geometry::IsRayIntersectWithTriangle(const FRay& ray, const FVector& v0, co
     if ( det > -epsilon && det < epsilon )
         return false;    // This ray is parallel to this triangle.
 
-    float inv_det = 1.0 / det;
+    float inv_det = 1.0f / det;
     FVector s = ray.Origin - v0;
     float u = inv_det * s.Dot(ray_cross_e2);
 

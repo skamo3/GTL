@@ -46,10 +46,8 @@ void UGizmoManager::Destroy()
 IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-	TArray<IClickable*> clickables = IClickable::GetClickableList();
+	TList<IClickable*> clickables = IClickable::GetClickableList();
 	IClickable* selected = nullptr;
-	TArray<IClickable*> selectedList = TArray<IClickable*>();
-	
 
 	float minDistancePow = FLT_MAX;
 	FVector hitpoint;
@@ -62,10 +60,4 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 		}
 	}
 	return selected;
-}
-
-bool UGizmoManager::IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const {
-
-
-	return false;
 }

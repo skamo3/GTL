@@ -18,6 +18,8 @@
 #include "ImGui/imgui_impl_dx11.h"
 #include "ImGui/imgui_impl_win32.h"
 
+#include "CoreUObject/Gizmo/GizmoArrow.h"
+
 void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext)
 {
 	// ImGui 생성.
@@ -49,23 +51,60 @@ void UUIManager::Tick(float DeltaTime)
 			UI->Tick(DeltaTime);
 		}
 	}
+
 	// picking
+	Picking();
+
+}
+
+void UUIManager::Picking() {
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
 	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
 		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
 		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmoManager();
 
-		for ( auto& clickable : IClickable::GetClickableList() ) {
-			//actor->IsSelected = false;
-			clickable->OnRelease();
-		}
+
+		// test pick
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
-
-		//lineActor->AddComponent<ULineComponent>(lineActor, FVector(1, 1, 1), FRotator::ZeroRotator, FVector(100.f, 0.f, 0.f));
 		IClickable* picked = gizmoManager->PickClickable(mouse_x, mouse_y);
-		if (picked)
-			picked->OnClick();
+
+
+		// if gizmo picked
+		UGizmoBase* pickedGizmo;
+		if ( picked && (pickedGizmo = dynamic_cast<UGizmoBase*>(picked)) ) {
+			return;
+		}
+
+
+		// release pick
+		for ( auto& clickable : IClickable::GetClickableList() ) {
+			clickable->OnRelease(mouse_x, mouse_y);
+		}
+		// release gizmo
+		for ( auto& g : Gizmo )
+			delete g;
+		Gizmo.clear();
+
+
+		// if actor picked
+		AActor* pickedActor;
+		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
+			picked->OnClick(mouse_x, mouse_y);
+
+			// pick gizmo
+			switch ( Mode ) {
+			case EGizmoMode::Translation:
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Z, pickedActor));
+				break;
+			case EGizmoMode::Rotation:
+			case EGizmoMode::Scale:
+				break;
+			}
+			return;
+		}
 	}
 }
 
@@ -264,4 +303,8 @@ void UUIManager::PreferenceStyle()
 	// Text
 	ImGui::GetStyle().Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 0.9f);
 
+}
+
+const TArray<UGizmoBase*> UUIManager::GetGizmo() {
+	return Gizmo;
 }
