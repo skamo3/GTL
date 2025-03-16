@@ -13,7 +13,7 @@ public:
 		Y,
 		Z
 	};
-	bool IsAbsoluteCoord = false;
+	static bool IsAbsoluteCoord;
 protected:
 	FVector OriginalAABB[8] = {
 		FVector(0.f, -0.5f, -0.5f),

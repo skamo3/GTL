@@ -20,7 +20,6 @@
 UResourceManager::UResourceManager()
 {
     LoadPrimitives();
-    LoadArrowGizmos();
 }
 
 UResourceManager::~UResourceManager()
@@ -67,6 +66,8 @@ void UResourceManager::LoadPrimitives()
 
     uint64 BoundingBoxVertexNum = sizeof(BoundingBoxVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
+
+    LoadArrowGizmos();
 }
 
 void UResourceManager::LoadArrowGizmos()
@@ -77,6 +78,7 @@ void UResourceManager::LoadArrowGizmos()
     if (!objFile)
     {
         // 파일 열기 실패 시 처리
+        
         return;
     }
 

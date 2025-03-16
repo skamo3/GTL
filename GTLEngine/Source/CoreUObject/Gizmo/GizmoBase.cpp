@@ -2,6 +2,8 @@
 #include "GizmoBase.h"
 #include "Utils/Math/Geometry.h"
 
+bool UGizmoBase::IsAbsoluteCoord = false;
+
 UGizmoBase::UGizmoBase(EAxis axis, AActor* Target) : Target(Target), axis(axis) {}
 
 void UGizmoBase::Tick(float TickTime) {

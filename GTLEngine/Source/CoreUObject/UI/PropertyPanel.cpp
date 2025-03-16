@@ -3,6 +3,7 @@
 
 #include "ImGui/imgui.h"
 #include "UI/UIManager.h"
+#include "Gizmo/GizmoBase.h"
 #include "Utils/Math/Vector.h"
 
 UPropertyPanel::UPropertyPanel()
@@ -41,5 +42,7 @@ void UPropertyPanel::Render()
 	ImGui::Text("GUID : %d", UUID);
 
 	ImGui::Separator();
+
+	ImGui::Checkbox("WorldCoord", &UGizmoBase::IsAbsoluteCoord);
 	ImGui::End();
 }

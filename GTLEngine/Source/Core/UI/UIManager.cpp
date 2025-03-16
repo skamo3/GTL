@@ -10,15 +10,12 @@
 #include "Engine/Engine.h"
 #include "Input/InputManager.h"
 #include "Core/Gizmo/GizmoManager.h"
-#include "World.h"
-#include "Utils/Math/Geometry.h"
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "ImGui/imgui_impl_win32.h"
 
-#include "CoreUObject/Gizmo/GizmoArrow.h"
 
 void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext)
 {
@@ -51,77 +48,6 @@ void UUIManager::Tick(float DeltaTime)
 			UI->Tick(DeltaTime);
 		}
 	}
-
-	for ( auto& g : Gizmo )
-		g->Tick(DeltaTime);
-
-	// picking
-	Picking();
-
-}
-
-void UUIManager::Picking() {
-	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
-	
-
-	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
-		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
-		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmoManager();
-		// test pick
-		float mouse_x = inputManager->GetMouseNdcX();
-		float mouse_y = inputManager->GetMouseNdcY();
-		IClickable* picked = gizmoManager->PickClickable(mouse_x, mouse_y);
-
-		IDragable* pickedDragable;
-		if ( picked && (pickedDragable = dynamic_cast<IDragable*>(picked))) {
-			DragTarget = pickedDragable;
-		}
-
-		// if gizmo picked
-		UGizmoBase* pickedGizmo;
-		if ( picked && (pickedGizmo = dynamic_cast<UGizmoBase*>(picked)) ) {
-			return;
-		}
-
-
-		// release pick
-		for ( auto& clickable : IClickable::GetClickableList() ) {
-			clickable->OnRelease(mouse_x, mouse_y);
-		}
-		// release gizmo
-		for ( auto& g : Gizmo )
-			delete g;
-		Gizmo.clear();
-
-
-		// if actor picked
-		AActor* pickedActor;
-		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
-			picked->OnClick(mouse_x, mouse_y);
-
-			// pick gizmo
-			switch ( Mode ) {
-			case EGizmoMode::Translation:
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::X, pickedActor));
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Y, pickedActor));
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Z, pickedActor));
-				break;
-			case EGizmoMode::Rotation:
-			case EGizmoMode::Scale:
-				break;
-			}
-			return;
-		}
-	} else if ( inputManager->GetMouseUp(UInputManager::EMouseButton::LEFT) ) {
-		DragTarget = nullptr;
-
-	} else if ( inputManager->GetMouseButton(UInputManager::EMouseButton::LEFT) ) {
-		if (DragTarget) {
-			int mouse_dx = inputManager->GetMouseDeltaX();
-			int mouse_dy = inputManager->GetMouseDeltaY();
-			DragTarget->OnDragTick(mouse_dx, mouse_dy);
-		}
-	} 
 }
 
 void UUIManager::RenderUI()
@@ -319,8 +245,4 @@ void UUIManager::PreferenceStyle()
 	// Text
 	ImGui::GetStyle().Colors[ImGuiCol_Text] = ImVec4(1.0f, 1.0f, 1.0f, 0.9f);
 
-}
-
-const TArray<UGizmoBase*> UUIManager::GetGizmo() {
-	return Gizmo;
 }

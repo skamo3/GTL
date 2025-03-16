@@ -21,18 +21,10 @@ public:
 	void RegistUI(UUIBase* NewUI);
 	void RenderUI();
 
-	enum class EGizmoMode {
-		Translation,
-		Rotation,
-		Scale,
-	};
-	EGizmoMode Mode = EGizmoMode::Translation;
+	
 private:
-	TArray<UGizmoBase*> Gizmo;
 	TArray<UUIBase*> UIList;
 	ImGuiIO* IO;
-	IDragable* DragTarget;
-	void Picking();
 public:
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
@@ -64,8 +56,6 @@ public:
 	void CreateUsingFont();
 
 	void PreferenceStyle();
-
-	const TArray<UGizmoBase*> GetGizmo();
 public:
 	// Console Function
 

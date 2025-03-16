@@ -14,10 +14,10 @@ enum class EPrimitiveType
     Cone,
     Grid,
     BoundingBox,
-    Max,
     XArrow,
     YArrow,
     ZArrow,
+    Max,
 };
 
  struct FVertexSimple

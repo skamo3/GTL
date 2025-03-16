@@ -14,34 +14,89 @@
 
 #include "Utils/Math/Geometry.h"
 
+#include "CoreUObject/Gizmo/GizmoArrow.h"
+
 UGizmoManager::UGizmoManager()
-	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr), SelectedActor(nullptr)
+	: GizmoType(EGizmoType::Translate), SelectedActor(nullptr), Gizmo()
 {
-	GizmoActor = new AGizmoActor();
 }
 
 void UGizmoManager::Tick(float DeltaTime)
 {
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
+	for ( auto& g : Gizmo )
+		g->Tick(DeltaTime);
 
-	// 마우스 왼쪽 클릭 했을 때
-	// Ray를 생성하고 GizmoActor와 교차하는지 확인.
-	if (InputManager->GetMouseDown(UInputManager::EMouseButton::LEFT))
-	{
-		SelectedAxis = ESelectedAxis::None;
-
-		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
-		float MouseDeltaY = static_cast<float>(InputManager->GetMouseDeltaY());
-		
-
-	}
-
-
+	Picking();
 }
 
 void UGizmoManager::Destroy()
 {
 }
+
+void UGizmoManager::Picking() {
+	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
+
+
+	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+		// test pick
+		float mouse_x = inputManager->GetMouseNdcX();
+		float mouse_y = inputManager->GetMouseNdcY();
+		IClickable* picked = PickClickable(mouse_x, mouse_y);
+
+		IDragable* pickedDragable;
+		if ( picked && (pickedDragable = dynamic_cast<IDragable*>(picked)) ) {
+			DragTarget = pickedDragable;
+		}
+
+		// if gizmo picked
+		UGizmoBase* pickedGizmo;
+		if ( picked && (pickedGizmo = dynamic_cast<UGizmoBase*>(picked)) ) {
+			return;
+		}
+
+
+		// release pick
+		for ( auto& clickable : IClickable::GetClickableList() ) {
+			clickable->OnRelease(mouse_x, mouse_y);
+		}
+		// release gizmo
+		for ( auto& g : Gizmo )
+			delete g;
+		Gizmo.clear();
+
+
+		// if actor picked
+		AActor* pickedActor;
+		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
+			picked->OnClick(mouse_x, mouse_y);
+
+			// pick gizmo
+			switch ( Mode ) {
+			case EGizmoType::Translate:
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Z, pickedActor));
+				break;
+			case EGizmoType::Rotate:
+			case EGizmoType::Scale:
+				break;
+			}
+			return;
+		}
+	} else if ( inputManager->GetMouseUp(UInputManager::EMouseButton::LEFT) ) {
+		DragTarget = nullptr;
+
+	} else if ( inputManager->GetMouseButton(UInputManager::EMouseButton::LEFT) ) {
+		if ( DragTarget ) {
+			int mouse_dx = inputManager->GetMouseDeltaX();
+			int mouse_dy = inputManager->GetMouseDeltaY();
+			DragTarget->OnDragTick(mouse_dx, mouse_dy);
+		}
+	}
+}
+
 
 IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
@@ -60,4 +115,8 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 		}
 	}
 	return selected;
+}
+
+const TArray<UGizmoBase*> UGizmoManager::GetGizmo() {
+	return Gizmo;
 }
