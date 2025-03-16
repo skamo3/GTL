@@ -105,6 +105,7 @@
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Source\Core\Resource\Types.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
     <ClCompile Include="Source\Core\UI\UIManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />

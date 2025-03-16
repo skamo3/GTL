@@ -99,6 +99,22 @@ HRESULT UDirectXHandle::CreateShaderManager()
     if (FAILED(hr))
         return hr;
 
+	D3D11_SAMPLER_DESC SamplerDesc = {};
+    SamplerDesc.Filter = D3D11_FILTER_MIN_MAG_MIP_LINEAR;
+	SamplerDesc.AddressU = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.AddressV = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.AddressW = D3D11_TEXTURE_ADDRESS_WRAP;
+	SamplerDesc.MipLODBias = -1.0f;
+
+	SamplerDesc.MaxAnisotropy = 16;
+	SamplerDesc.ComparisonFunc = D3D11_COMPARISON_NEVER;
+	SamplerDesc.MinLOD = 0;
+	SamplerDesc.MaxLOD = 0;
+    
+	hr = DXDDevice->CreateSamplerState(&SamplerDesc, &FontSamplerState);
+	if (FAILED(hr))
+		return hr;
+
     return S_OK;
 }
 
@@ -217,8 +233,7 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		return hr;
 	}
 
-    ID3D11ShaderResourceView* TextureSRV = nullptr;
-	hr = DirectX::CreateShaderResourceView(DXDDevice, TextureImage.GetImages(), TextureImage.GetImageCount(), TextureImage.GetMetadata(), &TextureSRV);
+	hr = DirectX::CreateShaderResourceView(DXDDevice, TextureImage.GetImages(), TextureImage.GetImageCount(), TextureImage.GetMetadata(), &FontAtlasTexture);
 	if (FAILED(hr))
 	{
 		return hr;
@@ -326,7 +341,7 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
     uint Stride = sizeof(FVertexSimple);
     uint offset = 0;
-    FVertexInfo Info = VertexBuffers[EPrimitiveType::Grid];
+    FVertexInfo Info = PrimitiveVertexBuffers[EPrimitiveType::Grid];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -388,7 +403,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     uint Stride = sizeof(FVertexSimple);
     //uint Stride = 84;6
     UINT offset = 0;
-    FVertexInfo Info = VertexBuffers[Type];
+    FVertexInfo Info = PrimitiveVertexBuffers[Type];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -429,7 +444,7 @@ void UDirectXHandle::RenderAABB(FAABB aabb) {
 
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
-    FVertexInfo Info = VertexBuffers[EPrimitiveType::BoundingBox];
+    FVertexInfo Info = PrimitiveVertexBuffers[EPrimitiveType::BoundingBox];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -459,6 +474,7 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
     {
         for (UActorComponent* Comp : Actor->GetOwnedComponent())
         {
+			//RenderUUID(dynamic_cast<UPrimitiveComponent*>(Comp));
             RenderPrimitive(dynamic_cast<UPrimitiveComponent*>(Comp));
         }
 
@@ -467,7 +483,6 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 		// PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
 	}
 
-    RenderTexture();
 
     // 셰이더 준비.
     // 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
@@ -499,28 +514,14 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 }
 
 void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
-    if ( LineComp == nullptr )
+    if ( LineComp == nullptr)
         return;
 
-    switch ( LineComp->GetPrimitiveType() ) {
-    case EPrimitiveType::Line:
-        break;
-    default:
-        return;
-    }
-
-    FMatrix worldMat = FMatrix::Identity();
-    FMatrix viewMat = FMatrix::Identity();
-    FMatrix projMat = FMatrix::Identity();
-
-
-    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS"));
-    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS"));
+	if (LineComp->GetPrimitiveType() == EPrimitiveType::None)
+		return;
 
     DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
     DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    auto a = ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS"));
 
     DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
@@ -547,7 +548,7 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     EPrimitiveType Type = LineComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
-    FVertexInfo Info = VertexBuffers[Type];
+    FVertexInfo Info = PrimitiveVertexBuffers[Type];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -555,9 +556,65 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     DXDDeviceContext->Draw(Num, 0);
 }
 
-void UDirectXHandle::RenderTexture()
+void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
 {
+    if (!PrimitiveComp)
+        return;
+
+    switch (PrimitiveComp->GetPrimitiveType()) {
+    case EPrimitiveType::None:
+    case EPrimitiveType::Line:
+    case EPrimitiveType::Grid:
+        return;
+    default:
+        break;
+    }
+
+    // Begin Object Matrix Update. 
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if (!CbChangesEveryObject)
+    {
+        return;
+    }
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
+    {
+        // 프리미티브 위치에서 카메라 쪽으로 회전.
+		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
+		FVector PrimitiveLocation = PrimitiveComp->GetOwner()->GetActorLocation();
+		FVector Delta = CameraLocation - PrimitiveLocation;
+		Delta = Delta.GetSafeNormal();
+
+		float Pitch = FMath::RadiansToDegrees(FMath::Asin(Delta.Z));
+		float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Delta.Y, Delta.X));
+
+		FRotator PrimitiveRotation(Pitch, Yaw, 0.f);
+        FMatrix RotationMatrix(PrimitiveRotation);
+        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(PrimitiveLocation);
+
+        Buffer->WorldMatrix = RotationMatrix * TranslationMatrix;
+    }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
+    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
+    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+
+	DXDDeviceContext->PSSetShaderResources(0, 1, &FontAtlasTexture);
+	DXDDeviceContext->PSSetSamplers(0, 1, &FontSamplerState);
+
+    //EPrimitiveType Type = LineComp->GetPrimitiveType();
+    uint Stride = sizeof(FVertexUV);
+    UINT offset = 0;
+    FVertexInfo Info = VertexBuffers[L"FontAtlas"];
+    ID3D11Buffer* VB = Info.VertexBuffer;
+    uint Num = Info.NumVertices;
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+
+    DXDDeviceContext->Draw(Num, 0);
 }
+
 
 void UDirectXHandle::InitView()
 {

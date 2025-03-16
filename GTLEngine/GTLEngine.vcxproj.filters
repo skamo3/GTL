@@ -265,6 +265,9 @@
     <ClCompile Include="UIInterface.cpp">
       <Filter>Source\Core\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\Core\Resource\Types.cpp">
+      <Filter>Source\Core\Resource</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">

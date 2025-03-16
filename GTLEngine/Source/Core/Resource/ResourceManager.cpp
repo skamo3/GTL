@@ -19,7 +19,9 @@
 
 UResourceManager::UResourceManager()
 {
-    LoadPrimitives();
+    // 평면형 UV 데이터 생성.
+    UVQuadData = TArray<FVertexUV>(QuadVertices, QuadVertices + sizeof(QuadVertices) / sizeof(FVertexUV));
+    LoadArrowGizmos();
 }
 
 UResourceManager::~UResourceManager()

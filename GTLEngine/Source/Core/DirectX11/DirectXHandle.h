@@ -47,9 +47,7 @@ public:
 	void RenderLine(ULineComponent* comp);
 	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
 	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
-	void RenderTexture();
-
-	void RenderLine();
+	void RenderUUID(UPrimitiveComponent* PrimitiveComp);
 
 public:
 	void InitView();
@@ -65,7 +63,13 @@ public:
 
 	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
-	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices);
+	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices);
+
+	// TODO: Name으로 버텍스 버퍼 저장.
+	// Array 타입을 다른 방식으로 바꿔서 저장.
+	template<typename T>
+	HRESULT AddVertexBuffer(std::wstring KeyName, const TArray<T> vertices);
+
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
@@ -85,10 +89,37 @@ private:
 	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
 
-	TMap<EPrimitiveType, FVertexInfo> VertexBuffers;
+	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
+	TMap<std::wstring, FVertexInfo> VertexBuffers;
 	TMap<EPrimitiveType, FIndexInfo> IndexBuffers;
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 
+	// TODO: Texture 관리용 객체로 묶어서 관리.
 	ID3D11ShaderResourceView* FontAtlasTexture;
+	ID3D11SamplerState* FontSamplerState;
+	FVertexInfo FontTextureBuffer;
+
 
 };
+
+template<typename T>
+inline HRESULT UDirectXHandle::AddVertexBuffer(std::wstring KeyName, const TArray<T> vertices)
+{
+	ID3D11Buffer* NewVertexBuffer;
+	// 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(T) * static_cast<uint32>(vertices.size());
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
+
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
+
+	HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+	if (FAILED(hr))
+		return hr;
+
+	FVertexInfo Info = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
+	VertexBuffers.insert({ KeyName, Info });
+}

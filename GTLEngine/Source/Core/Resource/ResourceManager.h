@@ -15,6 +15,7 @@ public:
     void Release();
 
     const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
+    const TArray<FVertexUV> GetUVData() const { return UVQuadData; }
     const TArray<uint32> GetIndexData(EPrimitiveType Type) const;
 
     void NewScene();
@@ -23,6 +24,7 @@ public:
 
 private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
+    TArray<FVertexUV> UVQuadData;
     TMap<EPrimitiveType, TArray<uint32>> IndexDataMap;
 
 private:
