@@ -28,6 +28,8 @@ protected:
 
 	EAxis axis = EAxis::X;
 	AActor* Target;
+	int startMouseX, startMouseY;
+	FMatrix mat = FMatrix::Identity();
 public:
 	UGizmoBase(EAxis axis, AActor* Target);
 

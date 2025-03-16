@@ -12,6 +12,6 @@ public:
 	virtual void Destroy() override;
 
 	void OnClick(int mx, int my) override;
-	void OnDragTick(int mx, int my) override;
+	void OnDragTick(int dmx, int dmy) override;
 	void OnRelease(int mx, int my) override;
 };

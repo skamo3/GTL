@@ -33,5 +33,5 @@ public:
 	virtual ~IDragable() {
 		DragableList.remove(nullptr);
 	}
-	virtual void OnDragTick(int mx, int my) abstract;
+	virtual void OnDragTick(int dmx, int dmy) abstract;
 };

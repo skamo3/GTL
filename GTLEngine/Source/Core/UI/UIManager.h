@@ -5,6 +5,7 @@
 
 class UUIBase;
 class UGizmoBase;
+class IDragable;
 
 struct ImGuiIO;
 
@@ -30,7 +31,7 @@ private:
 	TArray<UGizmoBase*> Gizmo;
 	TArray<UUIBase*> UIList;
 	ImGuiIO* IO;
-
+	IDragable* DragTarget;
 	void Picking();
 public:
 	// Property Window Function

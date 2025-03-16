@@ -52,6 +52,9 @@ void UUIManager::Tick(float DeltaTime)
 		}
 	}
 
+	for ( auto& g : Gizmo )
+		g->Tick(DeltaTime);
+
 	// picking
 	Picking();
 
@@ -59,16 +62,20 @@ void UUIManager::Tick(float DeltaTime)
 
 void UUIManager::Picking() {
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
+	
+
 	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
 		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
 		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmoManager();
-
-
 		// test pick
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
 		IClickable* picked = gizmoManager->PickClickable(mouse_x, mouse_y);
 
+		IDragable* pickedDragable;
+		if ( picked && (pickedDragable = dynamic_cast<IDragable*>(picked))) {
+			DragTarget = pickedDragable;
+		}
 
 		// if gizmo picked
 		UGizmoBase* pickedGizmo;
@@ -105,7 +112,16 @@ void UUIManager::Picking() {
 			}
 			return;
 		}
-	}
+	} else if ( inputManager->GetMouseUp(UInputManager::EMouseButton::LEFT) ) {
+		DragTarget = nullptr;
+
+	} else if ( inputManager->GetMouseButton(UInputManager::EMouseButton::LEFT) ) {
+		if (DragTarget) {
+			int mouse_dx = inputManager->GetMouseDeltaX();
+			int mouse_dy = inputManager->GetMouseDeltaY();
+			DragTarget->OnDragTick(mouse_dx, mouse_dy);
+		}
+	} 
 }
 
 void UUIManager::RenderUI()

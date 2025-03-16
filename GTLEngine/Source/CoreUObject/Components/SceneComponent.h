@@ -16,7 +16,9 @@ public:
 	void SetRelativeLocation(const FVector& Loc);
 	void SetRelativeRotation(const FRotator& Rot);
 	void SetRelativeScale(const FVector& Scale);
-	virtual FMatrix GetWorldMatrix() const { return FMatrix::Identity(); };
+	virtual FMatrix GetWorldMatrix() const { 
+		return FMatrix::GetScaleMatrix(RelativeScale) * FMatrix::GetRotateMatrix(RelativeRotation) * FMatrix::GetTranslateMatrix(RelativeLocation); 
+	};
 	FVector GetComponentLocation() const { return RelativeLocation; }
 	FRotator GetComponentRotation() const { return RelativeRotation; }
 	FVector GetComponentScale() const { return RelativeScale; }
