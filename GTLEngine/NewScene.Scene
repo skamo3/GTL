@@ -1,0 +1,61 @@
+{
+  "Actors" : {
+    "0" : {
+      "Children" : [{
+          "Children" : [{
+              "Children" : [],
+              "Location" : [0.000000, 5.000000, 2.000000],
+              "Rotation" : [45.000000, 0.000000, 0.000000],
+              "Scale" : [1.000000, 2.000000, 2.000000],
+              "Type" : "class UCubeComponent"
+            }],
+          "Location" : [0.000000, 0.000000, 0.000000],
+          "Rotation" : [0.000000, 0.000000, -45.000000],
+          "Scale" : [1.000000, 1.000000, 2.000000],
+          "Type" : "class UCubeComponent"
+        }],
+      "Location" : [0.000000, 0.000000, 0.000000],
+      "Rotation" : [0.000000, 1112.000000, 0.000000],
+      "Scale" : [1.000000, 1.000000, 1.000000],
+      "Type" : "class USceneComponent"
+    },
+    "1" : {
+      "Children" : [{
+          "Children" : [{
+              "Children" : [],
+              "Location" : [0.000000, 5.000000, 2.000000],
+              "Rotation" : [45.000000, 0.000000, 0.000000],
+              "Scale" : [1.000000, 2.000000, 2.000000],
+              "Type" : "class UCubeComponent"
+            }],
+          "Location" : [0.000000, 0.000000, 0.000000],
+          "Rotation" : [0.000000, 0.000000, -45.000000],
+          "Scale" : [1.000000, 1.000000, 2.000000],
+          "Type" : "class UCubeComponent"
+        }],
+      "Location" : [0.000000, 0.000000, 0.000000],
+      "Rotation" : [0.000000, 523.000000, 0.000000],
+      "Scale" : [1.000000, 1.000000, 1.000000],
+      "Type" : "class USceneComponent"
+    },
+    "2" : {
+      "Children" : [{
+          "Children" : [{
+              "Children" : [],
+              "Location" : [0.000000, 5.000000, 2.000000],
+              "Rotation" : [45.000000, 0.000000, 0.000000],
+              "Scale" : [1.000000, 2.000000, 2.000000],
+              "Type" : "class UCubeComponent"
+            }],
+          "Location" : [0.000000, 0.000000, 0.000000],
+          "Rotation" : [0.000000, 0.000000, -45.000000],
+          "Scale" : [1.000000, 1.000000, 2.000000],
+          "Type" : "class UCubeComponent"
+        }],
+      "Location" : [0.000000, 18.000000, 0.000000],
+      "Rotation" : [0.000000, 291.000000, 5.000000],
+      "Scale" : [1.000000, 1.000000, 1.000000],
+      "Type" : "class USceneComponent"
+    }
+  }
+}
