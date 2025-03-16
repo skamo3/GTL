@@ -6,23 +6,11 @@ UGizmoBase::UGizmoBase(EAxis axis, AActor* Target) : Target(Target), axis(axis) 
 
 void UGizmoBase::Tick(float TickTime) {
     if ( IsAbsoluteCoord ) {
-        if ( axis == EAxis::Y ) {
-            mat = mat * FMatrix::GetRotateMatrix(FQuat::EulerToQuaternion(FVector(0.f, 0.f, -90.f)));
-        } else if ( axis == EAxis::Z ) {
-            mat = mat * FMatrix::GetRotateMatrix(FQuat::EulerToQuaternion(FVector(0.f, 90.f, 0.f)));
-        }
         mat = FMatrix::GetTranslateMatrix(Target->GetActorLocation());
     } else {
-        //transform = FMatrix::GetScaleMatrix(Target->GetActorScale());
-        // 
-        //mat = FMatrix::GetRotateMatrix(Target->GetActorRotation());
-        mat = FMatrix::GetRotateMatrix(Target->GetActorRotation());
-        if ( axis == EAxis::Y ) {
-            mat = mat * FMatrix::GetRotateMatrix(FQuat::EulerToQuaternion(FVector(0.f, 0.f, -90.f)));
-        }
-        if ( axis == EAxis::Z ) {
-            mat = mat * FMatrix::GetRotateMatrix(FQuat::EulerToQuaternion(FVector(0.f, 90.f, 0.f)));
-        }
+        mat = FMatrix();
+        //mat = mat * FMatrix::GetScaleMatrix(Target->GetActorScale());
+        mat = mat * FMatrix::GetRotateMatrix(Target->GetActorRotation());
         mat = mat * FMatrix::GetTranslateMatrix(Target->GetActorLocation());
     }
 }
@@ -53,6 +41,5 @@ FAABB UGizmoBase::GetAABB() const {
 }
 
 bool UGizmoBase::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {
-
 	return Geometry::IsRayIntersectAABB(GetAABB(), ray, maxDistance);
 }

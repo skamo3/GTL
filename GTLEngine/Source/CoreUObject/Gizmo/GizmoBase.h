@@ -36,7 +36,7 @@ public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
-	FAABB GetAABB() const;
+	virtual FAABB GetAABB() const;
 
 	virtual bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
 

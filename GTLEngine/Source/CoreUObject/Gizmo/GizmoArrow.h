@@ -14,4 +14,6 @@ public:
 	void OnClick(int mx, int my) override;
 	void OnDragTick(int dmx, int dmy) override;
 	void OnRelease(int mx, int my) override;
+
+	virtual bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
 };
