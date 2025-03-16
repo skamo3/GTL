@@ -2,12 +2,11 @@
 
 #include "Object.h"
 #include "Math/Vector.h"
+#include "ImGui/imgui.h"
 
 class UUIBase;
 class UGizmoManager;
 class IDragable;
-
-struct ImGuiIO;
 
 class UUIManager : public UObject
 {
@@ -25,6 +24,9 @@ private:
 	TArray<UUIBase*> UIList;
 	ImGuiIO* IO;
 public:
+	inline const bool IsImGuiWantTextInput() const { return IO->WantTextInput; }
+	inline const bool IsImGuiWantMouseInput() const { return IO->WantCaptureMouse; }
+
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
 	void OnObjectTranslationChanged(FVector& inTranslation);

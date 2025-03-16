@@ -59,14 +59,14 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	TimeManager = new UTimeManager();
 	TimeManager->Initialize();
 
-    // 인풋 매니저 추가.
-    InputManager = new UInputManager();
-
     // UI 매니저 추가.
 	UIManager = new UUIManager();
 	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice(), DirectX11Handle->GetD3DDeviceContext());
 
     GizmoManager = new UGizmoManager();
+
+    // 인풋 매니저 추가.
+    InputManager = new UInputManager();
 
     // 월드 추가.
     World = UWorld::CreateWorld();

@@ -3,11 +3,14 @@
 #include "InputManager.h"
 
 #include "Engine.h"
+#include "Core/UI/UIManager.h"
 
 UInputManager::UInputManager()
     : CurrentKeyStates(TArray<bool>(256, false))
     , PrevKeyStates(TArray<bool>(256, false))
-{}
+{
+    ImGuiManager = UEngine::GetEngine().GetUIManager();
+}
 
 UInputManager::~UInputManager()
 {
@@ -79,6 +82,8 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
 
 bool UInputManager::GetMouseButton(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)
@@ -90,6 +95,8 @@ bool UInputManager::GetMouseButton(EMouseButton button) const
 
 bool UInputManager::GetMouseDown(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton && !PrevMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)
@@ -101,6 +108,8 @@ bool UInputManager::GetMouseDown(EMouseButton button) const
 
 bool UInputManager::GetMouseUp(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return !CurrentMouseState.LeftButton && PrevMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)

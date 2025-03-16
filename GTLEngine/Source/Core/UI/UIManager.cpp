@@ -27,6 +27,7 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);
 
 	CreateUsingFont();
+	IO = &ImGui::GetIO();
 }
 
 void UUIManager::RegistUI(UUIBase* NewUI)

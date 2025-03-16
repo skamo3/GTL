@@ -1,7 +1,7 @@
 #pragma once
 
 #include "Object.h"
-
+class UUIManager;
 class UInputManager : public UObject
 {
 public:
@@ -71,4 +71,6 @@ private:
 
     MouseState CurrentMouseState;
     MouseState PrevMouseState;
+
+    UUIManager* ImGuiManager;
 };

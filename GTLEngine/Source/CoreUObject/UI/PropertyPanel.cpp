@@ -56,7 +56,7 @@ void UPropertyPanel::Render()
 		ImGui::DragFloat3("Scale", Scale);
 		selected->SetActorScale(FVector(Scale[0], Scale[1], Scale[2]));
 
-		ImGui::Text("GUID : %d", UUID);
+		ImGui::Text("GUID : %d", selected->GetUUID());
 	}
 
 	ImGui::Separator();
