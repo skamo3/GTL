@@ -18,6 +18,7 @@ class AActor;
 class ACamera;
 class UGizmoManager;
 class UPrimitiveComponent;
+class ULineComponent;
 
 class UDirectXHandle
 {
@@ -35,11 +36,15 @@ public:
 	void ReleaseDirectX11Handle();
 
 	void UpdateCameraMatrix(ACamera* Camera);
+	void RenderWorldPlane(ACamera* Camera);
 	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
-	void RenderObejct(const TArray<AActor*> Actors);
-
-	void RenderLine();
+	void RenderBoundingBox(const TArray<AActor*> Actors);
+	void RenderObject(const TArray<AActor*> Actors);
+	void RenderLines(const TArray<AActor*> Actors);
+	void RenderLine(ULineComponent* comp);
+	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
+	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 
 public:
 	void InitView();
@@ -62,6 +67,8 @@ public:
 private:
 	void UpdateWorldViewMatrix(ACamera* Camera);
 	void UpdateWorldProjectionMatrix(ACamera* Camera);
+
+	void RenderAABB(FAABB aabb);
 
 private:
 	ID3D11Device* DXDDevice;

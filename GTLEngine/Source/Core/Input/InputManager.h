@@ -46,10 +46,10 @@ public:
     bool GetMouseDown(EMouseButton button) const;
     // 0: Left Button, 1: Right Button, 2: Middle Button    
     bool GetMouseUp(EMouseButton button) const;
-    int GetMouseClientX() const { return CurrentMouseState.ScreenX;};
-    int GetMouseClient() const { return CurrentMouseState.ScreenY;};
-    int GetMouseScreenX() const { return CurrentMouseState.ClientX;};
-    int GetMouseScreenY() const { return CurrentMouseState.ClientY;};
+    int GetMouseClientX() const { return CurrentMouseState.ClientX;};
+    int GetMouseClientY() const { return CurrentMouseState.ClientY;};
+    int GetMouseScreenX() const { return CurrentMouseState.ScreenX;};
+    int GetMouseScreenY() const { return CurrentMouseState.ScreenY;};
     float GetMouseNdcX() const { return CurrentMouseState.NdcX;};
     float GetMouseNdcY() const { return CurrentMouseState.NdcY;};
     int GetMouseDeltaX() const { return CurrentMouseState.ClientX - PrevMouseState.ClientX; };

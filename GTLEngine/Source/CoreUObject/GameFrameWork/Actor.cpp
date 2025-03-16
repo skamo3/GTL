@@ -69,3 +69,18 @@ void AActor::SetActorScale(const FVector& InScale)
 {
 	RootComponent->SetRelativeScale(InScale);
 }
+
+FAABB AActor::GetAABB() const {
+	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
+	FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+	for (UActorComponent* comp: OwnedComponent) {
+		FAABB compAABB = comp->GetAABB();
+		if ( compAABB.min.X < min.X ) min.X = compAABB.min.X;
+		if ( compAABB.min.Y < min.Y ) min.Y = compAABB.min.Y;
+		if ( compAABB.min.Z < min.Z ) min.Z = compAABB.min.Z;
+		if ( compAABB.max.X > max.X ) max.X = compAABB.max.X;
+		if ( compAABB.max.Y > max.Y ) max.Y = compAABB.max.Y;
+		if ( compAABB.max.Z > max.Z ) max.Z = compAABB.max.Z;
+	}
+	return FAABB(min, max);
+}

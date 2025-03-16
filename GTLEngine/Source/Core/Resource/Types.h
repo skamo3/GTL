@@ -12,7 +12,8 @@ enum class EPrimitiveType
     Cube,
     Cylinder,
     Cone,
-
+    Grid,
+    BoundingBox,
     Max,
 };
 
@@ -68,4 +69,18 @@ struct FCbLine
 {
     FVector Position;
     float R, G, B, A;
+};
+
+struct FRay {
+    FVector Origin;
+    FVector Direction;
+    FRay(FVector origin, FVector direction) : Origin(origin), Direction(direction) {};
+    inline FVector GetNormalizedDirection() const { return Direction.GetSafeNormal(); }
+};
+
+struct FAABB {
+    FVector min;
+    FVector max;
+    FAABB(FVector min, FVector max) : min(min), max(max) {};
+    FVector GetGap() { return max - min; }
 };

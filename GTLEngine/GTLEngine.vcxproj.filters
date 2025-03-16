@@ -136,7 +136,7 @@
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Components\TriangleComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp">
@@ -163,7 +163,7 @@
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp">
@@ -220,7 +220,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp">
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp">
@@ -254,6 +254,12 @@
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp">
+      <Filter>Source\CoreUObject\Components</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Utils\Math\Geometry.cpp">
+      <Filter>Utils\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Components\LineComponent.cpp">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClCompile>
   </ItemGroup>
@@ -309,7 +315,7 @@
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Components\TriangleComponent.h">
+    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h">
@@ -342,7 +348,7 @@
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
+    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
     <ClInclude Include="Source\Utils\Math\MathFwd.h">
@@ -405,7 +411,7 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.h">
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h">
@@ -447,14 +453,11 @@
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h">
       <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Asset\IconDefs.h">
-      <Filter>Source\Core\Asset</Filter>
+    <ClInclude Include="Source\Utils\Math\Geometry.h">
+      <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Asset\RawFonts.h">
-      <Filter>Source\Core\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\UI\UIIcon.h">
-      <Filter>Source\Core\UI</Filter>
+    <ClInclude Include="Source\CoreUObject\Components\LineComponent.h">
+      <Filter>Source\CoreUObject\Components</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

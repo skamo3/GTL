@@ -10,9 +10,12 @@
 #include "GameFrameWork/Actor.h"
 
 #include "DirectXMath.h"
+#include "Core/Resource/Types.h"
+
+#include "Utils/Math/Geometry.h"
 
 UGizmoManager::UGizmoManager()
-	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr)
+	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr), SelectedActor(nullptr)
 {
 	GizmoActor = new AGizmoActor();
 }
@@ -40,46 +43,40 @@ void UGizmoManager::Destroy()
 {
 }
 
-void UGizmoManager::RayCast2Dto3D(float MouseX, float MouseY)
-{
-	FWindowInfo WInfo = UEngine::GetEngine().GetWindowInfo();
+AActor* UGizmoManager::PickActor(float MouseX, float MouseY) const {
+	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
+	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
+	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	AActor* selected = nullptr;
+	TArray<AActor*> selectedList = TArray<AActor*>();
+	float minDistancePow = FLT_MAX;
 
-	float ViewX = (2.0f * MouseX) / WInfo.Width - 1.0f;
-	float ViewY = (-2.0f * MouseY) / WInfo.Height;
+	// aabb로 1차 검사
+	for (AActor* actor: actors) {
+		FAABB aabb = actor->GetAABB();
+		if ( Geometry::IsRayIntersectAABB(aabb, ray, 100.f) ) {
+			selectedList.push_back(actor);
+		}
+	}
 
-	// Projection 공간으로 변환
-	FVector4 RayOrigin = FVector4(ViewX, ViewY, 0.0f, 1.0f);
-	FVector4 RayEnd = FVector4(ViewX, ViewY, 1.0f, 1.0f);
-
-	// View 공간으로 변환
-	FMatrix InvProjMat = UEngine::GetEngine().GetWorld()->GetProjectionMatrix().Inverse();
-
-	ACamera* Camera = UEngine::GetEngine().GetWorld()->GetCamera();
-
-	RayOrigin = InvProjMat.TransformVector4(RayOrigin);
-	RayOrigin.W = 1.0f;
-	RayEnd = InvProjMat.TransformVector4(RayEnd);
-	RayEnd *= 1000.0f;
-	RayEnd.W = 1.0f;
-
-	FMatrix InvViewMat = UEngine::GetEngine().GetWorld()->GetViewMatrix().Inverse();
-	RayOrigin = InvViewMat.TransformVector4(RayOrigin);
-	RayOrigin /= RayOrigin.W = 1.0f;
-	RayEnd = InvViewMat.TransformVector4(RayEnd);
-	RayEnd /= RayEnd.W = 1.0f;
-
-	// Ray 생성.
-	FVector RayDir = (RayEnd - RayOrigin).GetSafeNormal();
-
-	// Picking 로직 구현.
-
-
-	// or
+	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
+	for (AActor* actor: selectedList) {
+		for (UActorComponent* comp: actor->GetOwnedComponent()) {
+			FVector hitpoint;
+			if (comp->IsRayIntersect(ray, 100.f, hitpoint) && 
+				minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
+			) {
+				minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
+				selected = actor;
+			}
+		}
+	}
 	
-	// 기즈모 이동.
-	float Distance = FVector::Distance(RayOrigin, SelectedActor->GetActorLocation());
-	
+	return selected;
+}
+
+bool UGizmoManager::IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const {
 
 
-	// 현재 카메라의 MVP 정보.
+	return false;
 }

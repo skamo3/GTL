@@ -19,6 +19,8 @@ enum class EGizmoType : uint8
 	Scale = 2
 };
 
+struct FRay;
+
 class UGizmoManager : public UObject
 {
 
@@ -39,7 +41,10 @@ private:
 	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
 
-	void RayCast2Dto3D(float MouseX, float MouseY);
+	
+	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
 
+public:
+	AActor* PickActor(float MouseX, float MouseY) const;
 };
 

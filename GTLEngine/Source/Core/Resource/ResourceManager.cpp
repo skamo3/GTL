@@ -33,6 +33,9 @@ void UResourceManager::LoadPrimitives()
         {0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f},
     };
 
+    uint64 LineVertexNum = sizeof(LineVertices) / sizeof(FVertexSimple);
+    VertexDataMap[EPrimitiveType::Line] = TArray<FVertexSimple>(LineVertices, LineVertices + LineVertexNum);
+
     uint64 TriangleVertexNum = sizeof(TriangleVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::Triangle] = TArray<FVertexSimple>(TriangleVertices, TriangleVertices + TriangleVertexNum);
 
@@ -47,6 +50,21 @@ void UResourceManager::LoadPrimitives()
 
     uint64 ConeVertexNum = sizeof(ConeVertices) / sizeof(FVertexSimple);
     VertexDataMap[EPrimitiveType::Cone] = TArray<FVertexSimple>(ConeVertices, ConeVertices + ConeVertexNum);
+
+    uint64 GridVertexNum = 1000;
+    float offset = static_cast<float>(GridVertexNum / 2) / 4;
+    TArray<FVertexSimple>& grid = VertexDataMap[EPrimitiveType::Grid] = TArray<FVertexSimple>();
+    grid.reserve(GridVertexNum);
+    for ( int i = 0; i < GridVertexNum / 4; ++i ) {
+        float f = static_cast<float>(i);
+        grid.push_back({ f - offset, offset,  0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ f - offset, -offset, 0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ offset, f - offset,  0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+        grid.push_back({ -offset, f - offset, 0.f,    1.0f, 1.0f, 1.0f, 1.0f });
+    }
+
+    uint64 BoundingBoxVertexNum = sizeof(BoundingBoxVertices) / sizeof(FVertexSimple);
+    VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
 }
 
 void UResourceManager::Release()

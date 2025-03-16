@@ -66,7 +66,8 @@
     <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CylinderComponent.cpp" />
-    <ClCompile Include="Source\CoreUObject\Components\TriangleComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\LineComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SceneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp" />
@@ -75,7 +76,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp" />
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp" />
@@ -85,7 +86,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
@@ -112,6 +113,7 @@
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
+    <ClCompile Include="Source\Utils\Math\Geometry.cpp" />
     <ClCompile Include="Source\Utils\Math\Matrix.cpp" />
     <ClCompile Include="Source\Utils\Math\Quat.cpp" />
     <ClCompile Include="Source\Utils\Math\Rotator.cpp" />
@@ -135,7 +137,8 @@
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CylinderComponent.h" />
-    <ClInclude Include="Source\CoreUObject\Components\TriangleComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\LineComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SceneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h" />
@@ -144,7 +147,7 @@
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h" />
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h" />
@@ -154,7 +157,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
+    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
@@ -162,8 +165,6 @@
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\Asset\Asset.h" />
     <ClInclude Include="Source\Core\Asset\AssetManager.h" />
-    <ClInclude Include="Source\Core\Asset\IconDefs.h" />
-    <ClInclude Include="Source\Core\Asset\RawFonts.h" />
     <ClInclude Include="Source\Core\Asset\SceneAsset.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />
@@ -181,10 +182,10 @@
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
-    <ClInclude Include="Source\Core\UI\UIIcon.h" />
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
+    <ClInclude Include="Source\Utils\Math\Geometry.h" />
     <ClInclude Include="Source\Utils\Math\MathUtils.h" />
     <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />
@@ -257,12 +258,10 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <IncludePath>$(ProjectDir)Plugins</IncludePath>
-    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)Source;$(ProjectDir)Utils;$(ProjectDir)Plugins;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <IncludePath>$(ProjectDir)Plugins</IncludePath>
-    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)\Source;$(ProjectDir)Plugins;$(ProjectDir)\Utils;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -306,7 +305,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine;$(ProjectDir)Plugins</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>
@@ -325,7 +324,7 @@
       <ConformanceMode>true</ConformanceMode>
       <PrecompiledHeader>Create</PrecompiledHeader>
       <PrecompiledHeaderFile>pch.h</PrecompiledHeaderFile>
-      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine;$(ProjectDir)Plugins</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)Source;$(ProjectDir)Source\Utils;$(ProjectDir)Source\CoreUObject;$(ProjectDir)Source\Core;$(ProjectDir)Source\Core\Engine</AdditionalIncludeDirectories>
       <LanguageStandard>stdcpp20</LanguageStandard>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
     </ClCompile>

@@ -9,7 +9,8 @@ class ACamera : public AActor
 {
 public:
 	ACamera();
-
+public:
+	float MouseSensitive;
 public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
@@ -23,5 +24,4 @@ public:
 
 private:
 	UCameraComponent* CameraComponent;
-
 };

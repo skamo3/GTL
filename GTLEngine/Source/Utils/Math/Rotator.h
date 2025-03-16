@@ -1,5 +1,6 @@
 #pragma once
 
+#include "MathUtils.h"
 #include "Vector.h"
 #include "Quat.h"
 #include "Matrix.h"
@@ -11,12 +12,14 @@ struct FRotator
 	float Roll; // X
 
 	static const FRotator ZeroRotator;
+	static FRotator MakeFromDirection(const FVector& normal);
 
 	FRotator() : Pitch(0.0f), Yaw(0.0f), Roll(0.0f) {}
 	FRotator(float InPitch, float InYaw, float InRoll) : Pitch(InPitch), Yaw(InYaw), Roll(InRoll) {}
-	FRotator(const FVector& InVector) : Pitch(InVector.Y), Yaw(InVector.Z), Roll(InVector.X) {}
+	FRotator(const FVector& InVector) : Pitch(FMath::RadiansToDegrees(InVector.Y)), Yaw(FMath::RadiansToDegrees(InVector.Z)), Roll(FMath::RadiansToDegrees(InVector.X)) {}
 	FRotator(const FRotator& InRotator) : Pitch(InRotator.Pitch), Yaw(InRotator.Yaw), Roll(InRotator.Roll) {}
 	FRotator(const FQuat& InQuat) : FRotator(InQuat.GetEuler()) {}
+	FRotator(const FMatrix InMatrix);
 
 	FRotator operator+(const FRotator& Other) const;
 	FRotator& operator+=(const FRotator& Other);
@@ -58,6 +61,29 @@ struct FRotator
 	void Normalize();
 
 };
+
+inline FRotator FRotator::MakeFromDirection(const FVector& normal) {
+	return FRotator();
+}
+
+inline FRotator::FRotator(const FMatrix InMatrix) {
+	// yaw pitch roll
+	//Pitch = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
+	//Yaw = atan2(-InMatrix.M[2][0], sqrt(InMatrix.M[2][1] * InMatrix.M[2][1] + InMatrix.M[2][2] * InMatrix.M[2][2]));
+	//Roll = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
+
+	// roll pitch yaw
+	//Pitch = asin(-InMatrix.M[2][0]);
+	//Yaw = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
+	//Roll = atan2(InMatrix.M[2][1], InMatrix.M[2][2]);
+
+	// gpt, help me!
+	//Pitch = -asin(InMatrix.M[2][0]);
+	//Yaw = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
+	//Roll = atan2(InMatrix.M[2][1], InMatrix.M[2][2]);
+
+
+}
 
 inline FRotator FRotator::operator+(const FRotator& Other) const
 {
@@ -186,12 +212,12 @@ inline FVector FRotator::Euler() const
 // Rotate a vector rotated by this rotator
 inline FVector FRotator::TransformRotVecToMatrix(const FVector& V) const
 {
-	return FMatrix(*this).TransformVector(V);
+	return FMatrix(*this).TransformPositionVector(V);
 }
 
 inline FVector FRotator::UnrotateVector(const FVector& V) const
 {
-	return (FMatrix(*this).Inverse().TransformVector(V));
+	return (FMatrix(*this).Inverse().TransformPositionVector(V));
 }
 
 inline FMatrix FRotator::ToMatrix() const
