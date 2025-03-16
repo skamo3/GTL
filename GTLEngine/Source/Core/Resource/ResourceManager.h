@@ -23,9 +23,10 @@ public:
 
     void Release();
 
-    const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
+    const TArray<FVertexSimple> GetPrimitiveVertexData(EPrimitiveType Type) const;
+    const TArray<uint32> GetPrimitiveIndexData(EPrimitiveType Type) const;
+
     const TArray<FVertexUV> GetUVData() const { return UVQuadData; }
-    const TArray<uint32> GetIndexData(EPrimitiveType Type) const;
 
     const TArray<FVertexSimple> GetGizmoVertexData(EGizmoViewType Type) const;
     const TArray<uint32> GetGizmoIndexData(EGizmoViewType Type) const;

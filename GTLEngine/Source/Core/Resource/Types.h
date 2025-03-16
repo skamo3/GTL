@@ -34,6 +34,8 @@ enum class EGizmoViewType
 
 FString GetPrimitiveTypeAsString(enum class EPrimitiveType Type);
 
+FString GetGizmoViewTypeAsString(enum class EGizmoViewType Type);
+
 struct FVertexSimple
 {
     float X = 0.f, Y = 0.f, Z = 0.f;

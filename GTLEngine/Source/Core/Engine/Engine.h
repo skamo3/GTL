@@ -40,8 +40,7 @@ public:
     void Render();
 	void ClearEngine();
 
-    HRESULT AddAllPrimitiveVertexBuffers();
-    HRESULT AddAllGizmoVertexBuffers();
+    HRESULT AddAllVertexBuffers();
 
 private:
     UEngine() = default;

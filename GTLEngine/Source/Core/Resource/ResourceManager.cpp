@@ -111,7 +111,7 @@ void UResourceManager::LoadPrimitives()
 
 void UResourceManager::LoadTranslateGizmos()
 {
-    ObjData Obj = LoadObj(L"Source/Core/Resource/Shape/GizmoTranslate.obj");
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoTranslate.obj");
 
     // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
@@ -149,7 +149,7 @@ void UResourceManager::LoadTranslateGizmos()
 
 void UResourceManager::LoadRotateGizmos()
 {
-    ObjData Obj = LoadObj(L"Source/Core/Resource/Shape/GizmoRotate.obj");
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoRotate.obj");
 
     // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
@@ -187,7 +187,7 @@ void UResourceManager::LoadRotateGizmos()
 
 void UResourceManager::LoadScaleGizmos()
 {
-    ObjData Obj = LoadObj(L"Source/Core/Resource/Shape/GizmoScale.obj");
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoScale.obj");
 
     // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
