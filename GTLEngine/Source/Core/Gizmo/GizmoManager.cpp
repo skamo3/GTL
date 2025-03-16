@@ -61,6 +61,7 @@ void UGizmoManager::Picking() {
 		for ( auto& clickable : IClickable::GetClickableList() ) {
 			clickable->OnRelease(mouse_x, mouse_y);
 		}
+		SelectedActor = nullptr;
 		// release gizmo
 		for ( auto& g : Gizmo )
 			delete g;
@@ -71,6 +72,7 @@ void UGizmoManager::Picking() {
 		AActor* pickedActor;
 		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
 			picked->OnClick(mouse_x, mouse_y);
+			SelectedActor = pickedActor;
 
 			// pick gizmo
 			switch ( Mode ) {

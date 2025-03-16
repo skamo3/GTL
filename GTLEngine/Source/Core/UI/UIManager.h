@@ -4,7 +4,7 @@
 #include "Math/Vector.h"
 
 class UUIBase;
-class UGizmoBase;
+class UGizmoManager;
 class IDragable;
 
 struct ImGuiIO;
@@ -21,7 +21,6 @@ public:
 	void RegistUI(UUIBase* NewUI);
 	void RenderUI();
 
-	
 private:
 	TArray<UUIBase*> UIList;
 	ImGuiIO* IO;

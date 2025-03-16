@@ -480,4 +480,9 @@
       <Filter>Resource\Shader</Filter>
     </FxCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Source\Core\Resource\Shape\AxisArrow.obj">
+      <Filter>Source\Core\Resource\Shape</Filter>
+    </Resource>
+  </ItemGroup>
 </Project>

@@ -66,10 +66,10 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	UIManager = new UUIManager();
 	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice(), DirectX11Handle->GetD3DDeviceContext());
 
+    GizmoManager = new UGizmoManager();
+
     // 월드 추가.
     World = UWorld::CreateWorld();
-
-	GizmoManager = new UGizmoManager();
 
     return true;
 }

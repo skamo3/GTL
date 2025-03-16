@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Math/Vector.h"
+#include "Gizmo/GizmoManager.h"
 #include "UI/UIBase.h"
 
 class UPropertyPanel: public UUIBase
@@ -11,7 +12,6 @@ public:
 public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void Destroy() override;
-
 private:
 	void Render();
 
@@ -24,4 +24,5 @@ private:
 	
 	float WindowWidth;
 	float WindowHeight;
+	UGizmoManager* gizmoManager;
 };
