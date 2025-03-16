@@ -60,8 +60,8 @@ void ACamera::Tick(float TickTime)
 		// Pitch, Yaw, Roll == Y, Z, X
 		// TODO: 회전 시 Roll 회전이 적용되는 문제가 생김. Rotator 문제일 수도 있음.
 
-		CameraRotation.Pitch += MouseDeltaY * MouseSensitive * TickTime;
-		CameraRotation.Yaw -= MouseDeltaX * MouseSensitive * TickTime;
+		CameraRotation.Pitch -= MouseDeltaY * MouseSensitive * TickTime;
+		CameraRotation.Yaw += MouseDeltaX * MouseSensitive * TickTime;
 
 		float MaxPitch = (89.0f);
 		float MinPitch = (-89.0f);

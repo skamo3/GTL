@@ -22,8 +22,8 @@
 #pragma comment(lib, "d3dcompiler") 
 
 #ifdef _DEBUG
-#pragma comment(lib, "DirectXTK/Libs/Debug/DirectXTK.lib")
-#pragma comment(lib, "DirectXTex/Libs/Debug/DirectXTex.lib")
+//#pragma comment(lib, "DirectXTK/Libs/Debug/DirectXTK.lib")
+//#pragma comment(lib, "DirectXTex/Libs/Debug/DirectXTex.lib")
 
 // 디버깅 시 콘솔 찍기.
 #pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
