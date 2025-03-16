@@ -34,6 +34,7 @@ public:
 	ESelectedAxis GetESelectedAxis() const { return SelectedAxis; }
 	EGizmoType GetGizmoType() const { return GizmoType; }
 
+
 private:
 	ESelectedAxis SelectedAxis;
 	EGizmoType GizmoType;

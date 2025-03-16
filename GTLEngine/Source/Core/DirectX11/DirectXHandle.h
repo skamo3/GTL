@@ -45,6 +45,9 @@ public:
 	void RenderLine(ULineComponent* comp);
 	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
 	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
+	void RenderTexture();
+
+	void RenderLine();
 
 public:
 	void InitView();
@@ -82,4 +85,7 @@ private:
 
 	TMap<EPrimitiveType, FVertexInfo> VertexBuffers;
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
+
+	ID3D11ShaderResourceView* FontAtlasTexture;
+
 };

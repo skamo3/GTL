@@ -467,5 +467,11 @@
     <FxCompile Include="Resource\Shader\LineShader.hlsl">
       <Filter>Resource\Shader</Filter>
     </FxCompile>
+    <FxCompile Include="Resource\Shader\TextureShader.hlsl">
+      <Filter>Resource\Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="Resource\Shader\MVPShader.hlsli">
+      <Filter>Resource\Shader</Filter>
+    </FxCompile>
   </ItemGroup>
 </Project>

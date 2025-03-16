@@ -21,6 +21,8 @@
 
 #include "Math/Matrix.h"
 
+#include "DirectXTex/DirectXTex.h"
+#include "DirectXTex/DirectXTex.inl"
 
 UDirectXHandle::~UDirectXHandle()
 {
@@ -66,18 +68,33 @@ HRESULT UDirectXHandle::CreateShaderManager()
     if (ShaderManager == nullptr)
         return S_FALSE;
 
-    // VertexShader 생성 및 InputLayout 생성.
+    // Primitive VS, PS, InputLayout 생성.
     D3D11_INPUT_ELEMENT_DESC layout[] =
     {
         { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
         { "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
     };
 
-    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/PrimitiveShader.hlsl", layout, ARRAYSIZE(layout));
+    HRESULT hr = ShaderManager->AddVertexShaderAndInputLayout(L"DefaultVS", L"Resource/Shader/PrimitiveShader.hlsl", "mainVS", layout, ARRAYSIZE(layout));
     if (FAILED(hr))
         return hr;
 
-    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"Resource/Shader/PrimitiveShader.hlsl");
+    hr = ShaderManager->AddPixelShader(L"DefaultPS", L"Resource/Shader/PrimitiveShader.hlsl", "mainPS");
+    if (FAILED(hr))
+        return hr;
+
+    // Texture VS, PS, InputLayout 생성.
+    D3D11_INPUT_ELEMENT_DESC TextureLayout[] =
+    {
+        { "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+        { "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT, 0, 12, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+    };
+
+    hr = ShaderManager->AddVertexShaderAndInputLayout(L"TextureVS", L"Resource/Shader/TextureShader.hlsl", "mainVS", TextureLayout, ARRAYSIZE(TextureLayout));
+    if (FAILED(hr))
+        return hr;
+
+    hr = ShaderManager->AddPixelShader(L"TexturePS", L"Resource/Shader/TextureShader.hlsl", "mainPS");
     if (FAILED(hr))
         return hr;
 
@@ -186,6 +203,27 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
     *         깊이 쓰기 = TRUE
     *         스텐실 테스트 = FALSE
     */
+
+    // 텍스쳐 불러오기.
+    // TODO: 텍스쳐 클래스로 묶기
+	// Create 시에는 File 경로로 불러오기.
+    // 내부에서 map<string,SRV> 쌍으로 관리.
+    DirectX::ScratchImage TextureImage;
+
+	hr =  DirectX::LoadFromDDSFile(L"Resource/Texture/Fonts/DejaVu_Sans_Mono.dds", DirectX::DDS_FLAGS_NONE, nullptr, TextureImage);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+    ID3D11ShaderResourceView* TextureSRV = nullptr;
+	hr = DirectX::CreateShaderResourceView(DXDDevice, TextureImage.GetImages(), TextureImage.GetImageCount(), TextureImage.GetMetadata(), &TextureSRV);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
+
+
 
     return S_OK;
 }
@@ -326,18 +364,8 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         break;
     }
 
-	FMatrix worldMat = FMatrix::Identity();
-	FMatrix viewMat = FMatrix::Identity();
-	FMatrix projMat = FMatrix::Identity();
-
-
-    ID3D11VertexShader* VS = ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS"));
-    ID3D11PixelShader* PS = ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS"));
-
     DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
     DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    auto a = ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS"));
 
     DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
@@ -355,14 +383,6 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    // View 변환 Constant.
-    
-    // Projection 변환 Constant.
-
-
-    // End Object Matrix Update
-    
-    
     EPrimitiveType Type = PrimitiveComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     //uint Stride = 84;6
@@ -428,6 +448,8 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
         //RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
         // PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
     }
+
+    RenderTexture();
 
     // 셰이더 준비.
     // 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
@@ -513,6 +535,10 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
 
     DXDDeviceContext->Draw(Num, 0);
+}
+
+void UDirectXHandle::RenderTexture()
+{
 }
 
 void UDirectXHandle::InitView()
