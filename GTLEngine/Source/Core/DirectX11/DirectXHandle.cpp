@@ -26,12 +26,12 @@
 
 UDirectXHandle::~UDirectXHandle()
 {
-    ReleaseDirectX11Handle();
+	ReleaseDirectX11Handle();
 }
 
 HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
 {
-    D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
+	D3D_FEATURE_LEVEL FeatureLevels[] = { D3D_FEATURE_LEVEL_11_0 };
 
     DXGI_SWAP_CHAIN_DESC swapchaindesc = {};
     swapchaindesc.BufferDesc.Width = UEngine::GetEngine().GetWindowInfo().Width; // 창 크기에 맞게 자동으로 설정
@@ -44,29 +44,29 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     swapchaindesc.Windowed = TRUE; // 창 모드
     swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 스왑 방식
 
-    uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
+	uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 
-    // Direct3D 장치와 스왑 체인을 생성
-    HRESULT hr = D3D11CreateDeviceAndSwapChain(
-        nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels), D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext);
+	// Direct3D 장치와 스왑 체인을 생성
+	HRESULT hr = D3D11CreateDeviceAndSwapChain(
+		nullptr, D3D_DRIVER_TYPE_HARDWARE, nullptr, CreateDeviceFlags, FeatureLevels, ARRAYSIZE(FeatureLevels), D3D11_SDK_VERSION, &swapchaindesc, &DXDSwapChain, &DXDDevice, nullptr, &DXDDeviceContext);
 
-    if (FAILED(hr))
-        return hr;
+	if (FAILED(hr))
+		return hr;
 
-    // 생성된 스왑 체인의 정보 가져오기
-    DXDSwapChain->GetDesc(&swapchaindesc);
+	// 생성된 스왑 체인의 정보 가져오기
+	DXDSwapChain->GetDesc(&swapchaindesc);
 
-    // 뷰포트 정보 설정
-    ViewportInfo = { 0.0f, 0.0f, (float)swapchaindesc.BufferDesc.Width, (float)swapchaindesc.BufferDesc.Height, 0.0f, 1.0f };
+	// 뷰포트 정보 설정
+	ViewportInfo = { 0.0f, 0.0f, (float)swapchaindesc.BufferDesc.Width, (float)swapchaindesc.BufferDesc.Height, 0.0f, 1.0f };
 
-    return S_OK;
+	return S_OK;
 }
 
 HRESULT UDirectXHandle::CreateShaderManager()
 {
-    ShaderManager = new UDXDShaderManager(DXDDevice);
-    if (ShaderManager == nullptr)
-        return S_FALSE;
+	ShaderManager = new UDXDShaderManager(DXDDevice);
+	if (ShaderManager == nullptr)
+		return S_FALSE;
 
     // Primitive VS, PS, InputLayout 생성.
     D3D11_INPUT_ELEMENT_DESC layout[] =
@@ -119,82 +119,82 @@ HRESULT UDirectXHandle::CreateShaderManager()
 
 HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 {
-    HRESULT hr;
-    // 디바이스 및 스왑체인 생성.
-    hr = CreateDeviceAndSwapchain();
-    if (FAILED(hr))
-        return hr;
+	HRESULT hr;
+	// 디바이스 및 스왑체인 생성.
+	hr = CreateDeviceAndSwapchain();
+	if (FAILED(hr))
+		return hr;
 
-    // 래스터라이저 스테이트 생성.
-    {
-        // 일반 메시용 레스터라이저
-        UDXDRasterizerState* NormalRasterizer = new UDXDRasterizerState();
-        if (NormalRasterizer == nullptr)
-            return S_FALSE;
-        D3D11_RASTERIZER_DESC NormalRasterizerDesc = {};
-        NormalRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
-        NormalRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
-        hr = NormalRasterizer->CreateRasterizerState(DXDDevice, &NormalRasterizerDesc);
-        if (FAILED(hr))
-            return hr;
-        RasterizerStates[TEXT("Normal")] = NormalRasterizer;
-    }
-    {
-        // 기즈모 레스터라이저
-        UDXDRasterizerState* GizmoRasterizer = new UDXDRasterizerState();
-        if (GizmoRasterizer == nullptr)
-            return S_FALSE;
-        D3D11_RASTERIZER_DESC GizmoRasterizerDesc = {};
-        GizmoRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
-        GizmoRasterizerDesc.CullMode = D3D11_CULL_FRONT; // 백 페이스 컬링
-        hr = GizmoRasterizer->CreateRasterizerState(DXDDevice, &GizmoRasterizerDesc);
-        if (FAILED(hr))
-            return hr;
-        RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
-    }
+	// 래스터라이저 스테이트 생성.
+	{
+		// 일반 메시용 레스터라이저
+		UDXDRasterizerState* NormalRasterizer = new UDXDRasterizerState();
+		if (NormalRasterizer == nullptr)
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC NormalRasterizerDesc = {};
+		NormalRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
+		NormalRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
+		hr = NormalRasterizer->CreateRasterizerState(DXDDevice, &NormalRasterizerDesc);
+		if (FAILED(hr))
+			return hr;
+		RasterizerStates[TEXT("Normal")] = NormalRasterizer;
+	}
+	{
+		// 기즈모 레스터라이저
+		UDXDRasterizerState* GizmoRasterizer = new UDXDRasterizerState();
+		if (GizmoRasterizer == nullptr)
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC GizmoRasterizerDesc = {};
+		GizmoRasterizerDesc.FillMode = D3D11_FILL_SOLID; // 채우기 모드
+		GizmoRasterizerDesc.CullMode = D3D11_CULL_FRONT; // 백 페이스 컬링
+		hr = GizmoRasterizer->CreateRasterizerState(DXDDevice, &GizmoRasterizerDesc);
+		if (FAILED(hr))
+			return hr;
+		RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
+	}
 
-    // 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
-    // VertexShader, InputLayout 는 쌍으로 생성 및 이름으로 관리.
-    hr = CreateShaderManager();
+	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
+	// VertexShader, InputLayout 는 쌍으로 생성 및 이름으로 관리.
+	hr = CreateShaderManager();
 
-    // 상수 버퍼 생성 및 버텍스 쉐이더와 픽셀 쉐이더에 바인딩
-    for (uint32 i = 0; i < static_cast<uint32>(EConstantBufferType::Max); i++)
-    {
-        EConstantBufferType Type = static_cast<EConstantBufferType>(i);
-        if (Type == EConstantBufferType::None)
-        {
-            continue;
-        }
+	// 상수 버퍼 생성 및 버텍스 쉐이더와 픽셀 쉐이더에 바인딩
+	for (uint32 i = 0; i < static_cast<uint32>(EConstantBufferType::Max); i++)
+	{
+		EConstantBufferType Type = static_cast<EConstantBufferType>(i);
+		if (Type == EConstantBufferType::None)
+		{
+			continue;
+		}
 
-        hr = AddConstantBuffer(Type);
-        if (FAILED(hr))
-        {
-            return hr;
-        }
-    }
+		hr = AddConstantBuffer(Type);
+		if (FAILED(hr))
+		{
+			return hr;
+		}
+	}
 
-    // 쉐이더에 상수 버퍼 바인딩
-    if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesOnResize])
-    {
-        if (ID3D11Buffer* CbChangedOnResize = DXDCB->GetConstantBuffer())
-        {
-            DXDDeviceContext->VSSetConstantBuffers(0, 1, &CbChangedOnResize);
-        }
-    }
-    if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryFrame])
-    {
-        if (ID3D11Buffer* CbChangesEveryFrame = DXDCB->GetConstantBuffer())
-        {
-            DXDDeviceContext->VSSetConstantBuffers(1, 1, &CbChangesEveryFrame);
-        }
-    }
-    if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryObject])
-    {
-        if (ID3D11Buffer* CbChangesEveryObject = DXDCB->GetConstantBuffer())
-        {
-            DXDDeviceContext->VSSetConstantBuffers(2, 1, &CbChangesEveryObject);
-        }
-    }
+	// 쉐이더에 상수 버퍼 바인딩
+	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesOnResize])
+	{
+		if (ID3D11Buffer* CbChangedOnResize = DXDCB->GetConstantBuffer())
+		{
+			DXDDeviceContext->VSSetConstantBuffers(0, 1, &CbChangedOnResize);
+		}
+	}
+	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryFrame])
+	{
+		if (ID3D11Buffer* CbChangesEveryFrame = DXDCB->GetConstantBuffer())
+		{
+			DXDDeviceContext->VSSetConstantBuffers(1, 1, &CbChangesEveryFrame);
+		}
+	}
+	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryObject])
+	{
+		if (ID3D11Buffer* CbChangesEveryObject = DXDCB->GetConstantBuffer())
+		{
+			DXDDeviceContext->VSSetConstantBuffers(2, 1, &CbChangesEveryObject);
+		}
+	}
 	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::MVP])
 	{
 		if (ID3D11Buffer* CbMVP = DXDCB->GetConstantBuffer())
@@ -210,15 +210,15 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
     if (FAILED(hr))
         return hr;
 
-    /**
-    * TODO: 뎁스 스텐실 스테이트 생성 권장.
-    *       생성하지 않는 경우 기본값이 적용되므로, 현재 프로젝트에서는 따로 생성하지 않아도 됨.
-    *       기본값:
-    *         깊이 테스트 = TRUE
-    *         깊이 비교 함수 = LESS (깊이값이 더 작을 때만 그려짐. 즉 더 가까이 있는 경우)
-    *         깊이 쓰기 = TRUE
-    *         스텐실 테스트 = FALSE
-    */
+	/**
+	* TODO: 뎁스 스텐실 스테이트 생성 권장.
+	*       생성하지 않는 경우 기본값이 적용되므로, 현재 프로젝트에서는 따로 생성하지 않아도 됨.
+	*       기본값:
+	*         깊이 테스트 = TRUE
+	*         깊이 비교 함수 = LESS (깊이값이 더 작을 때만 그려짐. 즉 더 가까이 있는 경우)
+	*         깊이 쓰기 = TRUE
+	*         스텐실 테스트 = FALSE
+	*/
 
     // 텍스쳐 불러오기.
     // TODO: 텍스쳐 클래스로 묶기
@@ -245,55 +245,55 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 
 void UDirectXHandle::ReleaseDirectX11Handle()
 {
-    if (DXDDeviceContext)
-    {
-        DXDDeviceContext->Flush();
-        DXDDeviceContext->Release();
+	if (DXDDeviceContext)
+	{
+		DXDDeviceContext->Flush();
+		DXDDeviceContext->Release();
 		DXDDeviceContext = nullptr;
-    }
+	}
 
-    if (DXDDevice)
-    {
+	if (DXDDevice)
+	{
 		DXDDevice->Release();
 		DXDDevice = nullptr;
-    }
+	}
 
-    if (DXDSwapChain)
-    {
+	if (DXDSwapChain)
+	{
 		DXDSwapChain->Release();
 		DXDSwapChain = nullptr;
-    }
+	}
 
-    RenderTarget->ReleaseRenderTarget();
+	RenderTarget->ReleaseRenderTarget();
 
-    ShaderManager->ReleaseAllShader();
+	ShaderManager->ReleaseAllShader();
 }
 
 void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 {
-    // Camera->GetCameraComponent.
-    // MVP 계산 행렬 구하고
-    // 카메라 상수버퍼로 바로 전달.
-    if (!Camera)
-    {
-        return;
-    }
+	// Camera->GetCameraComponent.
+	// MVP 계산 행렬 구하고
+	// 카메라 상수버퍼로 바로 전달.
+	if (!Camera)
+	{
+		return;
+	}
 
-    // 카메라 View 변환.
-    // 카메라 컴포넌트의 로컬 트랜스폼은 변경되지 않는다고 가정
-    ID3D11Buffer* CbChangesEveryFrame = ConstantBuffers[EConstantBufferType::ChangesEveryFrame]->GetConstantBuffer();
-    if (!CbChangesEveryFrame)
-    {
-        return;
-    }
-    D3D11_MAPPED_SUBRESOURCE viewMappedData;
-    DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &viewMappedData);
-    if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(viewMappedData.pData))
-    {
-        UpdateWorldViewMatrix(Camera);
-        Buffer->ViewMatrix = UEngine::GetEngine().GetWorld()->GetViewMatrix();
-    }
-    DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
+	// 카메라 View 변환.
+	// 카메라 컴포넌트의 로컬 트랜스폼은 변경되지 않는다고 가정
+	ID3D11Buffer* CbChangesEveryFrame = ConstantBuffers[EConstantBufferType::ChangesEveryFrame]->GetConstantBuffer();
+	if (!CbChangesEveryFrame)
+	{
+		return;
+	}
+	D3D11_MAPPED_SUBRESOURCE viewMappedData;
+	DXDDeviceContext->Map(CbChangesEveryFrame, 0, D3D11_MAP_WRITE_DISCARD, 0, &viewMappedData);
+	if (FCbChangesEveryFrame* Buffer = reinterpret_cast<FCbChangesEveryFrame*>(viewMappedData.pData))
+	{
+		UpdateWorldViewMatrix(Camera);
+		Buffer->ViewMatrix = UEngine::GetEngine().GetWorld()->GetViewMatrix();
+	}
+	DXDDeviceContext->Unmap(CbChangesEveryFrame, 0);
 
     // 카메라 Projection 변환
     // TODO: Test. 프로젝션 matrix는 리사이즈 할 때, FOV 변환할 때.
@@ -308,9 +308,9 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
     {
         UpdateWorldProjectionMatrix(Camera);
 		Buffer->ProjectionMatrix = UEngine::GetEngine().GetWorld()->GetProjectionMatrix();
-    }
-    DXDDeviceContext->Unmap(CbChangesOnResize, 0);
-    //XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
+	}
+	DXDDeviceContext->Unmap(CbChangesOnResize, 0);
+	//XMMatrixTranspose(XMMatrixPerspectiveFovLH(XMConvertToRadians(60.f), Width / Height, 1.f, 1000.f));
 }
 
 // use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
@@ -350,19 +350,19 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
 void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
 {
-    // Selected 오브젝트 기반으로 기즈모 그리가.
+	// Selected 오브젝트 기반으로 기즈모 그리가.
 
     switch (GizmoManager->GetGizmoType())
     {
 	case EGizmoType::Translate: // 이동 모양 그리기.
-		break;
+        break;
 	case EGizmoType::Rotate: // 회전 모양 그리기.
-		break;
+        break;
 	case EGizmoType::Scale: // 크기 조절 모양 그리기.
-		break;
+        break;
     default:
         break;
-    } 
+    }
 }
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
@@ -406,8 +406,19 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
-    
-    DXDDeviceContext->Draw(Num, 0);
+
+    // IndexBuffer가 존재하는지 확인하고, DrawIndexed 호출
+    auto indexIt = IndexBuffers.find(Type);
+    if (indexIt != IndexBuffers.end())
+    {
+        FIndexInfo IndexInfo = indexIt->second;
+        DXDDeviceContext->IASetIndexBuffer(IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+        DXDDeviceContext->DrawIndexed(IndexInfo.NumIndices, 0, 0);
+    }
+    else
+    {
+        DXDDeviceContext->Draw(Num, 0);
+    }
 }
 
 void UDirectXHandle::RenderAABB(FAABB aabb) {
@@ -461,9 +472,9 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
         }
 
 		// 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
-        //RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
-        // PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
-    }
+		//RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
+		// PrimitiveComponent가 없으면 그릴 게 없으므로 Pass;
+	}
 
 
     // 셰이더 준비.
@@ -476,8 +487,8 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
 
-    UINT stride = sizeof(FCbLine);
-    UINT offset = 0;
+	UINT stride = sizeof(FCbLine);
+	UINT offset = 0;
 
     // TODO: 인풋 레이아웃을 line 전용으로 변경해야하는데 지금은 동일한 정보이므로 바꾸지 않아도 될듯함.
     //       for 루프로 순회하면서 버텍스 버퍼 업데이트 및 draw.
@@ -600,98 +611,118 @@ void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
 
 void UDirectXHandle::InitView()
 {
-    // 렌더 타겟 클리어 및 클리어에 적용할 색.
-    FLOAT ClearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
+	// 렌더 타겟 클리어 및 클리어에 적용할 색.
+	FLOAT ClearColor[4] = { 0.1f, 0.1f, 0.1f, 1.0f };
 
-    DXDDeviceContext->ClearRenderTargetView(RenderTarget->GetFrameBufferRTV().Get(), ClearColor);
+	DXDDeviceContext->ClearRenderTargetView(RenderTarget->GetFrameBufferRTV().Get(), ClearColor);
 
-    // 뎁스/스텐실 뷰 클리어. 뷰, DEPTH만 클리어, 깊이 버퍼 클리어 할 값, 스텐실 버퍼 클리어 할 값.
-    DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
+	// 뎁스/스텐실 뷰 클리어. 뷰, DEPTH만 클리어, 깊이 버퍼 클리어 할 값, 스텐실 버퍼 클리어 할 값.
+	DXDDeviceContext->ClearDepthStencilView(DepthStencilView->GetDepthStencilView(), D3D11_CLEAR_DEPTH, 1.0f, 0);
 
     //DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
-    DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-    DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
-    
-    // TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
-    DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
+	DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
+	DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
+
+	// TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
+	DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
 }
 
 HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
-    RenderTarget = new UDXDRenderTarget();
-    
-    HRESULT hr = RenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
-    if (FAILED(hr))
-        return hr;
+	RenderTarget = new UDXDRenderTarget();
 
-    return S_OK;
+	HRESULT hr = RenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
+	if (FAILED(hr))
+		return hr;
+
+	return S_OK;
 }
 
-HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices)
+HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices)
 {
-    ID3D11Buffer* NewVertexBuffer;
-    // 버텍스 버퍼 생성
-    D3D11_BUFFER_DESC bufferDesc = {};
-    bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-    bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
-    bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-    bufferDesc.CPUAccessFlags = 0;
+	ID3D11Buffer* NewVertexBuffer;
+	// 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
+	bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = 0;
 
-    D3D11_SUBRESOURCE_DATA initData = {};
-    initData.pSysMem = vertices.data();
+	D3D11_SUBRESOURCE_DATA initData = {};
+	initData.pSysMem = vertices.data();
 
-    HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
-    if (FAILED(hr))
-        return hr;
+	HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
+	if (FAILED(hr))
+		return hr;
 
-    FVertexInfo Info = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
-    PrimitiveVertexBuffers.insert({ KeyType, Info });
+	FVertexInfo VertexInfo = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
+	VertexBuffers.insert({ KeyType, VertexInfo });
 
-    return S_OK;
+	if (indices.size() > 0)
+	{
+		ID3D11Buffer* NewIndexBuffer = nullptr;
+		D3D11_BUFFER_DESC indexBufferDesc = {};
+		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		indexBufferDesc.ByteWidth = sizeof(uint32) * static_cast<uint32>(indices.size());
+		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		indexBufferDesc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA indexInitData = {};
+		indexInitData.pSysMem = indices.data();
+
+		hr = DXDDevice->CreateBuffer(&indexBufferDesc, &indexInitData, &NewIndexBuffer);
+		if (FAILED(hr))
+			return hr;
+
+		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
+		IndexBuffers.insert({ KeyType, IndexInfo });
+	}
+
+	return S_OK;
 }
 
 HRESULT UDirectXHandle::AddConstantBuffer(EConstantBufferType Type)
 {
-    UDXDConstantBuffer* NewConstantBuffer = new UDXDConstantBuffer(DXDDevice);
-    if (!NewConstantBuffer)
-    {
-        return S_FALSE;
-    }
+	UDXDConstantBuffer* NewConstantBuffer = new UDXDConstantBuffer(DXDDevice);
+	if (!NewConstantBuffer)
+	{
+		return S_FALSE;
+	}
 
-    HRESULT hr = S_OK;
-    
-    hr = NewConstantBuffer->CreateBuffer(Type);
-    if (FAILED(hr))
-    {
-        return hr;
-    }
+	HRESULT hr = S_OK;
 
-    ConstantBuffers.insert({ Type, NewConstantBuffer });
+	hr = NewConstantBuffer->CreateBuffer(Type);
+	if (FAILED(hr))
+	{
+		return hr;
+	}
 
-    return S_OK;
+	ConstantBuffers.insert({ Type, NewConstantBuffer });
+
+	return S_OK;
 }
 
 void UDirectXHandle::UpdateWorldViewMatrix(ACamera* Camera)
 {
-    FVector CameraLocation = Camera->GetActorLocation();
-    FRotator CameraRotation = Camera->GetActorRotation();
+	FVector CameraLocation = Camera->GetActorLocation();
+	FRotator CameraRotation = Camera->GetActorRotation();
 
-    // Rotation Matrix 생성.
-    FVector ForwardVector = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector).GetSafeNormal();
+	// Rotation Matrix 생성.
+	FVector ForwardVector = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector).GetSafeNormal();
 
-    //XMMatrixLookAtLH(Eye, At, Up);
-    FMatrix CameraViewMatrix = FMatrix::LookAtLH(CameraLocation, CameraLocation + ForwardVector, FVector::UpVector);
+	//XMMatrixLookAtLH(Eye, At, Up);
+	FMatrix CameraViewMatrix = FMatrix::LookAtLH(CameraLocation, CameraLocation + ForwardVector, FVector::UpVector);
 	UEngine::GetEngine().GetWorld()->SetViewMatrix(CameraViewMatrix);
 
 }
 
 void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 {
-    float FOVRad = FMath::DegreesToRadians(Camera->GetFieldOfView());
-    UEngine::GetEngine().GetWorld()->SetProjectionMatrix(
-        FMatrix::PerspectiveFovLH(FOVRad, ViewportInfo.Width / ViewportInfo.Height, Camera->GetNearClip(), Camera->GetFarClip())
-    );
+	float FOVRad = FMath::DegreesToRadians(Camera->GetFieldOfView());
+	UEngine::GetEngine().GetWorld()->SetProjectionMatrix(
+		FMatrix::PerspectiveFovLH(FOVRad, ViewportInfo.Width / ViewportInfo.Height, Camera->GetNearClip(), Camera->GetFarClip())
+	);
 }
 
 

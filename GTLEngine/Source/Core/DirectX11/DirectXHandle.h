@@ -81,7 +81,7 @@ private:
 	ID3D11Device* DXDDevice;
 	ID3D11DeviceContext* DXDDeviceContext;
 	IDXGISwapChain* DXDSwapChain;
-
+	
 	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
 	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
@@ -89,6 +89,7 @@ private:
 
 	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
 	TMap<std::wstring, FVertexInfo> VertexBuffers;
+	TMap<EPrimitiveType, FIndexInfo> IndexBuffers;
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 
 	// TODO: Texture 관리용 객체로 묶어서 관리.

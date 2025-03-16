@@ -15,6 +15,9 @@ enum class EPrimitiveType
     Grid,
     BoundingBox,
     Max,
+    XArrow,
+    YArrow,
+    ZArrow,
 };
 
 FString GetPrimitiveTypeAsString(enum class EPrimitiveType Type);
@@ -35,6 +38,12 @@ struct FVertexInfo
 {
     uint NumVertices;
     ID3D11Buffer* VertexBuffer;
+};
+
+struct FIndexInfo
+{
+    uint32 NumIndices;
+    ID3D11Buffer* IndexBuffer;
 };
 
 //////////
