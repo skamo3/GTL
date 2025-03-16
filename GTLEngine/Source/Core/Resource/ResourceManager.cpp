@@ -5,6 +5,7 @@
 
 #include "SimpleJSON/json.hpp"
 #include <fstream>
+#include <sstream>
 
 #include "Engine.h"
 #include "World.h"
@@ -19,6 +20,7 @@
 UResourceManager::UResourceManager()
 {
     LoadPrimitives();
+    LoadArrowGizmos();
 }
 
 UResourceManager::~UResourceManager()
@@ -67,6 +69,88 @@ void UResourceManager::LoadPrimitives()
     VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
 }
 
+void UResourceManager::LoadArrowGizmos()
+{
+    // OBJ 파일 경로 (예: AxisArrow.obj)
+    FString filepath = L"Source/Core/Resource/Shape/AxisArrow.obj";
+    std::ifstream objFile(filepath.c_str());
+    if (!objFile)
+    {
+        // 파일 열기 실패 시 처리
+        return;
+    }
+
+    std::string line;
+    std::vector<FVector> positions;
+    TArray<FVertexSimple> vertices;
+    TArray<uint32> indices;
+
+    while (std::getline(objFile, line)) {
+        std::istringstream lineStream(line);
+        std::string type;
+        lineStream >> type;
+
+        if (type == "v") // Vertex position
+        {
+            FVector vertex;
+            lineStream >> vertex.X >> vertex.Y >> vertex.Z;
+            FVertexSimple vertexSimple{ vertex.X, vertex.Y, vertex.Z, 0.f,0.f, 0.f, 1.f };
+            vertices.push_back(vertexSimple);
+            positions.push_back(vertex);
+        }
+        else if (type == "f") // Face
+        {
+            std::vector<uint32_t> faceIndices;
+            uint32_t index;
+
+            while (lineStream >> index) {
+                faceIndices.push_back(index - 1);
+            }
+
+            for (size_t i = 1; i + 1 < faceIndices.size(); ++i) {
+                indices.push_back(faceIndices[0]);
+                indices.push_back(faceIndices[i]);
+                indices.push_back(faceIndices[i + 1]);
+            }
+        }
+
+    }
+    objFile.close();
+
+    // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
+    TArray<FVertexSimple> XVertices;
+    TArray<FVertexSimple> YVertices;
+    TArray<FVertexSimple> ZVertices;
+
+    // tmpVertices의 각 정점을 복사하여 각 배열에 넣음
+    for (size_t i = 0; i < vertices.size(); ++i)
+    {
+        FVertexSimple xVert = vertices[i];
+        FVertexSimple yVert = vertices[i];
+        FVertexSimple zVert = vertices[i];
+
+        // X축은 빨간색 (1,0,0)
+        xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
+        // Y축은 녹색 (0,1,0)
+        yVert.R = 0.f; yVert.G = 1.f; yVert.B = 0.f;
+        // Z축은 파란색 (0,0,1)
+        zVert.R = 0.f; zVert.G = 0.f; zVert.B = 1.f;
+
+        XVertices.push_back(xVert);
+        YVertices.push_back(yVert);
+        ZVertices.push_back(zVert);
+    }
+
+    // 이제 각 축에 해당하는 정점 배열을 VertexDataMap에 저장합니다.
+    // EGizmoType 또는 EPrimitiveType에 맞게 열거형 값을 사용하세요.
+    VertexDataMap[EPrimitiveType::XArrow] = XVertices;
+    VertexDataMap[EPrimitiveType::YArrow] = YVertices;
+    VertexDataMap[EPrimitiveType::ZArrow] = ZVertices;
+    IndexDataMap[EPrimitiveType::XArrow] = indices;
+    IndexDataMap[EPrimitiveType::YArrow] = indices;
+    IndexDataMap[EPrimitiveType::ZArrow] = indices;
+}
+
 void UResourceManager::Release()
 {
     for (auto& [Type, Info] : VertexDataMap)
@@ -83,6 +167,15 @@ const TArray<FVertexSimple> UResourceManager::GetVertexData(EPrimitiveType Type)
         return VertexDataMap.find(Type)->second;
     }
 	return TArray<FVertexSimple>();
+}
+
+const TArray<uint32> UResourceManager::GetIndexData(EPrimitiveType Type) const
+{
+    if (IndexDataMap.contains(Type))
+    {
+        return IndexDataMap.find(Type)->second;
+    }
+    return TArray<uint32>();
 }
 
 void UResourceManager::NewScene()

@@ -64,7 +64,7 @@ public:
 
 	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
-	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices);
+	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices);
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
@@ -78,13 +78,14 @@ private:
 	ID3D11Device* DXDDevice;
 	ID3D11DeviceContext* DXDDeviceContext;
 	IDXGISwapChain* DXDSwapChain;
-
+	
 	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
 	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
 
 	TMap<EPrimitiveType, FVertexInfo> VertexBuffers;
+	TMap<EPrimitiveType, FIndexInfo> IndexBuffers;
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 
 	ID3D11ShaderResourceView* FontAtlasTexture;

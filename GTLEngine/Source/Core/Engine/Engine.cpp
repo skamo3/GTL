@@ -177,7 +177,7 @@ HRESULT UEngine::AddAllPrimitiveVertexBuffers()
         EPrimitiveType Type = static_cast<EPrimitiveType>(i);
         if (Type != EPrimitiveType::None)
         {
-            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type));
+            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type), ResourceManager->GetIndexData(Type));
             if (FAILED(hr))
             {
                 return hr;
