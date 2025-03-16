@@ -50,6 +50,15 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
         MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
         return false;
     }
+    
+    // 텍스쳐용 UV 버퍼 추가.
+    hr = DirectX11Handle->AddVertexBuffer<FVertexUV>(L"FontAtlas", ResourceManager->GetUVData());
+	if (FAILED(hr))
+	{
+		MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
+		return false;
+	}
+
 
 	UAssetManager* AssetManager = new UAssetManager();
 	AssetManager->RegistryAssetMetaDatas();

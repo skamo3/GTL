@@ -13,6 +13,7 @@ public:
     void Release();
 
     const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
+    const TArray<FVertexUV> GetUVData() const { return UVQuadData; }
 
     void NewScene();
     void LoadScene(std::string SceneName);
@@ -20,6 +21,7 @@ public:
 
 private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
+    TArray<FVertexUV> UVQuadData;
 
 private:
     UResourceManager(const UResourceManager& InResourceManager) = delete;  

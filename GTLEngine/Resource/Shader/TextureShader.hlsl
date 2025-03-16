@@ -11,7 +11,7 @@ struct VS_INPUT
 
 struct PS_INPUT
 {
-    float4 position : POSITION;
+    float4 position : SV_POSITION;
     float2 texCoord : TEXCOORD;
 };
 
@@ -27,6 +27,9 @@ PS_INPUT mainVS(VS_INPUT Input)
     Output.position = mul(Output.position, ViewMatrix); // 월드 스페이스 -> 뷰 스페이스
     Output.position = mul(Output.position, ProjectionMatrix); // 뷰 스페이스 -> NDC
     
+    //int a = 65 / 16;
+    //int b = 65 % 16;
+    //Output.texCoord = (Input.texCoord + float2(b , a)) / 16.0f;
     Output.texCoord = Input.texCoord;
     
     return Output;
