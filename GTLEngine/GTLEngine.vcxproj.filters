@@ -488,11 +488,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Source\Core\Resource\Shape\AxisArrow.obj">
-      <Filter>Source\Core\Resource\Shape</Filter>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Source\CoreUObject\UI\ConsolePanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </Text>

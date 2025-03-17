@@ -392,10 +392,10 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     //uint Stride = 84;6
     UINT offset = 0;
 	FVertexInfo Info;
-	if ( !PrimitiveVertexBuffers.contains(Type) )
-		Info = VertexBuffers[GetPrimitiveTypeAsString(Type)];
-	else 
-		Info = PrimitiveVertexBuffers[Type];
+	//if ( !PrimitiveVertexBuffers.contains(Type) )
+	Info = VertexBuffers[GetPrimitiveTypeAsString(Type)];
+	//else 
+	//	Info = PrimitiveVertexBuffers[Type];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);

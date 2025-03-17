@@ -212,12 +212,6 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Source\Core\Resource\Shape\AxisArrow.obj">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
-      <FileType>Document</FileType>
-    </Resource>
-  </ItemGroup>
-  <ItemGroup>
     <Text Include="Source\CoreUObject\UI\ConsolePanel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
