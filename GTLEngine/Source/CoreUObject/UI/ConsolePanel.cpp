@@ -2,6 +2,7 @@
 #include "ConsolePanel.h"
 
 UConsolePanel::UConsolePanel(): WindowWidth(360.f), WindowHeight(400.f) {
+    Items = ImVector<char*>();
     strcpy_s(InputBuffer, 256, "");
 }
 
@@ -35,12 +36,12 @@ void UConsolePanel::Strtrim(char* s) {
     *str_end = 0;
 }
 
-TArray<FString> UConsolePanel::StrSplit(FString s) {
+TArray<std::string> UConsolePanel::StrSplit(std::string s) {
     size_t pos_start = 0, pos_end, delim_len = 1;
-    FString token;
-    std::vector<FString> res;
+    std::string token;
+    std::vector<std::string> res;
 
-    while ( (pos_end = s.find(L" ", pos_start)) != std::string::npos ) {
+    while ( (pos_end = s.find(" ", pos_start)) != std::string::npos ) {
         token = s.substr(pos_start, pos_end - pos_start);
         pos_start = pos_end + delim_len;
         res.push_back(token);
@@ -48,6 +49,14 @@ TArray<FString> UConsolePanel::StrSplit(FString s) {
 
     res.push_back(s.substr(pos_start));
     return res;
+}
+
+FString UConsolePanel::Spawn(TArray<FString> commands) {
+    return FString();
+}
+
+FString UConsolePanel::Delete(TArray<FString> commands) {
+    return FString();
 }
 
 void UConsolePanel::Tick(float TickTime) {
@@ -62,15 +71,16 @@ void UConsolePanel::Tick(float TickTime) {
     ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
 
 	ImGui::Begin("Console");
-    for (const char* item: Items) {
+
+    ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar);
+    for ( const char* item : Items ) {
         ImGui::TextUnformatted(item);
     }
     if ( ImGui::GetScrollY() >= ImGui::GetScrollMaxY() ) {
         ImGui::SetScrollHereY(1.0f);
     }
-    ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar);
-
     ImGui::EndChild();
+
     ImGui::Separator();
 
     const ImGuiInputTextFlags INPUT_TEXT_FLAGS = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll;
@@ -88,6 +98,7 @@ void UConsolePanel::Destroy() {}
 
 void UConsolePanel::ExecCommand(const char* s) {
     AddLog("# %s\n", s);
+    StrSplit(s);
 }
 
 void UConsolePanel::AddLog(const char* fmt, ...) {
@@ -98,10 +109,6 @@ void UConsolePanel::AddLog(const char* fmt, ...) {
     buf[IM_ARRAYSIZE(buf) - 1] = 0;
     va_end(args);
     Items.push_back(Strdup(buf));
-}
-
-void UConsolePanel::AddLog(const std::string str) {
-    AddLog(str.c_str());
 }
 
 void UConsolePanel::ClearLog() {

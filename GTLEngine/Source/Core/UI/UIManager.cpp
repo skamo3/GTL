@@ -3,6 +3,7 @@
 
 #include "Math/Matrix.h"
 #include "UI/UIBase.h"
+#include "UI/ConsolePanel.h"
 
 #include "Asset/IconDefs.h"
 #include "Asset/RawFonts.h"
@@ -32,6 +33,11 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 void UUIManager::RegistUI(UUIBase* NewUI)
 {
 	UIList.push_back(NewUI);
+
+	// if it's console remember it
+	UConsolePanel* downcast;
+	if ( downcast = dynamic_cast<UConsolePanel*>(NewUI) )
+		Console = downcast;
 }
 
 void UUIManager::Tick(float DeltaTime)

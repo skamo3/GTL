@@ -2,6 +2,7 @@
 
 #include "Object.h"
 
+#include "Core/Engine/Engine.h"
 #include "Components/SceneComponent.h"
 
 class AActor;
@@ -40,6 +41,8 @@ public:
 			Comp->SetRelativeScale(InScale);
 
 			ActiveActors.push_back(newActor);
+
+			UEngine::GetEngine().Log(L"Spawn %s (uuid: %d)", InName.c_str(), newActor->GetUUID());
 		}
 		return newObj;
 	}

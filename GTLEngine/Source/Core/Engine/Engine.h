@@ -40,7 +40,8 @@ public:
     void Render();
     HRESULT ResizeWindow(int width, int height);
 	void ClearEngine();
-
+    void Log(FString s, ...);
+    void Log(std::string s, ...);
     HRESULT AddAllVertexBuffers();
 
 private:
@@ -61,8 +62,6 @@ public:
     UUIManager* GetUIManager() const { return UIManager; }
     UAssetManager* GetAssetManager() const { return AssetManager; }
 	UGizmoManager* GetGizmoManager() const { return GizmoManager; }
-    
-
 
 private:
 	UDirectXHandle* DirectX11Handle;
@@ -72,7 +71,6 @@ private:
     UInputManager* InputManager;
     UUIManager* UIManager;
     UGizmoManager* GizmoManager;
-
 	UAssetManager* AssetManager;
 
 public:

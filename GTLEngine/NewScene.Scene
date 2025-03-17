@@ -15,7 +15,7 @@
           "Type" : "class UCubeComponent"
         }],
       "Location" : [0.000000, 2.000000, 0.000000],
-      "Rotation" : [90.000000, 295.000000, 0.000000],
+      "Rotation" : [90.000000, 1209.000000, 0.000000],
       "Scale" : [1.000000, 1.000000, 1.000000],
       "Type" : "class USceneComponent"
     },
@@ -28,7 +28,7 @@
           "Type" : "class USphereComponent"
         }],
       "Location" : [0.000000, 0.000000, 2.000000],
-      "Rotation" : [74.499550, 0.000000, 0.000000],
+      "Rotation" : [165.901047, 0.000000, 0.000000],
       "Scale" : [1.000000, 2.000000, 1.000000],
       "Type" : "class USceneComponent"
     }

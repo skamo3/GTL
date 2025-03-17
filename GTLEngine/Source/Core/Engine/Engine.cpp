@@ -1,5 +1,6 @@
 #include "pch.h"
 #include "Engine.h"
+#include <stdarg.h>
 
 #include "DirectX11/DirectXHandle.h"
 #include "Time/TimeManager.h"
@@ -7,6 +8,7 @@
 #include "Resource/ResourceManager.h"
 #include "Asset/AssetManager.h"
 #include "UI/UIManager.h"
+#include "UI/ConsolePanel.h"
 
 #include "World.h"
 #include "CoreUObject/GameFrameWork/Camera.h"
@@ -190,6 +192,31 @@ void UEngine::ClearEngine()
 		delete TimeManager;
 		TimeManager = nullptr;
 	}
+}
+
+void UEngine::Log(FString s, ...) {
+    //std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    //Log(myconv.to_bytes(s));
+    wchar_t buf[256];
+    char cbuf[256];
+    va_list args;
+    va_start(args, s);
+    _vsnwprintf_s(buf, IM_ARRAYSIZE(buf), s.c_str(), args);
+    buf[IM_ARRAYSIZE(buf) - 1] = 0;
+    va_end(args);
+    WideCharToMultiByte(CP_ACP, 0, buf, -1, cbuf, 256, NULL, NULL);
+    Log(cbuf);
+}
+
+// TODO: std::string -> char*
+void UEngine::Log(std::string s, ...) {
+    char buf[256];
+    va_list args;
+    va_start(args, s);
+    vsnprintf_s(buf, IM_ARRAYSIZE(buf), s.c_str(), args);
+    buf[IM_ARRAYSIZE(buf) - 1] = 0;
+    va_end(args);
+    UIManager->GetConsole()->AddLog(buf);
 }
 
 HRESULT UEngine::AddAllVertexBuffers()

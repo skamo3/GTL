@@ -274,6 +274,9 @@
     <ClCompile Include="Source\Core\UI\UIInterface.cpp">
       <Filter>Source\Core\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\SceneManager.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -473,6 +476,9 @@
     </ClInclude>
     <ClInclude Include="Plugins\ImGui\imstb_truetype.h">
       <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\SceneManager.h">
+      <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

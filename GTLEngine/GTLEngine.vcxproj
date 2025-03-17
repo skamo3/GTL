@@ -67,6 +67,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp" />
+    <ClCompile Include="Source\CoreUObject\UI\SceneManager.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp" />
     <ClCompile Include="Source\CoreUObject\World.cpp" />
     <ClCompile Include="Source\Core\Asset\Asset.cpp" />
@@ -137,6 +138,7 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h" />
+    <ClInclude Include="Source\CoreUObject\UI\SceneManager.h" />
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h" />
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\Asset\Asset.h" />

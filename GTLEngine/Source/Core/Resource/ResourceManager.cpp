@@ -264,6 +264,7 @@ void UResourceManager::NewScene()
     if (!World)
         return;
     World->Destroy();
+    UEngine::GetEngine().Log("Create New Scene");
 }
 
 void UResourceManager::LoadScene(std::string SceneName)
@@ -272,6 +273,7 @@ void UResourceManager::LoadScene(std::string SceneName)
     if (!inFile.is_open())
     {
         // 파일 열기 실패 처리
+        UEngine::GetEngine().Log("Can't access %s", (SceneName + ".Scene").c_str());
         return;
     }
 
@@ -330,6 +332,7 @@ void UResourceManager::LoadScene(std::string SceneName)
             }
         }
     }
+    UEngine::GetEngine().Log("Success to Load %s", (SceneName + ".Scene").c_str());
 }
 
 struct DFSItem {
@@ -411,5 +414,8 @@ void UResourceManager::SaveScene(std::string SceneName)
     {
         outFile << jsonData;
         outFile.close();
+        UEngine::GetEngine().Log("Success to Save %s", (SceneName + ".Scene").c_str());
+    } else {
+        UEngine::GetEngine().Log("Can't access %s", (SceneName + ".Scene").c_str());
     }
 }
