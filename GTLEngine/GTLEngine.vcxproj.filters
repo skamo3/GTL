@@ -80,6 +80,9 @@
     <Filter Include="Source\CoreUObject\Gizmo">
       <UniqueIdentifier>{a49f61d3-b10e-4d36-8c89-971ec9baa71a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Shape">
+      <UniqueIdentifier>{4dfa254a-28c2-471f-9376-c567b78bdbd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">

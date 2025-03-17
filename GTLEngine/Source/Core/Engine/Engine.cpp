@@ -44,15 +44,15 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 셰이더 추가.
 
     // 버텍스 버퍼 추가.
-    hr = AddAllPrimitiveVertexBuffers();
+    hr = AddAllVertexBuffers();
     if (FAILED(hr))
     {
         MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
         return false;
     }
-    
+
     // 텍스쳐용 UV 버퍼 추가.
-    hr = DirectX11Handle->AddVertexBuffer<FVertexUV>(L"FontAtlas", ResourceManager->GetUVData());
+    hr = DirectX11Handle->AddVertexBuffer<FVertexUV>(L"FontAtlas", ResourceManager->GetUVData(), TArray<uint32>());
 	if (FAILED(hr))
 	{
 		MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
@@ -177,20 +177,27 @@ void UEngine::ClearEngine()
 	}
 }
 
-HRESULT UEngine::AddAllPrimitiveVertexBuffers()
+HRESULT UEngine::AddAllVertexBuffers()
 {
     HRESULT hr = S_OK;
+
     for (uint32 i = 0; i < static_cast<uint32>(EPrimitiveType::Max); ++i)
     {
         EPrimitiveType Type = static_cast<EPrimitiveType>(i);
         if (Type != EPrimitiveType::None)
         {
-            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type), ResourceManager->GetIndexData(Type));
+            hr = DirectX11Handle->AddVertexBuffer(GetPrimitiveTypeAsString(Type), ResourceManager->GetPrimitiveVertexData(Type), ResourceManager->GetPrimitiveIndexData(Type));
             if (FAILED(hr))
             {
                 return hr;
             }
         }
+    }
+
+    for (uint32 i = 0; i < static_cast<uint32>(EGizmoViewType::Max); ++i)
+    {
+        EGizmoViewType Type = static_cast<EGizmoViewType>(i);
+        hr = DirectX11Handle->AddVertexBuffer(GetGizmoViewTypeAsString(Type), ResourceManager->GetGizmoVertexData(Type), ResourceManager->GetGizmoIndexData(Type));
     }
     
     return S_OK;

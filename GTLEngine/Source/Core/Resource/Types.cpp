@@ -28,3 +28,30 @@ FString GetPrimitiveTypeAsString(EPrimitiveType Type)
         return FString(TEXT("None"));
     }
 }
+
+FString GetGizmoViewTypeAsString(EGizmoViewType Type)
+{
+    switch (Type)
+    {
+    case EGizmoViewType::XTranslate:
+        return FString(TEXT("Line"));
+    case EGizmoViewType::YTranslate:
+        return FString(TEXT("Triangle"));
+    case EGizmoViewType::ZTranslate:
+        return FString(TEXT("Sphere"));
+    case EGizmoViewType::XRotate:
+        return FString(TEXT("Cube"));
+    case EGizmoViewType::YRotate:
+        return FString(TEXT("Cylinder"));
+    case EGizmoViewType::ZRotate:
+        return FString(TEXT("ZRotate"));
+    case EGizmoViewType::XScale:
+        return FString(TEXT("XScale"));
+    case EGizmoViewType::YScale:
+        return FString(TEXT("YScale"));
+    case EGizmoViewType::ZScale:
+        return FString(TEXT("ZScale"));
+    case EGizmoViewType::Max:
+        return FString(TEXT("Max"));
+    }
+}

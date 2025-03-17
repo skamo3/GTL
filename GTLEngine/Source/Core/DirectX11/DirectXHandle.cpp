@@ -346,7 +346,7 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
     uint Stride = sizeof(FVertexSimple);
     uint offset = 0;
-    FVertexInfo Info = PrimitiveVertexBuffers[EPrimitiveType::Grid];
+    FVertexInfo Info = VertexBuffers[GetPrimitiveTypeAsString(EPrimitiveType::Grid)];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -401,7 +401,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
 
     // IndexBuffer가 존재하는지 확인하고, DrawIndexed 호출
-    auto indexIt = IndexBuffers.find(Type);
+    auto indexIt = IndexBuffers.find(GetPrimitiveTypeAsString(Type));
     if (indexIt != IndexBuffers.end())
     {
         FIndexInfo IndexInfo = indexIt->second;
@@ -436,7 +436,7 @@ void UDirectXHandle::RenderAABB(FAABB aabb) {
 
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
-    FVertexInfo Info = PrimitiveVertexBuffers[EPrimitiveType::BoundingBox];
+    FVertexInfo Info = VertexBuffers[GetPrimitiveTypeAsString(EPrimitiveType::BoundingBox)];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -555,7 +555,7 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     EPrimitiveType Type = LineComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
-    FVertexInfo Info = PrimitiveVertexBuffers[Type];
+    FVertexInfo Info = VertexBuffers[GetPrimitiveTypeAsString(Type)];
     ID3D11Buffer* VB = Info.VertexBuffer;
     uint Num = Info.NumVertices;
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
@@ -642,56 +642,13 @@ void UDirectXHandle::InitView()
 	DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
 }
 
-HRESULT UDirectXHandle::AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
+HRESULT UDirectXHandle::AddRenderTarget(FString TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc)
 {
 	RenderTarget = new UDXDRenderTarget();
 
 	HRESULT hr = RenderTarget->CreateRenderTarget(DXDDevice, DXDSwapChain, RenderTargetViewDesc);
 	if (FAILED(hr))
 		return hr;
-
-	return S_OK;
-}
-
-HRESULT UDirectXHandle::AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices)
-{
-	ID3D11Buffer* NewVertexBuffer;
-	// 버텍스 버퍼 생성
-	D3D11_BUFFER_DESC bufferDesc = {};
-	bufferDesc.Usage = D3D11_USAGE_DEFAULT;
-	bufferDesc.ByteWidth = sizeof(FVertexSimple) * static_cast<uint32>(vertices.size());
-	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
-	bufferDesc.CPUAccessFlags = 0;
-
-	D3D11_SUBRESOURCE_DATA initData = {};
-	initData.pSysMem = vertices.data();
-
-	HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, &initData, &NewVertexBuffer);
-	if (FAILED(hr))
-		return hr;
-
-	FVertexInfo VertexInfo = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
-	PrimitiveVertexBuffers.insert({ KeyType, VertexInfo });
-
-	if (indices.size() > 0)
-	{
-		ID3D11Buffer* NewIndexBuffer = nullptr;
-		D3D11_BUFFER_DESC indexBufferDesc = {};
-		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
-		indexBufferDesc.ByteWidth = sizeof(uint32) * static_cast<uint32>(indices.size());
-		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
-		indexBufferDesc.CPUAccessFlags = 0;
-
-		D3D11_SUBRESOURCE_DATA indexInitData = {};
-		indexInitData.pSysMem = indices.data();
-
-		hr = DXDDevice->CreateBuffer(&indexBufferDesc, &indexInitData, &NewIndexBuffer);
-		if (FAILED(hr))
-			return hr;
-
-		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
-		IndexBuffers.insert({ KeyType, IndexInfo });
-	}
 
 	return S_OK;
 }

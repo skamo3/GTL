@@ -14,13 +14,27 @@ enum class EPrimitiveType
     Cone,
     Grid,
     BoundingBox,
-    XArrow,
-    YArrow,
-    ZArrow,
+    Max,
+
+};
+
+enum class EGizmoViewType
+{
+    XTranslate,
+    YTranslate,
+    ZTranslate,
+    XRotate,
+    YRotate,
+    ZRotate,
+    XScale,
+    YScale,
+    ZScale,
     Max,
 };
 
 FString GetPrimitiveTypeAsString(enum class EPrimitiveType Type);
+
+FString GetGizmoViewTypeAsString(enum class EGizmoViewType Type);
 
 struct FVertexSimple
 {

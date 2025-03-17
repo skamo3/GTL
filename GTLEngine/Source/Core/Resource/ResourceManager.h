@@ -2,6 +2,11 @@
 
 #include "Resource/Types.h"
 
+struct ObjData {
+    TArray<FVertexSimple> vertices;
+    TArray<uint32> indices;
+};
+
 class UResourceManager
 {
 public:
@@ -9,14 +14,22 @@ public:
     ~UResourceManager();
 
     void LoadPrimitives();
+    
+    ObjData LoadObj(FString filepath);
 
-    void LoadArrowGizmos();
+    void LoadTranslateGizmos();
+    void LoadRotateGizmos();
+    void LoadScaleGizmos();
 
     void Release();
 
-    const TArray<FVertexSimple> GetVertexData(EPrimitiveType Type) const;
+    const TArray<FVertexSimple> GetPrimitiveVertexData(EPrimitiveType Type) const;
+    const TArray<uint32> GetPrimitiveIndexData(EPrimitiveType Type) const;
+
     const TArray<FVertexUV> GetUVData() const { return UVQuadData; }
-    const TArray<uint32> GetIndexData(EPrimitiveType Type) const;
+
+    const TArray<FVertexSimple> GetGizmoVertexData(EGizmoViewType Type) const;
+    const TArray<uint32> GetGizmoIndexData(EGizmoViewType Type) const;
 
     void NewScene();
     void LoadScene(std::string SceneName);
@@ -26,6 +39,11 @@ private:
     TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
     TArray<FVertexUV> UVQuadData;
     TMap<EPrimitiveType, TArray<uint32>> IndexDataMap;
+    TMap<EPrimitiveType, TArray<FVertexSimple>> PrimitiveVertexDataMap;
+    TMap<EGizmoViewType, TArray<FVertexSimple>> GizmoVertexDataMap;
+
+    TMap<EPrimitiveType, TArray<uint32>> PrimitiveIndexDataMap;
+    TMap<EGizmoViewType, TArray<uint32>> GizmoIndexDataMap;
 
 private:
     UResourceManager(const UResourceManager& InResourceManager) = delete;  
