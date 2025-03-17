@@ -140,6 +140,9 @@ void UEngine::Render()
 
 HRESULT UEngine::ResizeWindow(int width, int height) {
 
+    WindowInfo.Width = width;
+    WindowInfo.Height = height;
+
     // Init 되기 전에도 실행됨
     HRESULT hr = S_OK;
     if (DirectX11Handle) {
