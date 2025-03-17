@@ -268,6 +268,7 @@
     <ClCompile Include="Source\Core\Resource\Types.cpp">
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -487,5 +488,10 @@
     <Resource Include="Source\Core\Resource\Shape\AxisArrow.obj">
       <Filter>Source\Core\Resource\Shape</Filter>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\CoreUObject\UI\ConsolePanel.h">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </Text>
   </ItemGroup>
 </Project>

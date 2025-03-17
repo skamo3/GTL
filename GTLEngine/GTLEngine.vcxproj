@@ -82,6 +82,7 @@
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp" />
     <ClCompile Include="Source\CoreUObject\Object.cpp" />
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -215,6 +216,9 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <FileType>Document</FileType>
     </Resource>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\CoreUObject\UI\ConsolePanel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
