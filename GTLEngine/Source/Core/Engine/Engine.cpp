@@ -194,12 +194,12 @@ HRESULT UEngine::AddAllVertexBuffers()
         }
     }
 
-    for (uint32 i = 0; i < static_cast<uint32>(EGizmoViewType::Max); ++i)
+    /*for (uint32 i = 0; i < static_cast<uint32>(EGizmoViewType::Max); ++i)
     {
         EGizmoViewType Type = static_cast<EGizmoViewType>(i);
         hr = DirectX11Handle->AddVertexBuffer(GetGizmoViewTypeAsString(Type), ResourceManager->GetGizmoVertexData(Type), ResourceManager->GetGizmoIndexData(Type));
     }
-    
+    */
     return S_OK;
 }
 
