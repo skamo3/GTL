@@ -12,6 +12,7 @@ class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
 class UDXDConstantBuffer;
+class UDXDBufferManager;
 
 class UObject;
 class AActor;
@@ -20,6 +21,7 @@ class UGizmoBase;
 class UGizmoManager;
 class UPrimitiveComponent;
 class ULineComponent;
+class USceneComponent;
 
 class UDirectXHandle
 {
@@ -44,13 +46,15 @@ public:
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);
-	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
-	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
-	void RenderUUID(UPrimitiveComponent* PrimitiveComp);
+	void RenderActorUUID(AActor* TargetActor);
+	void RenderComponentUUID(USceneComponent* TargetComponent);
 
 public:
 	void InitView();
 
+public:
+	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
+	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 
 private:
 	D3D11_VIEWPORT ViewportInfo;
@@ -62,6 +66,7 @@ public:
 
 	HRESULT AddRenderTarget(FString TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
+	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices);
 	// TODO: Name으로 버텍스 버퍼 저장.
 	// Array 타입을 다른 방식으로 바꿔서 저장.
 	template<typename T>
@@ -87,6 +92,7 @@ private:
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
 	TMap<FString, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
+	UDXDBufferManager* BufferManager;
 
 	TMap<FString, FVertexInfo> VertexBuffers;
 	TMap<FString, FIndexInfo> IndexBuffers;

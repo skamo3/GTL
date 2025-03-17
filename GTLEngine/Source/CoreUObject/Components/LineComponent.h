@@ -17,6 +17,6 @@ public:
 	//inline FRay GetRay() const { return FRay(start, GetDirection()); }
 
 	inline void SetDirection(FMatrix m) { rotation = m; }
-	FMatrix GetWorldMatrix() const override;
+	FMatrix GetWorldMatrix() const;
 };
 

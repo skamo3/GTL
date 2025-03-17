@@ -100,7 +100,7 @@
     <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DXDVertexBuffer.cpp">
+    <ClCompile Include="Source\Core\DirectX11\DXDBufferManager.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp">
@@ -288,7 +288,7 @@
     <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h">
       <Filter>Source\Core\DirectX11</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\DirectX11\DXDVertexBuffer.h">
+    <ClInclude Include="Source\Core\DirectX11\DXDBufferManager.h">
       <Filter>Source\Core\DirectX11</Filter>
     </ClInclude>
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h">

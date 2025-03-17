@@ -6,6 +6,7 @@
 #include "DXDRasterizerState.h"
 #include "DXDShaderManager.h"
 #include "DXDConstantBuffer.h"
+#include "DXDBufferManager.h"
 
 #include "CoreUObject/GameFrameWork/Actor.h"
 #include "CoreUObject/GameFrameWork/Camera.h"
@@ -211,6 +212,8 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
     if (FAILED(hr))
         return hr;
 
+	BufferManager = new UDXDBufferManager();
+
 	/**
 	* TODO: 뎁스 스텐실 스테이트 생성 권장.
 	*       생성하지 않는 경우 기본값이 적용되므로, 현재 프로젝트에서는 따로 생성하지 않아도 됨.
@@ -359,14 +362,8 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     if (!PrimitiveComp)
         return;
 
-    switch ( PrimitiveComp->GetPrimitiveType() ) {
-    case EPrimitiveType::None:
-    case EPrimitiveType::Line:
-    case EPrimitiveType::Grid:
-        return;
-    default:
-        break;
-    }
+	if (PrimitiveComp->GetPrimitiveType() == EPrimitiveType::None || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Line || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Grid)
+		return;
 
     DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
     DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
@@ -409,7 +406,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         DXDDeviceContext->DrawIndexed(IndexInfo.NumIndices, 0, 0);
     }
     else
-    {
+    {  
         DXDDeviceContext->Draw(Num, 0);
     }
 }
@@ -474,10 +471,12 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
     for (AActor* Actor : Actors)
     {
+		RenderActorUUID(Actor);
         for (UActorComponent* Comp : Actor->GetOwnedComponent())
         {
-			//RenderUUID(dynamic_cast<UPrimitiveComponent*>(Comp));
             RenderPrimitive(dynamic_cast<UPrimitiveComponent*>(Comp));
+			// TODO: 컴포넌트 별 UUID 렌더링 구현하기. 컴포넌트의 변환된 위치를 찾는 부분에서 문제 생김.
+			//RenderComponentUUID(dynamic_cast<USceneComponent*>(Comp));
         }
 
 		// 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
@@ -490,7 +489,6 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
     // 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
     // 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.
     // 액터에 해당하는 오브젝트 렌더링.
-    
 }
 
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
@@ -544,14 +542,6 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    // View 변환 Constant.
-
-    // Projection 변환 Constant.
-
-
-    // End Object Matrix Update
-
-
     EPrimitiveType Type = LineComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
@@ -563,19 +553,14 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     DXDDeviceContext->Draw(Num, 0);
 }
 
-void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
+void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 {
-    if (!PrimitiveComp)
+    if (!TargetActor)
         return;
 
-    switch (PrimitiveComp->GetPrimitiveType()) {
-    case EPrimitiveType::None:
-    case EPrimitiveType::Line:
-    case EPrimitiveType::Grid:
-        return;
-    default:
-        break;
-    }
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -589,39 +574,79 @@ void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
     {
         // 프리미티브 위치에서 카메라 쪽으로 회전.
 		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
-		FVector PrimitiveLocation = PrimitiveComp->GetOwner()->GetActorLocation();
-		FVector Delta = CameraLocation - PrimitiveLocation;
-		Delta = Delta.GetSafeNormal();
+		FVector ActorLocation = TargetActor->GetActorLocation();
+		FVector Delta = (CameraLocation - ActorLocation).GetSafeNormal();
 
 		float Pitch = FMath::RadiansToDegrees(FMath::Asin(Delta.Z));
 		float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Delta.Y, Delta.X));
 
 		FRotator PrimitiveRotation(Pitch, Yaw, 0.f);
         FMatrix RotationMatrix(PrimitiveRotation);
-        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(PrimitiveLocation);
+        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation);
 
         Buffer->WorldMatrix = RotationMatrix * TranslationMatrix;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+	DXDDeviceContext->PSSetShaderResources(0, 1, &FontAtlasTexture);
+	DXDDeviceContext->PSSetSamplers(0, 1, &FontSamplerState);
+
+    uint Stride = sizeof(FVertexUV);
+    UINT offset = 0;
+	FBufferInfo Info;
+	BufferManager->CreateASCIITextBuffer(DXDDevice, TargetActor->GetName(), Info, 0.0f, 0.0f);
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
+	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
+}
+
+void UDirectXHandle::RenderComponentUUID(USceneComponent* TargetComponent)
+{
+	// 컴포넌트가 없거나 Root 컴포넌트면 그리기 X.
+	if (!TargetComponent || TargetComponent == TargetComponent->GetOwner()->GetRootComponent())
+		return;
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+
+	// Begin Object Matrix Update. 
+	ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+	if (!CbChangesEveryObject)
+	{
+		return;
+	}
+	D3D11_MAPPED_SUBRESOURCE MappedData = {};
+	DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+	if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
+	{
+		// 프리미티브 위치에서 카메라 쪽으로 회전.
+		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
+		FVector ActorLocation = TargetComponent->GetComponentLocation();
+		FVector Delta = (CameraLocation - ActorLocation).GetSafeNormal();
+
+		float Pitch = FMath::RadiansToDegrees(FMath::Asin(Delta.Z));
+		float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Delta.Y, Delta.X));
+		
+		FRotator PrimitiveRotation(Pitch, Yaw, 0.f);
+		FMatrix RotationMatrix(PrimitiveRotation);
+		FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation);
+
+		Buffer->WorldMatrix = RotationMatrix * TranslationMatrix;
+	}
+	DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
 	DXDDeviceContext->PSSetShaderResources(0, 1, &FontAtlasTexture);
 	DXDDeviceContext->PSSetSamplers(0, 1, &FontSamplerState);
 
-    //EPrimitiveType Type = LineComp->GetPrimitiveType();
-    uint Stride = sizeof(FVertexUV);
-    UINT offset = 0;
-    FVertexInfo Info = VertexBuffers[L"FontAtlas"];
-    ID3D11Buffer* VB = Info.VertexBuffer;
-    uint Num = Info.NumVertices;
-    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
-
-    DXDDeviceContext->Draw(Num, 0);
+	uint Stride = sizeof(FVertexUV);
+	UINT offset = 0;
+	FBufferInfo Info;
+	BufferManager->CreateASCIITextBuffer(DXDDevice, TargetComponent->GetName(), Info, 0.0f, -1.0f);
+	DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
+	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
 }
-
 
 void UDirectXHandle::InitView()
 {
