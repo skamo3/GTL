@@ -21,8 +21,6 @@
 #include "GameFrameWork/Shapes/Cylinder.h"
 #include "GameFrameWork/Shapes/Cone.h"
 
-extern TArray<UObject*> GUObjectArray;
-
 UControlPanel::UControlPanel()
 	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, Scale{ 1.f,1.f,1.f },
     FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f)
@@ -33,10 +31,11 @@ UControlPanel::UControlPanel()
 void UControlPanel::Tick(float DeltaTime)
 {
     ImGuiIO& io = ImGui::GetIO();
+    
 
     float scaleX = io.DisplaySize.x / 1600.0f;
     float scaleY = io.DisplaySize.y / 900.0f;
-
+    
     ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
 
     ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
@@ -50,6 +49,10 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::Text("FPS %.0f (%.0f ms)", io.Framerate, 1000.0f / io.Framerate);
     ImGui::Text("Window %dx%d", UEngine::GetEngine().GetWindowInfo().Width, UEngine::GetEngine().GetWindowInfo().Height);
     ImGui::Text("Mouse %d,%d", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+    
+    ACamera* cam = UEngine::GetEngine().GetWorld()->GetCamera();
+    ImGui::DragFloat("Grid Scale", &cam->GridScale, 0.1f, 0.1f, 100.f, "%.1f");
+
     ImGui::Separator();
 
 	// 폰트 설정.
@@ -166,16 +169,16 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::Text("Allocation Bytes %d", UEngine::GetEngine().GetTotalAllocationBytes());
     ImGui::Text("Allocation Count %d", UEngine::GetEngine().GetTotalAllocationCount());
 
-    ImGui::BeginChild("ScrollingRegion");
-    for (UObject* obj: GUObjectArray) {
-        if (obj) {
-            FString ws = obj->GetName();
-            std::string s;
-            s.assign(ws.begin(), ws.end());
-            ImGui::Text("%s(%d)", s.c_str(), obj->GetUUID());
-        }
-    }
-    ImGui::EndChild();
+    //ImGui::BeginChild("ScrollingRegion");
+    //for (UObject* obj: GUObjectArray) {
+    //    if (obj) {
+    //        FString ws = obj->GetName();
+    //        std::string s;
+    //        s.assign(ws.begin(), ws.end());
+    //        ImGui::Text("%s(%d)", s.c_str(), obj->GetUUID());
+    //    }
+    //}
+    //ImGui::EndChild();
 
     ImGui::Separator();
 

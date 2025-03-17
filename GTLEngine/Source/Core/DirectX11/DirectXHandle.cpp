@@ -333,8 +333,9 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // set position
+	float s = Camera->GridScale;
     FVector campos = Camera->GetActorLocation();
-    FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
+    FVector truncpos = FVector(floor(campos.X/s)*s, floor(campos.Y/s)*s, 0.f);
 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {
@@ -343,7 +344,8 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(2, 2, 0)) * FMatrix::GetTranslateMatrix(truncpos * 2);
+		
+        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(s, s, 0)) * FMatrix::GetTranslateMatrix(truncpos);
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 

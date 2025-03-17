@@ -3,13 +3,10 @@
 
 #include "Engine/Engine.h"
 
-TArray<UObject*> GUObjectArray = TArray<UObject*>();
-
 UObject::UObject()
 {
     UUID = UEngineStatics::GenUUID();
-    InternalIndex = GUObjectArray.size();
-    GUObjectArray.push_back(this);
+    InternalIndex = 0;
 
     // TODO: class prefix 제거
     const char* ClassName = typeid(*this).name();
@@ -22,7 +19,6 @@ UObject::UObject()
 
 UObject::~UObject()
 {
-    GUObjectArray[InternalIndex] = nullptr;
 }
 
 void* UObject::operator new(size_t size)
