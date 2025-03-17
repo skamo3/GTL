@@ -2,12 +2,13 @@
 
 #include "CoreUObject/Object.h"
 #include "CoreUObject/Components/SceneComponent.h"
+#include "UI/UIInterface.h"
 
 class UActorComponent;
 class USceneComponent;
 struct FAABB;
 	
-class AActor : public UObject
+class AActor : public UObject, public IClickable
 {
 public:
 	AActor();
@@ -66,7 +67,12 @@ private:
 	AActor* Owner;
 	TArray<UActorComponent*> OwnedComponent;
 
-}; 
+public:
+	void OnClick(int mx, int my) override;
+	void OnRelease(int mx, int my) override;
+	bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
+
+};
 
 template<typename T>
 inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FRotator& InRelativeRotation, const FVector& InRelativeScale)

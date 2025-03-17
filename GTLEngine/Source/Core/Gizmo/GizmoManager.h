@@ -2,15 +2,7 @@
 
 #include "Object.h"
 
-#include "Gizmo/GizmoActor.h"
-
-enum class ESelectedAxis : uint8
-{
-	None = 0,
-	X = 1,
-	Y = 2,
-	Z = 3
-};
+#include "Gizmo/GizmoBase.h"
 
 enum class EGizmoType : uint8
 {
@@ -30,22 +22,20 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	virtual void Destroy() override;
 
-public:
-	ESelectedAxis GetESelectedAxis() const { return SelectedAxis; }
+	void Picking();
 	EGizmoType GetGizmoType() const { return GizmoType; }
 
 
 private:
-	ESelectedAxis SelectedAxis;
 	EGizmoType GizmoType;
-
-	AGizmoActor* GizmoActor;
 	AActor* SelectedActor;
-
-	
-	bool IsRayIntersect(UActorComponent* comp, FRay ray, float maxDistance) const;
-
+	IDragable* DragTarget;
+	TArray<UGizmoBase*> Gizmo;
+	EGizmoType Mode = EGizmoType::Translate;
 public:
-	AActor* PickActor(float MouseX, float MouseY) const;
+	IClickable* PickClickable(float MouseX, float MouseY) const;
+	void ClearSelected();
+	const TArray<UGizmoBase*> GetGizmo();
+	inline AActor* GetSelected() const { return SelectedActor; }
 };
 

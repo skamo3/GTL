@@ -19,11 +19,12 @@
 
 UResourceManager::UResourceManager()
 {
-    LoadPrimitives();
-
     // 평면형 UV 데이터 생성.
     UVQuadData = TArray<FVertexUV>(QuadVertices, QuadVertices + sizeof(QuadVertices) / sizeof(FVertexUV));
-    LoadArrowGizmos();
+    LoadPrimitives();
+    LoadTranslateGizmos();
+    LoadRotateGizmos();
+    LoadScaleGizmos();
 }
 
 UResourceManager::~UResourceManager()
@@ -31,34 +32,72 @@ UResourceManager::~UResourceManager()
     Release();
 }
 
+ObjData UResourceManager::LoadObj(FString filepath)
+{
+    std::ifstream objFile(filepath.c_str());
+    ObjData data;
+    if (!objFile)
+        return data; // 실패 시 빈 구조체 반환
+
+    std::string line;
+    while (std::getline(objFile, line)) {
+        std::istringstream lineStream(line);
+        std::string type;
+        lineStream >> type;
+
+        if (type == "v") { // Vertex position
+            FVertexSimple vertex;
+            //lineStream >> vertex.X >> vertex.Y >> vertex.Z >> vertex.R >> vertex.G >> vertex.B; color 있을경우
+            lineStream >> vertex.X >> vertex.Y >> vertex.Z;
+            FVertexSimple vertexSimple{ vertex.X, vertex.Y, vertex.Z, 0.f, 0.f, 0.f, 1.f };
+            data.vertices.push_back(vertexSimple);
+        }
+        else if (type == "f") { // Face
+            std::vector<uint32> faceIndices;
+            uint32 index;
+
+            while (lineStream >> index) {
+                faceIndices.push_back(index - 1);
+            }
+            for (size_t i = 1; i + 1 < faceIndices.size(); ++i) {
+                data.indices.push_back(faceIndices[0]);
+                data.indices.push_back(faceIndices[i]);
+                data.indices.push_back(faceIndices[i + 1]);
+            }
+        }
+    }
+    objFile.close();
+    return data;
+}
+
 void UResourceManager::LoadPrimitives()
 {
-    VertexDataMap[EPrimitiveType::Line] = {
+    PrimitiveVertexDataMap[EPrimitiveType::Line] = {
         {0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f},
         {0.f, 0.f, 0.f, 1.f, 0.f, 0.f, 1.f},
     };
 
     uint64 LineVertexNum = sizeof(LineVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Line] = TArray<FVertexSimple>(LineVertices, LineVertices + LineVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Line] = TArray<FVertexSimple>(LineVertices, LineVertices + LineVertexNum);
 
     uint64 TriangleVertexNum = sizeof(TriangleVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Triangle] = TArray<FVertexSimple>(TriangleVertices, TriangleVertices + TriangleVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Triangle] = TArray<FVertexSimple>(TriangleVertices, TriangleVertices + TriangleVertexNum);
 
     uint64 SphereVertexNum = sizeof(SphereVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Sphere] = TArray<FVertexSimple>(SphereVertices, SphereVertices + SphereVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Sphere] = TArray<FVertexSimple>(SphereVertices, SphereVertices + SphereVertexNum);
 
     uint64 CubeVertexNum = sizeof(CubeVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Cube] = TArray<FVertexSimple>(CubeVertices, CubeVertices + CubeVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Cube] = TArray<FVertexSimple>(CubeVertices, CubeVertices + CubeVertexNum);
 
     uint64 CylinderVertexNum = sizeof(CylinderVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Cylinder] = TArray<FVertexSimple>(CylinderVertices, CylinderVertices + CylinderVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Cylinder] = TArray<FVertexSimple>(CylinderVertices, CylinderVertices + CylinderVertexNum);
 
     uint64 ConeVertexNum = sizeof(ConeVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::Cone] = TArray<FVertexSimple>(ConeVertices, ConeVertices + ConeVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::Cone] = TArray<FVertexSimple>(ConeVertices, ConeVertices + ConeVertexNum);
 
     uint64 GridVertexNum = 1000;
     float offset = static_cast<float>(GridVertexNum / 2) / 4;
-    TArray<FVertexSimple>& grid = VertexDataMap[EPrimitiveType::Grid] = TArray<FVertexSimple>();
+    TArray<FVertexSimple>& grid = PrimitiveVertexDataMap[EPrimitiveType::Grid] = TArray<FVertexSimple>();
     grid.reserve(GridVertexNum);
     for ( int i = 0; i < GridVertexNum / 4; ++i ) {
         float f = static_cast<float>(i);
@@ -69,68 +108,22 @@ void UResourceManager::LoadPrimitives()
     }
 
     uint64 BoundingBoxVertexNum = sizeof(BoundingBoxVertices) / sizeof(FVertexSimple);
-    VertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
+    PrimitiveVertexDataMap[EPrimitiveType::BoundingBox] = TArray<FVertexSimple>(BoundingBoxVertices, BoundingBoxVertices + BoundingBoxVertexNum);
 }
 
-void UResourceManager::LoadArrowGizmos()
+void UResourceManager::LoadTranslateGizmos()
 {
-    // OBJ 파일 경로 (예: AxisArrow.obj)
-    FString filepath = L"Source/Core/Resource/Shape/AxisArrow.obj";
-    std::ifstream objFile(filepath.c_str());
-    if (!objFile)
-    {
-        // 파일 열기 실패 시 처리
-        return;
-    }
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoTranslate.obj");
 
-    std::string line;
-    std::vector<FVector> positions;
-    TArray<FVertexSimple> vertices;
-    TArray<uint32> indices;
-
-    while (std::getline(objFile, line)) {
-        std::istringstream lineStream(line);
-        std::string type;
-        lineStream >> type;
-
-        if (type == "v") // Vertex position
-        {
-            FVector vertex;
-            lineStream >> vertex.X >> vertex.Y >> vertex.Z;
-            FVertexSimple vertexSimple{ vertex.X, vertex.Y, vertex.Z, 0.f,0.f, 0.f, 1.f };
-            vertices.push_back(vertexSimple);
-            positions.push_back(vertex);
-        }
-        else if (type == "f") // Face
-        {
-            std::vector<uint32_t> faceIndices;
-            uint32_t index;
-
-            while (lineStream >> index) {
-                faceIndices.push_back(index - 1);
-            }
-
-            for (size_t i = 1; i + 1 < faceIndices.size(); ++i) {
-                indices.push_back(faceIndices[0]);
-                indices.push_back(faceIndices[i]);
-                indices.push_back(faceIndices[i + 1]);
-            }
-        }
-
-    }
-    objFile.close();
-
-    // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
     TArray<FVertexSimple> YVertices;
     TArray<FVertexSimple> ZVertices;
 
-    // tmpVertices의 각 정점을 복사하여 각 배열에 넣음
-    for (size_t i = 0; i < vertices.size(); ++i)
+    for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
-        FVertexSimple xVert = vertices[i];
-        FVertexSimple yVert = vertices[i];
-        FVertexSimple zVert = vertices[i];
+        FVertexSimple xVert = Obj.vertices[i];
+        FVertexSimple yVert = Obj.vertices[i];
+        FVertexSimple zVert = Obj.vertices[i];
 
         // X축은 빨간색 (1,0,0)
         xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
@@ -144,39 +137,123 @@ void UResourceManager::LoadArrowGizmos()
         ZVertices.push_back(zVert);
     }
 
-    // 이제 각 축에 해당하는 정점 배열을 VertexDataMap에 저장합니다.
-    // EGizmoType 또는 EPrimitiveType에 맞게 열거형 값을 사용하세요.
-    VertexDataMap[EPrimitiveType::XArrow] = XVertices;
-    VertexDataMap[EPrimitiveType::YArrow] = YVertices;
-    VertexDataMap[EPrimitiveType::ZArrow] = ZVertices;
-    IndexDataMap[EPrimitiveType::XArrow] = indices;
-    IndexDataMap[EPrimitiveType::YArrow] = indices;
-    IndexDataMap[EPrimitiveType::ZArrow] = indices;
+    GizmoVertexDataMap[EGizmoViewType::XTranslate] = XVertices;
+    GizmoVertexDataMap[EGizmoViewType::YTranslate] = YVertices;
+    GizmoVertexDataMap[EGizmoViewType::ZTranslate] = ZVertices;
+    GizmoIndexDataMap[EGizmoViewType::XTranslate] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::YTranslate] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::ZTranslate] = Obj.indices;
+}
+
+void UResourceManager::LoadRotateGizmos()
+{
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoRotate.obj");
+
+    TArray<FVertexSimple> XVertices;
+    TArray<FVertexSimple> YVertices;
+    TArray<FVertexSimple> ZVertices;
+
+    for (size_t i = 0; i < Obj.vertices.size(); ++i)
+    {
+        FVertexSimple xVert = Obj.vertices[i];
+        FVertexSimple yVert = Obj.vertices[i];
+        FVertexSimple zVert = Obj.vertices[i];
+
+        // X축은 빨간색 (1,0,0)
+        xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
+        // Y축은 녹색 (0,1,0)
+        yVert.R = 0.f; yVert.G = 1.f; yVert.B = 0.f;
+        // Z축은 파란색 (0,0,1)
+        zVert.R = 0.f; zVert.G = 0.f; zVert.B = 1.f;
+
+        XVertices.push_back(xVert);
+        YVertices.push_back(yVert);
+        ZVertices.push_back(zVert);
+    }
+
+    GizmoVertexDataMap[EGizmoViewType::XRotate] = XVertices;
+    GizmoVertexDataMap[EGizmoViewType::YRotate] = YVertices;
+    GizmoVertexDataMap[EGizmoViewType::ZRotate] = ZVertices;
+    GizmoIndexDataMap[EGizmoViewType::XRotate] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::YRotate] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::ZRotate] = Obj.indices;
+}
+
+void UResourceManager::LoadScaleGizmos()
+{
+    ObjData Obj = LoadObj(L"Resource/Shape/GizmoScale.obj");
+
+    TArray<FVertexSimple> XVertices;
+    TArray<FVertexSimple> YVertices;
+    TArray<FVertexSimple> ZVertices;
+
+    for (size_t i = 0; i < Obj.vertices.size(); ++i)
+    {
+        FVertexSimple xVert = Obj.vertices[i];
+        FVertexSimple yVert = Obj.vertices[i];
+        FVertexSimple zVert = Obj.vertices[i];
+
+        // X축은 빨간색 (1,0,0)
+        xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
+        // Y축은 녹색 (0,1,0)
+        yVert.R = 0.f; yVert.G = 1.f; yVert.B = 0.f;
+        // Z축은 파란색 (0,0,1)
+        zVert.R = 0.f; zVert.G = 0.f; zVert.B = 1.f;
+
+        XVertices.push_back(xVert);
+        YVertices.push_back(yVert);
+        ZVertices.push_back(zVert);
+    }
+
+    GizmoVertexDataMap[EGizmoViewType::XScale] = XVertices;
+    GizmoVertexDataMap[EGizmoViewType::YScale] = YVertices;
+    GizmoVertexDataMap[EGizmoViewType::ZScale] = ZVertices;
+    GizmoIndexDataMap[EGizmoViewType::XScale] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::YScale] = Obj.indices;
+    GizmoIndexDataMap[EGizmoViewType::ZScale] = Obj.indices;
 }
 
 void UResourceManager::Release()
 {
-    for (auto& [Type, Info] : VertexDataMap)
+    for (auto& [Type, Info] : PrimitiveVertexDataMap)
     {
         Info.clear();
     }
-    VertexDataMap.clear();
+    PrimitiveVertexDataMap.clear();
 }
 
-const TArray<FVertexSimple> UResourceManager::GetVertexData(EPrimitiveType Type) const
+const TArray<FVertexSimple> UResourceManager::GetPrimitiveVertexData(EPrimitiveType Type) const
 {
-    if (VertexDataMap.contains(Type))
+    if (PrimitiveVertexDataMap.contains(Type))
     {
-        return VertexDataMap.find(Type)->second;
+        return PrimitiveVertexDataMap.find(Type)->second;
     }
 	return TArray<FVertexSimple>();
 }
 
-const TArray<uint32> UResourceManager::GetIndexData(EPrimitiveType Type) const
+const TArray<uint32> UResourceManager::GetPrimitiveIndexData(EPrimitiveType Type) const
 {
-    if (IndexDataMap.contains(Type))
+    if (PrimitiveIndexDataMap.contains(Type))
     {
-        return IndexDataMap.find(Type)->second;
+        return PrimitiveIndexDataMap.find(Type)->second;
+    }
+    return TArray<uint32>();
+}
+
+const TArray<FVertexSimple> UResourceManager::GetGizmoVertexData(EGizmoViewType Type) const
+{
+    if (GizmoVertexDataMap.contains(Type))
+    {
+        return GizmoVertexDataMap.find(Type)->second;
+    }
+    return TArray<FVertexSimple>();
+}
+
+const TArray<uint32> UResourceManager::GetGizmoIndexData(EGizmoViewType Type) const
+{
+    if (GizmoIndexDataMap.contains(Type))
+    {
+        return GizmoIndexDataMap.find(Type)->second;
     }
     return TArray<uint32>();
 }

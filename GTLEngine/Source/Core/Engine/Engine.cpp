@@ -44,15 +44,15 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     // 셰이더 추가.
 
     // 버텍스 버퍼 추가.
-    hr = AddAllPrimitiveVertexBuffers();
+    hr = AddAllVertexBuffers();
     if (FAILED(hr))
     {
         MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
         return false;
     }
-    
+
     // 텍스쳐용 UV 버퍼 추가.
-    hr = DirectX11Handle->AddVertexBuffer<FVertexUV>(L"FontAtlas", ResourceManager->GetUVData());
+    hr = DirectX11Handle->AddVertexBuffer<FVertexUV>(L"FontAtlas", ResourceManager->GetUVData(), TArray<uint32>());
 	if (FAILED(hr))
 	{
 		MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
@@ -68,17 +68,17 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 	TimeManager = new UTimeManager();
 	TimeManager->Initialize();
 
-    // 인풋 매니저 추가.
-    InputManager = new UInputManager();
-
     // UI 매니저 추가.
 	UIManager = new UUIManager();
 	UIManager->InitUI(WindowInfo, DirectX11Handle->GetD3DDevice(), DirectX11Handle->GetD3DDeviceContext());
 
+    GizmoManager = new UGizmoManager();
+
+    // 인풋 매니저 추가.
+    InputManager = new UInputManager();
+
     // 월드 추가.
     World = UWorld::CreateWorld();
-
-	GizmoManager = new UGizmoManager();
 
     return true;
 }
@@ -121,16 +121,16 @@ void UEngine::Render()
     DirectX11Handle->InitView();
     DirectX11Handle->UpdateCameraMatrix(World->GetCamera());
 
-    DirectX11Handle->SetFaceMode();
-    DirectX11Handle->RenderObject(World->GetActors());
-
     DirectX11Handle->SetLineMode();
     DirectX11Handle->RenderWorldPlane(World->GetCamera());
     DirectX11Handle->RenderBoundingBox(World->GetActors());
+    DirectX11Handle->RenderGizmo(GizmoManager->GetGizmo());
     DirectX11Handle->RenderLines(World->GetActors());
+
+    DirectX11Handle->SetFaceMode();
+    DirectX11Handle->RenderObject(World->GetActors());
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
-    //DirectX11Handle->RenderGizmo(Gizmo);
-    
+
     // UI 그리기.
     UIManager->RenderUI();
 	// 최종적으로 그린 결과물을 화면에 출력.
@@ -177,20 +177,27 @@ void UEngine::ClearEngine()
 	}
 }
 
-HRESULT UEngine::AddAllPrimitiveVertexBuffers()
+HRESULT UEngine::AddAllVertexBuffers()
 {
     HRESULT hr = S_OK;
+
     for (uint32 i = 0; i < static_cast<uint32>(EPrimitiveType::Max); ++i)
     {
         EPrimitiveType Type = static_cast<EPrimitiveType>(i);
         if (Type != EPrimitiveType::None)
         {
-            hr = DirectX11Handle->AddVertexBuffer(Type, ResourceManager->GetVertexData(Type), ResourceManager->GetIndexData(Type));
+            hr = DirectX11Handle->AddVertexBuffer(GetPrimitiveTypeAsString(Type), ResourceManager->GetPrimitiveVertexData(Type), ResourceManager->GetPrimitiveIndexData(Type));
             if (FAILED(hr))
             {
                 return hr;
             }
         }
+    }
+
+    for (uint32 i = 0; i < static_cast<uint32>(EGizmoViewType::Max); ++i)
+    {
+        EGizmoViewType Type = static_cast<EGizmoViewType>(i);
+        hr = DirectX11Handle->AddVertexBuffer(GetGizmoViewTypeAsString(Type), ResourceManager->GetGizmoVertexData(Type), ResourceManager->GetGizmoIndexData(Type));
     }
     
     return S_OK;

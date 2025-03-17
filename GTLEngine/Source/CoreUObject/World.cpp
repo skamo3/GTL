@@ -13,6 +13,7 @@
 #include "Engine.h"
 #include "UI/UIManager.h"
 #include "UI/ControlPanel.h"
+#include "UI/ConsolePanel.h"
 #include "UI/PropertyPanel.h"
 
 UWorld* UWorld::CreateWorld()
@@ -55,6 +56,9 @@ void UWorld::Destroy()
 			Actor->Destroy();
 	}
 	ActiveActors.clear();
+	IClickable::GetClickableList().clear();
+	IDragable::GetClickableList().clear();
+	UEngine::GetEngine().GetGizmoManager()->ClearSelected();
 }
 
 void UWorld::InitViewInfo()
@@ -70,6 +74,7 @@ void UWorld::CreateDefaultUI()
 	if (UIManager)
 	{
 		UIManager->RegistUI(new UControlPanel());
+		UIManager->RegistUI(new UConsolePanel());
 		UIManager->RegistUI(new UPropertyPanel());
 	}
 }

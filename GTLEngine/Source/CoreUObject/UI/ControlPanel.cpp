@@ -21,6 +21,8 @@
 #include "GameFrameWork/Shapes/Cylinder.h"
 #include "GameFrameWork/Shapes/Cone.h"
 
+extern TArray<UObject*> GUObjectArray;
+
 UControlPanel::UControlPanel()
 	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, Scale{ 1.f,1.f,1.f },
     FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f)
@@ -157,10 +159,23 @@ void UControlPanel::Tick(float DeltaTime)
 
     ImGui::Separator();
 
-    ImGui::Separator();
+    //ImGui::Separator();
 
     ImGui::Text("Allocation Bytes %d", UEngine::GetEngine().GetTotalAllocationBytes());
     ImGui::Text("Allocation Count %d", UEngine::GetEngine().GetTotalAllocationCount());
+
+    ImGui::BeginChild("ScrollingRegion");
+    for (UObject* obj: GUObjectArray) {
+        if (obj) {
+            FString ws = obj->GetName();
+            std::string s;
+            s.assign(ws.begin(), ws.end());
+            ImGui::Text("%s(%d)", s.c_str(), obj->GetUUID());
+        }
+    }
+    ImGui::EndChild();
+
+    ImGui::Separator();
 
     ImGui::End();
 }

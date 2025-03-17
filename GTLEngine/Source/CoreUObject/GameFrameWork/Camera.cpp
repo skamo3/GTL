@@ -5,10 +5,6 @@
 #include "Components/LineComponent.h"
 #include "Engine/Engine.h"
 #include "Input/InputManager.h"
-#include "Core/Gizmo/GizmoManager.h"
-#include "World.h"
-#include "Utils/Math/Geometry.h"
-#include "CoreUObject/Components/CubeComponent.h"
 
 #include "Math/MathUtils.h"
 
@@ -71,27 +67,6 @@ void ACamera::Tick(float TickTime)
 
 	SetActorLocation(CameraLocation);
 	SetActorRotation(CameraRotation);
-
-	// picking
-	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
-	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
-		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
-		UGizmoManager* gizmoManager = UEngine::GetEngine().GetGizmoManager();
-
-		for (auto& actor: UEngine::GetEngine().GetWorld()->GetActors() ) {
-			actor->IsSelected = false;
-		}
-		float mouse_x = inputManager->GetMouseNdcX();
-		float mouse_y = inputManager->GetMouseNdcY();
-
-		//lineActor->AddComponent<ULineComponent>(lineActor, FVector(1, 1, 1), FRotator::ZeroRotator, FVector(100.f, 0.f, 0.f));
-
-		AActor* selected = gizmoManager->PickActor(mouse_x, mouse_y);
-		if (selected) {
-			selected->IsSelected = true;
-		}
-		
-	}
 }
 
 void ACamera::Destroy()

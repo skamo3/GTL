@@ -7,10 +7,15 @@
 #include "Asset/IconDefs.h"
 #include "Asset/RawFonts.h"
 
+#include "Engine/Engine.h"
+#include "Input/InputManager.h"
+#include "Core/Gizmo/GizmoManager.h"
+
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "ImGui/imgui_impl_dx11.h"
 #include "ImGui/imgui_impl_win32.h"
+
 
 void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext)
 {
@@ -22,6 +27,7 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);
 
 	CreateUsingFont();
+	IO = &ImGui::GetIO();
 }
 
 void UUIManager::RegistUI(UUIBase* NewUI)
@@ -43,7 +49,6 @@ void UUIManager::Tick(float DeltaTime)
 			UI->Tick(DeltaTime);
 		}
 	}
-
 }
 
 void UUIManager::RenderUI()

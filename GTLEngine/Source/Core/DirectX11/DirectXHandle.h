@@ -17,6 +17,7 @@ class UDXDBufferManager;
 class UObject;
 class AActor;
 class ACamera;
+class UGizmoBase;
 class UGizmoManager;
 class UPrimitiveComponent;
 class ULineComponent;
@@ -39,9 +40,9 @@ public:
 
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderWorldPlane(ACamera* Camera);
-	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderBoundingBox(const TArray<AActor*> Actors);
+	void RenderGizmo(const TArray<UGizmoBase*> gizmo);
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);
@@ -63,14 +64,13 @@ public:
 	ID3D11DeviceContext* GetD3DDeviceContext() const { return DXDDeviceContext; }
 	IDXGISwapChain* GetDXDSwapChain() const { return DXDSwapChain; }
 
-	HRESULT AddRenderTarget(std::wstring TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
+	HRESULT AddRenderTarget(FString TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
 	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices);
-
 	// TODO: Name으로 버텍스 버퍼 저장.
 	// Array 타입을 다른 방식으로 바꿔서 저장.
 	template<typename T>
-	HRESULT AddVertexBuffer(std::wstring KeyName, const TArray<T> vertices);
+	HRESULT AddVertexBuffer(FString KeyName, const TArray<T> vertices, const TArray<uint32>& indices);
 
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
@@ -88,13 +88,13 @@ private:
 	
 	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
-	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
+	TMap<FString, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
 	UDXDBufferManager* BufferManager;
 
-	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
-	TMap<std::wstring, FVertexInfo> VertexBuffers;
-	TMap<EPrimitiveType, FIndexInfo> IndexBuffers;
+	TMap<FString, FVertexInfo> VertexBuffers;
+	TMap<FString, FIndexInfo> IndexBuffers;
+
 	TMap<EConstantBufferType, UDXDConstantBuffer*> ConstantBuffers;
 
 	// TODO: Texture 관리용 객체로 묶어서 관리.
@@ -102,11 +102,10 @@ private:
 	ID3D11SamplerState* FontSamplerState;
 	FVertexInfo FontTextureBuffer;
 
-
 };
 
 template<typename T>
-inline HRESULT UDirectXHandle::AddVertexBuffer(std::wstring KeyName, const TArray<T> vertices)
+inline HRESULT UDirectXHandle::AddVertexBuffer(FString KeyName, const TArray<T> vertices, const TArray<uint32>& indices)
 {
 	ID3D11Buffer* NewVertexBuffer;
 	// 버텍스 버퍼 생성
@@ -125,4 +124,26 @@ inline HRESULT UDirectXHandle::AddVertexBuffer(std::wstring KeyName, const TArra
 
 	FVertexInfo Info = { static_cast<uint32>(vertices.size()), NewVertexBuffer };
 	VertexBuffers.insert({ KeyName, Info });
+
+	if (indices.size() > 0)
+	{
+		ID3D11Buffer* NewIndexBuffer = nullptr;
+		D3D11_BUFFER_DESC indexBufferDesc = {};
+		indexBufferDesc.Usage = D3D11_USAGE_DEFAULT;
+		indexBufferDesc.ByteWidth = sizeof(uint32) * static_cast<uint32>(indices.size());
+		indexBufferDesc.BindFlags = D3D11_BIND_INDEX_BUFFER;
+		indexBufferDesc.CPUAccessFlags = 0;
+
+		D3D11_SUBRESOURCE_DATA indexInitData = {};
+		indexInitData.pSysMem = indices.data();
+
+		hr = DXDDevice->CreateBuffer(&indexBufferDesc, &indexInitData, &NewIndexBuffer);
+		if (FAILED(hr))
+			return hr;
+
+		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
+		IndexBuffers.insert({ KeyName, IndexInfo });
+	}
+
+	return S_OK;
 }

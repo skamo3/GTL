@@ -2,9 +2,11 @@
 
 #include "Object.h"
 #include "Math/Vector.h"
+#include "ImGui/imgui.h"
 
 class UUIBase;
-struct ImGuiIO;
+class UGizmoManager;
+class IDragable;
 
 class UUIManager : public UObject
 {
@@ -13,16 +15,18 @@ public:
 	void InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext);
 
 	virtual void Tick(float DeltaTime) override;
-	void RenderUI();
 	virtual void Destroy() override;
 
 	void RegistUI(UUIBase* NewUI);
+	void RenderUI();
 
 private:
 	TArray<UUIBase*> UIList;
 	ImGuiIO* IO;
-
 public:
+	inline const bool IsImGuiWantTextInput() const { return IO->WantTextInput; }
+	inline const bool IsImGuiWantMouseInput() const { return IO->WantCaptureMouse; }
+
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
 	void OnObjectTranslationChanged(FVector& inTranslation);
@@ -53,7 +57,6 @@ public:
 	void CreateUsingFont();
 
 	void PreferenceStyle();
-
 public:
 	// Console Function
 

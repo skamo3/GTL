@@ -80,6 +80,9 @@
     <Filter Include="Source\CoreUObject\Gizmo">
       <UniqueIdentifier>{a49f61d3-b10e-4d36-8c89-971ec9baa71a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Resource\Shape">
+      <UniqueIdentifier>{4dfa254a-28c2-471f-9376-c567b78bdbd5}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Source\Utils\EnginePch.cpp">
@@ -229,10 +232,10 @@
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp">
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp">
@@ -262,9 +265,13 @@
     <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
+    <ClCompile Include="UIInterface.cpp">
+      <Filter>Source\Core\UI</Filter>
+    </ClCompile>
     <ClCompile Include="Source\Core\Resource\Types.cpp">
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -429,10 +436,10 @@
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h">
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBase.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h">
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrow.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h">
@@ -462,6 +469,9 @@
     <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
+    <ClInclude Include="Source\Core\UI\UIInterface.h">
+      <Filter>Source\Core\UI</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <FxCompile Include="Resource\Shader\PrimitiveShader.hlsl">
@@ -476,5 +486,10 @@
     <FxCompile Include="Resource\Shader\MVPShader.hlsli">
       <Filter>Resource\Shader</Filter>
     </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\CoreUObject\UI\ConsolePanel.h">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </Text>
   </ItemGroup>
 </Project>
