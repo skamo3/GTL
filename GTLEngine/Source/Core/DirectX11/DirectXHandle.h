@@ -70,12 +70,11 @@ public:
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
+	void ResizeViewport(int width, int height);
 	HRESULT ResizeWindow(int width, int height);
 private:
 	void UpdateWorldViewMatrix(ACamera* Camera);
 	void UpdateWorldProjectionMatrix(ACamera* Camera);
-
-	
 
 	void RenderAABB(FAABB aabb);
 

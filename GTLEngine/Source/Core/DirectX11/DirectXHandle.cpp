@@ -43,7 +43,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     swapchaindesc.BufferCount = 2; // 더블 버퍼링
     swapchaindesc.OutputWindow = UEngine::GetEngine().GetWindowInfo().WindowHandle; // 렌더링할 창 핸들
     swapchaindesc.Windowed = TRUE; // 창 모드
-    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 스왑 방식
+    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // 스왑 방식
 
 	uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 
@@ -696,6 +696,11 @@ void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 	);
 }
 
+void UDirectXHandle::ResizeViewport(int width, int height) {
+	ViewportInfo.Width = width;
+	ViewportInfo.Height = height;
+}
+
 HRESULT UDirectXHandle::ResizeWindow(int width, int height) {
 
 	RenderTarget->ReleaseRenderTarget();
@@ -716,9 +721,6 @@ HRESULT UDirectXHandle::ResizeWindow(int width, int height) {
 	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(width), static_cast<float>(height));
 	if ( FAILED(hr) )
 		return hr;
-	
-	ViewportInfo.Width = width;
-	ViewportInfo.Height = height;
 
 	return hr;
 }

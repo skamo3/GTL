@@ -139,10 +139,13 @@ void UEngine::Render()
 }
 
 HRESULT UEngine::ResizeWindow(int width, int height) {
+
     // Init 되기 전에도 실행됨
     HRESULT hr = S_OK;
-    if (DirectX11Handle)
+    if (DirectX11Handle) {
         hr = DirectX11Handle->ResizeWindow(width, height);
+        DirectX11Handle->ResizeViewport(width, height);
+    }
     return hr;
 }
 
