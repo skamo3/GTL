@@ -23,11 +23,10 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
 	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);
+	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
 
 	CreateUsingFont();
-	IO = &ImGui::GetIO();
 }
 
 void UUIManager::RegistUI(UUIBase* NewUI)
@@ -41,7 +40,6 @@ void UUIManager::Tick(float DeltaTime)
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-
 	for (UUIBase* UI : UIList)
 	{
 		if (UI)

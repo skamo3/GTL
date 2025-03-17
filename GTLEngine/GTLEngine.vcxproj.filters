@@ -178,27 +178,6 @@
     <ClCompile Include="Source\CoreUObject\Object.cpp">
       <Filter>Source\CoreUObject</Filter>
     </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_demo.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_draw.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_impl_dx11.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_impl_win32.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_tables.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
@@ -265,13 +244,36 @@
     <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="UIInterface.cpp">
-      <Filter>Source\Core\UI</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Resource\Types.cpp">
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
+    <ClCompile Include="Plugins\ImGui\imgui.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_demo.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_draw.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_impl_dx11.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_impl_win32.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_tables.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
+      <Filter>Plugins\ImGui</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\UI\UIInterface.cpp">
+      <Filter>Source\Core\UI</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -373,30 +375,6 @@
     <ClInclude Include="Source\CoreUObject\Object.h">
       <Filter>Source\CoreUObject</Filter>
     </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imconfig.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imgui.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imgui_impl_dx11.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imgui_impl_win32.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imgui_internal.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imstb_rectpack.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imstb_textedit.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
-    <ClInclude Include="Plugins\ImGui\imstb_truetype.h">
-      <Filter>Plugins\ImGui</Filter>
-    </ClInclude>
     <ClInclude Include="Plugins\SimpleJSON\json.hpp">
       <Filter>Plugins\SimpleJSON</Filter>
     </ClInclude>
@@ -471,6 +449,30 @@
     </ClInclude>
     <ClInclude Include="Source\Core\UI\UIInterface.h">
       <Filter>Source\Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imconfig.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_impl_dx11.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_impl_win32.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imgui_internal.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_rectpack.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_textedit.h">
+      <Filter>Plugins\ImGui</Filter>
+    </ClInclude>
+    <ClInclude Include="Plugins\ImGui\imstb_truetype.h">
+      <Filter>Plugins\ImGui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

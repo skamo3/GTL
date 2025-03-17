@@ -46,8 +46,10 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
     ImGui::Text("HELLO GTL!!");
 
-    // FPS 출력.
+    // FPS 및 창 크기출력.
     ImGui::Text("FPS %.0f (%.0f ms)", io.Framerate, 1000.0f / io.Framerate);
+    ImGui::Text("Window %.0fx%.0f", io.DisplaySize.x, io.DisplaySize.y);
+    ImGui::Text("Window %dx%d", UEngine::GetEngine().GetWindowInfo().Width, UEngine::GetEngine().GetWindowInfo().Height);
     ImGui::Separator();
 
 	// 폰트 설정.

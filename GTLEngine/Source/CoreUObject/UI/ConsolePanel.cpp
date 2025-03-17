@@ -58,7 +58,7 @@ void UConsolePanel::Tick(float TickTime) {
     float scaleY = io.DisplaySize.y / 900.0f;
     ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
 
-    ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
+    ImGui::SetNextWindowPos(ImVec2(5, 450), ImGuiCond_Appearing);
     ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
 
 	ImGui::Begin("Console");

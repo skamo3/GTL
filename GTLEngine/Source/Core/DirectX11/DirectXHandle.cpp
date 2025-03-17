@@ -696,4 +696,30 @@ void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 	);
 }
 
+HRESULT UDirectXHandle::ResizeWindow(int width, int height) {
+
+	RenderTarget->ReleaseRenderTarget();
+	DepthStencilView->ReleaseDepthStencilView();
+	
+	HRESULT hr = DXDSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if ( FAILED(hr) )
+		return hr;
+
+	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // 색상 포맷
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
+	hr = AddRenderTarget(TEXT("MainRenderTarget"), framebufferRTVdesc);
+	if ( FAILED(hr) )
+		return hr;
+
+	FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(width), static_cast<float>(height));
+	if ( FAILED(hr) )
+		return hr;
+	
+	ViewportInfo.Width = width;
+	ViewportInfo.Height = height;
+
+	return hr;
+}
 

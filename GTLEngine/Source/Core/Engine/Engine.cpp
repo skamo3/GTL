@@ -9,6 +9,7 @@
 #include "UI/UIManager.h"
 
 #include "World.h"
+#include "CoreUObject/GameFrameWork/Camera.h"
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/GizmoManager.h"
 
@@ -111,7 +112,7 @@ void UEngine::TickWindowInfo() {
         WindowInfo.Top = rect.top;
         WindowInfo.Bottom = rect.bottom;
         WindowInfo.Width = rect.right - rect.left;
-        WindowInfo.Height = rect.bottom - rect.top;
+        WindowInfo.Height = rect.bottom - rect.top;    
     }
 }
 
@@ -135,6 +136,14 @@ void UEngine::Render()
     UIManager->RenderUI();
 	// 최종적으로 그린 결과물을 화면에 출력.
 	DirectX11Handle->GetDXDSwapChain()->Present(1, 0);
+}
+
+HRESULT UEngine::ResizeWindow(int width, int height) {
+    // Init 되기 전에도 실행됨
+    HRESULT hr = S_OK;
+    if (DirectX11Handle)
+        hr = DirectX11Handle->ResizeWindow(width, height);
+    return hr;
 }
 
 void UEngine::ClearEngine()

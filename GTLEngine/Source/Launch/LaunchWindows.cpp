@@ -28,7 +28,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             */
             int32 NewHeight = HIWORD(lParam);
             int32 NewWidth = LOWORD(lParam);
-            // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달.
+            
+            HRESULT hr = UEngine::GetEngine().ResizeWindow(NewWidth, NewHeight);
+            if ( FAILED(hr) )
+                assert(0);
         }
         break;
     default:

@@ -22,10 +22,9 @@ public:
 
 private:
 	TArray<UUIBase*> UIList;
-	ImGuiIO* IO;
 public:
-	inline const bool IsImGuiWantTextInput() const { return IO->WantTextInput; }
-	inline const bool IsImGuiWantMouseInput() const { return IO->WantCaptureMouse; }
+	inline const bool IsImGuiWantTextInput() const { return ImGui::GetIO().WantTextInput; }
+	inline const bool IsImGuiWantMouseInput() const { return ImGui::GetIO().WantCaptureMouse; }
 
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
