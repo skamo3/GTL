@@ -55,6 +55,9 @@ void UWorld::Destroy()
 			Actor->Destroy();
 	}
 	ActiveActors.clear();
+	IClickable::GetClickableList().clear();
+	IDragable::GetClickableList().clear();
+	UEngine::GetEngine().GetGizmoManager()->ClearSelected();
 }
 
 void UWorld::InitViewInfo()

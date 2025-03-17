@@ -37,6 +37,7 @@ void AActor::Destroy()
 		delete RootComponent;
 		RootComponent = nullptr;
 	}
+	OwnedComponent.clear();
 }
 
 void AActor::SetOwner(AActor* InOwner)

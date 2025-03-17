@@ -38,7 +38,6 @@ public:
 
 	void UpdateCameraMatrix(ACamera* Camera);
 	void RenderWorldPlane(ACamera* Camera);
-	void RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderBoundingBox(const TArray<AActor*> Actors);
 	void RenderGizmo(const TArray<UGizmoBase*> gizmo);

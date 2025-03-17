@@ -324,6 +324,11 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
         DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST);
     */
 
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
+
     // set position
     FVector campos = Camera->GetActorLocation();
     FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
@@ -347,23 +352,6 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
     DXDDeviceContext->Draw(Num, 0);
 
-}
-
-void UDirectXHandle::RenderGizmo(UObject* Selected, UGizmoManager* GizmoManager)
-{
-	// Selected 오브젝트 기반으로 기즈모 그리가.
-
-    switch (GizmoManager->GetGizmoType())
-    {
-	case EGizmoType::Translate: // 이동 모양 그리기.
-        break;
-	case EGizmoType::Rotate: // 회전 모양 그리기.
-        break;
-	case EGizmoType::Scale: // 크기 조절 모양 그리기.
-        break;
-    default:
-        break;
-    }
 }
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
@@ -458,6 +446,11 @@ void UDirectXHandle::RenderAABB(FAABB aabb) {
 
 void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
 
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
+
     for ( AActor* Actor : Actors ) {
         if (Actor->IsSelected)
             RenderAABB(Actor->GetAABB());
@@ -465,6 +458,11 @@ void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
 }
 
 void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> gizmo) {
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     for ( UGizmoBase* g : gizmo ) {
         RenderAABB(g->GetAABB());
@@ -497,6 +495,11 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
 	UINT stride = sizeof(FCbLine);
 	UINT offset = 0;

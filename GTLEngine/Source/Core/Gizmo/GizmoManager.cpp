@@ -61,11 +61,7 @@ void UGizmoManager::Picking() {
 		for ( auto& clickable : IClickable::GetClickableList() ) {
 			clickable->OnRelease(mouse_x, mouse_y);
 		}
-		SelectedActor = nullptr;
-		// release gizmo
-		for ( auto& g : Gizmo )
-			delete g;
-		Gizmo.clear();
+		ClearSelected();
 
 
 		// if actor picked
@@ -117,6 +113,13 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 		}
 	}
 	return selected;
+}
+
+void UGizmoManager::ClearSelected() {
+	SelectedActor = nullptr;
+	for ( auto& g : Gizmo )
+		delete g;
+	Gizmo.clear();
 }
 
 const TArray<UGizmoBase*> UGizmoManager::GetGizmo() {

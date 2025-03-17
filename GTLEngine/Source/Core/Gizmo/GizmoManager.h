@@ -34,6 +34,7 @@ private:
 	EGizmoType Mode = EGizmoType::Translate;
 public:
 	IClickable* PickClickable(float MouseX, float MouseY) const;
+	void ClearSelected();
 	const TArray<UGizmoBase*> GetGizmo();
 	inline AActor* GetSelected() const { return SelectedActor; }
 };
