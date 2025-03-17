@@ -18,7 +18,7 @@ struct alignas(16) FMatrix
 	static FMatrix Identity(); // 단위행렬.
 	static FMatrix Transpose(const FMatrix& Matrix); // 전치행렬.
 	static FMatrix GetTranslateMatrix(float X, float Y, float Z); // 이동행렬.
-	static FMatrix GetTranslateMatrix(FVector Translation); // 이동행렬.
+	static FMatrix GetTranslateMatrix(const FVector& Translation); // 이동행렬.
 	static FMatrix GetScaleMatrix(float X, float Y, float Z); // 스케일링 행렬.
 	static FMatrix GetScaleMatrix(const FVector& InScale); // 스케일링 행렬.
 	static FMatrix GetRotateMatrix(const FRotator& Q); // 회전행렬.

@@ -98,7 +98,7 @@
     <ClCompile Include="Source\Core\DirectX11\DXDRasterizerState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDRenderTarget.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp" />
-    <ClCompile Include="Source\Core\DirectX11\DXDVertexBuffer.cpp" />
+    <ClCompile Include="Source\Core\DirectX11\DXDBufferManager.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
@@ -167,7 +167,7 @@
     <ClInclude Include="Source\Core\DirectX11\DXDRasterizerState.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDRenderTarget.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h" />
-    <ClInclude Include="Source\Core\DirectX11\DXDVertexBuffer.h" />
+    <ClInclude Include="Source\Core\DirectX11\DXDBufferManager.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />

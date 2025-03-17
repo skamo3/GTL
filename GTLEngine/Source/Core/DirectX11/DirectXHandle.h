@@ -12,6 +12,7 @@ class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
 class UDXDConstantBuffer;
+class UDXDBufferManager;
 
 class UObject;
 class AActor;
@@ -19,6 +20,7 @@ class ACamera;
 class UGizmoManager;
 class UPrimitiveComponent;
 class ULineComponent;
+class USceneComponent;
 
 class UDirectXHandle
 {
@@ -43,13 +45,15 @@ public:
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);
-	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
-	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
-	void RenderUUID(UPrimitiveComponent* PrimitiveComp);
+	void RenderActorUUID(AActor* TargetActor);
+	void RenderComponentUUID(USceneComponent* TargetComponent);
 
 public:
 	void InitView();
 
+public:
+	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
+	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 
 private:
 	D3D11_VIEWPORT ViewportInfo;
@@ -86,6 +90,7 @@ private:
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
 	TMap<std::wstring, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
+	UDXDBufferManager* BufferManager;
 
 	TMap<EPrimitiveType, FVertexInfo> PrimitiveVertexBuffers;
 	TMap<std::wstring, FVertexInfo> VertexBuffers;

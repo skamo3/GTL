@@ -14,7 +14,6 @@ public:
 public:
 	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
 
-	virtual FMatrix GetWorldMatrix() const;
 	virtual FAABB GetAABB() const override;
 	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
 protected:

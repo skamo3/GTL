@@ -46,6 +46,12 @@ struct FIndexInfo
     ID3D11Buffer* IndexBuffer;
 };
 
+struct FBufferInfo
+{
+    FVertexInfo VertexInfo;
+    FIndexInfo IndexInfo;
+};
+
 //////////
 // 
 // Constant Buffers

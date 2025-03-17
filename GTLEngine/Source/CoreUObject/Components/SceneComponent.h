@@ -21,6 +21,12 @@ public:
 	FRotator GetComponentRotation() const { return RelativeRotation; }
 	FVector GetComponentScale() const { return RelativeScale; }
 
+	FMatrix GetScaleMatrix() const;
+	FMatrix GetRotationMatrix() const;
+	FMatrix GetTranslateMatrix() const;
+	FMatrix GetRotLocMatrix() const;
+	FMatrix GetWorldMatrix() const;
+
 private:
 	FVector RelativeLocation;
 	FRotator RelativeRotation;

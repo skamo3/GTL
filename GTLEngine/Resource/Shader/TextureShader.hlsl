@@ -37,5 +37,12 @@ PS_INPUT mainVS(VS_INPUT Input)
 
 float4 mainPS(PS_INPUT Input) : SV_TARGET
 {
-    return AtlasTexture.Sample(AtlasSampler, Input.texCoord);
+    
+    float4 Texture = AtlasTexture.Sample(AtlasSampler, Input.texCoord);
+    
+    if (Texture.r <= 0.1f && Texture.g <= 0.1f && Texture.b <= 0.1f)
+    {
+        discard;
+    }
+    return Texture;
 }
