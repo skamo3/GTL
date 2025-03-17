@@ -23,6 +23,8 @@ UResourceManager::UResourceManager()
     UVQuadData = TArray<FVertexUV>(QuadVertices, QuadVertices + sizeof(QuadVertices) / sizeof(FVertexUV));
     LoadPrimitives();
     LoadTranslateGizmos();
+    LoadRotateGizmos();
+    LoadScaleGizmos();
 }
 
 UResourceManager::~UResourceManager()
@@ -113,12 +115,10 @@ void UResourceManager::LoadTranslateGizmos()
 {
     ObjData Obj = LoadObj(L"Resource/Shape/GizmoTranslate.obj");
 
-    // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
     TArray<FVertexSimple> YVertices;
     TArray<FVertexSimple> ZVertices;
 
-    // tmpVertices의 각 정점을 복사하여 각 배열에 넣음
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
@@ -137,8 +137,6 @@ void UResourceManager::LoadTranslateGizmos()
         ZVertices.push_back(zVert);
     }
 
-    // 이제 각 축에 해당하는 정점 배열을 VertexDataMap에 저장합니다.
-    // EGizmoViewType 또는 EPrimitiveType에 맞게 열거형 값을 사용하세요.
     GizmoVertexDataMap[EGizmoViewType::XTranslate] = XVertices;
     GizmoVertexDataMap[EGizmoViewType::YTranslate] = YVertices;
     GizmoVertexDataMap[EGizmoViewType::ZTranslate] = ZVertices;
@@ -151,12 +149,10 @@ void UResourceManager::LoadRotateGizmos()
 {
     ObjData Obj = LoadObj(L"Resource/Shape/GizmoRotate.obj");
 
-    // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
     TArray<FVertexSimple> YVertices;
     TArray<FVertexSimple> ZVertices;
 
-    // tmpVertices의 각 정점을 복사하여 각 배열에 넣음
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
@@ -175,8 +171,6 @@ void UResourceManager::LoadRotateGizmos()
         ZVertices.push_back(zVert);
     }
 
-    // 이제 각 축에 해당하는 정점 배열을 VertexDataMap에 저장합니다.
-    // EGizmoViewType 또는 EGizmoViewType에 맞게 열거형 값을 사용하세요.
     GizmoVertexDataMap[EGizmoViewType::XRotate] = XVertices;
     GizmoVertexDataMap[EGizmoViewType::YRotate] = YVertices;
     GizmoVertexDataMap[EGizmoViewType::ZRotate] = ZVertices;
@@ -189,12 +183,10 @@ void UResourceManager::LoadScaleGizmos()
 {
     ObjData Obj = LoadObj(L"Resource/Shape/GizmoScale.obj");
 
-    // 이제 tmpVertices에 읽어들인 정점을 3개의 배열로 복사하면서 색상을 지정합니다.
     TArray<FVertexSimple> XVertices;
     TArray<FVertexSimple> YVertices;
     TArray<FVertexSimple> ZVertices;
 
-    // tmpVertices의 각 정점을 복사하여 각 배열에 넣음
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
@@ -213,8 +205,6 @@ void UResourceManager::LoadScaleGizmos()
         ZVertices.push_back(zVert);
     }
 
-    // 이제 각 축에 해당하는 정점 배열을 VertexDataMap에 저장합니다.
-    // EGizmoViewType 또는 EGizmoViewType에 맞게 열거형 값을 사용하세요.
     GizmoVertexDataMap[EGizmoViewType::XScale] = XVertices;
     GizmoVertexDataMap[EGizmoViewType::YScale] = YVertices;
     GizmoVertexDataMap[EGizmoViewType::ZScale] = ZVertices;

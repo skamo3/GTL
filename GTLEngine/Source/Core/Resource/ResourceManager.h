@@ -36,9 +36,8 @@ public:
     void SaveScene(std::string SceneName);
 
 private:
-    TMap<EPrimitiveType, TArray<FVertexSimple>> VertexDataMap;
     TArray<FVertexUV> UVQuadData;
-    TMap<EPrimitiveType, TArray<uint32>> IndexDataMap;
+
     TMap<EPrimitiveType, TArray<FVertexSimple>> PrimitiveVertexDataMap;
     TMap<EGizmoViewType, TArray<FVertexSimple>> GizmoVertexDataMap;
 

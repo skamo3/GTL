@@ -34,15 +34,15 @@ FString GetGizmoViewTypeAsString(EGizmoViewType Type)
     switch (Type)
     {
     case EGizmoViewType::XTranslate:
-        return FString(TEXT("Line"));
+        return FString(TEXT("XTranslate"));
     case EGizmoViewType::YTranslate:
-        return FString(TEXT("Triangle"));
+        return FString(TEXT("YTranslate"));
     case EGizmoViewType::ZTranslate:
-        return FString(TEXT("Sphere"));
+        return FString(TEXT("ZTranslate"));
     case EGizmoViewType::XRotate:
-        return FString(TEXT("Cube"));
+        return FString(TEXT("XRotate"));
     case EGizmoViewType::YRotate:
-        return FString(TEXT("Cylinder"));
+        return FString(TEXT("YRotate"));
     case EGizmoViewType::ZRotate:
         return FString(TEXT("ZRotate"));
     case EGizmoViewType::XScale:
