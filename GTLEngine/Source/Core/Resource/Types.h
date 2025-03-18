@@ -115,9 +115,9 @@ struct FRay {
     inline FVector GetNormalizedDirection() const { return Direction.GetSafeNormal(); }
 };
 
-struct FAABB {
+struct FBoundingBox {
     FVector min;
     FVector max;
-    FAABB(FVector min, FVector max) : min(min), max(max) {};
+    FBoundingBox(FVector min, FVector max) : min(min), max(max) {};
     FVector GetGap() { return max - min; }
 };

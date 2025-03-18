@@ -7,7 +7,7 @@
 using std::max;
 using std::min;
 
-bool Geometry::IsRayIntersectAABB(FAABB aabb, FRay ray, float maxDistance = 100.f) {
+bool Geometry::IsRayIntersectAABB(FBoundingBox aabb, FRay ray, float maxDistance = 100.f) {
 
 	// reference: https://gamedev.stackexchange.com/questions/18436/most-efficient-aabb-vs-ray-collision-algorithms
     FVector rayDir = ray.Direction.GetSafeNormal();

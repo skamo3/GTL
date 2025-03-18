@@ -7,7 +7,7 @@
 
 class UActorComponent;
 class USceneComponent;
-struct FAABB;
+struct FBoundingBox;
 	
 class AActor : public UObject, public IClickable
 {
@@ -55,7 +55,7 @@ public:
 	void SetActorRotation(const FRotator& InRotation);
 	void SetActorScale(const FVector& InScale);
 
-	FAABB GetAABB() const;
+	FBoundingBox GetAABB() const;
 	bool IsSelected = false;
 
 protected:

@@ -17,7 +17,7 @@ void UPrimitiveComponent::Destroy()
 {
 }
 
-FAABB UPrimitiveComponent::GetAABB() const {
+FBoundingBox UPrimitiveComponent::GetAABB() const {
     FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
     FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
@@ -34,7 +34,7 @@ FAABB UPrimitiveComponent::GetAABB() const {
         if ( vecs[i].Z > max.Z ) max.Z = vecs[i].Z;
     }
 
-    return FAABB(min, max);
+    return FBoundingBox(min, max);
 }
 
 bool UPrimitiveComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {

@@ -58,7 +58,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
     uint32 Width = 1600;
     uint32 Height = 900;
 
-    RECT rc = { 0, 0, Width, Height };
+    RECT rc = { 0, 0, LONG(Width), LONG(Height) };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
     OutputDebugString((std::to_wstring(Width) + L", " + std::to_wstring(Height) + L"\n").c_str());
     // 1024 x 1024 크기에 윈도우 생성

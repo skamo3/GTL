@@ -9,7 +9,7 @@ void ULineComponent::Tick(float TickTime) {}
 
 void ULineComponent::Destroy() {}
 
-FAABB ULineComponent::GetAABB() const {
+FBoundingBox ULineComponent::GetAABB() const {
 	FVector min, max;
 	FMatrix transformation = GetWorldMatrix();
 	FVector start = transformation.TransformPositionVector(FVector::Zero());
@@ -21,7 +21,7 @@ FAABB ULineComponent::GetAABB() const {
 	max.X = (start.X > end.X) ? start.X : end.X;
 	max.Y = (start.Y > end.Y) ? start.Y : end.Y;
 	max.Z = (start.Z > end.Z) ? start.Z : end.Z;
-	return FAABB(min, max);
+	return FBoundingBox(min, max);
 }
 
 bool ULineComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {

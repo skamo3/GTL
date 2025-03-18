@@ -17,7 +17,7 @@ public:
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-	virtual FAABB GetAABB() const;
+	virtual FBoundingBox GetAABB() const;
 	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const;
 public:
 	inline AActor* GetOwner() const { return OwnerPrivate; }
