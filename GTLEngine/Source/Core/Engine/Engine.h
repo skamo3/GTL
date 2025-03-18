@@ -9,20 +9,8 @@ class UTimeManager;
 class UInputManager;
 class UGizmoManager;
 class UObject;
-class UAssetManager;
 class UUIManager;
 
-class UEngineStatics
-{
-public:
-    static uint32 GenUUID()
-    {
-        return NextUUID++;
-    }
-
-private:
-    static uint32 NextUUID;
-};
 
 class UEngine
 {
@@ -58,7 +46,6 @@ public:
 	UTimeManager* GetTimeManager() const { return TimeManager; }
     UInputManager* GetInputManager() const { return InputManager; }
     UUIManager* GetUIManager() const { return UIManager; }
-    UAssetManager* GetAssetManager() const { return AssetManager; }
 	UGizmoManager* GetGizmoManager() const { return GizmoManager; }
     
 
@@ -71,8 +58,6 @@ private:
     UInputManager* InputManager;
     UUIManager* UIManager;
     UGizmoManager* GizmoManager;
-
-	UAssetManager* AssetManager;
 
 public:
     const FWindowInfo& GetWindowInfo() const { return WindowInfo; }

@@ -5,15 +5,11 @@
 #include "Time/TimeManager.h"
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
-#include "Asset/AssetManager.h"
 #include "UI/UIManager.h"
 
 #include "World.h"
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/GizmoManager.h"
-
-
-uint32 UEngineStatics::NextUUID = 0;
 
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
@@ -58,11 +54,6 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 		MessageBox(WindowInfo.WindowHandle, TEXT("버텍스 버퍼 생성 실패"), TEXT("Error"), MB_OK);
 		return false;
 	}
-
-
-	UAssetManager* AssetManager = new UAssetManager();
-	AssetManager->RegistryAssetMetaDatas();
-	AssetManager->LoadAssets();
 
 	// TimeManager 추가
 	TimeManager = new UTimeManager();
