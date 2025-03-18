@@ -11,6 +11,17 @@ class UGizmoManager;
 class UObject;
 class UUIManager;
 
+enum class EViewModeIndex : uint32 {
+    VMI_Lit,
+    VMI_Unlit,
+    VMI_Wireframe
+};
+
+enum class EEngineShowFlags : uint64 {
+    SF_Primitives = 1 << 0,
+    SF_Line = 1 << 1,
+    SF_BillboardText = 1 << 2,
+};
 
 class UEngine
 {
@@ -26,8 +37,10 @@ public:
 	void Tick();
     void TickWindowInfo();
     void Render();
+    HRESULT ResizeWindow(int width, int height);
 	void ClearEngine();
-
+    void Log(FString s, ...);
+    void Log(std::string s, ...);
     HRESULT AddAllVertexBuffers();
 
 private:
@@ -47,8 +60,6 @@ public:
     UInputManager* GetInputManager() const { return InputManager; }
     UUIManager* GetUIManager() const { return UIManager; }
 	UGizmoManager* GetGizmoManager() const { return GizmoManager; }
-    
-
 
 private:
 	UDirectXHandle* DirectX11Handle;
@@ -72,6 +83,9 @@ public:
 private:
     float FPS;
 
+public:
+    EViewModeIndex ViewModeIndex;
+    EEngineShowFlags ShowFlags;
 };
 
 extern TArray<UObject*> GUObjectArray;

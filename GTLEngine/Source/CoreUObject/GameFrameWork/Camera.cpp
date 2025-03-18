@@ -4,9 +4,12 @@
 #include "Components/CameraComponent.h"
 #include "Components/LineComponent.h"
 #include "Engine/Engine.h"
+#include "World.h"
+#include "Resource/ResourceManager.h"
 #include "Input/InputManager.h"
 
 #include "Math/MathUtils.h"
+#include "Utils/Math/Geometry.h"
 
 ACamera::ACamera() : MouseSensitive(5.f)
 {
@@ -15,6 +18,11 @@ ACamera::ACamera() : MouseSensitive(5.f)
 	SetActorLocation(FVector(0, 0, 0));
 	SetActorRotation(FVector(0, 0, 0));
 	SetActorScale(FVector(1, 1, 1));
+
+	UResourceManager* resourceManager = UEngine::GetEngine().GetResourceManager();
+	GridScale = resourceManager->GetConfigData(EConfigData::GridScale, 1.0f);
+	MouseSensitive = resourceManager->GetConfigData(EConfigData::MouseSensitive, 5.0f);
+	MoveSpeed = resourceManager->GetConfigData(EConfigData::MoveSpeed, 10.f);
 }
 
 void ACamera::Tick(float TickTime)
@@ -28,26 +36,33 @@ void ACamera::Tick(float TickTime)
 	
 	FVector ForwardDirection = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector);
 	FVector RightDirection = CameraRotation.TransformRotVecToMatrix(FVector::RightVector);
+	FVector UpDirection = CameraRotation.TransformRotVecToMatrix(FVector::UpVector);
 
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
 	
 	if (InputManager->GetKey('W'))
 	{
-		CameraLocation += ForwardDirection * 10 * TickTime;
+		CameraLocation += ForwardDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('S'))
 	{
-		CameraLocation -= ForwardDirection * 10 * TickTime;
+		CameraLocation -= ForwardDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('A'))
 	{
-		CameraLocation -= RightDirection * 10 * TickTime;
+		CameraLocation -= RightDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('D'))
 	{
-		CameraLocation += RightDirection * 10 * TickTime;
+		CameraLocation += RightDirection * MoveSpeed * TickTime;
 	}
-
+	if ( InputManager->GetKey('Q') ) 
+	{
+		CameraLocation -= UpDirection * MoveSpeed * TickTime;
+	}
+	if ( InputManager->GetKey('E') ) {
+		CameraLocation += UpDirection * MoveSpeed * TickTime;
+	}
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
 		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
@@ -71,6 +86,14 @@ void ACamera::Tick(float TickTime)
 
 void ACamera::Destroy()
 {
+	SaveConfig();
+}
+
+void ACamera::SaveConfig() {
+	UResourceManager* resourceManager = UEngine::GetEngine().GetResourceManager();
+	resourceManager->SetConfigData(EConfigData::GridScale, GridScale);
+	resourceManager->SetConfigData(EConfigData::MouseSensitive, MouseSensitive);
+	resourceManager->SetConfigData(EConfigData::MoveSpeed, MoveSpeed);
 }
 
 float ACamera::GetFieldOfView() const
@@ -93,3 +116,4 @@ float ACamera::GetFarClip() const
 		return 0.0f;
 	return CameraComponent->GetFarClip();
 }
+

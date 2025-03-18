@@ -3,9 +3,11 @@
 #include "Object.h"
 #include "Math/Vector.h"
 #include "ImGui/imgui.h"
+#include "CoreUObject/UI/ConsolePanel.h"
 
 class UUIBase;
 class UGizmoManager;
+class UConsolePanel;
 class IDragable;
 
 class UUIManager
@@ -22,10 +24,11 @@ public:
 
 private:
 	TArray<UUIBase*> UIList;
-	ImGuiIO* IO;
+	UConsolePanel* Console;
 public:
-	inline const bool IsImGuiWantTextInput() const { return IO->WantTextInput; }
-	inline const bool IsImGuiWantMouseInput() const { return IO->WantCaptureMouse; }
+	inline const bool IsImGuiWantTextInput() const { return ImGui::GetIO().WantTextInput; }
+	inline const bool IsImGuiWantMouseInput() const { return ImGui::GetIO().WantCaptureMouse; }
+	inline UConsolePanel* GetConsole() const { return Console; }
 
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);

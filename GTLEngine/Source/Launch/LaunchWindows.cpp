@@ -28,7 +28,10 @@ LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
             */
             int32 NewHeight = HIWORD(lParam);
             int32 NewWidth = LOWORD(lParam);
-            // TODO: 윈도우 크기 변경 메시지 처리. 엔진에 전달.
+            
+            HRESULT hr = UEngine::GetEngine().ResizeWindow(NewWidth, NewHeight);
+            if ( FAILED(hr) )
+                assert(0);
         }
         break;
     default:
@@ -57,12 +60,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 
     RECT rc = { 0, 0, LONG(Width), LONG(Height) };
     AdjustWindowRect(&rc, WS_OVERLAPPEDWINDOW, FALSE);
-    Width = rc.right - rc.left;
-    Height = rc.bottom - rc.top;
     OutputDebugString((std::to_wstring(Width) + L", " + std::to_wstring(Height) + L"\n").c_str());
     // 1024 x 1024 크기에 윈도우 생성
     HWND hWnd = CreateWindowExW(0, WindowClass, Title, WS_POPUP | WS_VISIBLE | WS_OVERLAPPEDWINDOW,
-        CW_USEDEFAULT, CW_USEDEFAULT, Width, Height,
+        CW_USEDEFAULT, CW_USEDEFAULT, rc.right - rc.left, rc.bottom - rc.top,
         nullptr, nullptr, hInstance, nullptr);
     
     FWindowInfo WindowInfo = { 0, hWnd, Width, Height };

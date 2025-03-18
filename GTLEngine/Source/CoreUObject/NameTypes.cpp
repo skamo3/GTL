@@ -295,7 +295,7 @@ FName::FName(const ANSICHAR* Name)
 }
 
 FName::FName(const FString& Name)
-	: FName(FNameHelper::MakeFName(Name, Name.size()))
+	: FName(FNameHelper::MakeFName(Name, (uint32)Name.size()))
 {
 }
 

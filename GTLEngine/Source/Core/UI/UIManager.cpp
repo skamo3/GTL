@@ -3,6 +3,7 @@
 
 #include "Math/Matrix.h"
 #include "UI/UIBase.h"
+#include "UI/ConsolePanel.h"
 
 #include "Asset/IconDefs.h"
 #include "Asset/RawFonts.h"
@@ -23,16 +24,20 @@ void UUIManager::InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, 
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
 	ImGui_ImplDX11_Init(DXDDevice, DXDDeviceContext);
+	ImGui_ImplWin32_Init((void*)WindowInfo.WindowHandle);
 
 	CreateUsingFont();
-	IO = &ImGui::GetIO();
 }
 
 void UUIManager::RegistUI(UUIBase* NewUI)
 {
 	UIList.push_back(NewUI);
+
+	// if it's console remember it
+	UConsolePanel* downcast;
+	if ( downcast = dynamic_cast<UConsolePanel*>(NewUI) )
+		Console = downcast;
 }
 
 void UUIManager::Tick(float DeltaTime)
@@ -41,7 +46,6 @@ void UUIManager::Tick(float DeltaTime)
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-
 	for (UUIBase* UI : UIList)
 	{
 		if (UI)

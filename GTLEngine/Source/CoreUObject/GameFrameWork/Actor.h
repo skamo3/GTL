@@ -1,5 +1,6 @@
 #pragma once
 
+#include "Core/Engine/Engine.h"
 #include "CoreUObject/Object.h"
 #include "CoreUObject/Components/SceneComponent.h"
 #include "UI/UIInterface.h"
@@ -62,7 +63,7 @@ protected:
 	USceneComponent* RootComponent = nullptr;
 
 public:
-	TArray<UActorComponent*> GetOwnedComponent() const { return OwnedComponent; }
+	TArray<UActorComponent*>& GetOwnedComponent() { return OwnedComponent; }
 
 private:
 	AActor* Owner;
@@ -85,6 +86,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	if (dynamic_cast<UActorComponent*>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
+		UEngine::GetEngine().Log("AddComponent: T is not UActorComponent");
 		return nullptr;
 	}
 	NewActorComp->SetOwner(Owner);
@@ -92,6 +94,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent*>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
+		UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewActorComp->GetName().c_str(), NewActorComp->GetUUID());
 		return nullptr;
 	}
 
@@ -108,5 +111,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	NewSceneComp->SetRelativeScale(InRelativeScale);
 
 	OwnedComponent.push_back(NewComp);
+
+	UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewSceneComp->GetName().c_str(), NewSceneComp->GetUUID());
 	return NewComp;
 }

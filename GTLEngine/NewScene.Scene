@@ -2,6 +2,19 @@
   "Actors" : {
     "0" : {
       "Children" : [{
+          "Children" : [],
+          "Location" : [0.000000, 0.000000, 0.000000],
+          "Rotation" : [0.000000, 0.000000, 0.000000],
+          "Scale" : [1.000000, 1.000000, 1.000000],
+          "Type" : "class UCameraComponent"
+        }],
+      "Location" : [-15.595529, 4.492534, 3.188512],
+      "Rotation" : [0.000000, -5.252707, -3.639134],
+      "Scale" : [1.000000, 1.000000, 1.000000],
+      "Type" : "class USceneComponent"
+    },
+    "1" : {
+      "Children" : [{
           "Children" : [{
               "Children" : [],
               "Location" : [0.000000, 5.000000, 2.000000],
@@ -15,11 +28,11 @@
           "Type" : "class UCubeComponent"
         }],
       "Location" : [0.000000, 2.000000, 0.000000],
-      "Rotation" : [90.000000, 341.000000, 0.000000],
+      "Rotation" : [90.000000, 1293.000000, 0.000000],
       "Scale" : [1.000000, 1.000000, 1.000000],
       "Type" : "class USceneComponent"
     },
-    "1" : {
+    "2" : {
       "Children" : [{
           "Children" : [],
           "Location" : [0.000000, 0.000000, 0.000000],
@@ -28,7 +41,7 @@
           "Type" : "class USphereComponent"
         }],
       "Location" : [0.000000, 0.000000, 2.000000],
-      "Rotation" : [79.099480, 0.000000, 0.000000],
+      "Rotation" : [174.301559, 0.000000, 0.000000],
       "Scale" : [1.000000, 2.000000, 1.000000],
       "Type" : "class USceneComponent"
     }

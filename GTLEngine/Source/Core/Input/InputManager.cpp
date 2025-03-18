@@ -42,12 +42,12 @@ void UInputManager::Tick(float TickTime)
     {
         CurrentMouseState.ScreenX = pt.x;
         CurrentMouseState.ScreenY = pt.y;
-
         if (ScreenToClient(WindowInfo.WindowHandle, &pt))
         {
             CurrentMouseState.ClientX = pt.x;
             CurrentMouseState.ClientY = pt.y;
             ConvertMouseToNDC(WindowInfo.WindowHandle, WindowInfo.Width, WindowInfo.Height);
+            
         }
     }
 }
@@ -58,16 +58,22 @@ void UInputManager::Destroy()
 
 bool UInputManager::GetKey(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return CurrentKeyStates[key];
 }
 
 bool UInputManager::GetKeyDown(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return CurrentKeyStates[key] && !PrevKeyStates[key];
 }
 
 bool UInputManager::GetKeyUp(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return !CurrentKeyStates[key] && PrevKeyStates[key];
 }
 

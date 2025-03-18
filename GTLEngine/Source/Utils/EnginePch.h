@@ -94,4 +94,20 @@ struct FWindowInfo
     RECT screenRect;
 };
 
+template <typename T>
+void SetFlagOff(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) & ~static_cast<uint32>(flag));
+}
+
+template <typename T>
+void SetFlagOn(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) | static_cast<uint32>(flag));
+}
+
+template <typename T>
+bool GetFlag(T& target, const T flag) {
+	return ((static_cast<uint32>(target) & static_cast<uint32>(flag)) != 0);
+}
+
+
 #include "NameTypes.h"

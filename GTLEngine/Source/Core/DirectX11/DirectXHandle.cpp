@@ -44,7 +44,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     swapchaindesc.BufferCount = 2; // 더블 버퍼링
     swapchaindesc.OutputWindow = UEngine::GetEngine().GetWindowInfo().WindowHandle; // 렌더링할 창 핸들
     swapchaindesc.Windowed = TRUE; // 창 모드
-    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 스왑 방식
+    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // 스왑 방식
 
 	uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 
@@ -153,6 +153,19 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		if (FAILED(hr))
 			return hr;
 		RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
+
+
+		// 와이어프레임 레스터라이저
+		UDXDRasterizerState* WireframeRasterizer = new UDXDRasterizerState();
+		if ( WireframeRasterizer == nullptr )
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC WireframeRasterizerDesc = {};
+		WireframeRasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // 채우기 모드
+		WireframeRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
+		hr = WireframeRasterizer->CreateRasterizerState(DXDDevice, &WireframeRasterizerDesc);
+		if ( FAILED(hr) )
+			return hr;
+		RasterizerStates[TEXT("Wireframe")] = WireframeRasterizer;
 	}
 
 	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
@@ -335,8 +348,9 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // set position
+	float s = Camera->GridScale;
     FVector campos = Camera->GetActorLocation();
-    FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
+    FVector truncpos = FVector(floor(campos.X/s)*s, floor(campos.Y/s)*s, 0.f);
 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {
@@ -345,7 +359,8 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(2, 2, 0)) * FMatrix::GetTranslateMatrix(truncpos * 2);
+		
+        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(s, s, 0)) * FMatrix::GetTranslateMatrix(truncpos);
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -367,10 +382,9 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 	if (PrimitiveComp->GetPrimitiveType() == EPrimitiveType::None || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Line || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Grid)
 		return;
 
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -470,6 +484,13 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> gizmo) {
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
+		return;
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     for (AActor* Actor : Actors)
     {
@@ -495,6 +516,8 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Line) )
+		return;
 
 	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
 	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
@@ -521,16 +544,12 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 }
 
 void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
+
     if ( LineComp == nullptr)
         return;
 
 	if (LineComp->GetPrimitiveType() == EPrimitiveType::None)
 		return;
-
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -553,10 +572,15 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
 
     DXDDeviceContext->Draw(Num, 0);
+
+	Info.VertexBuffer->Release();
 }
 
 void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_BillboardText) )
+		return;
+
     if (!TargetActor)
         return;
 
@@ -666,7 +690,10 @@ void UDirectXHandle::InitView()
     //DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-	DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
+	if (UEngine::GetEngine().ViewModeIndex == EViewModeIndex::VMI_Wireframe)
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Wireframe")]->GetRasterizerState().Get());
+	else
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
 
 	// TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
 	DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
@@ -726,4 +753,32 @@ void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 	);
 }
 
+void UDirectXHandle::ResizeViewport(int width, int height) {
+	ViewportInfo.Width = width;
+	ViewportInfo.Height = height;
+}
+
+HRESULT UDirectXHandle::ResizeWindow(int width, int height) {
+
+	RenderTarget->ReleaseRenderTarget();
+	DepthStencilView->ReleaseDepthStencilView();
+	
+	HRESULT hr = DXDSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if ( FAILED(hr) )
+		return hr;
+
+	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // 색상 포맷
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
+	hr = AddRenderTarget(TEXT("MainRenderTarget"), framebufferRTVdesc);
+	if ( FAILED(hr) )
+		return hr;
+
+	FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(width), static_cast<float>(height));
+	if ( FAILED(hr) )
+		return hr;
+
+	return hr;
+}
 
