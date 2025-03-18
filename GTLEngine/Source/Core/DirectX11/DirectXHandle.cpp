@@ -411,7 +411,7 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     }
 }
 
-void UDirectXHandle::RenderAABB(FAABB aabb) {
+void UDirectXHandle::RenderAABB(FBoundingBox aabb) {
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {

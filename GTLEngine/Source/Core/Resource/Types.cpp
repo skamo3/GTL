@@ -53,5 +53,7 @@ FString GetGizmoViewTypeAsString(EGizmoViewType Type)
         return FString(TEXT("ZScale"));
     case EGizmoViewType::Max:
         return FString(TEXT("Max"));
+    default:
+        return FString();
     }
 }

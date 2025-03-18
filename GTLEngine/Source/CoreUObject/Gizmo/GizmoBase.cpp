@@ -28,14 +28,14 @@ void UGizmoBase::Tick(float TickTime) {
 
 void UGizmoBase::Destroy() {}
 
-FAABB UGizmoBase::GetAABB() const {
+FBoundingBox UGizmoBase::GetAABB() const {
     FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
     FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
     FVector vecs[8];
     if ( Target == nullptr ) {
         OutputDebugString(L"UGizmoBase::GetAABB(): Target nullptr");
-        return FAABB(min, max);
+        return FBoundingBox(min, max);
     }
 
     for ( int i = 0; i < 8; i++ ) {
@@ -48,7 +48,7 @@ FAABB UGizmoBase::GetAABB() const {
         if ( vecs[i].Z > max.Z ) max.Z = vecs[i].Z;
     }
 
-    return FAABB(min, max);
+    return FBoundingBox(min, max);
 }
 
 bool UGizmoBase::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {

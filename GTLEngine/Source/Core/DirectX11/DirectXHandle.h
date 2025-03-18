@@ -66,7 +66,6 @@ public:
 
 	HRESULT AddRenderTarget(FString TargetName, const D3D11_RENDER_TARGET_VIEW_DESC& RenderTargetViewDesc);
 
-	HRESULT AddVertexBuffer(EPrimitiveType KeyType, const TArray<FVertexSimple> vertices, const TArray<uint32>& indices);
 	// TODO: Name으로 버텍스 버퍼 저장.
 	// Array 타입을 다른 방식으로 바꿔서 저장.
 	template<typename T>
@@ -79,7 +78,7 @@ private:
 	void UpdateWorldViewMatrix(ACamera* Camera);
 	void UpdateWorldProjectionMatrix(ACamera* Camera);
 
-	void RenderAABB(FAABB aabb);
+	void RenderAABB(FBoundingBox aabb);
 
 private:
 	ID3D11Device* DXDDevice;

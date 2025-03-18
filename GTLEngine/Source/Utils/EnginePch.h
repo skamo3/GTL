@@ -91,4 +91,3 @@ struct FWindowInfo
 	uint Right;
 	RECT screenRect;
 };
-

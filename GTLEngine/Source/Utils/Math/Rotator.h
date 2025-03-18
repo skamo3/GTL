@@ -66,24 +66,6 @@ inline FRotator FRotator::MakeFromDirection(const FVector& normal) {
 	return FRotator();
 }
 
-inline FRotator::FRotator(const FMatrix InMatrix) {
-	// yaw pitch roll
-	//Pitch = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
-	//Yaw = atan2(-InMatrix.M[2][0], sqrt(InMatrix.M[2][1] * InMatrix.M[2][1] + InMatrix.M[2][2] * InMatrix.M[2][2]));
-	//Roll = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
-
-	// roll pitch yaw
-	//Pitch = asin(-InMatrix.M[2][0]);
-	//Yaw = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
-	//Roll = atan2(InMatrix.M[2][1], InMatrix.M[2][2]);
-
-	// gpt, help me!
-	//Pitch = -asin(InMatrix.M[2][0]);
-	//Yaw = atan2(InMatrix.M[1][0], InMatrix.M[0][0]);
-	//Roll = atan2(InMatrix.M[2][1], InMatrix.M[2][2]);
-
-
-}
 
 inline FRotator FRotator::operator+(const FRotator& Other) const
 {
