@@ -116,12 +116,45 @@ void UControlPanel::Tick(float DeltaTime)
 
     ImGui::PopFont();
 
+    // render mode
+    const char* renderModes[3] = {
+        "Lit",
+        "UnLit",
+        "Wireframe"
+    };
+    int32 viewModeIndex = static_cast<int32>(UEngine::GetEngine().ViewModeIndex);
+    ImGui::Combo("Render mode", &viewModeIndex, renderModes, ARRAYSIZE(renderModes));
+    UEngine::GetEngine().ViewModeIndex = static_cast<EViewModeIndex>(viewModeIndex);
+
+    // set draw targets
+    if ( ImGui::CollapsingHeader("Rendering Entity") ) {
+        EEngineShowFlags flags = UEngine::GetEngine().ShowFlags;
+
+        bool Primitive = GetFlag(flags, EEngineShowFlags::SF_Primitives);
+        ImGui::Checkbox("Primitives", &Primitive);
+        if ( Primitive )
+            SetFlagOn(flags, EEngineShowFlags::SF_Primitives);
+        else 
+            SetFlagOff(flags, EEngineShowFlags::SF_Primitives);
+
+        bool BillboardText = GetFlag(flags, EEngineShowFlags::SF_BillboardText);
+        ImGui::Checkbox("BillboardText", &BillboardText);
+        if ( BillboardText )
+            SetFlagOn(flags, EEngineShowFlags::SF_BillboardText);
+        else 
+            SetFlagOff(flags, EEngineShowFlags::SF_BillboardText);
+
+        UEngine::GetEngine().ShowFlags = flags;
+    }
+
+
     ImGui::Separator();
 
     // Primitive Spawn 창.
-    DrawSpawnPrimitive();
+    // SceneManager로 이전
+    //DrawSpawnPrimitive();
 
-    ImGui::Separator();
+    //ImGui::Separator();
 
 
 	// Scene 로드 세이브.

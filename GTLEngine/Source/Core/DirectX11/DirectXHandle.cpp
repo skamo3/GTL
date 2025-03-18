@@ -153,6 +153,19 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		if (FAILED(hr))
 			return hr;
 		RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
+
+
+		// 와이어프레임 레스터라이저
+		UDXDRasterizerState* WireframeRasterizer = new UDXDRasterizerState();
+		if ( WireframeRasterizer == nullptr )
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC WireframeRasterizerDesc = {};
+		WireframeRasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // 채우기 모드
+		WireframeRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
+		hr = WireframeRasterizer->CreateRasterizerState(DXDDevice, &WireframeRasterizerDesc);
+		if ( FAILED(hr) )
+			return hr;
+		RasterizerStates[TEXT("Wireframe")] = WireframeRasterizer;
 	}
 
 	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
@@ -361,6 +374,9 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
+		return;
+
     if (!PrimitiveComp)
         return;
 
@@ -521,6 +537,9 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 }
 
 void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
+		return;
+
     if ( LineComp == nullptr)
         return;
 
@@ -557,6 +576,9 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
 
 void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_BillboardText) )
+		return;
+
     if (!TargetActor)
         return;
 
@@ -663,7 +685,10 @@ void UDirectXHandle::InitView()
     //DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-	DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
+	if (UEngine::GetEngine().ViewModeIndex == EViewModeIndex::VMI_Wireframe)
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Wireframe")]->GetRasterizerState().Get());
+	else
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
 
 	// TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
 	DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());

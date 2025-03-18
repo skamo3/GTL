@@ -24,6 +24,17 @@ private:
     static uint32 NextUUID;
 };
 
+enum class EViewModeIndex : uint32 {
+    VMI_Lit,
+    VMI_Unlit,
+    VMI_Wireframe
+};
+
+enum class EEngineShowFlags : uint64 {
+    SF_Primitives = 1 << 0,
+    SF_BillboardText = 1 << 1,
+};
+
 class UEngine
 {
 
@@ -100,5 +111,8 @@ private:
     uint32 TotalAllocationBytes;
     uint32 TotalAllocationCount;
 
+public:
+    EViewModeIndex ViewModeIndex;
+    EEngineShowFlags ShowFlags;
 };
 
