@@ -52,6 +52,8 @@ void UControlPanel::Tick(float DeltaTime)
     
     ACamera* cam = UEngine::GetEngine().GetWorld()->GetCamera();
     ImGui::DragFloat("Grid Scale", &cam->GridScale, 0.1f, 0.1f, 100.f, "%.1f");
+    ImGui::DragFloat("Camera speed", &cam->MoveSpeed, 0.1f, 0.1f, 100.f, "%.1f");
+    ImGui::DragFloat("Mouse Sensitive", &cam->MouseSensitive, 0.1f, 0.1f, 10.f, "%.1f");
 
     ImGui::Separator();
 

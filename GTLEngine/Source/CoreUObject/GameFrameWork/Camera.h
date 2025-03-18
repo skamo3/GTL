@@ -11,6 +11,7 @@ public:
 	ACamera();
 public:
 	float MouseSensitive;
+	float MoveSpeed = 10.f;
 	float GridScale = 2.0f;
 public:
 	virtual void Tick(float TickTime) override;

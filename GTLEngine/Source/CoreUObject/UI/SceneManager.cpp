@@ -61,6 +61,8 @@ void USceneManager::RenderUI() {
         }
     }
     ImGui::Separator();
+    ImGui::Checkbox("Spawn debug line", &DebugSpawnLine);
+    ImGui::Separator();
 
     // TODO: Insert Actor List
     //ImGui::BeginChild("ScrollingRegion");
@@ -81,7 +83,7 @@ void USceneManager::Tick(float TickTime) {
 	RenderUI();
 
     UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
-    if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+    if ( DebugSpawnLine && inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
 		float mouse_x = inputManager->GetMouseNdcX();
 		float mouse_y = inputManager->GetMouseNdcY();
 		FRay ray = Geometry::CreateRayWithMouse(mouse_x, mouse_y);

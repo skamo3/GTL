@@ -30,4 +30,5 @@ private:
 	float SpawnScale[3] = { 1.f, 1.f, 1.f };
 	int32 CurrentPrimitiveType;
 	int32 SpawnNum;
+	bool DebugSpawnLine = false;
 };

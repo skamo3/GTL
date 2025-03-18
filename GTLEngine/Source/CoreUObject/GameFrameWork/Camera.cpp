@@ -35,26 +35,26 @@ void ACamera::Tick(float TickTime)
 	
 	if (InputManager->GetKey('W'))
 	{
-		CameraLocation += ForwardDirection * 10 * TickTime;
+		CameraLocation += ForwardDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('S'))
 	{
-		CameraLocation -= ForwardDirection * 10 * TickTime;
+		CameraLocation -= ForwardDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('A'))
 	{
-		CameraLocation -= RightDirection * 10 * TickTime;
+		CameraLocation -= RightDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetKey('D'))
 	{
-		CameraLocation += RightDirection * 10 * TickTime;
+		CameraLocation += RightDirection * MoveSpeed * TickTime;
 	}
 	if ( InputManager->GetKey('Q') ) 
 	{
-		CameraLocation -= UpDirection * 10 * TickTime;
+		CameraLocation -= UpDirection * MoveSpeed * TickTime;
 	}
 	if ( InputManager->GetKey('E') ) {
-		CameraLocation += UpDirection * 10 * TickTime;
+		CameraLocation += UpDirection * MoveSpeed * TickTime;
 	}
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
