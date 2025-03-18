@@ -49,11 +49,11 @@ bool UPrimitiveComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& h
     bool result = false;
     //BYTE* pbPositions = reinterpret_cast<BYTE*>(vertices.data());
 
-    int nPrimitives = vertices.size() / 3;
+    uint32 nPrimitives = static_cast<uint32>(vertices.size() / 3);
 
     float nearHitDistancePow = FLT_MAX;
     FVector nearestHitPoint = FVector::Zero();
-    for ( int i = 0; i < nPrimitives; i++ ) {
+    for ( uint32 i = 0; i < nPrimitives; i++ ) {
         int idx0, idx1, idx2;
         idx0 = i * 3;
         idx1 = i * 3 + 1;

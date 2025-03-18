@@ -59,7 +59,7 @@ void UGizmoManager::Picking() {
 
 		// release pick
 		for ( auto& clickable : IClickable::GetClickableList() ) {
-			clickable->OnRelease(mouse_x, mouse_y);
+			clickable->OnRelease(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
 		}
 		ClearSelected();
 
@@ -67,7 +67,7 @@ void UGizmoManager::Picking() {
 		// if actor picked
 		AActor* pickedActor;
 		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
-			picked->OnClick(mouse_x, mouse_y);
+			picked->OnClick(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
 			SelectedActor = pickedActor;
 
 			// pick gizmo
