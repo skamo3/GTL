@@ -8,6 +8,7 @@ class UDXDDevice;
 class UDXDSwapChain;
 class UDXDRenderTarget;
 class UDXDDepthStencilView;
+class UDXDDepthStencilState;
 class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
@@ -40,7 +41,7 @@ public:
 	void RenderWorldPlane(ACamera* Camera);
 	void RenderPrimitive(UPrimitiveComponent* PrimitiveComp);
 	void RenderBoundingBox(const TArray<AActor*> Actors);
-	void RenderGizmo(const TArray<UGizmoBase*> gizmo);
+	void RenderGizmo(const TArray<UGizmoBase*> Gizmos);
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);
@@ -83,6 +84,7 @@ private:
 	
 	UDXDRenderTarget* RenderTarget;
 	UDXDDepthStencilView* DepthStencilView; // 여러개 보류.
+	UDXDDepthStencilState* DepthStencilState;
 	TMap<FString, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
 

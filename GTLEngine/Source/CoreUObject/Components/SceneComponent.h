@@ -19,6 +19,12 @@ public:
 	virtual FMatrix GetWorldMatrix() const { 
 		return FMatrix::GetScaleMatrix(RelativeScale) * FMatrix::GetRotateMatrix(RelativeRotation) * FMatrix::GetTranslateMatrix(RelativeLocation); 
 	};
+	virtual FMatrix GetRotateTranslateMatrix() const {
+		return FMatrix::GetRotateMatrix(RelativeRotation) * FMatrix::GetTranslateMatrix(RelativeLocation);
+	}
+	virtual FMatrix GetTranslateMatrix() const {
+		return FMatrix::GetTranslateMatrix(RelativeLocation);
+	};
 	FVector GetComponentLocation() const { return RelativeLocation; }
 	FRotator GetComponentRotation() const { return RelativeRotation; }
 	FVector GetComponentScale() const { return RelativeScale; }

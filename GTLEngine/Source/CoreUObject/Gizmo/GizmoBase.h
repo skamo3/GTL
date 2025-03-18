@@ -4,6 +4,10 @@
 #include "Core/Resource/Types.h"
 #include "CoreUObject/GameFrameWork/Actor.h"
 #include "Core/UI/UIInterface.h"
+#include "Core/Engine/Engine.h"
+#include "CoreUObject/World.h"
+#include "Utils/Math/Geometry.h"
+#include "Resource/ResourceManager.h"
 
 class UGizmoBase : public UObject, public IDragable
 {
@@ -15,21 +19,13 @@ public:
 	};
 	static bool IsAbsoluteCoord;
 protected:
-	FVector OriginalAABB[8] = {
-		FVector(0.f, -0.5f, -0.5f),
-		FVector(0.f, -0.5f, -0.5f),
-		FVector(0.f, 0.5f, -0.5f),
-		FVector(0.f, 0.5f, -0.5f),
-		FVector(10.f, -0.5f, 0.5f),
-		FVector(10.f, -0.5f, 0.5f),
-		FVector(10.f, 0.5f, 0.5f),
-		FVector(10.f, 0.5f, 0.5f),
-	};
-
+	FVector OriginalAABB[8];
+	EGizmoViewType GizmoViewType;
 	EAxis axis = EAxis::X;
 	AActor* Target;
 	int startMouseX, startMouseY;
 	FMatrix mat = FMatrix::Identity();
+	AActor* PickedActor;
 public:
 	UGizmoBase(EAxis axis, AActor* Target);
 
@@ -39,5 +35,6 @@ public:
 	virtual FAABB GetAABB() const;
 
 	virtual bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
-
+	EGizmoViewType GetGizmoViewType() const { return GizmoViewType; }
+	AActor* GetPickedActor() { return PickedActor; }
 };

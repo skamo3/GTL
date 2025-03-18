@@ -124,11 +124,11 @@ void UEngine::Render()
     DirectX11Handle->SetLineMode();
     DirectX11Handle->RenderWorldPlane(World->GetCamera());
     DirectX11Handle->RenderBoundingBox(World->GetActors());
-    DirectX11Handle->RenderGizmo(GizmoManager->GetGizmo());
     DirectX11Handle->RenderLines(World->GetActors());
 
     DirectX11Handle->SetFaceMode();
     DirectX11Handle->RenderObject(World->GetActors());
+    DirectX11Handle->RenderGizmo(GizmoManager->GetGizmo());
     // 오브젝트들 받아와서 DXD 핸들에 넘겨준 후 DXD 핸들에서 해당 오브젝트 값 읽어서 렌더링에 추가.
 
     // UI 그리기.

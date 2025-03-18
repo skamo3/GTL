@@ -35,7 +35,7 @@ FMatrix UPrimitiveComponent::GetWorldMatrix() const {
         RotTrs = RotTrs * RTTemp;
         Parent = Parent->GetParent();
     }
-	return ScaleMat * RotTrs;;
+	return ScaleMat * RotTrs;
 }
 
 FAABB UPrimitiveComponent::GetAABB() const {

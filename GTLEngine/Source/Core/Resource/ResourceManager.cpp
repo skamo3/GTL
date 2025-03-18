@@ -122,9 +122,10 @@ void UResourceManager::LoadTranslateGizmos()
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
-        FVertexSimple yVert = Obj.vertices[i];
-        FVertexSimple zVert = Obj.vertices[i];
-
+        FVertexSimple yVert;
+        yVert.X = xVert.Y; yVert.Y = xVert.X; yVert.Z = xVert.Z; //Y축 방향
+        FVertexSimple zVert;
+        zVert.X = xVert.Z; zVert.Y = xVert.Y; zVert.Z = xVert.X; //Z축 방향
         // X축은 빨간색 (1,0,0)
         xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
         // Y축은 녹색 (0,1,0)
@@ -156,8 +157,10 @@ void UResourceManager::LoadRotateGizmos()
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
-        FVertexSimple yVert = Obj.vertices[i];
-        FVertexSimple zVert = Obj.vertices[i];
+        FVertexSimple yVert;
+        yVert.X = xVert.Y; yVert.Y = xVert.X; yVert.Z = xVert.Z; //Y축 방향
+        FVertexSimple zVert;
+        zVert.X = xVert.Z; zVert.Y = xVert.Y; zVert.Z = xVert.X; //Z축 방향
 
         // X축은 빨간색 (1,0,0)
         xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
@@ -190,8 +193,10 @@ void UResourceManager::LoadScaleGizmos()
     for (size_t i = 0; i < Obj.vertices.size(); ++i)
     {
         FVertexSimple xVert = Obj.vertices[i];
-        FVertexSimple yVert = Obj.vertices[i];
-        FVertexSimple zVert = Obj.vertices[i];
+        FVertexSimple yVert;
+        yVert.X = Obj.vertices[i].Y; yVert.Y = Obj.vertices[i].X; yVert.Z = Obj.vertices[i].Z; //Y축 방향
+        FVertexSimple zVert;
+        zVert.X = Obj.vertices[i].Z; zVert.Y = Obj.vertices[i].Y; zVert.Z = Obj.vertices[i].X; //Z축 방향
 
         // X축은 빨간색 (1,0,0)
         xVert.R = 1.f; xVert.G = 0.f; xVert.B = 0.f;
