@@ -28,6 +28,7 @@ void ACamera::Tick(float TickTime)
 	
 	FVector ForwardDirection = CameraRotation.TransformRotVecToMatrix(FVector::ForwardVector);
 	FVector RightDirection = CameraRotation.TransformRotVecToMatrix(FVector::RightVector);
+	FVector UpDirection = CameraRotation.TransformRotVecToMatrix(FVector::UpVector);
 
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
 	
@@ -46,6 +47,13 @@ void ACamera::Tick(float TickTime)
 	if (InputManager->GetKey('D'))
 	{
 		CameraLocation += RightDirection * 10 * TickTime;
+	}
+	if ( InputManager->GetKey('Q') ) 
+	{
+		CameraLocation -= UpDirection * 10 * TickTime;
+	}
+	if ( InputManager->GetKey('E') ) {
+		CameraLocation += UpDirection * 10 * TickTime;
 	}
 
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
