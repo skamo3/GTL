@@ -178,6 +178,7 @@ void UControlPanel::Tick(float DeltaTime)
 
     if (ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize))     // New Scene
     {
+        Camera->SaveConfig();
         ResourceManager->NewScene();
     }
 
@@ -230,9 +231,7 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::End();
 }
 
-void UControlPanel::Destroy()
-{
-}
+void UControlPanel::Destroy() {}
 
 const char* primitives[] = { "Sphere", "Cube", "Triangle", "Cylinder", "Cone"};
 

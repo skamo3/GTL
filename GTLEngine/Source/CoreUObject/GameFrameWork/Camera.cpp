@@ -4,6 +4,8 @@
 #include "Components/CameraComponent.h"
 #include "Components/LineComponent.h"
 #include "Engine/Engine.h"
+#include "World.h"
+#include "Resource/ResourceManager.h"
 #include "Input/InputManager.h"
 
 #include "Math/MathUtils.h"
@@ -16,6 +18,11 @@ ACamera::ACamera() : MouseSensitive(5.f)
 	SetActorLocation(FVector(0, 0, 0));
 	SetActorRotation(FVector(0, 0, 0));
 	SetActorScale(FVector(1, 1, 1));
+
+	UResourceManager* resourceManager = UEngine::GetEngine().GetResourceManager();
+	GridScale = resourceManager->GetConfigData(EConfigData::GridScale, 1.0f);
+	MouseSensitive = resourceManager->GetConfigData(EConfigData::MouseSensitive, 5.0f);
+	MoveSpeed = resourceManager->GetConfigData(EConfigData::MoveSpeed, 10.f);
 }
 
 void ACamera::Tick(float TickTime)
@@ -79,6 +86,14 @@ void ACamera::Tick(float TickTime)
 
 void ACamera::Destroy()
 {
+	SaveConfig();
+}
+
+void ACamera::SaveConfig() {
+	UResourceManager* resourceManager = UEngine::GetEngine().GetResourceManager();
+	resourceManager->SetConfigData(EConfigData::GridScale, GridScale);
+	resourceManager->SetConfigData(EConfigData::MouseSensitive, MouseSensitive);
+	resourceManager->SetConfigData(EConfigData::MoveSpeed, MoveSpeed);
 }
 
 float ACamera::GetFieldOfView() const

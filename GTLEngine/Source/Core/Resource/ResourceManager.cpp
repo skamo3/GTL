@@ -419,3 +419,40 @@ void UResourceManager::SaveScene(std::string SceneName)
         UEngine::GetEngine().Log("Can't access %s", (SceneName + ".Scene").c_str());
     }
 }
+
+void UResourceManager::SetConfigData(EConfigData type, float data) {
+    wchar_t ret[100] = {};
+    FString attribute;
+    switch(type) {
+    case EConfigData::GridScale:
+        attribute = FString(L"GridScale"); break;
+    case EConfigData::MouseSensitive:
+        attribute = FString(L"MouseSensitive"); break;
+    case EConfigData::MoveSpeed:
+        attribute = FString(L"MouseMoveSpeed"); break;
+    }
+
+    int res = WritePrivateProfileString(TEXT("Config"), attribute.c_str(), std::to_wstring(data).c_str(), L"./editor.ini");
+    if ( !res )
+        DWORD err = GetLastError();
+}
+float UResourceManager::GetConfigData(EConfigData type, float defaultValue = 1.0f) {
+    wchar_t ret[100] = {};
+    FString attribute;
+    switch ( type ) {
+    case EConfigData::GridScale:
+        attribute = FString(L"GridScale"); break;
+    case EConfigData::MouseSensitive:
+        attribute = FString(L"MouseSensitive"); break;
+    case EConfigData::MoveSpeed:
+        attribute = FString(L"MouseMoveSpeed"); break;
+    }
+
+    int res = GetPrivateProfileString(TEXT("Config"), attribute.c_str(), L"", ret, sizeof(ret), L"./editor.ini");
+    if ( !res )
+        DWORD err = GetLastError();
+    if ( lstrcmp(L"\0", ret) )
+        return std::stof(ret);
+    else
+        return defaultValue;
+}
