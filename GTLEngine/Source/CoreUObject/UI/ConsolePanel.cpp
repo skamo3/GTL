@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "ConsolePanel.h"
 
-UConsolePanel::UConsolePanel(): WindowWidth(360.f), WindowHeight(400.f) {
+UConsolePanel::UConsolePanel(): UUIBase(), WindowWidth(360.f), WindowHeight(400.f) {
     strcpy_s(InputBuffer, 256, "");
 }
 

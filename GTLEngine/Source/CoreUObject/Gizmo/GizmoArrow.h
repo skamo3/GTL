@@ -4,7 +4,7 @@
 
 class UGizmoArrow : public UGizmoBase
 {
-
+	DECLARE_CLASS(UGizmoArrow, UGizmoBase)
 public:
 	UGizmoArrow(EAxis axis, AActor* Target);
 

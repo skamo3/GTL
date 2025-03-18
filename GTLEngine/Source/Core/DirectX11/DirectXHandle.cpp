@@ -320,6 +320,8 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 // use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
 void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
+	if (!Camera)
+		return;
     /** state check
     D3D11_PRIMITIVE_TOPOLOGY topology;
     DXDDeviceContext->IAGetPrimitiveTopology(&topology);
@@ -573,7 +575,10 @@ void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
         // 프리미티브 위치에서 카메라 쪽으로 회전.
-		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
+		ACamera* Camera = UEngine::GetEngine().GetWorld()->GetCamera();
+		if (!Camera)
+			return;
+		FVector CameraLocation = Camera->GetActorLocation();
 		FVector ActorLocation = TargetActor->GetActorLocation();
 		FVector Delta = (CameraLocation - ActorLocation).GetSafeNormal();
 

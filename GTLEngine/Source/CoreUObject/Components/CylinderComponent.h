@@ -4,6 +4,7 @@
 
 class UCylinderComponent: public UPrimitiveComponent
 {
+	DECLARE_CLASS(UCylinderComponent, UPrimitiveComponent)
 public:
 	UCylinderComponent();
 	virtual void Tick(float TickTime) override;

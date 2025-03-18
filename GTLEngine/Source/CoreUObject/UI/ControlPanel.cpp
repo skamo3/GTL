@@ -63,7 +63,8 @@ void UControlPanel::Tick(float DeltaTime)
         return;
 
     ACamera* Camera = World->GetCamera();
-    UCameraComponent* camera = Camera->GetCameraComponent();
+    if (Camera)
+        UCameraComponent* camera = Camera->GetCameraComponent();
 
 
     //if (isTranslationActive)
@@ -161,11 +162,13 @@ void UControlPanel::Tick(float DeltaTime)
 
     //ImGui::Separator();
 
-    ImGui::Text("Allocation Bytes %d", UEngine::GetEngine().GetTotalAllocationBytes());
-    ImGui::Text("Allocation Count %d", UEngine::GetEngine().GetTotalAllocationCount());
+    // TODO: 메모리 가져와서 UI 업데이트 해주기.
+    
+    ImGui::Text("Allocation Bytes %d", FPlatformMemory::GetAllocationBytes());
+    ImGui::Text("Allocation Count %d", FPlatformMemory::GetAllocationCount());
 
     ImGui::BeginChild("ScrollingRegion");
-    for (UObject* obj: GUObjectArray) {
+    for (UObject* obj: UEngine::GetEngine().GetWorld()->GetActors()) {
         if (obj) {
             FString ws = obj->GetName();
             std::string s;

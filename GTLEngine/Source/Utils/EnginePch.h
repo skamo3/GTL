@@ -52,6 +52,9 @@ typedef	INT16		int16;
 typedef	INT32		int32;
 typedef	INT64		int64;
 
+typedef char ANSICHAR;
+typedef wchar_t WIDECHAR;
+
 template <typename T>
 using TArray = std::vector<T>;
 
@@ -78,16 +81,17 @@ using FString = std::wstring;
 // inline을 하지않는 매크로
 #define FORCENOINLINE __declspec(noinline)
 
-
 struct FWindowInfo
 {
-	uint Id;
-	HWND WindowHandle;
-	uint Width;
-	uint Height;
-	uint Top;
-	uint Bottom;
-	uint Left;
-	uint Right;
-	RECT screenRect;
+    uint Id;
+    HWND WindowHandle;
+    uint Width;
+    uint Height;
+    uint Top;
+    uint Bottom;
+    uint Left;
+    uint Right;
+    RECT screenRect;
 };
+
+#include "NameTypes.h"

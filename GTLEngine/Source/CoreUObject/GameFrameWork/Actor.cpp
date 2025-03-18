@@ -107,6 +107,9 @@ bool AActor::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {
 	bool result = false;
 	float minDistancePow = FLT_MAX;
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	if (camera == nullptr) {
+		return false;
+	}
 	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
 	for ( UActorComponent* comp : GetOwnedComponent() ) {
 		FVector hitp;

@@ -71,9 +71,6 @@
     <Filter Include="Plugins\SimpleJSON">
       <UniqueIdentifier>{e19583fe-4f81-43a0-b3d8-b4207ffe65d3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Source\Core\Asset">
-      <UniqueIdentifier>{1cd82e48-94a8-45e6-b5c2-a221359f1fcf}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Source\CoreUObject\GameFrameWork\Shapes">
       <UniqueIdentifier>{faa802ce-4518-4db8-b875-28c6db235a1b}</UniqueIdentifier>
     </Filter>
@@ -82,6 +79,9 @@
     </Filter>
     <Filter Include="Resource\Shape">
       <UniqueIdentifier>{4dfa254a-28c2-471f-9376-c567b78bdbd5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source\Core\HAL">
+      <UniqueIdentifier>{290e5c06-bae0-4ca3-ac17-0073e4665b2f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -205,15 +205,6 @@
     <ClCompile Include="Source\Core\Asset\Asset.cpp">
       <Filter>Source\Core\Asset</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\Asset\AssetManager.cpp">
-      <Filter>Source\Core\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Asset\Asset.cpp">
-      <Filter>Source\Core\Asset</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\Core\Asset\SceneAsset.cpp">
-      <Filter>Source\Core\Asset</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClCompile>
@@ -272,6 +263,24 @@
       <Filter>Source\Core\Resource</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
+    <ClCompile Include="Source\Core\Engine\EngineStatics.cpp">
+      <Filter>Source\Core\Engine</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\NameTypes.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\ObjectFactory.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Class.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\HAL\PlatformMemory.cpp">
+      <Filter>Source\Core\HAL</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Casts.cpp">
+      <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -403,15 +412,6 @@
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClInclude>
-    <ClInclude Include="Source\Core\Asset\AssetManager.h">
-      <Filter>Source\Core\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Asset\Asset.h">
-      <Filter>Source\Core\Asset</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\Core\Asset\SceneAsset.h">
-      <Filter>Source\Core\Asset</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h">
       <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </ClInclude>
@@ -471,6 +471,27 @@
     </ClInclude>
     <ClInclude Include="Source\Core\UI\UIInterface.h">
       <Filter>Source\Core\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\Engine\EngineStatics.h">
+      <Filter>Source\Core\Engine</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\NameTypes.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\ObjectFactory.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\ObjectMacros.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Class.h">
+      <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\Core\HAL\PlatformMemory.h">
+      <Filter>Source\Core\HAL</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Casts.h">
+      <Filter>Source\CoreUObject</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

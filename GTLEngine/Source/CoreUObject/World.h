@@ -3,6 +3,7 @@
 #include "Object.h"
 
 #include "Components/SceneComponent.h"
+#include "ObjectFactory.h"
 
 class AActor;
 class ACamera;
@@ -23,8 +24,9 @@ public:
 	template<typename T>
 	T* SpawnActor(std::wstring InName, const FVector& InLocation, const FRotator& InRotation, const FVector& InScale, AActor* InOwner)
 	{
-		T* newObj = new T();
-		AActor* newActor = dynamic_cast<AActor*>(newObj);
+		T* NewObject = FObjectFactory::ConstructObject<T>();
+		
+		AActor* newActor = Cast<AActor>(NewObject);
 		// newActor-> SetLocation, SetScale, SetRotation.
 		newActor->SetActorLocation(InLocation);
 		newActor->SetActorScale(InScale);
@@ -41,7 +43,7 @@ public:
 
 			ActiveActors.push_back(newActor);
 		}
-		return newObj;
+		return NewObject;
 	}
 
 public:

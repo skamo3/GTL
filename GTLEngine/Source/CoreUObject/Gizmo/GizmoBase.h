@@ -7,6 +7,7 @@
 
 class UGizmoBase : public UObject, public IDragable
 {
+	DECLARE_CLASS(UGizmoBase, UObject)
 public:
 	enum class EAxis {
 		X,

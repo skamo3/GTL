@@ -1,7 +1,9 @@
 #pragma once
 #include "CoreUObject/Components/PrimitiveComponent.h"
 
-class ULineComponent: public UPrimitiveComponent {
+class ULineComponent: public UPrimitiveComponent 
+{
+	DECLARE_CLASS(ULineComponent, UPrimitiveComponent)
 private:
 	FMatrix rotation;
 

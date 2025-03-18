@@ -61,6 +61,8 @@
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
       <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Casts.cpp" />
+    <ClCompile Include="Source\CoreUObject\Class.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CameraComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp" />
@@ -81,7 +83,9 @@
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp" />
+    <ClCompile Include="Source\CoreUObject\NameTypes.cpp" />
     <ClCompile Include="Source\CoreUObject\Object.cpp" />
+    <ClCompile Include="Source\CoreUObject\ObjectFactory.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -90,9 +94,6 @@
     <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp" />
     <ClCompile Include="Source\CoreUObject\World.cpp" />
-    <ClCompile Include="Source\Core\Asset\Asset.cpp" />
-    <ClCompile Include="Source\Core\Asset\AssetManager.cpp" />
-    <ClCompile Include="Source\Core\Asset\SceneAsset.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDDepthStencilView.cpp" />
@@ -103,14 +104,19 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
+    <ClCompile Include="Source\Core\Engine\EngineStatics.cpp" />
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
+    <ClCompile Include="Source\Core\HAL\PlatformMemory.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
     <ClCompile Include="Source\Core\Resource\Types.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
     <ClCompile Include="Source\Core\UI\UIManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
-    <ClCompile Include="Source\Utils\EnginePch.cpp" />
+    <ClCompile Include="Source\Utils\EnginePch.cpp">
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
+    </ClCompile>
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
     <ClCompile Include="Source\Utils\Math\Geometry.cpp" />
     <ClCompile Include="Source\Utils\Math\Matrix.cpp" />
@@ -132,6 +138,8 @@
     <ClInclude Include="Plugins\ImGui\imstb_textedit.h" />
     <ClInclude Include="Plugins\ImGui\imstb_truetype.h" />
     <ClInclude Include="Plugins\SimpleJSON\json.hpp" />
+    <ClInclude Include="Source\CoreUObject\Casts.h" />
+    <ClInclude Include="Source\CoreUObject\Class.h" />
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CameraComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h" />
@@ -152,7 +160,10 @@
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrow.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBase.h" />
+    <ClInclude Include="Source\CoreUObject\NameTypes.h" />
     <ClInclude Include="Source\CoreUObject\Object.h" />
+    <ClInclude Include="Source\CoreUObject\ObjectFactory.h" />
+    <ClInclude Include="Source\CoreUObject\ObjectMacros.h" />
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
@@ -160,9 +171,6 @@
     <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h" />
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h" />
     <ClInclude Include="Source\CoreUObject\World.h" />
-    <ClInclude Include="Source\Core\Asset\Asset.h" />
-    <ClInclude Include="Source\Core\Asset\AssetManager.h" />
-    <ClInclude Include="Source\Core\Asset\SceneAsset.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDConstantBuffer.h" />
     <ClInclude Include="Source\Core\DirectX11\DirectXHandle.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDDepthStencilView.h" />
@@ -173,7 +181,9 @@
     <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />
+    <ClInclude Include="Source\Core\Engine\EngineStatics.h" />
     <ClInclude Include="Source\Core\Gizmo\GizmoManager.h" />
+    <ClInclude Include="Source\Core\HAL\PlatformMemory.h" />
     <ClInclude Include="Source\Core\Input\InputManager.h" />
     <ClInclude Include="Source\Core\Resource\ResourceManager.h" />
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />

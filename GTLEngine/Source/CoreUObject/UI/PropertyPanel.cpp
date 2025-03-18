@@ -35,7 +35,7 @@ void UPropertyPanel::Render()
 	ImGui::SetNextWindowSize(WinSize, ImGuiCond_Appearing);
 	ImGui::Begin("Property Panel", nullptr, ImGuiWindowFlags_NoResize);
 
-	AActor* selected = gizmoManager->GetSelected();
+	AActor* selected = UEngine::GetEngine().GetGizmoManager()->GetSelected();
 
 	if (selected) {
 		Location[0] = selected->GetActorLocation().X;

@@ -18,9 +18,9 @@
 
 UWorld* UWorld::CreateWorld()
 {
-	UWorld* NewWorld = new UWorld();
-	NewWorld->MainCamera = new ACamera();
-
+	UWorld* NewWorld = FObjectFactory::ConstructObject<UWorld>();
+	NewWorld->MainCamera = NewWorld->SpawnActor<ACamera>(TEXT("MainCamera"), FVector(0.f, 2.f, 0.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
+	
 	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 2.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
 	NewWorld->SpawnActor<ASphere>(TEXT("DefaultSphere"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 45.f), FVector(1.0f, 2.0f, 1.0f), nullptr);
 
@@ -32,12 +32,6 @@ UWorld* UWorld::CreateWorld()
     return NewWorld;
 }
 
-void UWorld::CameraTick(float TickTime)
-{
-	// 카메라 정보 업데이트.
-	// 위치, 뭐 등등..
-	MainCamera->Tick(TickTime);
-}
 
 void UWorld::Tick(float TickTime)
 {
@@ -53,9 +47,15 @@ void UWorld::Destroy()
 	for (AActor* Actor : ActiveActors)
 	{
 		if (Actor)
+		{
 			Actor->Destroy();
+			delete Actor;
+			Actor = nullptr;
+		}
 	}
+	MainCamera = nullptr;
 	ActiveActors.clear();
+	GUObjectArray.clear();
 	IClickable::GetClickableList().clear();
 	IDragable::GetClickableList().clear();
 	UEngine::GetEngine().GetGizmoManager()->ClearSelected();
@@ -73,6 +73,7 @@ void UWorld::CreateDefaultUI()
 	UUIManager* UIManager = UEngine::GetEngine().GetUIManager();
 	if (UIManager)
 	{
+		
 		UIManager->RegistUI(new UControlPanel());
 		UIManager->RegistUI(new UConsolePanel());
 		UIManager->RegistUI(new UPropertyPanel());

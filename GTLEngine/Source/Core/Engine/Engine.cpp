@@ -11,6 +11,8 @@
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/GizmoManager.h"
 
+TArray<UObject*> GUObjectArray = TArray<UObject*>();
+
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
     WindowInfo = InWindowInfo;
@@ -88,7 +90,6 @@ void UEngine::Tick()
     UIManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
-    World->CameraTick(TimeManager->DeltaTime());
     World->Tick(TimeManager->DeltaTime());
 
 	GizmoManager->Tick(TimeManager->DeltaTime());
@@ -192,24 +193,4 @@ HRESULT UEngine::AddAllVertexBuffers()
     }
     
     return S_OK;
-}
-
-void UEngine::AddTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes += Bytes;
-}
-
-void UEngine::AddTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount += Count;
-}
-
-void UEngine::RemoveTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes -= Bytes;
-}
-
-void UEngine::RemoveTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount -= Count;
 }

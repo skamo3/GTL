@@ -6,6 +6,7 @@
 
 class UPropertyPanel: public UUIBase
 {
+	DECLARE_CLASS(UPropertyPanel, UUIBase)
 public:
 	UPropertyPanel();
 

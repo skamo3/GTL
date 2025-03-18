@@ -1,7 +1,10 @@
 #pragma once
 #include "CoreUObject/UI/UIBase.h"
 
-class UConsolePanel: public UUIBase {
+class UConsolePanel: public UUIBase 
+{
+	DECLARE_CLASS(UConsolePanel, UUIBase)
+
 public:
 	UConsolePanel();
 	// UUIBase을(를) 통해 상속됨

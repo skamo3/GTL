@@ -8,14 +8,14 @@ class UUIBase;
 class UGizmoManager;
 class IDragable;
 
-class UUIManager : public UObject
+class UUIManager
 {
 
 public:
 	void InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext);
 
-	virtual void Tick(float DeltaTime) override;
-	virtual void Destroy() override;
+	void Tick(float DeltaTime);
+	void Destroy();
 
 	void RegistUI(UUIBase* NewUI);
 	void RenderUI();
