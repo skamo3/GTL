@@ -62,7 +62,7 @@ protected:
 	USceneComponent* RootComponent;
 
 public:
-	TArray<UActorComponent*> GetOwnedComponent() const { return OwnedComponent; }
+	TArray<UActorComponent*>& GetOwnedComponent() { return OwnedComponent; }
 
 private:
 	AActor* Owner;

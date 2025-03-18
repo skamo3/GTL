@@ -55,6 +55,7 @@
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Line.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
@@ -193,6 +194,7 @@
     </FxCompile>
   </ItemGroup>
   <ItemGroup>
+    <Text Include="Source\CoreUObject\GameFrameWork\Shapes\Line.h" />
     <Text Include="Source\CoreUObject\UI\ConsolePanel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

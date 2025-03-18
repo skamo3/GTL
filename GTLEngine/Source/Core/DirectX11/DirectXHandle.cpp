@@ -374,19 +374,11 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
 void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
 {
-	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
-		return;
-
     if (!PrimitiveComp)
         return;
 
 	if (PrimitiveComp->GetPrimitiveType() == EPrimitiveType::None || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Line || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Grid)
 		return;
-
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -486,6 +478,13 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> gizmo) {
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
+		return;
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     for (AActor* Actor : Actors)
     {
@@ -511,6 +510,8 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Line) )
+		return;
 
 	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
 	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
@@ -537,19 +538,12 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 }
 
 void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
-	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
-		return;
 
     if ( LineComp == nullptr)
         return;
 
 	if (LineComp->GetPrimitiveType() == EPrimitiveType::None)
 		return;
-
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();

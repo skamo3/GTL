@@ -277,6 +277,7 @@
     <ClCompile Include="Source\CoreUObject\UI\SceneManager.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Line.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Source\Utils\EnginePch.h">
@@ -498,6 +499,9 @@
   <ItemGroup>
     <Text Include="Source\CoreUObject\UI\ConsolePanel.h">
       <Filter>Source\CoreUObject\UI</Filter>
+    </Text>
+    <Text Include="Source\CoreUObject\GameFrameWork\Shapes\Line.h">
+      <Filter>Source\CoreUObject\GameFrameWork\Shapes</Filter>
     </Text>
   </ItemGroup>
 </Project>

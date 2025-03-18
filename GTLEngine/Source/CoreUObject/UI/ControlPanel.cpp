@@ -130,6 +130,7 @@ void UControlPanel::Tick(float DeltaTime)
     if ( ImGui::CollapsingHeader("Rendering Entity") ) {
         EEngineShowFlags flags = UEngine::GetEngine().ShowFlags;
 
+        // primitive
         bool Primitive = GetFlag(flags, EEngineShowFlags::SF_Primitives);
         ImGui::Checkbox("Primitives", &Primitive);
         if ( Primitive )
@@ -137,6 +138,15 @@ void UControlPanel::Tick(float DeltaTime)
         else 
             SetFlagOff(flags, EEngineShowFlags::SF_Primitives);
 
+        // line
+        bool Line = GetFlag(flags, EEngineShowFlags::SF_Line);
+        ImGui::Checkbox("Line", &Line);
+        if ( Line )
+            SetFlagOn(flags, EEngineShowFlags::SF_Line);
+        else
+            SetFlagOff(flags, EEngineShowFlags::SF_Line);
+
+        // BillboardText
         bool BillboardText = GetFlag(flags, EEngineShowFlags::SF_BillboardText);
         ImGui::Checkbox("BillboardText", &BillboardText);
         if ( BillboardText )

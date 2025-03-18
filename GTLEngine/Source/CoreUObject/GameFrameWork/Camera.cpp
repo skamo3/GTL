@@ -7,6 +7,7 @@
 #include "Input/InputManager.h"
 
 #include "Math/MathUtils.h"
+#include "Utils/Math/Geometry.h"
 
 ACamera::ACamera() : MouseSensitive(5.f)
 {
@@ -55,7 +56,6 @@ void ACamera::Tick(float TickTime)
 	if ( InputManager->GetKey('E') ) {
 		CameraLocation += UpDirection * 10 * TickTime;
 	}
-
 	if (InputManager->GetMouseButton(UInputManager::EMouseButton::RIGHT))
 	{
 		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
@@ -101,3 +101,4 @@ float ACamera::GetFarClip() const
 		return 0.0f;
 	return CameraComponent->GetFarClip();
 }
+

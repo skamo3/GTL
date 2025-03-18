@@ -3,12 +3,15 @@
 
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
+#include "Core/Input/InputManager.h"
+#include "Utils/Math/Geometry.h"
 
 #include "GameFrameWork/Shapes/Triangle.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
 #include "GameFrameWork/Shapes/Cylinder.h"
 #include "GameFrameWork/Shapes/Cone.h"
+#include "GameFrameWork/Shapes/Line.h"
 
 void USceneManager::DeleteActor(uint32 uuid) {
 
@@ -34,6 +37,9 @@ void USceneManager::RenderUI() {
     if (ImGui::Button("Spawn")) {
         for (int i = 0; i < SpawnNum; i++) {
             switch ( static_cast<EPrimitiveType>(CurrentPrimitiveType) ) {
+            case EPrimitiveType::Line:
+                SpawnActor<ALine>(TEXT("Line"));
+                break;
             case EPrimitiveType::Triangle:
                 SpawnActor<ATriangle>(TEXT("Triangle"));
                 break;
@@ -56,6 +62,7 @@ void USceneManager::RenderUI() {
     }
     ImGui::Separator();
 
+    // TODO: Insert Actor List
     //ImGui::BeginChild("ScrollingRegion");
     //for (UObject* obj: GUObjectArray) {
     //    if (obj) {
@@ -72,6 +79,21 @@ void USceneManager::RenderUI() {
 
 void USceneManager::Tick(float TickTime) {
 	RenderUI();
+
+    UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
+    if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		float mouse_x = inputManager->GetMouseNdcX();
+		float mouse_y = inputManager->GetMouseNdcY();
+		FRay ray = Geometry::CreateRayWithMouse(mouse_x, mouse_y);
+		ALine* line = UEngine::GetEngine().GetWorld()->SpawnActor<ALine>(
+			TEXT("Line"),
+			FVector::ZeroVector,
+			FRotator::ZeroRotator,
+			FVector::OneVector,
+			nullptr
+		);
+        line->SetRay(ray);
+	}
 }
 
 void USceneManager::Destroy() {}
