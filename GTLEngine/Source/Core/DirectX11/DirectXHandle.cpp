@@ -573,7 +573,7 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
 
     DXDDeviceContext->Draw(Num, 0);
 
-	Info.VertexBuffer->Release();
+	//Info.VertexBuffer->Release();
 }
 
 void UDirectXHandle::RenderActorUUID(AActor* TargetActor)

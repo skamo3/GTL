@@ -5,7 +5,10 @@
 #include "CoreUObject/World.h"
 #include "Utils/Math/Geometry.h"
 
-UGizmoArrow::UGizmoArrow(EAxis axis, AActor* Target): UGizmoBase(axis, Target) {
+UGizmoArrow::UGizmoArrow() : UGizmoBase() {}
+
+void UGizmoArrow::Init(EAxis axis, AActor* Target) {
+	UGizmoBase::Init(axis, Target);
 	switch ( axis ) {
 	case EAxis::X:
 		OriginalAABB[0] = FVector(0.f, -0.5f, -0.5f);

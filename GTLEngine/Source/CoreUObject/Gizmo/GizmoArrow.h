@@ -6,7 +6,9 @@ class UGizmoArrow : public UGizmoBase
 {
 	DECLARE_CLASS(UGizmoArrow, UGizmoBase)
 public:
-	UGizmoArrow(EAxis axis, AActor* Target);
+	UGizmoArrow();
+
+	void Init(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

@@ -13,6 +13,8 @@
 #include "GameFrameWork/Shapes/Cone.h"
 #include "GameFrameWork/Shapes/Line.h"
 
+#include <functional>
+
 void USceneManager::DeleteActor(uint32 uuid) {
 
 }
@@ -63,6 +65,40 @@ void USceneManager::RenderUI() {
     ImGui::Separator();
     ImGui::Checkbox("Spawn debug line", &DebugSpawnLine);
     ImGui::Separator();
+
+    ImGui::BeginChild("ScrollingRegion");
+
+    std::function<void(USceneComponent*)> createNode = [&createNode](USceneComponent* comp)->void {
+        FString ws = comp->GetName();
+        std::string s;
+        s.assign(ws.begin(), ws.end());
+
+        ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+        if ( comp->GetAllChildren().size() == 0 )
+            flags |= ImGuiTreeNodeFlags_Leaf;
+
+        if (ImGui::TreeNodeEx(s.c_str(), flags)) {
+            for ( auto& child : comp->GetAllChildren() ) {
+                createNode(child);
+            }
+            ImGui::TreePop();
+        }
+        
+        
+    };
+    for ( AActor* obj : UEngine::GetEngine().GetWorld()->GetActors() ) {
+        if ( obj ) {
+            FString ws = obj->GetName();
+            std::string s;
+            s.assign(ws.begin(), ws.end());
+            if ( ImGui::TreeNodeEx(s.c_str()) ) {
+                createNode(obj->GetRootComponent());
+                ImGui::TreePop();
+            }
+            
+        }
+    }
+    ImGui::EndChild();
 
     // TODO: Insert Actor List
     //ImGui::BeginChild("ScrollingRegion");

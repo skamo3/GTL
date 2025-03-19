@@ -51,10 +51,14 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::Text("Mouse %d,%d", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
     
     ACamera* cam = UEngine::GetEngine().GetWorld()->GetCamera();
-    ImGui::DragFloat("Grid Scale", &cam->GridScale, 0.1f, 0.1f, 100.f, "%.1f");
-    ImGui::DragFloat("Camera speed", &cam->MoveSpeed, 0.1f, 0.1f, 100.f, "%.1f");
-    ImGui::DragFloat("Mouse Sensitive", &cam->MouseSensitive, 0.1f, 0.1f, 10.f, "%.1f");
-
+    if ( cam != nullptr ) {
+        ImGui::DragFloat("Grid Scale", &cam->GridScale, 0.1f, 0.1f, 100.f, "%.1f");
+        ImGui::DragFloat("Camera speed", &cam->MoveSpeed, 0.1f, 0.1f, 100.f, "%.1f");
+        ImGui::DragFloat("Mouse Sensitive", &cam->MouseSensitive, 0.1f, 0.1f, 10.f, "%.1f");
+    } else {
+        ImGui::Text("Can not find main camera");
+    }
+    
     ImGui::Separator();
 
 	// 폰트 설정.
@@ -217,17 +221,6 @@ void UControlPanel::Tick(float DeltaTime)
     
     ImGui::Text("Allocation Bytes %d", FPlatformMemory::GetAllocationBytes());
     ImGui::Text("Allocation Count %d", FPlatformMemory::GetAllocationCount());
-
-    ImGui::BeginChild("ScrollingRegion");
-    for (UObject* obj: UEngine::GetEngine().GetWorld()->GetActors()) {
-        if (obj) {
-            FString ws = obj->GetName();
-            std::string s;
-            s.assign(ws.begin(), ws.end());
-            ImGui::Text("%s(%d)", s.c_str(), obj->GetUUID());
-        }
-    }
-    ImGui::EndChild();
 
     ImGui::Separator();
 
