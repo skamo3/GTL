@@ -46,8 +46,10 @@ void UUIManager::Tick(float DeltaTime)
 	ImGui_ImplDX11_NewFrame();
 	ImGui_ImplWin32_NewFrame();
 	ImGui::NewFrame();
-	for (UUIBase* UI : UIList)
+	//for (UUIBase* UI : UIList)
+	for (int i = 0; i < UIList.size(); i++)
 	{
+		UUIBase* UI = UIList[i];
 		if (UI)
 		{
  			UI->Tick(DeltaTime);

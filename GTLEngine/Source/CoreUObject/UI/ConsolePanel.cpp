@@ -2,7 +2,6 @@
 #include "ConsolePanel.h"
 
 UConsolePanel::UConsolePanel(): WindowWidth(360.f), WindowHeight(400.f) {
-    Items = ImVector<char*>();
     strcpy_s(InputBuffer, 256, "");
 }
 
@@ -72,9 +71,13 @@ void UConsolePanel::Tick(float TickTime) {
 
 	ImGui::Begin("Console");
 
+    if ( ImGui::Button("Clear") )
+        ULogManager::ClearLog();
+
     ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar);
-    for ( const char* item : Items ) {
+    for ( const char* item : ULogManager::GetLogs() ) {
         ImGui::TextUnformatted(item);
+        //ImGui::Text(item);
     }
     if ( ImGui::GetScrollY() >= ImGui::GetScrollMaxY() ) {
         ImGui::SetScrollHereY(1.0f);
@@ -97,23 +100,7 @@ void UConsolePanel::Tick(float TickTime) {
 void UConsolePanel::Destroy() {}
 
 void UConsolePanel::ExecCommand(const char* s) {
-    AddLog("# %s\n", s);
+    //AddLog("# %s\n", s);
+    UE_LOG(TEXT("# %s\n"), s)
     StrSplit(s);
-}
-
-void UConsolePanel::AddLog(const char* fmt, ...) {
-    char buf[1024];
-    va_list args;
-    va_start(args, fmt);
-    vsnprintf(buf, IM_ARRAYSIZE(buf), fmt, args);
-    buf[IM_ARRAYSIZE(buf) - 1] = 0;
-    va_end(args);
-    Items.push_back(Strdup(buf));
-}
-
-void UConsolePanel::ClearLog() {
-    for ( auto& item : Items ) {
-        ImGui::MemFree(item);
-    }
-    Items.clear();
 }

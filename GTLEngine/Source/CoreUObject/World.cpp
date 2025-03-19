@@ -22,7 +22,6 @@ UWorld* UWorld::CreateWorld()
 	UWorld* NewWorld = FObjectFactory::ConstructObject<UWorld>();
 
 	// TODO: 나중에 분리.
-	NewWorld->CreateDefaultUI();
 
 	NewWorld->MainCamera = NewWorld->SpawnActor<ACamera>(TEXT("MainCamera"), FVector(0.f, 2.f, 0.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
 	NewWorld->MainCamera->SetActorLocation(FVector(-10.f, 0.f, 0.0f));

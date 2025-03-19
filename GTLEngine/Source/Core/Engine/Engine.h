@@ -39,8 +39,6 @@ public:
     void Render();
     HRESULT ResizeWindow(int width, int height);
 	void ClearEngine();
-    void Log(FString s, ...);
-    void Log(std::string s, ...);
     HRESULT AddAllVertexBuffers();
 
 private:

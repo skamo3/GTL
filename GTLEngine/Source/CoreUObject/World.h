@@ -44,7 +44,7 @@ public:
 
 			ActiveActors.push_back(newActor);
 
-			UEngine::GetEngine().Log(L"Spawn %s (uuid: %d)", InName.c_str(), newActor->GetUUID());
+			UE_LOG(TEXT("Spawn %s"), InName.c_str());
 		}
 		return NewObject;
 	}
@@ -75,7 +75,7 @@ private:
 	TArray<AActor*> ActiveActors;
 	ACamera* MainCamera;
 
-private:
+public:
 	void CreateDefaultUI();
 
 

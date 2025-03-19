@@ -12,13 +12,10 @@ public:
 	void Destroy() override;
 
 	void ExecCommand(const char* s);
-	void AddLog(const char* fmt, ...);
-	void ClearLog();
 private:
 	float WindowWidth;
 	float WindowHeight;
 	char InputBuffer[256];
-	ImVector<char*> Items;
 
 	int Stricmp(const char* s1, const char* s2);
 	int Strnicmp(const char* s1, const char* s2, int n);

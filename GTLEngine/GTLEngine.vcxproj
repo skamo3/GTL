@@ -87,6 +87,7 @@
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
     <ClCompile Include="Source\Core\Engine\EngineStatics.cpp" />
+    <ClCompile Include="Source\Core\Engine\LogManager.cpp" />
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
     <ClCompile Include="Source\Core\HAL\PlatformMemory.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
@@ -208,6 +209,7 @@
   <ItemGroup>
     <Text Include="Source\CoreUObject\GameFrameWork\Shapes\Line.h" />
     <Text Include="Source\CoreUObject\UI\ConsolePanel.h" />
+    <Text Include="Source\Core\Engine\LogManager.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>

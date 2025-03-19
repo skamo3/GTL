@@ -86,7 +86,8 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	if (Cast<UActorComponent>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
-		UEngine::GetEngine().Log("AddComponent: T is not UActorComponent");
+		//ULogManager::AddLog(L"AddComponent: T is not UActorComponent");
+		UE_LOG(L"AddComponent: T is not UActorComponent");
 		return nullptr;
 	}
 	NewActorComp->SetOwner(Owner);
@@ -94,7 +95,8 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	USceneComponent* NewSceneComp = Cast<USceneComponent>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
-		UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewActorComp->GetName().c_str(), NewActorComp->GetUUID());
+		//ULogManager::AddLog(L"AddComponent: %S", NewActorComp->GetName().c_str());
+		UE_LOG(L"AddComponent: %s", NewActorComp->GetName().c_str());
 		return nullptr;
 	}
 
@@ -112,6 +114,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 
 	OwnedComponent.push_back(NewComp);
 
-	UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewSceneComp->GetName().c_str(), NewSceneComp->GetUUID());
+	// ULogManager::AddLog(L"AddComponent: %S", NewSceneComp->GetName().c_str());
+	UE_LOG(L"AddComponent: %s", NewActorComp->GetName().c_str());
 	return NewComp;
 }
