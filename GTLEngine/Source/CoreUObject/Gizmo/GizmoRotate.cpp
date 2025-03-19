@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GizmoRotate.h"
 
-UGizmoRotate::UGizmoRotate(EAxis axis, AActor* Target) : UGizmoBase(axis, Target) {
+UGizmoRotate::UGizmoRotate(EAxis axis, AActor* Target) : UGizmoBase() {
 	FVector Min = FVector(-0.120000f, -2.170000f, -2.170000f);	//하드코딩 min, max
 	FVector Max = FVector(0.120000f, 2.170000f, 2.170000f);
 

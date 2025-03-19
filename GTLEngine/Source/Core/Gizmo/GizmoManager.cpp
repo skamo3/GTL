@@ -70,10 +70,9 @@ void UGizmoManager::Picking() {
 		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
 			picked->OnClick(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
 			SelectedActor = pickedActor;
-			UGizmoArrow* gizmo;
-			// pick gizmo
 			switch ( Mode ) {
 			case EGizmoType::Translate:
+				UGizmoTranslate* gizmo;
 				gizmo = FObjectFactory::ConstructObject<UGizmoTranslate>();
 				gizmo->Init(UGizmoBase::EAxis::X, pickedActor);
 				Gizmo.push_back(gizmo);
@@ -85,11 +84,13 @@ void UGizmoManager::Picking() {
 				Gizmo.push_back(gizmo);
 				break;
 			case EGizmoType::Rotate:
-				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::X, pickedActor));
+				UGizmoRotate* gizmo;
+				/*Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::X, pickedActor));
 				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::Y, pickedActor));
-				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::Z, pickedActor));
+				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::Z, pickedActor));*/
 				break;
 			case EGizmoType::Scale:
+				UGizmoScale* gizmo;
 				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::X, pickedActor));
 				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::Y, pickedActor));
 				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::Z, pickedActor));

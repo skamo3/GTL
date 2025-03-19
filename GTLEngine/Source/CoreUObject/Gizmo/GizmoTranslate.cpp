@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GizmoTranslate.h"
 
-UGizmoTranslate::UGizmoTranslate(EAxis axis, AActor* Target): UGizmoBase(axis, Target) {
+UGizmoTranslate::UGizmoTranslate(): UGizmoBase() {
 	FVector Min = FVector(0.000016f, -0.118037f, -0.117011f);	//하드코딩 min, max
 	FVector Max = FVector(1.920310f, 0.118037f, 0.117011f);
 
@@ -30,6 +30,11 @@ UGizmoTranslate::UGizmoTranslate(EAxis axis, AActor* Target): UGizmoBase(axis, T
 		GizmoViewType = EGizmoViewType::ZTranslate;
 		break;
 	}
+}
+
+void UGizmoTranslate::Init(EAxis axis, AActor* Target) {
+	this->axis = axis;
+	this->Target = Target;
 }
 
 void UGizmoTranslate::Tick(float TickTime) {

@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "GizmoScale.h"
 
-UGizmoScale::UGizmoScale(EAxis axis, AActor* Target) : UGizmoBase(axis, Target) {
+UGizmoScale::UGizmoScale(EAxis axis, AActor* Target) : UGizmoBase() {
 	FVector Min = FVector(0.000016f, -0.100000f, -0.100000f);	//하드코딩 min, max
 	FVector Max = FVector(1.796750f, 0.100000f, 0.100000f);
 
