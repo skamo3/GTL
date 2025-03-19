@@ -6,7 +6,6 @@
 #include "Time/TimeManager.h"
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
-#include "Asset/AssetManager.h"
 #include "UI/UIManager.h"
 #include "UI/ConsolePanel.h"
 
@@ -15,8 +14,7 @@
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/GizmoManager.h"
 
-
-uint32 UEngineStatics::NextUUID = 0;
+TArray<UObject*> GUObjectArray = TArray<UObject*>();
 
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
@@ -62,11 +60,6 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 		return false;
 	}
 
-
-	UAssetManager* AssetManager = new UAssetManager();
-	AssetManager->RegistryAssetMetaDatas();
-	AssetManager->LoadAssets();
-
 	// TimeManager 추가
 	TimeManager = new UTimeManager();
 	TimeManager->Initialize();
@@ -100,7 +93,6 @@ void UEngine::Tick()
     UIManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
-    World->CameraTick(TimeManager->DeltaTime());
     World->Tick(TimeManager->DeltaTime());
 
 	GizmoManager->Tick(TimeManager->DeltaTime());
@@ -243,24 +235,4 @@ HRESULT UEngine::AddAllVertexBuffers()
     }
     */
     return S_OK;
-}
-
-void UEngine::AddTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes += Bytes;
-}
-
-void UEngine::AddTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount += Count;
-}
-
-void UEngine::RemoveTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes -= Bytes;
-}
-
-void UEngine::RemoveTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount -= Count;
 }

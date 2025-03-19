@@ -6,6 +6,7 @@ class UTriangleComponent;
 
 class ATriangle : public AActor
 {
+	DECLARE_CLASS(ATriangle, AActor)
 public:
 	ATriangle();
 

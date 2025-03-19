@@ -5,11 +5,11 @@
 class IClickable {
 private:
 	static TList<IClickable*> ClickableList;
-	uint32 InternalIndex;
+	uint32 _InternalIndex;
 public:
 	inline static TList<IClickable*> GetClickableList() { return ClickableList; };
 	IClickable() {
-		InternalIndex = static_cast<uint32>(ClickableList.size());
+		_InternalIndex = static_cast<uint32>(ClickableList.size());
 		ClickableList.push_back(this);
 	}
 	virtual ~IClickable() {
@@ -23,11 +23,11 @@ public:
 class IDragable: public IClickable {
 private:
 	static TList<IDragable*> DragableList;
-	uint32 InternalIndex;
+	uint32 _InternalIndex;
 public:
 	inline static TList<IDragable*> GetDragableList() { return DragableList; };
 	IDragable() {
-		InternalIndex = static_cast<uint32>(DragableList.size());
+		_InternalIndex = static_cast<uint32>(DragableList.size());
 		DragableList.push_back(this);
 	}
 	virtual ~IDragable() {

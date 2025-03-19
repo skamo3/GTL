@@ -7,6 +7,7 @@
 
 class USceneComponent : public UActorComponent
 {
+	DECLARE_CLASS(USceneComponent, UActorComponent)
 public:
 	USceneComponent();
 

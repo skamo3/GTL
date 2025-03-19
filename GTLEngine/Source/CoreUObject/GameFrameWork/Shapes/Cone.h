@@ -6,6 +6,7 @@ class UConeComponent;
 
 class ACone : public AActor
 {
+	DECLARE_CLASS(ACone, AActor)
 public:
 	ACone();
 

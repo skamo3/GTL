@@ -13,14 +13,14 @@ enum class EGizmoType : uint8
 
 struct FRay;
 
-class UGizmoManager : public UObject
+class UGizmoManager
 {
 
 public:
 	UGizmoManager();
 
-	virtual void Tick(float DeltaTime) override;
-	virtual void Destroy() override;
+	void Tick(float DeltaTime);
+	void Destroy();
 
 	void Picking();
 	EGizmoType GetGizmoType() const { return GizmoType; }

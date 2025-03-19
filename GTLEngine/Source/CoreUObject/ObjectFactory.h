@@ -1,0 +1,34 @@
+﻿#pragma once
+#include "Engine.h"
+#include "EngineStatics.h"
+#include <string>
+#include "HAL/PlatformMemory.h"
+
+class UObject;
+
+class FObjectFactory
+{
+public:
+    /**
+     * UObject를 생성합니다.
+     * @tparam T UObject를 상속받은 클래스
+     * @return 캐스팅된 UObject*
+     */
+    template<typename T>
+        requires std::derived_from<T, UObject>
+    static T* ConstructObject()
+    {
+        constexpr size_t ObjectSize = sizeof(T);
+        void* RawMemory = FPlatformMemory::Malloc(ObjectSize);
+
+        T* ObjectPtr = new (RawMemory) T();
+        ObjectPtr->UUID = UEngineStatics::GenUUID();
+
+        ObjectPtr->NamePrivate = T::StaticClass()->GetName() + L"_" + std::to_wstring(ObjectPtr->UUID);
+        ObjectPtr->ClassPrivate = T::StaticClass();
+        GUObjectArray.push_back(ObjectPtr);
+		ObjectPtr->InternalIndex = static_cast<int>(GUObjectArray.size() - 1);
+
+        return ObjectPtr;
+    }
+};

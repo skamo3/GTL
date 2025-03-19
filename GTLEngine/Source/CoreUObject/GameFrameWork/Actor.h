@@ -4,6 +4,7 @@
 #include "CoreUObject/Object.h"
 #include "CoreUObject/Components/SceneComponent.h"
 #include "UI/UIInterface.h"
+#include "ObjectFactory.h"
 
 class UActorComponent;
 class USceneComponent;
@@ -11,9 +12,9 @@ struct FBoundingBox;
 	
 class AActor : public UObject, public IClickable
 {
+	DECLARE_CLASS(AActor, UObject)
 public:
 	AActor();
-
 
 public:
 	virtual void Tick(float TickTime) override;
@@ -34,7 +35,7 @@ public:
 				continue;
 			}
 
-			FoundComponent = dynamic_cast<T*>(Comp);
+			FoundComponent = Cast<T>(Comp);
 			if (FoundComponent != nullptr)
 			{
 				return FoundComponent;
@@ -59,7 +60,7 @@ public:
 	bool IsSelected = false;
 
 protected:
-	USceneComponent* RootComponent;
+	USceneComponent* RootComponent = nullptr;
 
 public:
 	TArray<UActorComponent*>& GetOwnedComponent() { return OwnedComponent; }
@@ -78,7 +79,7 @@ public:
 template<typename T>
 inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FRotator& InRelativeRotation, const FVector& InRelativeScale)
 {
-	T* NewComp = new T();
+	T* NewComp = FObjectFactory::ConstructObject<T>();
 
 	// ActorComponent 하위 클래스가 아니라면 에러.
 	UActorComponent* NewActorComp = dynamic_cast<UActorComponent*>(NewComp);
@@ -100,7 +101,6 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	if (RootComponent == nullptr)
 	{
 		RootComponent = NewSceneComp;
-		NewSceneComp->SetName(TEXT("RootComponent"));
 	}
 	else
 	{

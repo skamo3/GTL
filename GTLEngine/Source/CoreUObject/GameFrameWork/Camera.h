@@ -7,6 +7,7 @@ struct FMatrix;
 
 class ACamera : public AActor
 {
+	DECLARE_CLASS(ACamera, AActor)
 public:
 	ACamera();
 public:

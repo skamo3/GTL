@@ -6,6 +6,7 @@ class USphereComponent;
 
 class ASphere : public AActor
 {
+	DECLARE_CLASS(ASphere, AActor)
 public:
 	ASphere();
 

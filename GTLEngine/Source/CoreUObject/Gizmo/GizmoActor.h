@@ -6,6 +6,7 @@ class UGizmoArrow;
 
 class AGizmoActor : public AActor
 {
+	DECLARE_CLASS(AGizmoActor, AActor)
 public:
 	AGizmoActor();
 
