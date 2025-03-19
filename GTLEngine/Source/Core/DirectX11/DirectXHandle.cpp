@@ -512,7 +512,8 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
 
-    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDepthStencilStates()[1], 0); // DepthStencilState 기즈모로 변경
+	// 깊이 테스트 무시하는 DepthStencilState로 변경.
+    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetMaskZeroDepthStencilState(), 0);
     for (UGizmoBase* Gizmo : Gizmos)
     {
         EGizmoViewType Type = Gizmo->GetGizmoViewType();
@@ -535,10 +536,8 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
         }
     }
 
-    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDepthStencilStates()[0], 0); // DepthStencilState 기본으로 변경
-    //for (UGizmoBase* g : Gizmos) {
-    //    RenderAABB(g->GetAABB());
-    //}
+	// DepthStencilState 기본으로 변경
+    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDefaultDepthStencilState(), 0);
 }
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
@@ -553,13 +552,13 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 
     for (AActor* Actor : Actors)
     {
-		RenderActorUUID(Actor);
         for (UActorComponent* Comp : Actor->GetOwnedComponent())
         {
             RenderPrimitive(Cast<UPrimitiveComponent>(Comp));
 			// TODO: 컴포넌트 별 UUID 렌더링 구현하기. 컴포넌트의 변환된 위치를 찾는 부분에서 문제 생김.
 			//RenderComponentUUID(dynamic_cast<USceneComponent*>(Comp));
         }
+		RenderActorUUID(Actor);
 
 		// 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
 		//RenderPrimitive(Actor->GetComponentByClass<UPrimitiveComponent>());
@@ -646,6 +645,7 @@ void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
 	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
 	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+	DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetMaskZeroDepthStencilState(), 0);
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -686,6 +686,9 @@ void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
     DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
 	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
+
+	DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDefaultDepthStencilState(), 0);
+
 }
 
 void UDirectXHandle::RenderComponentUUID(USceneComponent* TargetComponent)

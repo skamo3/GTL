@@ -158,7 +158,7 @@ void UControlPanel::Tick(float DeltaTime)
 
         // BillboardText
         bool BillboardText = GetFlag(flags, EEngineShowFlags::SF_BillboardText);
-        ImGui::Checkbox("BillboardText", &BillboardText);
+        ImGui::Checkbox("UUID", &BillboardText);
         if ( BillboardText )
             SetFlagOn(flags, EEngineShowFlags::SF_BillboardText);
         else 
