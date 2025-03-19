@@ -1,6 +1,8 @@
 #include "pch.h"
 #include "SceneComponent.h"
 
+#include "ObjectFactory.h"
+
 USceneComponent::USceneComponent()
 	: UActorComponent()
 	, RelativeLocation(FVector::ZeroVector), RelativeRotation(FVector::ZeroVector), RelativeScale(FVector::OneVector)
@@ -15,8 +17,7 @@ void USceneComponent::Destroy()
 		if (Child)
 		{
 			Child->Destroy();
-			delete Child;
-			Child = nullptr;
+			FObjectFactory::DestroyObject(Child);
 		}
 	}
 }

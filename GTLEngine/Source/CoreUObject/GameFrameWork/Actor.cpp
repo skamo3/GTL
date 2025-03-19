@@ -34,8 +34,7 @@ void AActor::Destroy()
 	if (RootComponent)
 	{
 		RootComponent->Destroy();
-		delete RootComponent;
-		RootComponent = nullptr;
+		FObjectFactory::DestroyObject(RootComponent);
 	}
 	OwnedComponent.clear();
 }

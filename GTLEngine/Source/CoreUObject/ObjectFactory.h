@@ -31,4 +31,16 @@ public:
 
         return ObjectPtr;
     }
+
+    template<typename T>
+		requires std::derived_from<T, UObject>
+	static void DestroyObject(T* Object)
+	{
+		// GUObjectArray에서 제거.
+		GUObjectArray.erase(std::remove(GUObjectArray.begin(), GUObjectArray.end(), Object), GUObjectArray.end());
+
+		Object->~T();
+		FPlatformMemory::Free(Object, sizeof(T));
+		Object = nullptr;
+	}
 };

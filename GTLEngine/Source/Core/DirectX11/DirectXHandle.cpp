@@ -733,6 +733,8 @@ HRESULT UDirectXHandle::AddConstantBuffer(EConstantBufferType Type)
 
 void UDirectXHandle::UpdateWorldViewMatrix(ACamera* Camera)
 {
+	if (!Camera)
+		return;
 	FVector CameraLocation = Camera->GetActorLocation();
 	FRotator CameraRotation = Camera->GetActorRotation();
 

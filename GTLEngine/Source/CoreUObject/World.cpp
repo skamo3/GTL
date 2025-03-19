@@ -52,8 +52,7 @@ void UWorld::Destroy()
 		if (Actor)
 		{
 			Actor->Destroy();
-			delete Actor;
-			Actor = nullptr;
+			FObjectFactory::DestroyObject(Actor);
 		}
 	}
 	MainCamera = nullptr;

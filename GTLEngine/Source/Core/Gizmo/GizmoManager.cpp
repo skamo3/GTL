@@ -105,7 +105,7 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	float minDistancePow = FLT_MAX;
 	FVector hitpoint;
 	for (IClickable* clickable: clickables) {
-		if ( clickable->IsClicked(ray, 100.f, hitpoint) &&
+		if (camera && clickable->IsClicked(ray, 100.f, hitpoint) &&
 			minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
 			) {
 			minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();

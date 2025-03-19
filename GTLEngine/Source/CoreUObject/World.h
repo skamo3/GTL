@@ -50,7 +50,6 @@ public:
 	}
 
 public:
-	void CameraTick(float TickTime);
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
 
