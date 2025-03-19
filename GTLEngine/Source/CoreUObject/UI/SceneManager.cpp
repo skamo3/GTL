@@ -4,6 +4,8 @@
 #include "ImGui/imgui.h"
 #include "ImGui/imgui_internal.h"
 #include "Core/Input/InputManager.h"
+#include "Core/Gizmo/GizmoManager.h"
+#include "CoreUObject/GameFrameWork/Camera.h"
 #include "Utils/Math/Geometry.h"
 
 #include "GameFrameWork/Shapes/Triangle.h"
@@ -63,11 +65,12 @@ void USceneManager::RenderUI() {
         }
     }
     ImGui::Separator();
-    ImGui::Checkbox("Spawn debug line", &DebugSpawnLine);
+    ImGui::Checkbox("Spawn debug ray", &DebugSpawnLine);
     ImGui::Separator();
 
     ImGui::BeginChild("ScrollingRegion");
 
+    // create node for child
     std::function<void(USceneComponent*)> createNode = [&createNode](USceneComponent* comp)->void {
         FString ws = comp->GetName();
         std::string s;
@@ -83,19 +86,40 @@ void USceneManager::RenderUI() {
             }
             ImGui::TreePop();
         }
-        
-        
     };
+
+    auto setSelected = [](AActor* actor)->void {
+        UEngine::GetEngine().GetGizmoManager()->ClearSelected();
+
+        if ( dynamic_cast<ACamera*>(actor) )
+            return;
+        if ( actor->IsSelected == false ) {
+            actor->IsSelected = true;
+            UEngine::GetEngine().GetGizmoManager()->SetSelected(actor);
+            UEngine::GetEngine().GetGizmoManager()->AttachGizmo(actor);
+        } else {
+            actor->IsSelected = false;
+        }
+    };
+
     for ( AActor* obj : UEngine::GetEngine().GetWorld()->GetActors() ) {
         if ( obj ) {
             FString ws = obj->GetName();
             std::string s;
             s.assign(ws.begin(), ws.end());
-            if ( ImGui::TreeNodeEx(s.c_str()) ) {
+
+            ImGuiTreeNodeFlags flags = ImGuiTreeNodeFlags_None;
+            if ( obj->IsSelected )
+                flags |= ImGuiTreeNodeFlags_Selected;
+
+            bool isOpen = ImGui::TreeNodeEx(s.c_str(), flags);
+            if ( ImGui::IsItemClicked() ) {
+                setSelected(obj);
+            }
+            if (isOpen) {
                 createNode(obj->GetRootComponent());
                 ImGui::TreePop();
             }
-            
         }
     }
     ImGui::EndChild();

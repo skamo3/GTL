@@ -76,39 +76,7 @@ void UGizmoManager::Picking() {
 		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
 			picked->OnClick(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
 			SelectedActor = pickedActor;
-
-			UGizmoTranslate* GizmoTranslate;
-			GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
-			GizmoTranslate->Init(UGizmoBase::EAxis::X, pickedActor);
-			Gizmo.push_back(GizmoTranslate);
-			GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
-			GizmoTranslate->Init(UGizmoBase::EAxis::Y, pickedActor);
-			Gizmo.push_back(GizmoTranslate);
-			GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
-			GizmoTranslate->Init(UGizmoBase::EAxis::Z, pickedActor);
-			Gizmo.push_back(GizmoTranslate);
-
-			UGizmoRotate* GizmoRotate;
-			GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
-			GizmoRotate->Init(UGizmoBase::EAxis::X, pickedActor);
-			Gizmo.push_back(GizmoRotate);
-			GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
-			GizmoRotate->Init(UGizmoBase::EAxis::Y, pickedActor);
-			Gizmo.push_back(GizmoRotate);
-			GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
-			GizmoRotate->Init(UGizmoBase::EAxis::Z, pickedActor);
-			Gizmo.push_back(GizmoRotate);
-
-			UGizmoScale* GizmoScale;
-			GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
-			GizmoScale->Init(UGizmoBase::EAxis::X, pickedActor);
-			Gizmo.push_back(GizmoScale);
-			GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
-			GizmoScale->Init(UGizmoBase::EAxis::Y, pickedActor);
-			Gizmo.push_back(GizmoScale);
-			GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
-			GizmoScale->Init(UGizmoBase::EAxis::Z, pickedActor);
-			Gizmo.push_back(GizmoScale);
+			AttachGizmo(pickedActor);
 			return;
 		}
 	} else if ( inputManager->GetMouseUp(UInputManager::EMouseButton::LEFT) ) {
@@ -176,4 +144,39 @@ void UGizmoManager::ClearSelected() {
 
 const TArray<UGizmoBase*> UGizmoManager::GetGizmo() {
 	return Gizmo;
+}
+
+void UGizmoManager::AttachGizmo(AActor* target) {
+	UGizmoTranslate* GizmoTranslate;
+	GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
+	GizmoTranslate->Init(UGizmoBase::EAxis::X, target);
+	Gizmo.push_back(GizmoTranslate);
+	GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
+	GizmoTranslate->Init(UGizmoBase::EAxis::Y, target);
+	Gizmo.push_back(GizmoTranslate);
+	GizmoTranslate = FObjectFactory::ConstructObject<UGizmoTranslate>();
+	GizmoTranslate->Init(UGizmoBase::EAxis::Z, target);
+	Gizmo.push_back(GizmoTranslate);
+
+	UGizmoRotate* GizmoRotate;
+	GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
+	GizmoRotate->Init(UGizmoBase::EAxis::X, target);
+	Gizmo.push_back(GizmoRotate);
+	GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
+	GizmoRotate->Init(UGizmoBase::EAxis::Y, target);
+	Gizmo.push_back(GizmoRotate);
+	GizmoRotate = FObjectFactory::ConstructObject<UGizmoRotate>();
+	GizmoRotate->Init(UGizmoBase::EAxis::Z, target);
+	Gizmo.push_back(GizmoRotate);
+
+	UGizmoScale* GizmoScale;
+	GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
+	GizmoScale->Init(UGizmoBase::EAxis::X, target);
+	Gizmo.push_back(GizmoScale);
+	GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
+	GizmoScale->Init(UGizmoBase::EAxis::Y, target);
+	Gizmo.push_back(GizmoScale);
+	GizmoScale = FObjectFactory::ConstructObject<UGizmoScale>();
+	GizmoScale->Init(UGizmoBase::EAxis::Z, target);
+	Gizmo.push_back(GizmoScale);
 }
