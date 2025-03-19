@@ -76,9 +76,13 @@ void UWorld::CreateDefaultUI()
 	if (UIManager)
 	{
 		
-		UIManager->RegistUI(new UControlPanel());
-		UIManager->RegistUI(new UConsolePanel());
-		UIManager->RegistUI(new UPropertyPanel());
-		UIManager->RegistUI(new USceneManager());
+		//UIManager->RegistUI(new UControlPanel());
+		//UIManager->RegistUI(new UConsolePanel());
+		//UIManager->RegistUI(new UPropertyPanel());
+		//UIManager->RegistUI(new USceneManager());
+		UIManager->RegistUI(FObjectFactory::ConstructObject<UControlPanel>());
+		UIManager->RegistUI(FObjectFactory::ConstructObject<UConsolePanel>());
+		UIManager->RegistUI(FObjectFactory::ConstructObject<UPropertyPanel>());
+		UIManager->RegistUI(FObjectFactory::ConstructObject<USceneManager>());
 	}
 }

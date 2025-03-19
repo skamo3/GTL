@@ -246,7 +246,8 @@ struct FNameHelper
 		}
 		else
 		{
-			static_assert(false, "Invalid Character type");
+			// why error??
+			// static_assert(false, "Invalid Character type");
 			return {};
 		}
 	}

@@ -21,7 +21,6 @@ private:
 	float Location[3] = { 0, 0, 0 };
 	float Rotation[3] = { 0, 0, 0 };
 	float Scale[3] = { 0, 0, 0 };
-	int32 UUID;
 	
 	float WindowWidth;
 	float WindowHeight;
