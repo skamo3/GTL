@@ -20,6 +20,7 @@ public:
 	void Destroy();
 
 	void RegistUI(UUIBase* NewUI);
+	void CreateDefaultUI();
 	void RenderUI();
 
 private:
