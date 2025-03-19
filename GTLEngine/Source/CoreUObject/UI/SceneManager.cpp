@@ -68,6 +68,14 @@ void USceneManager::RenderUI() {
     ImGui::Checkbox("Spawn debug ray", &DebugSpawnLine);
     ImGui::Separator();
 
+    ImGui::Checkbox("Show Actor List", &bShowActorList);
+    if (bShowActorList)
+        ShowActorList();
+
+	ImGui::End();
+}
+
+void USceneManager::ShowActorList() {
     ImGui::BeginChild("ScrollingRegion");
 
     // create node for child
@@ -80,7 +88,7 @@ void USceneManager::RenderUI() {
         if ( comp->GetAllChildren().size() == 0 )
             flags |= ImGuiTreeNodeFlags_Leaf;
 
-        if (ImGui::TreeNodeEx(s.c_str(), flags)) {
+        if ( ImGui::TreeNodeEx(s.c_str(), flags) ) {
             for ( auto& child : comp->GetAllChildren() ) {
                 createNode(child);
             }
@@ -116,27 +124,13 @@ void USceneManager::RenderUI() {
             if ( ImGui::IsItemClicked() ) {
                 setSelected(obj);
             }
-            if (isOpen) {
+            if ( isOpen ) {
                 createNode(obj->GetRootComponent());
                 ImGui::TreePop();
             }
         }
     }
     ImGui::EndChild();
-
-    // TODO: Insert Actor List
-    //ImGui::BeginChild("ScrollingRegion");
-    //for (UObject* obj: GUObjectArray) {
-    //    if (obj) {
-    //        FString ws = obj->GetName();
-    //        std::string s;
-    //        s.assign(ws.begin(), ws.end());
-    //        ImGui::Text("%s(%d)", s.c_str(), obj->GetUUID());
-    //    }
-    //}
-    //ImGui::EndChild();
-
-	ImGui::End();
 }
 
 void USceneManager::Tick(float TickTime) {

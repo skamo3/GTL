@@ -72,6 +72,9 @@ public:
 	template<typename T>
 	HRESULT AddVertexBuffer(FString KeyName, const TArray<T> vertices, const TArray<uint32>& indices);
 
+	// for batch line render
+	template<typename T>
+	HRESULT CheckAndAddDynamicVertexBuffer(FString KeyName, const uint32 size);
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
@@ -104,6 +107,8 @@ private:
 	ID3D11ShaderResourceView* FontAtlasTexture;
 	ID3D11SamplerState* FontSamplerState;
 	FVertexInfo FontTextureBuffer;
+
+	uint32 DynamicVertexBufferSize;
 
 };
 
@@ -147,6 +152,41 @@ inline HRESULT UDirectXHandle::AddVertexBuffer(FString KeyName, const TArray<T> 
 		FIndexInfo IndexInfo = { static_cast<uint32>(indices.size()), NewIndexBuffer };
 		IndexBuffers.insert({ KeyName, IndexInfo });
 	}
+
+	return S_OK;
+}
+
+template<typename T>
+inline HRESULT UDirectXHandle::CheckAndAddDynamicVertexBuffer(FString KeyName, const uint32 size) {
+	
+	if ( VertexBuffers.contains(KeyName) ) {
+
+		if ( size < DynamicVertexBufferSize )
+			return S_OK;
+
+		while ( size >= DynamicVertexBufferSize ) {
+			DynamicVertexBufferSize *= 2;
+		}
+
+		VertexBuffers[KeyName].VertexBuffer->Release();
+		VertexBuffers[KeyName].VertexBuffer = nullptr;
+	}
+	
+	ID3D11Buffer* NewVertexBuffer;
+	// 버텍스 버퍼 생성
+	D3D11_BUFFER_DESC bufferDesc = {};
+	bufferDesc.Usage = D3D11_USAGE_DYNAMIC;
+	bufferDesc.ByteWidth = sizeof(T) * DynamicVertexBufferSize;
+	bufferDesc.BindFlags = D3D11_BIND_VERTEX_BUFFER;
+	bufferDesc.CPUAccessFlags = D3D11_CPU_ACCESS_WRITE;
+
+	HRESULT hr = DXDDevice->CreateBuffer(&bufferDesc, nullptr, &NewVertexBuffer);
+	if ( FAILED(hr) )
+		return hr;
+
+	FVertexInfo Info = { 0, NewVertexBuffer };
+	//VertexBuffers.insert({ KeyName, Info });
+	VertexBuffers[KeyName] = Info;
 
 	return S_OK;
 }

@@ -20,6 +20,8 @@ public:
 	void DeleteActor(FString InName);
 	void RenderUI();
 
+	void ShowActorList();
+
 	// UUIBase을(를) 통해 상속됨
 	void Tick(float TickTime) override;
 	void Destroy() override;
@@ -31,4 +33,5 @@ private:
 	int32 CurrentPrimitiveType;
 	int32 SpawnNum;
 	bool DebugSpawnLine = false;
+	bool bShowActorList = true;
 };
