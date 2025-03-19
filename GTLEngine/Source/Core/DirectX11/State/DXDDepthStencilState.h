@@ -9,7 +9,11 @@ public:
 	HRESULT CreateDepthStencilState(ComPtr<ID3D11Device> Device);
 	void ReleaseDepthStencilState();
 
-	TArray<ID3D11DepthStencilState*> GetDepthStencilStates() const { return DepthStencilStates; }
+	ID3D11DepthStencilState* GetDefaultDepthStencilState() const { return DefaultDepthStencilState; }
+	ID3D11DepthStencilState* GetMaskZeroDepthStencilState() const { return MaskZeroDepthStencilState; }
+
 private:
-	TArray<ID3D11DepthStencilState*> DepthStencilStates;
+
+	ID3D11DepthStencilState* DefaultDepthStencilState = nullptr;
+	ID3D11DepthStencilState* MaskZeroDepthStencilState = nullptr;
 };
