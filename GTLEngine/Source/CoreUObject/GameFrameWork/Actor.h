@@ -82,8 +82,8 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	T* NewComp = FObjectFactory::ConstructObject<T>();
 
 	// ActorComponent 하위 클래스가 아니라면 에러.
-	UActorComponent* NewActorComp = dynamic_cast<UActorComponent*>(NewComp);
-	if (dynamic_cast<UActorComponent*>(NewComp) == nullptr)
+	UActorComponent* NewActorComp = Cast<UActorComponent>(NewComp);
+	if (Cast<UActorComponent>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
 		UEngine::GetEngine().Log("AddComponent: T is not UActorComponent");
@@ -91,7 +91,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	}
 	NewActorComp->SetOwner(Owner);
 
-	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent*>(NewComp);
+	USceneComponent* NewSceneComp = Cast<USceneComponent>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
 		UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewActorComp->GetName().c_str(), NewActorComp->GetUUID());

@@ -36,7 +36,7 @@ void UUIManager::RegistUI(UUIBase* NewUI)
 
 	// if it's console remember it
 	UConsolePanel* downcast;
-	if ( downcast = dynamic_cast<UConsolePanel*>(NewUI) )
+	if ( downcast = Cast<UConsolePanel>(NewUI) )
 		Console = downcast;
 }
 

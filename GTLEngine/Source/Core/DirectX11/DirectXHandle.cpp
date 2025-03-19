@@ -492,7 +492,7 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
     AActor* Actor = Gizmos.front()->GetTargetActor();
     if (!Actor)
         return;
-    USceneComponent* Comp = dynamic_cast<USceneComponent*>(Actor->GetRootComponent());
+    USceneComponent* Comp = Cast<USceneComponent>(Actor->GetRootComponent());
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -556,7 +556,7 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 		RenderActorUUID(Actor);
         for (UActorComponent* Comp : Actor->GetOwnedComponent())
         {
-            RenderPrimitive(dynamic_cast<UPrimitiveComponent*>(Comp));
+            RenderPrimitive(Cast<UPrimitiveComponent>(Comp));
 			// TODO: 컴포넌트 별 UUID 렌더링 구현하기. 컴포넌트의 변환된 위치를 찾는 부분에서 문제 생김.
 			//RenderComponentUUID(dynamic_cast<USceneComponent*>(Comp));
         }
@@ -592,7 +592,7 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 
     for ( AActor* Actor : Actors ) {
         for ( UActorComponent* Comp : Actor->GetOwnedComponent() ) {
-            RenderLine(dynamic_cast<ULineComponent*>(Comp));
+            RenderLine(Cast<ULineComponent>(Comp));
         }
 
         // 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
@@ -734,6 +734,9 @@ void UDirectXHandle::RenderComponentUUID(USceneComponent* TargetComponent)
 	DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
 	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
+
+	Info.VertexInfo.VertexBuffer->Release();
+	Info.IndexInfo.IndexBuffer->Release();
 }
 
 void UDirectXHandle::InitView()

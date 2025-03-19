@@ -96,7 +96,7 @@ bool UGizmoRotate::IsClicked(FRay ray, float maxDistance, FVector& hitpoint)
 	if (!Geometry::IsRayIntersectAABB(GetAABB(), ray, maxDistance))
 		return false;
 
-	USceneComponent* RootComp = dynamic_cast<USceneComponent*>(Target->GetRootComponent());
+	USceneComponent* RootComp = Cast<USceneComponent>(Target->GetRootComponent());
 	FMatrix transform;
 
 	if (IsAbsoluteCoord)
