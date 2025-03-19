@@ -34,6 +34,7 @@ void UGizmoManager::Destroy()
 {
 }
 
+// TODO: it should be in Inputmanager
 void UGizmoManager::Picking() {
 	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
 	if (inputManager->GetKeyDown(VK_SPACE))
@@ -61,7 +62,10 @@ void UGizmoManager::Picking() {
 
 
 		// release pick
-		for ( auto& clickable : IClickable::GetClickableList() ) {
+		for ( auto& clickable: Gizmo ) {
+			clickable->OnRelease(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
+		}
+		for ( auto& clickable : UEngine::GetEngine().GetWorld()->GetActors() ) {
 			clickable->OnRelease(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
 		}
 		ClearSelected();
@@ -123,10 +127,13 @@ void UGizmoManager::Picking() {
 IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
-	TList<IClickable*> clickables = IClickable::GetClickableList();
+	TArray<AActor*> actors = UEngine::GetEngine().GetWorld()->GetActors();
+	TArray<IClickable*> clickables = TArray<IClickable*>();
 	IClickable* selected = nullptr;
 	UGizmoBase* selectedGizmo = nullptr;
 
+	clickables.insert(clickables.end(), Gizmo.begin(), Gizmo.end());
+	clickables.insert(clickables.end(), actors.begin(),actors.end());
 	float minDistancePow = FLT_MAX;
 	float gizmoMinDistancePow = FLT_MAX;
 
@@ -158,7 +165,10 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 }
 
 void UGizmoManager::ClearSelected() {
-	SelectedActor = nullptr;
+	if (SelectedActor) {
+		SelectedActor->IsSelected = false;
+		SelectedActor = nullptr;
+	}
 	for ( auto& g : Gizmo )
 		delete g;
 	Gizmo.clear();
