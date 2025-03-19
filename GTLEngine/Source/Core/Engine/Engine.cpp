@@ -76,7 +76,7 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
     InputManager = new UInputManager();
 
     // 월드 추가.
-    ResourceManager->LoadScene("Resource/Scenes/DefaultScene");
+    ResourceManager->LoadScene("DefaultScene");
 
     return true;
 }
