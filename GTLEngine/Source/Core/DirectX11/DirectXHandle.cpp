@@ -632,7 +632,7 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
 
     DXDDeviceContext->Draw(Num, 0);
 
-	Info.VertexBuffer->Release();
+	//Info.VertexBuffer->Release();
 }
 
 void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
@@ -813,8 +813,8 @@ void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 }
 
 void UDirectXHandle::ResizeViewport(int width, int height) {
-	ViewportInfo.Width = width;
-	ViewportInfo.Height = height;
+	ViewportInfo.Width = static_cast<float>(width);
+	ViewportInfo.Height = static_cast<float>(height);
 }
 
 HRESULT UDirectXHandle::ResizeWindow(int width, int height) {

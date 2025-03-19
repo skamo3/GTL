@@ -6,7 +6,9 @@ class UGizmoTranslate : public UGizmoBase
 {
 	DECLARE_CLASS(UGizmoTranslate, UGizmoBase)
 public:
-	UGizmoTranslate(EAxis axis, AActor* Target);
+	UGizmoTranslate();
+
+	void Init(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

@@ -28,7 +28,9 @@ protected:
 	FMatrix mat = FMatrix::Identity();
 	AActor* PickedActor;
 public:
-	UGizmoBase(EAxis axis, AActor* Target);
+	UGizmoBase();
+
+	void Init(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

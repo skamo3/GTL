@@ -4,16 +4,12 @@
 
 bool UGizmoBase::IsAbsoluteCoord = false;
 
-UGizmoBase::UGizmoBase(EAxis axis, AActor* Target) : Target(Target), axis(axis), mat() {
-    PickedActor = Target;
-    if ( IsAbsoluteCoord ) {
-        mat = FMatrix::GetTranslateMatrix(Target->GetActorLocation());
-    } else {
-        mat = FMatrix();
-        //mat = mat * FMatrix::GetScaleMatrix(Target->GetActorScale());
-        mat = mat * FMatrix::GetRotateMatrix(Target->GetActorRotation());
-        mat = mat * FMatrix::GetTranslateMatrix(Target->GetActorLocation());
-    }
+UGizmoBase::UGizmoBase(): mat() {
+}
+
+void UGizmoBase::Init(EAxis axis, AActor* Target) {
+    this->axis = axis;
+    this->Target = Target;
 }
 
 void UGizmoBase::Tick(float TickTime) {
