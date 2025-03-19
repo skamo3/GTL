@@ -24,6 +24,18 @@ private:
     static uint32 NextUUID;
 };
 
+enum class EViewModeIndex : uint32 {
+    VMI_Lit,
+    VMI_Unlit,
+    VMI_Wireframe
+};
+
+enum class EEngineShowFlags : uint64 {
+    SF_Primitives = 1 << 0,
+    SF_Line = 1 << 1,
+    SF_BillboardText = 1 << 2,
+};
+
 class UEngine
 {
 
@@ -36,10 +48,13 @@ public:
 
     bool InitEngine(const FWindowInfo& InWindowInfo);
 	void Tick();
+    void TickWindowInfo();
     void Render();
+    HRESULT ResizeWindow(int width, int height);
 	void ClearEngine();
-
-    HRESULT AddAllPrimitiveVertexBuffers();
+    void Log(FString s, ...);
+    void Log(std::string s, ...);
+    HRESULT AddAllVertexBuffers();
 
 private:
     UEngine() = default;
@@ -58,9 +73,7 @@ public:
     UInputManager* GetInputManager() const { return InputManager; }
     UUIManager* GetUIManager() const { return UIManager; }
     UAssetManager* GetAssetManager() const { return AssetManager; }
-	UGizmoManager* GetGizmo() const { return GizmoManager; }
-    
-
+	UGizmoManager* GetGizmoManager() const { return GizmoManager; }
 
 private:
 	UDirectXHandle* DirectX11Handle;
@@ -70,7 +83,6 @@ private:
     UInputManager* InputManager;
     UUIManager* UIManager;
     UGizmoManager* GizmoManager;
-
 	UAssetManager* AssetManager;
 
 public:
@@ -100,5 +112,8 @@ private:
     uint32 TotalAllocationBytes;
     uint32 TotalAllocationCount;
 
+public:
+    EViewModeIndex ViewModeIndex;
+    EEngineShowFlags ShowFlags = EEngineShowFlags::SF_Primitives;
 };
 

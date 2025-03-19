@@ -398,3 +398,6 @@ FodyWeavers.xsd
 
 # JetBrains Rider
 *.sln.iml
+
+!GTLEngine/Plugins/**
+!GTLEngine/Resource/**/**.obj

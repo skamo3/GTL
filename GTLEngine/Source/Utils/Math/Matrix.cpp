@@ -211,7 +211,7 @@ FMatrix FMatrix::GetTranslateMatrix(float X, float Y, float Z)
 	return Result;
 }
 
-FMatrix FMatrix::GetTranslateMatrix(FVector Translation)
+FMatrix FMatrix::GetTranslateMatrix(const FVector& Translation)
 {
 	return GetTranslateMatrix(Translation.X, Translation.Y, Translation.Z);
 }
@@ -308,6 +308,21 @@ FMatrix FMatrix::PerspectiveFovLH(float FieldOfView, float AspectRatio, float Ne
 	return Result;
 }
 
+FMatrix FMatrix::MakeFromDirection(const FVector& direction, const FVector& WorldUp) {
+	FVector Forward = direction.GetSafeNormal();
+	FVector Right = FVector::CrossProduct(WorldUp, Forward).GetSafeNormal();
+	FVector Up = FVector::CrossProduct(Forward, Right).GetSafeNormal();
+
+	FMatrix Result = FMatrix(
+		FVector4(Forward.X, Right.X, Up.X, 0.f),
+		FVector4(Forward.Y, Right.Y, Up.Y, 0.f),
+		FVector4(Forward.Z, Right.Z, Up.Z, 0.f),
+		FVector4(0.f, 0.f, 0.f, 1.f)
+	);
+
+	return FMatrix::Transpose(Result);
+}
+
 FVector FMatrix::GetTranslation() const
 {
 	return FVector(M[3][0], M[3][1], M[3][2]);
@@ -331,8 +346,16 @@ FVector FMatrix::GetRotation() const
 	return Euler;
 }
 
-FVector FMatrix::TransformVector(const FVector& Vector) const
+FVector FMatrix::TransformPositionVector(const FVector& Vector) const
 {
+	return {
+			Vector.X * M[0][0] + Vector.Y * M[1][0] + Vector.Z * M[2][0] + M[3][0],
+			Vector.X * M[0][1] + Vector.Y * M[1][1] + Vector.Z * M[2][1] + M[3][1],
+			Vector.X * M[0][2] + Vector.Y * M[1][2] + Vector.Z * M[2][2] + M[3][2]
+	};
+}
+
+FVector FMatrix::TransformDirectionVector(const FVector& Vector) const {
 	return {
 			Vector.X * M[0][0] + Vector.Y * M[1][0] + Vector.Z * M[2][0],
 			Vector.X * M[0][1] + Vector.Y * M[1][1] + Vector.Z * M[2][1],
@@ -383,8 +406,8 @@ FMatrix FMatrix::RotatePitch(float Angle)
 	float S = sin(Angle);
 
 	Result.M[0][0] = C;
-	Result.M[0][2] = -S;
-	Result.M[2][0] = S;
+	Result.M[0][2] = S;
+	Result.M[2][0] = -S;
 	Result.M[2][2] = C;
 	return Result;
 }
@@ -397,10 +420,10 @@ FMatrix FMatrix::RotateYaw(float Angle)
 	float C = cos(Angle);
 	float S = sin(Angle);
 
-	Result.M[0][0] = C;  // ù ��° ���� ù ��° ��
-	Result.M[0][1] = -S;  // ù ��° ���� �� ��° ��
-	Result.M[1][0] = S; // �� ��° ���� ù ��° ��
-	Result.M[1][1] = C;  // �� ��° ���� �� ��° ��
+	Result.M[0][0] = C;
+	Result.M[0][1] = S;
+	Result.M[1][0] = -S;
+	Result.M[1][1] = C;
 
 	return Result;
 }
@@ -412,5 +435,5 @@ FMatrix FMatrix::RotateToMatrix(float X, float Y, float Z)
 	{
 		return RotateRoll(X) * RotatePitch(Y) * RotateYaw(Z);
 	}
-	return  RotateRoll(X) * RotateYaw(Z) * RotatePitch(Y);
+	return  RotateRoll(X) *  RotatePitch(Y) * RotateYaw(Z);
 }

@@ -22,9 +22,9 @@ public:
 	HRESULT AddInputLayout(const std::wstring& Key, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize);
 
 	
-	HRESULT AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FileName, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize);
+	HRESULT AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FileName, const std::string& EntryPoint, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize);
 
-	HRESULT AddPixelShader(const std::wstring& Key, const std::wstring& FileName);
+	HRESULT AddPixelShader(const std::wstring& Key, const std::wstring& FileName, const std::string& EntryPoint);
 
 	ID3D11InputLayout* GetInputLayoutByKey(const std::wstring& Key) const;
 	ID3D11VertexShader* GetVertexShaderByKey(const std::wstring& Key) const;

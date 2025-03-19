@@ -9,10 +9,15 @@ class ACamera : public AActor
 {
 public:
 	ACamera();
-
+public:
+	float MouseSensitive;
+	float MoveSpeed = 10.f;
+	float GridScale = 2.0f;
 public:
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
+
+	void SaveConfig();
 
 public:
 	UCameraComponent* GetCameraComponent() const { return CameraComponent; }
@@ -23,5 +28,4 @@ public:
 
 private:
 	UCameraComponent* CameraComponent;
-
 };

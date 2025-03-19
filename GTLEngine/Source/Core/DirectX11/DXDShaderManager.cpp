@@ -35,7 +35,7 @@ void UDXDShaderManager::ReleaseAllShader()
 
 }
 
-HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::wstring& FileName)
+HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::wstring& FileName, const std::string& EntryPoint)
 {
     HRESULT hr = S_OK;
 
@@ -43,7 +43,7 @@ HRESULT UDXDShaderManager::AddPixelShader(const std::wstring& Key, const std::ws
         return S_FALSE;
 
     ID3DBlob* PsBlob = nullptr;
-    hr = D3DCompileFromFile(FileName.c_str(), nullptr, nullptr, "mainPS", "ps_5_0", 0, 0, &PsBlob, nullptr);
+    hr = D3DCompileFromFile(FileName.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), "ps_5_0", 0, 0, &PsBlob, nullptr);
     if (FAILED(hr))
         return hr;
 
@@ -68,10 +68,10 @@ HRESULT UDXDShaderManager::AddVertexShader(const std::wstring& Key, const std::w
 
 HRESULT UDXDShaderManager::AddInputLayout(const std::wstring& Key, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
-    return E_NOTIMPL;
+    return S_OK;
 }
 
-HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FilePath, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
+HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key, const std::wstring& FileName, const std::string& EntryPoint, const D3D11_INPUT_ELEMENT_DESC* Layout, uint LayoutSize)
 {
     if (DXDDevice == nullptr)
         return S_FALSE;
@@ -79,10 +79,17 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
     HRESULT hr = S_OK;
 
     ID3DBlob* VertexShaderCSO = nullptr;
+    ID3DBlob* ErrorBlob = nullptr;
 
-    hr = D3DCompileFromFile(FilePath.c_str(), nullptr, nullptr, "mainVS", "vs_5_0", 0, 0, &VertexShaderCSO, nullptr);
+    hr = D3DCompileFromFile(FileName.c_str(), nullptr, D3D_COMPILE_STANDARD_FILE_INCLUDE, EntryPoint.c_str(), "vs_5_0", 0, 0, &VertexShaderCSO, &ErrorBlob);
     if (FAILED(hr))
+    {
+        if (ErrorBlob) {
+            OutputDebugStringA((char*)ErrorBlob->GetBufferPointer());
+            ErrorBlob->Release();
+        }
         return hr;
+    }
 
     ID3D11VertexShader* NewVertexShader;
     hr = DXDDevice->CreateVertexShader(VertexShaderCSO->GetBufferPointer(), VertexShaderCSO->GetBufferSize(), nullptr, &NewVertexShader);
@@ -100,6 +107,8 @@ HRESULT UDXDShaderManager::AddVertexShaderAndInputLayout(const std::wstring& Key
 
 	VertexShaders[Key] = NewVertexShader;
 	InputLayouts[Key] = NewInputLayout;
+
+    VertexShaderCSO->Release();
     
     return S_OK;
 }

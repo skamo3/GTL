@@ -2,9 +2,6 @@
 
 #define NOMINMAX
 
-#pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
-#include <iostream>
-
 // STL include
 #include <windows.h>
 #include <tchar.h>
@@ -22,7 +19,20 @@
 // D3D include
 #pragma comment(lib, "user32")
 #pragma comment(lib, "d3d11")
-#pragma comment(lib, "d3dcompiler")
+#pragma comment(lib, "d3dcompiler") 
+
+#ifdef _DEBUG
+#pragma comment(lib, "DirectXTK/Libs/Debug/DirectXTK.lib")
+#pragma comment(lib, "DirectXTex/Libs/Debug/DirectXTex.lib")
+
+// 디버깅 시 콘솔 찍기.
+#pragma comment( linker, "/entry:WinMainCRTStartup /subsystem:console" )
+#include <iostream>
+
+#else
+#pragma comment(lib, "DirectXTK/Libs/Release/DirectXTK.lib")
+#pragma comment(lib, "DirectXTex/Libs/Release/DirectXTex.lib")
+#endif
 
 #include <d3d11.h>
 #include <d3dcompiler.h>
@@ -44,6 +54,9 @@ typedef	INT64		int64;
 
 template <typename T>
 using TArray = std::vector<T>;
+
+template <typename T>
+using TList = std::list<T>;
 
 template <typename T1, typename T2>
 using TPair = std::pair<T1, T2>;
@@ -72,5 +85,25 @@ struct FWindowInfo
 	HWND WindowHandle;
 	uint Width;
 	uint Height;
+	uint Top;
+	uint Bottom;
+	uint Left;
+	uint Right;
+	RECT screenRect;
 };
+
+template <typename T>
+void SetFlagOff(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) & ~static_cast<uint32>(flag));
+}
+
+template <typename T>
+void SetFlagOn(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) | static_cast<uint32>(flag));
+}
+
+template <typename T>
+bool GetFlag(T& target, const T flag) {
+	return ((static_cast<uint32>(target) & static_cast<uint32>(flag)) != 0);
+}
 

@@ -2,7 +2,7 @@
 
 #include "GameFrameWork/Actor.h"
 
-class UGizmoArrowComponent;
+class UGizmoArrow;
 
 class AGizmoActor : public AActor
 {
@@ -14,6 +14,6 @@ public:
 	virtual void Destroy() override;
 
 private:
-	UGizmoArrowComponent* ArrowComponent;
+	UGizmoArrow* ArrowComponent;
 
 };

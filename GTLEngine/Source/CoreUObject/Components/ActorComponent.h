@@ -1,6 +1,7 @@
 #pragma once
 
 #include "Object.h"
+#include "Core/Resource/Types.h"
 
 class AActor;
 
@@ -16,7 +17,8 @@ public:
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-
+	virtual FBoundingBox GetAABB() const;
+	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const;
 public:
 	inline AActor* GetOwner() const { return OwnerPrivate; }
 	inline void SetOwner(AActor* InOwner) { OwnerPrivate = InOwner; }

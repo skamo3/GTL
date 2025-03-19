@@ -81,15 +81,15 @@ void UAssetManager::LoadAssets()
 				break;
 			}
 			break;
-			case EAssetType::SceneAsset:
-			{
-				USceneAsset* sceneAsset = LoadAsset<USceneAsset>(assetMetaData.second);
-				if (sceneAsset != nullptr)
-				{
-					Assets[assetMetaData.first] = sceneAsset;
-				}
-				break;
-			}
+			//case EAssetType::SceneAsset:
+			//{
+			//	USceneAsset* sceneAsset = LoadAsset<USceneAsset>(assetMetaData.second);
+			//	if (sceneAsset != nullptr)
+			//	{
+			//		Assets[assetMetaData.first] = sceneAsset;
+			//	}
+			//	break;
+			//}
 		}
 	}
 }

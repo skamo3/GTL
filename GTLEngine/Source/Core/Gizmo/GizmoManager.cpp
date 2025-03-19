@@ -10,76 +10,118 @@
 #include "GameFrameWork/Actor.h"
 
 #include "DirectXMath.h"
+#include "Core/Resource/Types.h"
+
+#include "Utils/Math/Geometry.h"
+
+#include "CoreUObject/Gizmo/GizmoArrow.h"
 
 UGizmoManager::UGizmoManager()
-	: SelectedAxis(ESelectedAxis::None), GizmoType(EGizmoType::Translate), GizmoActor(nullptr)
+	: GizmoType(EGizmoType::Translate), SelectedActor(nullptr), Gizmo()
 {
-	GizmoActor = new AGizmoActor();
 }
 
 void UGizmoManager::Tick(float DeltaTime)
 {
 	UInputManager* InputManager = UEngine::GetEngine().GetInputManager();
+	for ( auto& g : Gizmo )
+		g->Tick(DeltaTime);
 
-	// 마우스 왼쪽 클릭 했을 때
-	// Ray를 생성하고 GizmoActor와 교차하는지 확인.
-	if (InputManager->GetMouseDown(UInputManager::EMouseButton::LEFT))
-	{
-		SelectedAxis = ESelectedAxis::None;
-
-		float MouseDeltaX = static_cast<float>(InputManager->GetMouseDeltaX());
-		float MouseDeltaY = static_cast<float>(InputManager->GetMouseDeltaY());
-		
-
-	}
-
-
+	Picking();
 }
 
 void UGizmoManager::Destroy()
 {
 }
 
-void UGizmoManager::RayCast2Dto3D(float MouseX, float MouseY)
-{
-	FWindowInfo WInfo = UEngine::GetEngine().GetWindowInfo();
-
-	float ViewX = (2.0f * MouseX) / WInfo.Width - 1.0f;
-	float ViewY = (-2.0f * MouseY) / WInfo.Height;
-
-	// Projection 공간으로 변환
-	FVector4 RayOrigin = FVector4(ViewX, ViewY, 0.0f, 1.0f);
-	FVector4 RayEnd = FVector4(ViewX, ViewY, 1.0f, 1.0f);
-
-	// View 공간으로 변환
-	FMatrix InvProjMat = UEngine::GetEngine().GetWorld()->GetProjectionMatrix().Inverse();
-
-	ACamera* Camera = UEngine::GetEngine().GetWorld()->GetCamera();
-
-	RayOrigin = InvProjMat.TransformVector4(RayOrigin);
-	RayOrigin.W = 1.0f;
-	RayEnd = InvProjMat.TransformVector4(RayEnd);
-	RayEnd *= 1000.0f;
-	RayEnd.W = 1.0f;
-
-	FMatrix InvViewMat = UEngine::GetEngine().GetWorld()->GetViewMatrix().Inverse();
-	RayOrigin = InvViewMat.TransformVector4(RayOrigin);
-	RayOrigin /= RayOrigin.W = 1.0f;
-	RayEnd = InvViewMat.TransformVector4(RayEnd);
-	RayEnd /= RayEnd.W = 1.0f;
-
-	// Ray 생성.
-	FVector RayDir = (RayEnd - RayOrigin).GetSafeNormal();
-
-	// Picking 로직 구현.
+void UGizmoManager::Picking() {
+	UInputManager* inputManager = UEngine::GetEngine().GetInputManager();
 
 
-	// or
-	
-	// 기즈모 이동.
-	float Distance = FVector::Distance(RayOrigin, SelectedActor->GetActorLocation());
-	
+	if ( inputManager->GetMouseDown(UInputManager::EMouseButton::LEFT) ) {
+		FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+		// test pick
+		float mouse_x = inputManager->GetMouseNdcX();
+		float mouse_y = inputManager->GetMouseNdcY();
+		IClickable* picked = PickClickable(mouse_x, mouse_y);
+
+		IDragable* pickedDragable;
+		if ( picked && (pickedDragable = dynamic_cast<IDragable*>(picked)) ) {
+			DragTarget = pickedDragable;
+		}
+
+		// if gizmo picked
+		UGizmoBase* pickedGizmo;
+		if ( picked && (pickedGizmo = dynamic_cast<UGizmoBase*>(picked)) ) {
+			return;
+		}
 
 
-	// 현재 카메라의 MVP 정보.
+		// release pick
+		for ( auto& clickable : IClickable::GetClickableList() ) {
+			clickable->OnRelease(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
+		}
+		ClearSelected();
+
+
+		// if actor picked
+		AActor* pickedActor;
+		if ( picked && (pickedActor = dynamic_cast<AActor*>(picked)) ) {
+			picked->OnClick(static_cast<int>(mouse_x), static_cast<int>(mouse_y));
+			SelectedActor = pickedActor;
+
+			// pick gizmo
+			switch ( Mode ) {
+			case EGizmoType::Translate:
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Z, pickedActor));
+				break;
+			case EGizmoType::Rotate:
+			case EGizmoType::Scale:
+				break;
+			}
+			return;
+		}
+	} else if ( inputManager->GetMouseUp(UInputManager::EMouseButton::LEFT) ) {
+		DragTarget = nullptr;
+
+	} else if ( inputManager->GetMouseButton(UInputManager::EMouseButton::LEFT) ) {
+		if ( DragTarget ) {
+			int mouse_dx = inputManager->GetMouseDeltaX();
+			int mouse_dy = inputManager->GetMouseDeltaY();
+			DragTarget->OnDragTick(mouse_dx, mouse_dy);
+		}
+	}
+}
+
+
+IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
+	FRay ray = Geometry::CreateRayWithMouse(MouseX, MouseY);
+	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	TList<IClickable*> clickables = IClickable::GetClickableList();
+	IClickable* selected = nullptr;
+
+	float minDistancePow = FLT_MAX;
+	FVector hitpoint;
+	for (IClickable* clickable: clickables) {
+		if ( clickable->IsClicked(ray, 100.f, hitpoint) &&
+			minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
+			) {
+			minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
+			selected = clickable;
+		}
+	}
+	return selected;
+}
+
+void UGizmoManager::ClearSelected() {
+	SelectedActor = nullptr;
+	for ( auto& g : Gizmo )
+		delete g;
+	Gizmo.clear();
+}
+
+const TArray<UGizmoBase*> UGizmoManager::GetGizmo() {
+	return Gizmo;
 }

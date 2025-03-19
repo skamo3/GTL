@@ -11,6 +11,7 @@
 #include <initializer_list>
 #include <ostream>
 #include <iostream>
+#include <Utils/Math/Rotator.h>
 
 namespace json {
 
@@ -644,6 +645,38 @@ namespace {
 JSON JSON::Load( const string &str ) {
     size_t offset = 0;
     return std::move( parse_next( str, offset ) );
+}
+
+json::JSON FVectorToJSON(const FVector& vec) {
+    return json::Array(vec.X, vec.Y, vec.Z);
+}
+
+json::JSON FRotatorToJSON(const FRotator& rot) {
+    return json::Array(rot.Roll, rot.Pitch, rot.Yaw);
+}
+
+FVector JSONToFVector(const json::JSON& jsonArr) {
+    FVector vec = { 0.0f, 0.0f, 0.0f };
+
+    if (jsonArr.JSONType() == json::JSON::Class::Array && jsonArr.size() >= 3) {
+        bool ok = false;
+        vec.X = static_cast<float>(jsonArr.at(0).ToFloat(ok));
+        vec.Y = static_cast<float>(jsonArr.at(1).ToFloat(ok));
+        vec.Z = static_cast<float>(jsonArr.at(2).ToFloat(ok));
+    }
+    return vec;
+}
+
+FRotator JSONToFRotator(const json::JSON& jsonArr) {
+    FRotator rot = { 0.0f, 0.0f, 0.0f };
+
+    if (jsonArr.JSONType() == json::JSON::Class::Array && jsonArr.size() >= 3) {
+        bool ok = false;
+        rot.Roll = static_cast<float>(jsonArr.at(0).ToFloat(ok));
+        rot.Pitch = static_cast<float>(jsonArr.at(1).ToFloat(ok));
+        rot.Yaw = static_cast<float>(jsonArr.at(2).ToFloat(ok));
+    }
+    return rot;
 }
 
 } // End Namespace json

@@ -21,70 +21,54 @@
   <ItemGroup>
     <ClCompile Include="Plugins\ImGui\imgui.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_demo.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_draw.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_impl_dx11.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_impl_win32.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_tables.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">NotUsing</PrecompiledHeader>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">stdafx.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderFile Condition="'$(Configuration)|$(Platform)'=='Release|x64'">stdafx.h</PrecompiledHeaderFile>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Components\ActorComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CameraComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\ConeComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\CubeComponent.cpp" />
-    <ClCompile Include="Source\CoreUObject\Components\PlaneComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\CylinderComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\LineComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\PrimitiveComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SceneComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\Components\SphereComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Components\TriangleComponent.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Actor.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Camera.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.cpp" />
-    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Line.cpp" />
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.cpp" />
+    <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.cpp" />
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp" />
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.cpp" />
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp" />
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp" />
     <ClCompile Include="Source\CoreUObject\Object.cpp" />
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\ControlPanel.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\PropertyWindow.cpp">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\UI\PropertyPanel.cpp" />
+    <ClCompile Include="Source\CoreUObject\UI\SceneManager.cpp" />
     <ClCompile Include="Source\CoreUObject\UI\UIBase.cpp" />
     <ClCompile Include="Source\CoreUObject\World.cpp" />
     <ClCompile Include="Source\Core\Asset\Asset.cpp" />
@@ -96,18 +80,21 @@
     <ClCompile Include="Source\Core\DirectX11\DXDRasterizerState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDRenderTarget.cpp" />
     <ClCompile Include="Source\Core\DirectX11\DXDShaderManager.cpp" />
-    <ClCompile Include="Source\Core\DirectX11\DXDVertexBuffer.cpp" />
+    <ClCompile Include="Source\Core\DirectX11\DXDBufferManager.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDBlendState.cpp" />
     <ClCompile Include="Source\Core\DirectX11\State\DXDDepthStencilState.cpp" />
     <ClCompile Include="Source\Core\Engine\Engine.cpp" />
     <ClCompile Include="Source\Core\Gizmo\GizmoManager.cpp" />
     <ClCompile Include="Source\Core\Input\InputManager.cpp" />
     <ClCompile Include="Source\Core\Resource\ResourceManager.cpp" />
+    <ClCompile Include="Source\Core\Resource\Types.cpp" />
     <ClCompile Include="Source\Core\Time\TimeManager.cpp" />
+    <ClCompile Include="Source\Core\UI\UIInterface.cpp" />
     <ClCompile Include="Source\Core\UI\UIManager.cpp" />
     <ClCompile Include="Source\Launch\LaunchWindows.cpp" />
     <ClCompile Include="Source\Utils\EnginePch.cpp" />
     <ClCompile Include="Source\Utils\GTLStringLibrary.cpp" />
+    <ClCompile Include="Source\Utils\Math\Geometry.cpp" />
     <ClCompile Include="Source\Utils\Math\Matrix.cpp" />
     <ClCompile Include="Source\Utils\Math\Quat.cpp" />
     <ClCompile Include="Source\Utils\Math\Rotator.cpp" />
@@ -128,28 +115,31 @@
     <ClInclude Include="Plugins\SimpleJSON\json.hpp" />
     <ClInclude Include="Source\CoreUObject\Components\ActorComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CameraComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\ConeComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\CubeComponent.h" />
-    <ClInclude Include="Source\CoreUObject\Components\PlaneComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\CylinderComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\LineComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\PrimitiveComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SceneComponent.h" />
     <ClInclude Include="Source\CoreUObject\Components\SphereComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Components\TriangleComponent.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Actor.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Camera.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cone.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cube.h" />
-    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Plane.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h" />
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Sphere.h" />
+    <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Triangle.h" />
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h" />
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrowComponent.h" />
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBaseComponent.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrow.h" />
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBase.h" />
     <ClInclude Include="Source\CoreUObject\Object.h" />
     <ClInclude Include="Source\CoreUObject\UI\ControlPanel.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\UI\PropertyWindow.h">
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
-      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">false</ExcludedFromBuild>
-    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\UI\PropertyPanel.h" />
+    <ClInclude Include="Source\CoreUObject\UI\SceneManager.h" />
     <ClInclude Include="Source\CoreUObject\UI\UIBase.h" />
     <ClInclude Include="Source\CoreUObject\World.h" />
     <ClInclude Include="Source\Core\Asset\Asset.h" />
@@ -161,7 +151,7 @@
     <ClInclude Include="Source\Core\DirectX11\DXDRasterizerState.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDRenderTarget.h" />
     <ClInclude Include="Source\Core\DirectX11\DXDShaderManager.h" />
-    <ClInclude Include="Source\Core\DirectX11\DXDVertexBuffer.h" />
+    <ClInclude Include="Source\Core\DirectX11\DXDBufferManager.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDBlendState.h" />
     <ClInclude Include="Source\Core\DirectX11\State\DXDDepthStencilState.h" />
     <ClInclude Include="Source\Core\Engine\Engine.h" />
@@ -171,9 +161,11 @@
     <ClInclude Include="Source\Core\Resource\Shape\PrimitiveShape.h" />
     <ClInclude Include="Source\Core\Resource\Types.h" />
     <ClInclude Include="Source\Core\Time\TimeManager.h" />
+    <ClInclude Include="Source\Core\UI\UIInterface.h" />
     <ClInclude Include="Source\Core\UI\UIManager.h" />
     <ClInclude Include="Source\Utils\EnginePch.h" />
     <ClInclude Include="Source\Utils\GTLStringLibrary.h" />
+    <ClInclude Include="Source\Utils\Math\Geometry.h" />
     <ClInclude Include="Source\Utils\Math\MathUtils.h" />
     <ClInclude Include="Source\Utils\Math\MathFwd.h" />
     <ClInclude Include="Source\Utils\Math\Matrix.h" />
@@ -188,10 +180,22 @@
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Resource\Shader\MVPShader.hlsli">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
     <FxCompile Include="Resource\Shader\PrimitiveShader.hlsl">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
     </FxCompile>
+    <FxCompile Include="Resource\Shader\TextureShader.hlsl">
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Release|x64'">true</ExcludedFromBuild>
+    </FxCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="Source\CoreUObject\GameFrameWork\Shapes\Line.h" />
+    <Text Include="Source\CoreUObject\UI\ConsolePanel.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>17.0</VCProjectVersion>
@@ -247,9 +251,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <IncludePath>$(ProjectDir)Source;$(ProjectDir)Utils;$(ProjectDir)Plugins;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <IncludePath>$(ProjectDir)\Source;$(ProjectDir)Plugins;$(ProjectDir)\Utils;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)Plugins;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

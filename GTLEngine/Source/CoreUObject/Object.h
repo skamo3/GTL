@@ -19,12 +19,13 @@ public:
 	
 	std::wstring GetName() const { return NamePrivate; }
 	void SetName(const std::wstring& Name) { NamePrivate = Name; }
+	inline const uint32 GetUUID() const { return UUID; }
 private:
 	// Name of this object.
 	std::wstring NamePrivate;
 
 
-public:
+private:
 	uint32 UUID;
 	uint32 InternalIndex; // Index of GUObjectArray
 

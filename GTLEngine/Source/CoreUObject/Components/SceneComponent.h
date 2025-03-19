@@ -3,6 +3,7 @@
 #include "ActorComponent.h"
 #include "Math/Vector.h"
 #include "Math/Rotator.h"
+#include "Math/Matrix.h"
 
 class USceneComponent : public UActorComponent
 {
@@ -18,12 +19,18 @@ public:
 
 	FVector GetComponentLocation() const { return RelativeLocation; }
 	FRotator GetComponentRotation() const { return RelativeRotation; }
-	FVector GetComponentScale() const { return RelativeScale3D; }
+	FVector GetComponentScale() const { return RelativeScale; }
+
+	FMatrix GetScaleMatrix() const;
+	FMatrix GetRotationMatrix() const;
+	FMatrix GetTranslateMatrix() const;
+	FMatrix GetRotLocMatrix() const;
+	FMatrix GetWorldMatrix() const;
 
 private:
 	FVector RelativeLocation;
 	FRotator RelativeRotation;
-	FVector RelativeScale3D;
+	FVector RelativeScale;
 
 public:
 	USceneComponent* GetParent() const { return AttachParent; }

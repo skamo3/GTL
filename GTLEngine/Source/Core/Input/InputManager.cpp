@@ -3,11 +3,14 @@
 #include "InputManager.h"
 
 #include "Engine.h"
+#include "Core/UI/UIManager.h"
 
 UInputManager::UInputManager()
     : CurrentKeyStates(TArray<bool>(256, false))
     , PrevKeyStates(TArray<bool>(256, false))
-{}
+{
+    ImGuiManager = UEngine::GetEngine().GetUIManager();
+}
 
 UInputManager::~UInputManager()
 {
@@ -33,19 +36,18 @@ void UInputManager::Tick(float TickTime)
     CurrentMouseState.MiddleButton = (GetAsyncKeyState(VK_MBUTTON) & 0x8000) != 0;
 
     // 마우스 커서 위치 업데이트
+    FWindowInfo WindowInfo = UEngine::GetEngine().GetWindowInfo();
     POINT pt;
     if (GetCursorPos(&pt))
     {
         CurrentMouseState.ScreenX = pt.x;
         CurrentMouseState.ScreenY = pt.y;
-
-        
-        if (ScreenToClient(UEngine::GetEngine().GetWindowInfo().WindowHandle, &pt))
+        if (ScreenToClient(WindowInfo.WindowHandle, &pt))
         {
             CurrentMouseState.ClientX = pt.x;
             CurrentMouseState.ClientY = pt.y;
-            FWindowInfo WindowInfo = UEngine::GetEngine().GetWindowInfo();
             ConvertMouseToNDC(WindowInfo.WindowHandle, WindowInfo.Width, WindowInfo.Height);
+            
         }
     }
 }
@@ -56,16 +58,22 @@ void UInputManager::Destroy()
 
 bool UInputManager::GetKey(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return CurrentKeyStates[key];
 }
 
 bool UInputManager::GetKeyDown(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return CurrentKeyStates[key] && !PrevKeyStates[key];
 }
 
 bool UInputManager::GetKeyUp(int key) const
 {
+    if ( ImGuiManager->IsImGuiWantTextInput() )
+        return false;
     return !CurrentKeyStates[key] && PrevKeyStates[key];
 }
 
@@ -74,12 +82,14 @@ void UInputManager::ConvertMouseToNDC(HWND hWnd, int Width, int Height)
     // 마우스 커서 위치를 NCD 좌표로 변환
     float HalfWidth = Width / 2.f;
     float HalfHeight = Height / 2.f;
-    CurrentMouseState.NdcX = (CurrentMouseState.ScreenX - HalfWidth) / HalfWidth;
-    CurrentMouseState.NdcY = (CurrentMouseState.ScreenY - HalfHeight) / HalfHeight * -1.f;
+    CurrentMouseState.NdcX = (CurrentMouseState.ClientX - HalfWidth) / HalfWidth;
+    CurrentMouseState.NdcY = (CurrentMouseState.ClientY - HalfHeight) / HalfHeight * -1.f;
 }
 
 bool UInputManager::GetMouseButton(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)
@@ -91,6 +101,8 @@ bool UInputManager::GetMouseButton(EMouseButton button) const
 
 bool UInputManager::GetMouseDown(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return CurrentMouseState.LeftButton && !PrevMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)
@@ -102,6 +114,8 @@ bool UInputManager::GetMouseDown(EMouseButton button) const
 
 bool UInputManager::GetMouseUp(EMouseButton button) const
 {
+    if ( ImGuiManager->IsImGuiWantMouseInput() )
+        return false;
     if (button == EMouseButton::LEFT)
         return !CurrentMouseState.LeftButton && PrevMouseState.LeftButton;
     if (button == EMouseButton::RIGHT)

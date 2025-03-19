@@ -2,8 +2,13 @@
 
 #include "Object.h"
 #include "Math/Vector.h"
+#include "ImGui/imgui.h"
+#include "CoreUObject/UI/ConsolePanel.h"
 
 class UUIBase;
+class UGizmoManager;
+class UConsolePanel;
+class IDragable;
 
 class UUIManager : public UObject
 {
@@ -12,15 +17,19 @@ public:
 	void InitUI(const FWindowInfo& WindowInfo, ID3D11Device* DXDDevice, ID3D11DeviceContext* DXDDeviceContext);
 
 	virtual void Tick(float DeltaTime) override;
-	void RenderUI();
 	virtual void Destroy() override;
 
 	void RegistUI(UUIBase* NewUI);
+	void RenderUI();
 
 private:
 	TArray<UUIBase*> UIList;
-
+	UConsolePanel* Console;
 public:
+	inline const bool IsImGuiWantTextInput() const { return ImGui::GetIO().WantTextInput; }
+	inline const bool IsImGuiWantMouseInput() const { return ImGui::GetIO().WantCaptureMouse; }
+	inline UConsolePanel* GetConsole() const { return Console; }
+
 	// Property Window Function
 	bool GetObjectTranslation(FVector& outTranslation);
 	void OnObjectTranslationChanged(FVector& inTranslation);
@@ -48,6 +57,9 @@ public:
 
 	void OnGizmoModeChanged(int modeNum);
 
+	void CreateUsingFont();
+
+	void PreferenceStyle();
 public:
 	// Console Function
 

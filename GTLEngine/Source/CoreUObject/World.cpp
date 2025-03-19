@@ -4,25 +4,30 @@
 #include "GameFrameWork/Actor.h"
 #include "GameFrameWork/Camera.h"
 
-#include "GameFrameWork/Shapes/Plane.h"
+#include "GameFrameWork/Shapes/Triangle.h"
 #include "GameFrameWork/Shapes/Sphere.h"
 #include "GameFrameWork/Shapes/Cube.h"
+#include "GameFrameWork/Shapes/Cylinder.h"
+#include "GameFrameWork/Shapes/Cone.h"
 
 #include "Engine.h"
 #include "UI/UIManager.h"
 #include "UI/ControlPanel.h"
+#include "UI/ConsolePanel.h"
+#include "UI/PropertyPanel.h"
+#include "UI/SceneManager.h"
 
 UWorld* UWorld::CreateWorld()
 {
 	UWorld* NewWorld = new UWorld();
+	NewWorld->CreateDefaultUI();
+
 	NewWorld->MainCamera = new ACamera();
-
-	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 0.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
-	NewWorld->SpawnActor<APlane>(TEXT("DefaultPlane"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 0.f), FVector::OneVector, nullptr);
-
+	NewWorld->SpawnActor<ACube>(TEXT("DefaultCude"), FVector(0.f, 2.f, 0.f), FRotator(0.f, 0.f, 90.f), FVector::OneVector, nullptr);
+	NewWorld->SpawnActor<ASphere>(TEXT("DefaultSphere"), FVector(0.f, 0.f, 2.f), FRotator(0.f, 0.f, 45.f), FVector(1.0f, 2.0f, 1.0f), nullptr);
 
 	// TODO: 나중에 분리.
-	NewWorld->CreateDefaultUI();
+	
 
 	NewWorld->MainCamera->SetActorLocation(FVector(-10.f, 0.f, 0.0f));
 
@@ -53,6 +58,9 @@ void UWorld::Destroy()
 			Actor->Destroy();
 	}
 	ActiveActors.clear();
+	IClickable::GetClickableList().clear();
+	IDragable::GetClickableList().clear();
+	UEngine::GetEngine().GetGizmoManager()->ClearSelected();
 }
 
 void UWorld::InitViewInfo()
@@ -68,6 +76,8 @@ void UWorld::CreateDefaultUI()
 	if (UIManager)
 	{
 		UIManager->RegistUI(new UControlPanel());
-
+		UIManager->RegistUI(new UConsolePanel());
+		UIManager->RegistUI(new UPropertyPanel());
+		UIManager->RegistUI(new USceneManager());
 	}
 }
