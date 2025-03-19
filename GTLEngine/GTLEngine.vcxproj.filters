@@ -247,6 +247,15 @@
     <ClCompile Include="Source\CoreUObject\Casts.cpp">
       <Filter>Source\CoreUObject</Filter>
     </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoRotate.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoScale.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
+    </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
@@ -262,16 +271,13 @@
     <ClCompile Include="Plugins\ImGui\imgui_impl_win32.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
-      <Filter>Plugins\ImGui</Filter>
-    </ClCompile>
     <ClCompile Include="Plugins\ImGui\imgui_tables.cpp">
       <Filter>Plugins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp">
-      <Filter>Source\CoreUObject\UI</Filter>
+    <ClCompile Include="Plugins\ImGui\imgui_widgets.cpp">
+      <Filter>Plugins\ImGui</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\UI\UIInterface.cpp">
+    <ClCompile Include="Source\CoreUObject\UI\ConsolePanel.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Line.cpp">
@@ -280,14 +286,8 @@
     <ClCompile Include="Source\CoreUObject\UI\SceneManager.cpp">
       <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoRotate.cpp">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
-    </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoScale.cpp">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
+    <ClCompile Include="Source\Core\UI\UIInterface.cpp">
+      <Filter>Source\CoreUObject\UI</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -474,6 +474,12 @@
     <ClInclude Include="Source\CoreUObject\Casts.h">
       <Filter>Source\CoreUObject</Filter>
     </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoRotate.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoScale.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClInclude>
     <ClInclude Include="Plugins\ImGui\imconfig.h">
       <Filter>Plugins\ImGui</Filter>
     </ClInclude>
@@ -500,12 +506,6 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\UI\SceneManager.h">
       <Filter>Source\CoreUObject\UI</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoScale.h">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
-    </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoRotate.h">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

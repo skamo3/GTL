@@ -1,10 +1,14 @@
+#pragma once
+
 #include "GizmoBase.h"
 
 class UGizmoScale : public UGizmoBase
 {
 	DECLARE_CLASS(UGizmoScale, UGizmoBase)
 public:
-	UGizmoScale(EAxis axis, AActor* Target);
+	UGizmoScale();
+
+	void Init(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

@@ -26,7 +26,6 @@ protected:
 	AActor* Target;
 	int startMouseX, startMouseY;
 	FMatrix mat = FMatrix::Identity();
-	AActor* PickedActor;
 public:
 	UGizmoBase();
 
@@ -39,5 +38,5 @@ public:
 
 	virtual bool IsClicked(FRay ray, float maxDistance, FVector& hitpoint) override;
 	EGizmoViewType GetGizmoViewType() const { return GizmoViewType; }
-	AActor* GetPickedActor() { return PickedActor; }
+	AActor* GetTargetActor() { return Target; }
 };

@@ -50,7 +50,7 @@ void UUIManager::Tick(float DeltaTime)
 	{
 		if (UI)
 		{
-			UI->Tick(DeltaTime);
+ 			UI->Tick(DeltaTime);
 		}
 	}
 }
@@ -110,31 +110,6 @@ bool UUIManager::GetObjectScale(FVector& outScale)
 	return false;
 }
 
-void UUIManager::OnObjectScaleChanged(FVector& inScale)
-{
-
-}
-
-void UUIManager::SpawnPrimitive()
-{
-
-}
-
-
-void UUIManager::MakeNewScene()
-{
-
-}
-
-void UUIManager::SaveScene(char* inSceneName)
-{
-
-}
-
-void UUIManager::LoadScene(char* inSceneName)
-{
-
-}
 
 bool UUIManager::GetFOV(float& outFOV)
 {

@@ -489,7 +489,7 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
 
     if (Gizmos.empty())
         return;
-    AActor* Actor = Gizmos.back()->GetPickedActor();
+    AActor* Actor = Gizmos.front()->GetTargetActor();
     if (!Actor)
         return;
     USceneComponent* Comp = dynamic_cast<USceneComponent*>(Actor->GetRootComponent());

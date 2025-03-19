@@ -265,12 +265,8 @@ const TArray<uint32> UResourceManager::GetGizmoIndexData(EGizmoViewType Type) co
 
 void UResourceManager::NewScene()
 {
-    UWorld* World = UEngine::GetEngine().GetWorld();
-    if (!World)
-        return;
-    World->Destroy();
-    UEngine::GetEngine().Log("Create New Scene");
-}
+    LoadScene("NewScene");
+    UEngine::GetEngine().Log("Create New Scene");}
 
 void UResourceManager::LoadScene(std::string SceneName)
 {
@@ -282,10 +278,13 @@ void UResourceManager::LoadScene(std::string SceneName)
         return;
     }
 
+    UEngine::GetEngine().CreateNewWorld();
+    
     UWorld* World = UEngine::GetEngine().GetWorld();
     if (!World)
+    {
         return;
-    World->Destroy();
+    }
 
     std::string jsonData((std::istreambuf_iterator<char>(inFile)), std::istreambuf_iterator<char>());
     inFile.close();

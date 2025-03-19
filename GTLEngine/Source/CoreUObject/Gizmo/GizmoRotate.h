@@ -1,10 +1,14 @@
+#pragma once
+
 #include "GizmoBase.h"
 
 class UGizmoRotate: public UGizmoBase
 {
 	DECLARE_CLASS(UGizmoRotate, UGizmoBase)
 public:
-	UGizmoRotate(EAxis axis, AActor* Target);
+	UGizmoRotate();
+
+	void Init(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;

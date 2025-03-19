@@ -14,8 +14,8 @@ void FPlatformMemory::IncrementStats(size_t Size)
 
 void FPlatformMemory::DecrementStats(size_t Size)
 {
-    TotalAllocationBytes += Size;
-    TotalAllocationCount++;
+    TotalAllocationBytes -= Size;
+    TotalAllocationCount--;
 }
 
 void* FPlatformMemory::Malloc(size_t Size)

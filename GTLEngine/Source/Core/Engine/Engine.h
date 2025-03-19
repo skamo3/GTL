@@ -86,6 +86,11 @@ private:
 public:
     EViewModeIndex ViewModeIndex;
     EEngineShowFlags ShowFlags = EEngineShowFlags::SF_Primitives;
+
+public:
+    void CreateNewWorld();
+    void DestroyWorld();
+
 };
 
 extern TArray<UObject*> GUObjectArray;

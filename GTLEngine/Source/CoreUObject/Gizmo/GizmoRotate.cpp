@@ -1,7 +1,13 @@
 #include "pch.h"
 #include "GizmoRotate.h"
 
-UGizmoRotate::UGizmoRotate(EAxis axis, AActor* Target) : UGizmoBase() {
+UGizmoRotate::UGizmoRotate() : UGizmoBase() {
+}
+
+void UGizmoRotate::Init(EAxis axis, AActor* Target) {
+	this->axis = axis;
+	this->Target = Target;
+
 	FVector Min = FVector(-0.120000f, -2.170000f, -2.170000f);	//하드코딩 min, max
 	FVector Max = FVector(0.120000f, 2.170000f, 2.170000f);
 
@@ -90,7 +96,7 @@ bool UGizmoRotate::IsClicked(FRay ray, float maxDistance, FVector& hitpoint)
 	if (!Geometry::IsRayIntersectAABB(GetAABB(), ray, maxDistance))
 		return false;
 
-	USceneComponent* RootComp = dynamic_cast<USceneComponent*>(PickedActor->GetRootComponent());
+	USceneComponent* RootComp = dynamic_cast<USceneComponent*>(Target->GetRootComponent());
 	FMatrix transform;
 
 	if (IsAbsoluteCoord)

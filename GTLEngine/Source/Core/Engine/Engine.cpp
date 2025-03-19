@@ -236,3 +236,21 @@ HRESULT UEngine::AddAllVertexBuffers()
     
     return S_OK;
 }
+
+void UEngine::CreateNewWorld()
+{
+    if (World)
+    {
+        DestroyWorld();
+    }
+    World = UWorld::CreateWorld();
+}
+
+void UEngine::DestroyWorld()
+{
+    if (World)
+    {
+        World->Destroy();
+        //FObjectFactory::DeleteObject();
+    }
+}
