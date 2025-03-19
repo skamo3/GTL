@@ -684,6 +684,8 @@ void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 
 	DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDefaultDepthStencilState(), 0);
 
+	Info.VertexInfo.VertexBuffer->Release();
+	Info.IndexInfo.IndexBuffer->Release();
 }
 
 void UDirectXHandle::RenderComponentUUID(USceneComponent* TargetComponent)
