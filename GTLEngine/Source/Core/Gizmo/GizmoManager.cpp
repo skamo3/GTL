@@ -1,7 +1,10 @@
 #include "pch.h"
 #include "GizmoManager.h"
 
-#include "Gizmo/GizmoActor.h"
+#include "Gizmo/GizmoTranslate.h"
+#include "Gizmo/GizmoRotate.h"
+#include "Gizmo/GizmoScale.h"
+
 #include "Input/InputManager.h"
 
 #include "Engine.h"
@@ -13,8 +16,6 @@
 #include "Core/Resource/Types.h"
 
 #include "Utils/Math/Geometry.h"
-
-#include "CoreUObject/Gizmo/GizmoArrow.h"
 
 UGizmoManager::UGizmoManager()
 	: GizmoType(EGizmoType::Translate), SelectedActor(nullptr), Gizmo()
@@ -73,12 +74,19 @@ void UGizmoManager::Picking() {
 			// pick gizmo
 			switch ( Mode ) {
 			case EGizmoType::Translate:
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::X, pickedActor));
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Y, pickedActor));
-				Gizmo.push_back(new UGizmoArrow(UGizmoBase::EAxis::Z, pickedActor));
+				Gizmo.push_back(new UGizmoTranslate(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoTranslate(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoTranslate(UGizmoBase::EAxis::Z, pickedActor));
 				break;
 			case EGizmoType::Rotate:
+				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoRotate(UGizmoBase::EAxis::Z, pickedActor));
+				break;
 			case EGizmoType::Scale:
+				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::X, pickedActor));
+				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::Y, pickedActor));
+				Gizmo.push_back(new UGizmoScale(UGizmoBase::EAxis::Z, pickedActor));
 				break;
 			}
 			return;
@@ -101,18 +109,36 @@ IClickable* UGizmoManager::PickClickable(float MouseX, float MouseY) const {
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
 	TList<IClickable*> clickables = IClickable::GetClickableList();
 	IClickable* selected = nullptr;
+	UGizmoBase* selectedGizmo = nullptr;
 
 	float minDistancePow = FLT_MAX;
+	float gizmoMinDistancePow = FLT_MAX;
+
 	FVector hitpoint;
 	for (IClickable* clickable: clickables) {
-		if ( clickable->IsClicked(ray, 100.f, hitpoint) &&
-			minDistancePow > (camera->GetActorLocation() - hitpoint).LengthSquared()
-			) {
-			minDistancePow = (camera->GetActorLocation() - hitpoint).LengthSquared();
-			selected = clickable;
+		if ( clickable->IsClicked(ray, 100.f, hitpoint))
+		{
+			float distanceSq = (camera->GetActorLocation() - hitpoint).LengthSquared();
+			if (UGizmoBase* gizmo = dynamic_cast<UGizmoBase*>(clickable)) {
+				if (distanceSq < gizmoMinDistancePow) {
+					gizmoMinDistancePow = distanceSq;
+					selectedGizmo = gizmo;
+				}
+			}
+			else {
+				if (distanceSq < minDistancePow)
+				{
+					minDistancePow = distanceSq;
+					selected = clickable;
+				}
+			}
 		}
 	}
-	return selected;
+
+	if (selectedGizmo)
+		return selectedGizmo;
+	else
+		return selected;
 }
 
 void UGizmoManager::ClearSelected() {

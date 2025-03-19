@@ -5,6 +5,7 @@
 bool UGizmoBase::IsAbsoluteCoord = false;
 
 UGizmoBase::UGizmoBase(EAxis axis, AActor* Target) : Target(Target), axis(axis), mat() {
+    PickedActor = Target;
     if ( IsAbsoluteCoord ) {
         mat = FMatrix::GetTranslateMatrix(Target->GetActorLocation());
     } else {

@@ -1,12 +1,10 @@
-#pragma once
-
 #include "GizmoBase.h"
 
-class UGizmoArrow : public UGizmoBase
+class UGizmoRotate: public UGizmoBase
 {
-	DECLARE_CLASS(UGizmoArrow, UGizmoBase)
+	DECLARE_CLASS(UGizmoRotate, UGizmoBase)
 public:
-	UGizmoArrow(EAxis axis, AActor* Target);
+	UGizmoRotate(EAxis axis, AActor* Target);
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
