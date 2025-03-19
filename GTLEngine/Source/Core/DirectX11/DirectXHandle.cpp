@@ -6,6 +6,8 @@
 #include "DXDRasterizerState.h"
 #include "DXDShaderManager.h"
 #include "DXDConstantBuffer.h"
+#include "State/DXDDepthStencilState.h"
+#include "State/DXDDepthStencilState.h"
 #include "DXDBufferManager.h"
 
 #include "CoreUObject/GameFrameWork/Actor.h"
@@ -203,13 +205,13 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 			DXDDeviceContext->VSSetConstantBuffers(1, 1, &CbChangesEveryFrame);
 		}
 	}
-	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryObject])
-	{
-		if (ID3D11Buffer* CbChangesEveryObject = DXDCB->GetConstantBuffer())
-		{
-			DXDDeviceContext->VSSetConstantBuffers(2, 1, &CbChangesEveryObject);
-		}
-	}
+    if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::ChangesEveryObject])
+    {
+        if (ID3D11Buffer* CbChangesEveryObject = DXDCB->GetConstantBuffer())
+        {
+            DXDDeviceContext->VSSetConstantBuffers(2, 1, &CbChangesEveryObject);
+        }
+    }
 	if (UDXDConstantBuffer* DXDCB = ConstantBuffers[EConstantBufferType::MVP])
 	{
 		if (ID3D11Buffer* CbMVP = DXDCB->GetConstantBuffer())
@@ -236,6 +238,13 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 	*         깊이 쓰기 = TRUE
 	*         스텐실 테스트 = FALSE
 	*/
+
+    // 뎁스 스텐실 스테이트 생성.
+    DepthStencilState = new UDXDDepthStencilState();
+    hr = DepthStencilState->CreateDepthStencilState(DXDDevice);
+    if (FAILED(hr))
+        return hr;
+
 
     // 텍스쳐 불러오기.
     // TODO: 텍스쳐 클래스로 묶기
@@ -467,19 +476,69 @@ void UDirectXHandle::RenderBoundingBox(const TArray<AActor*> Actors) {
     for ( AActor* Actor : Actors ) {
         if (Actor->IsSelected)
             RenderAABB(Actor->GetAABB());
+
     }
 }
 
-void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> gizmo) {
+void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
 
 	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
 	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
 
 	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
-    for ( UGizmoBase* g : gizmo ) {
-        RenderAABB(g->GetAABB());
+    if (Gizmos.empty())
+        return;
+    AActor* Actor = Gizmos.back()->GetPickedActor();
+    if (!Actor)
+        return;
+    USceneComponent* Comp = dynamic_cast<USceneComponent*>(Actor->GetRootComponent());
+
+    // Begin Object Matrix Update. 
+    ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+    if (!CbChangesEveryObject)
+    {
+        return;
+    } 
+    D3D11_MAPPED_SUBRESOURCE MappedData = {};
+    DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+    if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
+    {
+		if (Gizmos.back()->IsAbsoluteCoord)
+			Buffer->WorldMatrix = Comp->GetTranslateMatrix();
+		else
+			Buffer->WorldMatrix = Comp->GetRotationMatrix() * Comp->GetTranslateMatrix();
     }
+    DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
+
+
+    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDepthStencilStates()[1], 0); // DepthStencilState 기즈모로 변경
+    for (UGizmoBase* Gizmo : Gizmos)
+    {
+        EGizmoViewType Type = Gizmo->GetGizmoViewType();
+        uint Stride = sizeof(FVertexSimple);
+        UINT offset = 0;
+        FVertexInfo Info = VertexBuffers[GetGizmoViewTypeAsString(Type)];
+        ID3D11Buffer* VB = Info.VertexBuffer;
+        uint Num = Info.NumVertices;
+        DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
+        auto indexIt = IndexBuffers.find(GetGizmoViewTypeAsString(Type));
+        if (indexIt != IndexBuffers.end())
+        {
+            FIndexInfo IndexInfo = indexIt->second;
+            DXDDeviceContext->IASetIndexBuffer(IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+            DXDDeviceContext->DrawIndexed(IndexInfo.NumIndices, 0, 0);
+        }
+        else
+        {
+            DXDDeviceContext->Draw(Num, 0);
+        }
+    }
+
+    DXDDeviceContext->OMSetDepthStencilState(DepthStencilState->GetDepthStencilStates()[0], 0); // DepthStencilState 기본으로 변경
+    //for (UGizmoBase* g : Gizmos) {
+    //    RenderAABB(g->GetAABB());
+    //}
 }
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)

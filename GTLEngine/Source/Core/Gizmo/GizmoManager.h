@@ -31,7 +31,7 @@ private:
 	AActor* SelectedActor;
 	IDragable* DragTarget;
 	TArray<UGizmoBase*> Gizmo;
-	EGizmoType Mode = EGizmoType::Translate;
+	EGizmoType Mode = EGizmoType::Rotate;
 public:
 	IClickable* PickClickable(float MouseX, float MouseY) const;
 	void ClearSelected();

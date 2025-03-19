@@ -106,9 +106,6 @@
     <ClCompile Include="Source\Core\DirectX11\DXDConstantBuffer.cpp">
       <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
-    <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp">
-      <Filter>Source\Core\DirectX11</Filter>
-    </ClCompile>
     <ClCompile Include="Source\Core\Engine\Engine.cpp">
       <Filter>Source\Core\Engine</Filter>
     </ClCompile>
@@ -199,13 +196,10 @@
     <ClCompile Include="Source\Utils\Math\Rotator.cpp">
       <Filter>Utils\Math</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoActor.cpp">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
-    </ClCompile>
     <ClCompile Include="Source\CoreUObject\Gizmo\GizmoBase.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
-    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoArrow.cpp">
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoTranslate.cpp">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.cpp">
@@ -256,6 +250,15 @@
     </ClCompile>
     <ClCompile Include="Source\CoreUObject\Casts.cpp">
       <Filter>Source\CoreUObject</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoRotate.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\CoreUObject\Gizmo\GizmoScale.cpp">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClCompile>
+    <ClCompile Include="Source\Core\DirectX11\DirectXHandle.cpp">
+      <Filter>Source\Core\DirectX11</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,13 +388,10 @@
     <ClInclude Include="Source\Utils\Math\Rotator.h">
       <Filter>Utils\Math</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoActor.h">
-      <Filter>Source\CoreUObject\Gizmo</Filter>
-    </ClInclude>
     <ClInclude Include="Source\CoreUObject\Gizmo\GizmoBase.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
-    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoArrow.h">
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoTranslate.h">
       <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\GameFrameWork\Shapes\Cylinder.h">
@@ -444,6 +444,12 @@
     </ClInclude>
     <ClInclude Include="Source\CoreUObject\Casts.h">
       <Filter>Source\CoreUObject</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoRotate.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
+    </ClInclude>
+    <ClInclude Include="Source\CoreUObject\Gizmo\GizmoScale.h">
+      <Filter>Source\CoreUObject\Gizmo</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
