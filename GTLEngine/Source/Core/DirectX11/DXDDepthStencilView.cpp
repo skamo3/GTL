@@ -56,12 +56,12 @@ void UDXDDepthStencilView::ReleaseDepthStencilView()
     if (DepthStencilBuffer)
     {
         DepthStencilBuffer->Release();
-        delete DepthStencilBuffer;
+        //delete DepthStencilBuffer;
     }
 
     if (DepthStencilView)
     {
         DepthStencilView->Release();
-        delete DepthStencilView;
+        //delete DepthStencilView;
     }
 }

@@ -4,10 +4,12 @@
 
 class USphereComponent : public UPrimitiveComponent
 {
+	DECLARE_CLASS(USphereComponent, UPrimitiveComponent)
+
 public:
 	USphereComponent();
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-	virtual FAABB GetAABB() const override;
+	virtual FBoundingBox GetAABB() const override;
 };

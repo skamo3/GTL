@@ -8,6 +8,7 @@ static const char* Items[] = {  "None", "Line", "Triangle", "Sphere", "Cube", "C
 
 class UControlPanel: public UUIBase
 {
+	DECLARE_CLASS(UControlPanel, UUIBase)
 public:
 	UControlPanel();
 

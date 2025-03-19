@@ -211,7 +211,7 @@ FMatrix FMatrix::GetTranslateMatrix(float X, float Y, float Z)
 	return Result;
 }
 
-FMatrix FMatrix::GetTranslateMatrix(FVector Translation)
+FMatrix FMatrix::GetTranslateMatrix(const FVector& Translation)
 {
 	return GetTranslateMatrix(Translation.X, Translation.Y, Translation.Z);
 }

@@ -21,8 +21,6 @@
 #include "GameFrameWork/Shapes/Cylinder.h"
 #include "GameFrameWork/Shapes/Cone.h"
 
-extern TArray<UObject*> GUObjectArray;
-
 UControlPanel::UControlPanel()
 	: UUIBase(), CurrentPrimitiveType(0), SpawnNum(1), SceneName("NewScene"), blsOrthogonal(nullptr), Location{ 0.f, 0.f,0.f }, Rotation{ 0.f,0.f,0.f }, Scale{ 1.f,1.f,1.f },
     FOV(nullptr), CameraLocation(nullptr), CameraRotation(nullptr), WindowWidth(360.f), WindowHeight(400.f)
@@ -33,10 +31,11 @@ UControlPanel::UControlPanel()
 void UControlPanel::Tick(float DeltaTime)
 {
     ImGuiIO& io = ImGui::GetIO();
+    
 
     float scaleX = io.DisplaySize.x / 1600.0f;
     float scaleY = io.DisplaySize.y / 900.0f;
-
+    
     ImVec2 WinSize(WindowWidth * scaleX, WindowHeight * scaleY);
 
     ImGui::SetNextWindowPos(ImVec2(5, 10), ImGuiCond_Appearing);
@@ -46,8 +45,16 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::Begin("Control Panel", nullptr, ImGuiWindowFlags_NoResize);
     ImGui::Text("HELLO GTL!!");
 
-    // FPS 출력.
+    // FPS 및 창 크기출력.
     ImGui::Text("FPS %.0f (%.0f ms)", io.Framerate, 1000.0f / io.Framerate);
+    ImGui::Text("Window %dx%d", UEngine::GetEngine().GetWindowInfo().Width, UEngine::GetEngine().GetWindowInfo().Height);
+    ImGui::Text("Mouse %d,%d", ImGui::GetIO().MousePos.x, ImGui::GetIO().MousePos.y);
+    
+    ACamera* cam = UEngine::GetEngine().GetWorld()->GetCamera();
+    ImGui::DragFloat("Grid Scale", &cam->GridScale, 0.1f, 0.1f, 100.f, "%.1f");
+    ImGui::DragFloat("Camera speed", &cam->MoveSpeed, 0.1f, 0.1f, 100.f, "%.1f");
+    ImGui::DragFloat("Mouse Sensitive", &cam->MouseSensitive, 0.1f, 0.1f, 10.f, "%.1f");
+
     ImGui::Separator();
 
 	// 폰트 설정.
@@ -63,7 +70,8 @@ void UControlPanel::Tick(float DeltaTime)
         return;
 
     ACamera* Camera = World->GetCamera();
-    UCameraComponent* camera = Camera->GetCameraComponent();
+    if (Camera)
+        UCameraComponent* camera = Camera->GetCameraComponent();
 
 
     //if (isTranslationActive)
@@ -111,12 +119,55 @@ void UControlPanel::Tick(float DeltaTime)
 
     ImGui::PopFont();
 
+    // render mode
+    const char* renderModes[3] = {
+        "Lit",
+        "UnLit",
+        "Wireframe"
+    };
+    int32 viewModeIndex = static_cast<int32>(UEngine::GetEngine().ViewModeIndex);
+    ImGui::Combo("Render mode", &viewModeIndex, renderModes, ARRAYSIZE(renderModes));
+    UEngine::GetEngine().ViewModeIndex = static_cast<EViewModeIndex>(viewModeIndex);
+
+    // set draw targets
+    if ( ImGui::CollapsingHeader("Rendering Entity") ) {
+        EEngineShowFlags flags = UEngine::GetEngine().ShowFlags;
+
+        // primitive
+        bool Primitive = GetFlag(flags, EEngineShowFlags::SF_Primitives);
+        ImGui::Checkbox("Primitives", &Primitive);
+        if ( Primitive )
+            SetFlagOn(flags, EEngineShowFlags::SF_Primitives);
+        else 
+            SetFlagOff(flags, EEngineShowFlags::SF_Primitives);
+
+        // line
+        bool Line = GetFlag(flags, EEngineShowFlags::SF_Line);
+        ImGui::Checkbox("Line", &Line);
+        if ( Line )
+            SetFlagOn(flags, EEngineShowFlags::SF_Line);
+        else
+            SetFlagOff(flags, EEngineShowFlags::SF_Line);
+
+        // BillboardText
+        bool BillboardText = GetFlag(flags, EEngineShowFlags::SF_BillboardText);
+        ImGui::Checkbox("BillboardText", &BillboardText);
+        if ( BillboardText )
+            SetFlagOn(flags, EEngineShowFlags::SF_BillboardText);
+        else 
+            SetFlagOff(flags, EEngineShowFlags::SF_BillboardText);
+
+        UEngine::GetEngine().ShowFlags = flags;
+    }
+
+
     ImGui::Separator();
 
     // Primitive Spawn 창.
-    DrawSpawnPrimitive();
+    // SceneManager로 이전
+    //DrawSpawnPrimitive();
 
-    ImGui::Separator();
+    //ImGui::Separator();
 
 
 	// Scene 로드 세이브.
@@ -128,6 +179,7 @@ void UControlPanel::Tick(float DeltaTime)
 
     if (ImGui::Button(ICON_BUTTON_NEW_SCENE, ControlButtonSize))     // New Scene
     {
+        Camera->SaveConfig();
         ResourceManager->NewScene();
     }
 
@@ -161,11 +213,13 @@ void UControlPanel::Tick(float DeltaTime)
 
     //ImGui::Separator();
 
-    ImGui::Text("Allocation Bytes %d", UEngine::GetEngine().GetTotalAllocationBytes());
-    ImGui::Text("Allocation Count %d", UEngine::GetEngine().GetTotalAllocationCount());
+    // TODO: 메모리 가져와서 UI 업데이트 해주기.
+    
+    ImGui::Text("Allocation Bytes %d", FPlatformMemory::GetAllocationBytes());
+    ImGui::Text("Allocation Count %d", FPlatformMemory::GetAllocationCount());
 
     ImGui::BeginChild("ScrollingRegion");
-    for (UObject* obj: GUObjectArray) {
+    for (UObject* obj: UEngine::GetEngine().GetWorld()->GetActors()) {
         if (obj) {
             FString ws = obj->GetName();
             std::string s;
@@ -180,9 +234,7 @@ void UControlPanel::Tick(float DeltaTime)
     ImGui::End();
 }
 
-void UControlPanel::Destroy()
-{
-}
+void UControlPanel::Destroy() {}
 
 const char* primitives[] = { "Sphere", "Cube", "Triangle", "Cylinder", "Cone"};
 

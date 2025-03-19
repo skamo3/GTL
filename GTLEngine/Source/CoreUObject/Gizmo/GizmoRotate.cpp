@@ -96,7 +96,7 @@ bool UGizmoRotate::IsClicked(FRay ray, float maxDistance, FVector& hitpoint)
 	if (IsAbsoluteCoord)
 		transform = RootComp->GetTranslateMatrix().Inverse();
 	else
-		transform = RootComp->GetRotateTranslateMatrix().Inverse();
+		transform = RootComp->GetTranslateMatrix().Inverse() * RootComp->GetRotationMatrix().Inverse();
 
 	FRay transformedRay = FRay(
 		transform.TransformPositionVector(ray.Origin),

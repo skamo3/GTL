@@ -2,7 +2,7 @@
 
 #include "Object.h"
 class UUIManager;
-class UInputManager : public UObject
+class UInputManager
 {
 public:
     enum class EMouseButton
@@ -16,8 +16,8 @@ public:
     ~UInputManager();
 
     // 매 프레임 호출하여 입력 상태를 업데이트
-    virtual void Tick(float TickTime) override;
-    virtual void Destroy() override;
+    void Tick(float TickTime);
+    void Destroy();
 
     // 키보드 입력 함수
     bool GetKey(int key) const;

@@ -13,6 +13,7 @@ class UDXDRasterizerState;
 class UDXDShaderManager;
 class UDXDInputLayout;
 class UDXDConstantBuffer;
+class UDXDBufferManager;
 
 class UObject;
 class AActor;
@@ -21,6 +22,7 @@ class UGizmoBase;
 class UGizmoManager;
 class UPrimitiveComponent;
 class ULineComponent;
+class USceneComponent;
 
 class UDirectXHandle
 {
@@ -45,13 +47,15 @@ public:
 	void RenderObject(const TArray<AActor*> Actors);
 	void RenderLines(const TArray<AActor*> Actors);
 	void RenderLine(ULineComponent* comp);
-	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
-	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
-	void RenderUUID(UPrimitiveComponent* PrimitiveComp);
+	void RenderActorUUID(AActor* TargetActor);
+	void RenderComponentUUID(USceneComponent* TargetComponent);
 
 public:
 	void InitView();
 
+public:
+	inline void SetLineMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_LINELIST); }
+	inline void SetFaceMode() { DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST); }
 
 private:
 	D3D11_VIEWPORT ViewportInfo;
@@ -71,11 +75,13 @@ public:
 	
 	HRESULT AddConstantBuffer(EConstantBufferType Type);
 
+	void ResizeViewport(int width, int height);
+	HRESULT ResizeWindow(int width, int height);
 private:
 	void UpdateWorldViewMatrix(ACamera* Camera);
 	void UpdateWorldProjectionMatrix(ACamera* Camera);
 
-	void RenderAABB(FAABB aabb);
+	void RenderAABB(FBoundingBox aabb);
 
 private:
 	ID3D11Device* DXDDevice;
@@ -87,6 +93,7 @@ private:
 	UDXDDepthStencilState* DepthStencilState;
 	TMap<FString, UDXDRasterizerState*> RasterizerStates;
 	UDXDShaderManager* ShaderManager;
+	UDXDBufferManager* BufferManager;
 
 	TMap<FString, FVertexInfo> VertexBuffers;
 	TMap<FString, FIndexInfo> IndexBuffers;

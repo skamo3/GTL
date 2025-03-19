@@ -28,6 +28,6 @@ void UDXDRenderTarget::ReleaseRenderTarget()
 
     if (FrameBufferRTV)
     {
-        FrameBuffer.Reset();
+        FrameBufferRTV.Reset();
     }
 }

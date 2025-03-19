@@ -75,11 +75,11 @@ void AActor::SetActorScale(const FVector& InScale)
 	RootComponent->SetRelativeScale(InScale);
 }
 
-FAABB AActor::GetAABB() const {
+FBoundingBox AActor::GetAABB() const {
 	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
 	FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 	for (UActorComponent* comp: OwnedComponent) {
-		FAABB compAABB = comp->GetAABB();
+		FBoundingBox compAABB = comp->GetAABB();
 		if ( compAABB.min.X < min.X ) min.X = compAABB.min.X;
 		if ( compAABB.min.Y < min.Y ) min.Y = compAABB.min.Y;
 		if ( compAABB.min.Z < min.Z ) min.Z = compAABB.min.Z;
@@ -87,7 +87,7 @@ FAABB AActor::GetAABB() const {
 		if ( compAABB.max.Y > max.Y ) max.Y = compAABB.max.Y;
 		if ( compAABB.max.Z > max.Z ) max.Z = compAABB.max.Z;
 	}
-	return FAABB(min, max);
+	return FBoundingBox(min, max);
 }
 
 void AActor::OnClick(int mx, int my) {
@@ -100,13 +100,16 @@ void AActor::OnRelease(int mx, int my) {
 
 bool AActor::IsClicked(FRay ray, float maxDistance, FVector& hitpoint) {
 	// aabb로 1차 검사
-	FAABB aabb = GetAABB();
+	FBoundingBox aabb = GetAABB();
 	if ( !Geometry::IsRayIntersectAABB(aabb, ray, 100.f) ) {
 		return false;
 	}
 	bool result = false;
 	float minDistancePow = FLT_MAX;
 	AActor* camera = UEngine::GetEngine().GetWorld()->GetCamera();
+	if (camera == nullptr) {
+		return false;
+	}
 	// 각 객체의 알고리즘(default: moller-trumbore algorithm)으로 2차 검사
 	for ( UActorComponent* comp : GetOwnedComponent() ) {
 		FVector hitp;

@@ -7,6 +7,8 @@
 #include "DXDShaderManager.h"
 #include "DXDConstantBuffer.h"
 #include "State/DXDDepthStencilState.h"
+#include "State/DXDDepthStencilState.h"
+#include "DXDBufferManager.h"
 
 #include "CoreUObject/GameFrameWork/Actor.h"
 #include "CoreUObject/GameFrameWork/Camera.h"
@@ -44,7 +46,7 @@ HRESULT UDirectXHandle::CreateDeviceAndSwapchain()
     swapchaindesc.BufferCount = 2; // 더블 버퍼링
     swapchaindesc.OutputWindow = UEngine::GetEngine().GetWindowInfo().WindowHandle; // 렌더링할 창 핸들
     swapchaindesc.Windowed = TRUE; // 창 모드
-    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_FLIP_DISCARD; // 스왑 방식
+    swapchaindesc.SwapEffect = DXGI_SWAP_EFFECT_DISCARD; // 스왑 방식
 
 	uint CreateDeviceFlags = D3D11_CREATE_DEVICE_BGRA_SUPPORT | D3D11_CREATE_DEVICE_DEBUG;
 
@@ -153,6 +155,19 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
 		if (FAILED(hr))
 			return hr;
 		RasterizerStates[TEXT("Gizmo")] = GizmoRasterizer;
+
+
+		// 와이어프레임 레스터라이저
+		UDXDRasterizerState* WireframeRasterizer = new UDXDRasterizerState();
+		if ( WireframeRasterizer == nullptr )
+			return S_FALSE;
+		D3D11_RASTERIZER_DESC WireframeRasterizerDesc = {};
+		WireframeRasterizerDesc.FillMode = D3D11_FILL_WIREFRAME; // 채우기 모드
+		WireframeRasterizerDesc.CullMode = D3D11_CULL_BACK; // 백 페이스 컬링
+		hr = WireframeRasterizer->CreateRasterizerState(DXDDevice, &WireframeRasterizerDesc);
+		if ( FAILED(hr) )
+			return hr;
+		RasterizerStates[TEXT("Wireframe")] = WireframeRasterizer;
 	}
 
 	// 셰이더 초기화. VertexShader, PixelShader, InputLayout 생성.
@@ -211,6 +226,8 @@ HRESULT UDirectXHandle::CreateDirectX11Handle(HWND hWnd)
     hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(winInfo.Width), static_cast<float>(winInfo.Height));
     if (FAILED(hr))
         return hr;
+
+	BufferManager = new UDXDBufferManager();
 
 	/**
 	* TODO: 뎁스 스텐실 스테이트 생성 권장.
@@ -325,6 +342,8 @@ void UDirectXHandle::UpdateCameraMatrix(ACamera* Camera)
 // use when D3D11_PRIMITIVE_TOPOLOGY_LINELIST state
 void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 
+	if (!Camera)
+		return;
     /** state check
     D3D11_PRIMITIVE_TOPOLOGY topology;
     DXDDeviceContext->IAGetPrimitiveTopology(&topology);
@@ -338,8 +357,9 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
 	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // set position
+	float s = Camera->GridScale;
     FVector campos = Camera->GetActorLocation();
-    FVector truncpos = FVector(floor(campos.X), floor(campos.Y), 0.f);
+    FVector truncpos = FVector(floor(campos.X/s)*s, floor(campos.Y/s)*s, 0.f);
 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {
@@ -348,7 +368,8 @@ void UDirectXHandle::RenderWorldPlane(ACamera* Camera) {
     D3D11_MAPPED_SUBRESOURCE MappedData = {};
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if ( FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData) ) {
-        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(2, 2, 0)) * FMatrix::GetTranslateMatrix(truncpos * 2);
+		
+        Buffer->WorldMatrix = FMatrix::GetScaleMatrix(FVector(s, s, 0)) * FMatrix::GetTranslateMatrix(truncpos);
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -367,19 +388,12 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
     if (!PrimitiveComp)
         return;
 
-    switch ( PrimitiveComp->GetPrimitiveType() ) {
-    case EPrimitiveType::None:
-    case EPrimitiveType::Line:
-    case EPrimitiveType::Grid:
-        return;
-    default:
-        break;
-    }
+	if (PrimitiveComp->GetPrimitiveType() == EPrimitiveType::None || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Line || PrimitiveComp->GetPrimitiveType() == EPrimitiveType::Grid)
+		return;
 
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -417,12 +431,12 @@ void UDirectXHandle::RenderPrimitive(UPrimitiveComponent* PrimitiveComp)
         DXDDeviceContext->DrawIndexed(IndexInfo.NumIndices, 0, 0);
     }
     else
-    {
+    {  
         DXDDeviceContext->Draw(Num, 0);
     }
 }
 
-void UDirectXHandle::RenderAABB(FAABB aabb) {
+void UDirectXHandle::RenderAABB(FBoundingBox aabb) {
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
     if ( !CbChangesEveryObject ) {
@@ -490,10 +504,10 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
     DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
-        if (Gizmos.back()->IsAbsoluteCoord)
-            Buffer->WorldMatrix = Comp->GetTranslateMatrix();
-        else
-            Buffer->WorldMatrix = Comp->GetRotateTranslateMatrix();
+		if (Gizmos.back()->IsAbsoluteCoord)
+			Buffer->WorldMatrix = Comp->GetTranslateMatrix();
+		else
+			Buffer->WorldMatrix = Comp->GetRotationMatrix() * Comp->GetTranslateMatrix();
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
@@ -529,13 +543,22 @@ void UDirectXHandle::RenderGizmo(const TArray<UGizmoBase*> Gizmos) {
 
 void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Primitives) )
+		return;
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
+
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     for (AActor* Actor : Actors)
     {
+		RenderActorUUID(Actor);
         for (UActorComponent* Comp : Actor->GetOwnedComponent())
         {
-			//RenderUUID(dynamic_cast<UPrimitiveComponent*>(Comp));
             RenderPrimitive(dynamic_cast<UPrimitiveComponent*>(Comp));
+			// TODO: 컴포넌트 별 UUID 렌더링 구현하기. 컴포넌트의 변환된 위치를 찾는 부분에서 문제 생김.
+			//RenderComponentUUID(dynamic_cast<USceneComponent*>(Comp));
         }
 
 		// 액터가 가진 모든 컴포넌트 순회하면서 렌더링.
@@ -548,11 +571,12 @@ void UDirectXHandle::RenderObject(const TArray<AActor*> Actors)
     // 현재 액터가 가진 Component 타입 별로 분석해서 셰이더 적용.
     // 컴포넌트에서 정보 가져와서 Constant 버퍼 업데이트.
     // 액터에 해당하는 오브젝트 렌더링.
-    
 }
 
 void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 {
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_Line) )
+		return;
 
 	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
 	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
@@ -579,16 +603,12 @@ void UDirectXHandle::RenderLines(const TArray<AActor*> Actors)
 }
 
 void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
+
     if ( LineComp == nullptr)
         return;
 
 	if (LineComp->GetPrimitiveType() == EPrimitiveType::None)
 		return;
-
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("DefaultVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("DefaultPS")), NULL, 0);
-
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("DefaultVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -602,14 +622,6 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    // View 변환 Constant.
-
-    // Projection 변환 Constant.
-
-
-    // End Object Matrix Update
-
-
     EPrimitiveType Type = LineComp->GetPrimitiveType();
     uint Stride = sizeof(FVertexSimple);
     UINT offset = 0;
@@ -619,21 +631,21 @@ void UDirectXHandle::RenderLine(ULineComponent* LineComp) {
     DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
 
     DXDDeviceContext->Draw(Num, 0);
+
+	Info.VertexBuffer->Release();
 }
 
-void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
+void UDirectXHandle::RenderActorUUID(AActor* TargetActor)
 {
-    if (!PrimitiveComp)
+	if ( !GetFlag(UEngine::GetEngine().ShowFlags, EEngineShowFlags::SF_BillboardText) )
+		return;
+
+    if (!TargetActor)
         return;
 
-    switch (PrimitiveComp->GetPrimitiveType()) {
-    case EPrimitiveType::None:
-    case EPrimitiveType::Line:
-    case EPrimitiveType::Grid:
-        return;
-    default:
-        break;
-    }
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
 
     // Begin Object Matrix Update. 
     ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
@@ -646,40 +658,83 @@ void UDirectXHandle::RenderUUID(UPrimitiveComponent* PrimitiveComp)
     if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
     {
         // 프리미티브 위치에서 카메라 쪽으로 회전.
-		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
-		FVector PrimitiveLocation = PrimitiveComp->GetOwner()->GetActorLocation();
-		FVector Delta = CameraLocation - PrimitiveLocation;
-		Delta = Delta.GetSafeNormal();
+		ACamera* Camera = UEngine::GetEngine().GetWorld()->GetCamera();
+		if (!Camera)
+			return;
+		FVector CameraLocation = Camera->GetActorLocation();
+		FVector ActorLocation = TargetActor->GetActorLocation();
+		FVector Delta = (CameraLocation - ActorLocation).GetSafeNormal();
 
 		float Pitch = FMath::RadiansToDegrees(FMath::Asin(Delta.Z));
 		float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Delta.Y, Delta.X));
 
 		FRotator PrimitiveRotation(Pitch, Yaw, 0.f);
         FMatrix RotationMatrix(PrimitiveRotation);
-        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(PrimitiveLocation);
+        FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation);
 
         Buffer->WorldMatrix = RotationMatrix * TranslationMatrix;
     }
     DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
-    DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
-    DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
-    DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+	DXDDeviceContext->PSSetShaderResources(0, 1, &FontAtlasTexture);
+	DXDDeviceContext->PSSetSamplers(0, 1, &FontSamplerState);
+
+    uint Stride = sizeof(FVertexUV);
+    UINT offset = 0;
+	FBufferInfo Info;
+	BufferManager->CreateASCIITextBuffer(DXDDevice, TargetActor->GetName(), Info, 0.0f, 0.0f);
+    DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
+	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
+}
+
+void UDirectXHandle::RenderComponentUUID(USceneComponent* TargetComponent)
+{
+	// 컴포넌트가 없거나 Root 컴포넌트면 그리기 X.
+	if (!TargetComponent || TargetComponent == TargetComponent->GetOwner()->GetRootComponent())
+		return;
+
+	DXDDeviceContext->VSSetShader(ShaderManager->GetVertexShaderByKey(TEXT("TextureVS")), NULL, 0);
+	DXDDeviceContext->PSSetShader(ShaderManager->GetPixelShaderByKey(TEXT("TexturePS")), NULL, 0);
+	DXDDeviceContext->IASetInputLayout(ShaderManager->GetInputLayoutByKey(TEXT("TextureVS")));
+
+	// Begin Object Matrix Update. 
+	ID3D11Buffer* CbChangesEveryObject = ConstantBuffers[EConstantBufferType::ChangesEveryObject]->GetConstantBuffer();
+	if (!CbChangesEveryObject)
+	{
+		return;
+	}
+	D3D11_MAPPED_SUBRESOURCE MappedData = {};
+	DXDDeviceContext->Map(CbChangesEveryObject, 0, D3D11_MAP_WRITE_DISCARD, 0, &MappedData);
+	if (FCbChangesEveryObject* Buffer = reinterpret_cast<FCbChangesEveryObject*>(MappedData.pData))
+	{
+		// 프리미티브 위치에서 카메라 쪽으로 회전.
+		FVector CameraLocation = UEngine::GetEngine().GetWorld()->GetCamera()->GetActorLocation();
+		FVector ActorLocation = TargetComponent->GetComponentLocation();
+		FVector Delta = (CameraLocation - ActorLocation).GetSafeNormal();
+
+		float Pitch = FMath::RadiansToDegrees(FMath::Asin(Delta.Z));
+		float Yaw = FMath::RadiansToDegrees(FMath::Atan2(Delta.Y, Delta.X));
+		
+		FRotator PrimitiveRotation(Pitch, Yaw, 0.f);
+		FMatrix RotationMatrix(PrimitiveRotation);
+		FMatrix TranslationMatrix = FMatrix::GetTranslateMatrix(ActorLocation);
+
+		Buffer->WorldMatrix = RotationMatrix * TranslationMatrix;
+	}
+	DXDDeviceContext->Unmap(CbChangesEveryObject, 0);
 
 	DXDDeviceContext->PSSetShaderResources(0, 1, &FontAtlasTexture);
 	DXDDeviceContext->PSSetSamplers(0, 1, &FontSamplerState);
 
-    //EPrimitiveType Type = LineComp->GetPrimitiveType();
-    uint Stride = sizeof(FVertexUV);
-    UINT offset = 0;
-    FVertexInfo Info = VertexBuffers[L"FontAtlas"];
-    ID3D11Buffer* VB = Info.VertexBuffer;
-    uint Num = Info.NumVertices;
-    DXDDeviceContext->IASetVertexBuffers(0, 1, &VB, &Stride, &offset);
-
-    DXDDeviceContext->Draw(Num, 0);
+	uint Stride = sizeof(FVertexUV);
+	UINT offset = 0;
+	FBufferInfo Info;
+	BufferManager->CreateASCIITextBuffer(DXDDevice, TargetComponent->GetName(), Info, 0.0f, -1.0f);
+	DXDDeviceContext->IASetVertexBuffers(0, 1, &Info.VertexInfo.VertexBuffer, &Stride, &offset);
+	DXDDeviceContext->IASetIndexBuffer(Info.IndexInfo.IndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	DXDDeviceContext->DrawIndexed(Info.IndexInfo.NumIndices, 0, 0);
 }
-
 
 void UDirectXHandle::InitView()
 {
@@ -694,7 +749,10 @@ void UDirectXHandle::InitView()
     //DXDDeviceContext->IASetPrimitiveTopology(D3D11_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 
 	DXDDeviceContext->RSSetViewports(1, &ViewportInfo);
-	DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
+	if (UEngine::GetEngine().ViewModeIndex == EViewModeIndex::VMI_Wireframe)
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Wireframe")]->GetRasterizerState().Get());
+	else
+		DXDDeviceContext->RSSetState(RasterizerStates[TEXT("Normal")]->GetRasterizerState().Get());
 
 	// TODO: SwapChain Window 크기와 DepthStencilView Window 크기가 맞아야 에러 X.
 	DXDDeviceContext->OMSetRenderTargets(1, RenderTarget->GetFrameBufferRTV().GetAddressOf(), DepthStencilView->GetDepthStencilView());
@@ -753,3 +811,33 @@ void UDirectXHandle::UpdateWorldProjectionMatrix(ACamera* Camera)
 		FMatrix::PerspectiveFovLH(FOVRad, ViewportInfo.Width / ViewportInfo.Height, Camera->GetNearClip(), Camera->GetFarClip())
 	);
 }
+
+void UDirectXHandle::ResizeViewport(int width, int height) {
+	ViewportInfo.Width = width;
+	ViewportInfo.Height = height;
+}
+
+HRESULT UDirectXHandle::ResizeWindow(int width, int height) {
+
+	RenderTarget->ReleaseRenderTarget();
+	DepthStencilView->ReleaseDepthStencilView();
+	
+	HRESULT hr = DXDSwapChain->ResizeBuffers(1, width, height, DXGI_FORMAT_UNKNOWN, 0);
+	if ( FAILED(hr) )
+		return hr;
+
+	D3D11_RENDER_TARGET_VIEW_DESC framebufferRTVdesc = {};
+	framebufferRTVdesc.Format = DXGI_FORMAT_B8G8R8A8_UNORM_SRGB; // 색상 포맷
+	framebufferRTVdesc.ViewDimension = D3D11_RTV_DIMENSION_TEXTURE2D; // 2D 텍스처
+	hr = AddRenderTarget(TEXT("MainRenderTarget"), framebufferRTVdesc);
+	if ( FAILED(hr) )
+		return hr;
+
+	FWindowInfo winInfo = UEngine::GetEngine().GetWindowInfo();
+	hr = DepthStencilView->CreateDepthStencilView(DXDDevice, winInfo.WindowHandle, static_cast<float>(width), static_cast<float>(height));
+	if ( FAILED(hr) )
+		return hr;
+
+	return hr;
+}
+

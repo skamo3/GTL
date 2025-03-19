@@ -4,7 +4,7 @@
 
 class UGizmoTranslate : public UGizmoBase
 {
-
+	DECLARE_CLASS(UGizmoTranslate, UGizmoBase)
 public:
 	UGizmoTranslate(EAxis axis, AActor* Target);
 

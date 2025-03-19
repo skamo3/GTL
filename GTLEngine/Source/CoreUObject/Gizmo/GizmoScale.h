@@ -2,7 +2,7 @@
 
 class UGizmoScale : public UGizmoBase
 {
-
+	DECLARE_CLASS(UGizmoScale, UGizmoBase)
 public:
 	UGizmoScale(EAxis axis, AActor* Target);
 

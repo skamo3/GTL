@@ -1,18 +1,20 @@
 #pragma once
 
+#include "Core/Engine/Engine.h"
 #include "CoreUObject/Object.h"
 #include "CoreUObject/Components/SceneComponent.h"
 #include "UI/UIInterface.h"
+#include "ObjectFactory.h"
 
 class UActorComponent;
 class USceneComponent;
-struct FAABB;
+struct FBoundingBox;
 	
 class AActor : public UObject, public IClickable
 {
+	DECLARE_CLASS(AActor, UObject)
 public:
 	AActor();
-
 
 public:
 	virtual void Tick(float TickTime) override;
@@ -33,7 +35,7 @@ public:
 				continue;
 			}
 
-			FoundComponent = dynamic_cast<T*>(Comp);
+			FoundComponent = Cast<T>(Comp);
 			if (FoundComponent != nullptr)
 			{
 				return FoundComponent;
@@ -54,14 +56,14 @@ public:
 	void SetActorRotation(const FRotator& InRotation);
 	void SetActorScale(const FVector& InScale);
 
-	FAABB GetAABB() const;
+	FBoundingBox GetAABB() const;
 	bool IsSelected = false;
 
 protected:
-	USceneComponent* RootComponent;
+	USceneComponent* RootComponent = nullptr;
 
 public:
-	TArray<UActorComponent*> GetOwnedComponent() const { return OwnedComponent; }
+	TArray<UActorComponent*>& GetOwnedComponent() { return OwnedComponent; }
 
 private:
 	AActor* Owner;
@@ -77,13 +79,14 @@ public:
 template<typename T>
 inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation, const FRotator& InRelativeRotation, const FVector& InRelativeScale)
 {
-	T* NewComp = new T();
+	T* NewComp = FObjectFactory::ConstructObject<T>();
 
 	// ActorComponent 하위 클래스가 아니라면 에러.
 	UActorComponent* NewActorComp = dynamic_cast<UActorComponent*>(NewComp);
 	if (dynamic_cast<UActorComponent*>(NewComp) == nullptr)
 	{
 		// "Actor Component 아니라는 에러 메시지 출력. "
+		UEngine::GetEngine().Log("AddComponent: T is not UActorComponent");
 		return nullptr;
 	}
 	NewActorComp->SetOwner(Owner);
@@ -91,13 +94,13 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	USceneComponent* NewSceneComp = dynamic_cast<USceneComponent*>(NewComp);
 	if (NewSceneComp == nullptr)
 	{
+		UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewActorComp->GetName().c_str(), NewActorComp->GetUUID());
 		return nullptr;
 	}
 
 	if (RootComponent == nullptr)
 	{
 		RootComponent = NewSceneComp;
-		NewSceneComp->SetName(TEXT("RootComponent"));
 	}
 	else
 	{
@@ -108,5 +111,7 @@ inline T* AActor::AddComponent(AActor* Owner, const FVector& InRelativeLocation,
 	NewSceneComp->SetRelativeScale(InRelativeScale);
 
 	OwnedComponent.push_back(NewComp);
+
+	UEngine::GetEngine().Log("AddComponent: %S (UUID: %d)", NewSceneComp->GetName().c_str(), NewSceneComp->GetUUID());
 	return NewComp;
 }

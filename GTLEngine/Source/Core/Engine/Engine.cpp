@@ -1,19 +1,20 @@
 #include "pch.h"
 #include "Engine.h"
+#include <stdarg.h>
 
 #include "DirectX11/DirectXHandle.h"
 #include "Time/TimeManager.h"
 #include "Input/InputManager.h"
 #include "Resource/ResourceManager.h"
-#include "Asset/AssetManager.h"
 #include "UI/UIManager.h"
+#include "UI/ConsolePanel.h"
 
 #include "World.h"
+#include "CoreUObject/GameFrameWork/Camera.h"
 #include "GameFrameWork/Actor.h"
 #include "Gizmo/GizmoManager.h"
 
-
-uint32 UEngineStatics::NextUUID = 0;
+TArray<UObject*> GUObjectArray = TArray<UObject*>();
 
 bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 {
@@ -59,11 +60,6 @@ bool UEngine::InitEngine(const FWindowInfo& InWindowInfo)
 		return false;
 	}
 
-
-	UAssetManager* AssetManager = new UAssetManager();
-	AssetManager->RegistryAssetMetaDatas();
-	AssetManager->LoadAssets();
-
 	// TimeManager 추가
 	TimeManager = new UTimeManager();
 	TimeManager->Initialize();
@@ -97,7 +93,6 @@ void UEngine::Tick()
     UIManager->Tick(TimeManager->DeltaTime());
 
     // World 오브젝트 값들 없데이트.
-    World->CameraTick(TimeManager->DeltaTime());
     World->Tick(TimeManager->DeltaTime());
 
 	GizmoManager->Tick(TimeManager->DeltaTime());
@@ -111,7 +106,7 @@ void UEngine::TickWindowInfo() {
         WindowInfo.Top = rect.top;
         WindowInfo.Bottom = rect.bottom;
         WindowInfo.Width = rect.right - rect.left;
-        WindowInfo.Height = rect.bottom - rect.top;
+        WindowInfo.Height = rect.bottom - rect.top;    
     }
 }
 
@@ -135,6 +130,20 @@ void UEngine::Render()
     UIManager->RenderUI();
 	// 최종적으로 그린 결과물을 화면에 출력.
 	DirectX11Handle->GetDXDSwapChain()->Present(1, 0);
+}
+
+HRESULT UEngine::ResizeWindow(int width, int height) {
+
+    WindowInfo.Width = width;
+    WindowInfo.Height = height;
+
+    // Init 되기 전에도 실행됨
+    HRESULT hr = S_OK;
+    if (DirectX11Handle) {
+        hr = DirectX11Handle->ResizeWindow(width, height);
+        DirectX11Handle->ResizeViewport(width, height);
+    }
+    return hr;
 }
 
 void UEngine::ClearEngine()
@@ -177,6 +186,31 @@ void UEngine::ClearEngine()
 	}
 }
 
+void UEngine::Log(FString s, ...) {
+    //std::wstring_convert<std::codecvt_utf8<wchar_t>> myconv;
+    //Log(myconv.to_bytes(s));
+    wchar_t buf[256];
+    char cbuf[256];
+    va_list args;
+    va_start(args, s);
+    _vsnwprintf_s(buf, IM_ARRAYSIZE(buf), s.c_str(), args);
+    buf[IM_ARRAYSIZE(buf) - 1] = 0;
+    va_end(args);
+    WideCharToMultiByte(CP_ACP, 0, buf, -1, cbuf, 256, NULL, NULL);
+    Log(cbuf);
+}
+
+// TODO: std::string -> char*
+void UEngine::Log(std::string s, ...) {
+    char buf[256];
+    va_list args;
+    va_start(args, s);
+    vsnprintf_s(buf, IM_ARRAYSIZE(buf), s.c_str(), args);
+    buf[IM_ARRAYSIZE(buf) - 1] = 0;
+    va_end(args);
+    UIManager->GetConsole()->AddLog(buf);
+}
+
 HRESULT UEngine::AddAllVertexBuffers()
 {
     HRESULT hr = S_OK;
@@ -201,24 +235,4 @@ HRESULT UEngine::AddAllVertexBuffers()
     }
     
     return S_OK;
-}
-
-void UEngine::AddTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes += Bytes;
-}
-
-void UEngine::AddTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount += Count;
-}
-
-void UEngine::RemoveTotalAllocationBytes(uint32 Bytes)
-{
-    TotalAllocationBytes -= Bytes;
-}
-
-void UEngine::RemoveTotalAllocationCount(uint32 Count)
-{
-    TotalAllocationCount -= Count;
 }

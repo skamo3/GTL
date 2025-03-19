@@ -5,16 +5,17 @@
 
 class UPrimitiveComponent : public USceneComponent
 {
+	DECLARE_CLASS(UPrimitiveComponent, USceneComponent)
 public:
 	UPrimitiveComponent();
 
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-	FMatrix GetWorldMatrix() const override;
 
 public:
 	EPrimitiveType GetPrimitiveType() const { return PrimitiveType; }
-	virtual FAABB GetAABB() const override;
+
+	virtual FBoundingBox GetAABB() const override;
 	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
 protected:
 	EPrimitiveType PrimitiveType;

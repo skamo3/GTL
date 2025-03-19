@@ -17,28 +17,7 @@ void UPrimitiveComponent::Destroy()
 {
 }
 
-FMatrix UPrimitiveComponent::GetWorldMatrix() const {
-    FMatrix ScaleMat = FMatrix::GetScaleMatrix(GetComponentScale());
-    FMatrix RotMat = FMatrix::GetRotateMatrix(GetComponentRotation());
-    FMatrix TransMat = FMatrix::GetTranslateMatrix(GetComponentLocation());
-
-    FMatrix RotTrs = RotMat * TransMat;
-    USceneComponent* Parent = GetParent();
-    while ( Parent != nullptr ) {
-        FMatrix ParScaleMat = FMatrix::GetScaleMatrix(Parent->GetComponentScale());
-        FMatrix ParRotMat = FMatrix::GetRotateMatrix(Parent->GetComponentRotation());
-        FMatrix ParTransMat = FMatrix::GetTranslateMatrix(Parent->GetComponentLocation());
-
-        ScaleMat = ScaleMat * ParScaleMat;
-
-        FMatrix RTTemp = ParRotMat * ParTransMat;
-        RotTrs = RotTrs * RTTemp;
-        Parent = Parent->GetParent();
-    }
-	return ScaleMat * RotTrs;
-}
-
-FAABB UPrimitiveComponent::GetAABB() const {
+FBoundingBox UPrimitiveComponent::GetAABB() const {
     FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
     FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
@@ -55,7 +34,7 @@ FAABB UPrimitiveComponent::GetAABB() const {
         if ( vecs[i].Z > max.Z ) max.Z = vecs[i].Z;
     }
 
-    return FAABB(min, max);
+    return FBoundingBox(min, max);
 }
 
 bool UPrimitiveComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const {
@@ -70,7 +49,7 @@ bool UPrimitiveComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& h
     bool result = false;
     //BYTE* pbPositions = reinterpret_cast<BYTE*>(vertices.data());
 
-    int nPrimitives = vertices.size() / 3;
+    int nPrimitives = static_cast<int>(vertices.size() / 3);
 
     float nearHitDistancePow = FLT_MAX;
     FVector nearestHitPoint = FVector::Zero();

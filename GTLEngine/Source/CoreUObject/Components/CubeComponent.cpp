@@ -29,7 +29,7 @@ bool UCubeComponent::IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoi
 	// OBB (Transformed ray with AABB)
 	FMatrix transform = GetWorldMatrix().Inverse();
 	FRay transformedRay = FRay(transform.TransformPositionVector(ray.Origin), transform.TransformDirectionVector(ray.Direction).GetSafeNormal());
-	FAABB AABBorigin = FAABB(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5));
+	FBoundingBox AABBorigin = FBoundingBox(FVector(-0.5, -0.5, -0.5), FVector(0.5, 0.5, 0.5));
 
 	bool result = Geometry::IsRayIntersectAABB(AABBorigin, transformedRay, hitDistance);
 	if (result) {

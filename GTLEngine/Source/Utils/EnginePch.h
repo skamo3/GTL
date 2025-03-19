@@ -52,6 +52,9 @@ typedef	INT16		int16;
 typedef	INT32		int32;
 typedef	INT64		int64;
 
+typedef char ANSICHAR;
+typedef wchar_t WIDECHAR;
+
 template <typename T>
 using TArray = std::vector<T>;
 
@@ -78,17 +81,33 @@ using FString = std::wstring;
 // inline을 하지않는 매크로
 #define FORCENOINLINE __declspec(noinline)
 
-
 struct FWindowInfo
 {
-	uint Id;
-	HWND WindowHandle;
-	uint Width;
-	uint Height;
-	uint Top;
-	uint Bottom;
-	uint Left;
-	uint Right;
-	RECT screenRect;
+    uint Id;
+    HWND WindowHandle;
+    uint Width;
+    uint Height;
+    uint Top;
+    uint Bottom;
+    uint Left;
+    uint Right;
+    RECT screenRect;
 };
 
+template <typename T>
+void SetFlagOff(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) & ~static_cast<uint32>(flag));
+}
+
+template <typename T>
+void SetFlagOn(T& target, const T flag) {
+	target = static_cast<T>(static_cast<uint32>(target) | static_cast<uint32>(flag));
+}
+
+template <typename T>
+bool GetFlag(T& target, const T flag) {
+	return ((static_cast<uint32>(target) & static_cast<uint32>(flag)) != 0);
+}
+
+
+#include "NameTypes.h"

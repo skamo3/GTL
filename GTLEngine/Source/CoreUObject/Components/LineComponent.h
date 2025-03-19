@@ -1,7 +1,9 @@
 #pragma once
 #include "CoreUObject/Components/PrimitiveComponent.h"
 
-class ULineComponent: public UPrimitiveComponent {
+class ULineComponent: public UPrimitiveComponent 
+{
+	DECLARE_CLASS(ULineComponent, UPrimitiveComponent)
 private:
 	FMatrix rotation;
 
@@ -9,7 +11,7 @@ public:
 	ULineComponent();
 	virtual void Tick(float TickTime) override;
 	virtual void Destroy() override;
-	virtual FAABB GetAABB() const override;
+	virtual FBoundingBox GetAABB() const override;
 	virtual bool IsRayIntersect(FRay ray, float hitDistance, FVector& hitPoint) const override;
 	//inline FVector GetPosition() const { return RelativeLocation; };
 	//inline FVector GetDirection() const { return (end - start).GetSafeNormal(); }
@@ -17,6 +19,6 @@ public:
 	//inline FRay GetRay() const { return FRay(start, GetDirection()); }
 
 	inline void SetDirection(FMatrix m) { rotation = m; }
-	FMatrix GetWorldMatrix() const override;
+	FMatrix GetWorldMatrix() const;
 };
 

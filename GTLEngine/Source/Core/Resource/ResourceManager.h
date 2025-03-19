@@ -7,6 +7,12 @@ struct ObjData {
     TArray<uint32> indices;
 };
 
+enum class EConfigData {
+    GridScale,
+    MouseSensitive,
+    MoveSpeed,
+};
+
 class UResourceManager
 {
 public:
@@ -34,6 +40,9 @@ public:
     void NewScene();
     void LoadScene(std::string SceneName);
     void SaveScene(std::string SceneName);
+
+    void SetConfigData(EConfigData type, float data);
+    float GetConfigData(EConfigData type, float defaultValue);
 
 private:
     TArray<FVertexUV> UVQuadData;

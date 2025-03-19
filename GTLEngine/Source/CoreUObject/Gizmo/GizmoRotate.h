@@ -2,7 +2,7 @@
 
 class UGizmoRotate: public UGizmoBase
 {
-
+	DECLARE_CLASS(UGizmoRotate, UGizmoBase)
 public:
 	UGizmoRotate(EAxis axis, AActor* Target);
 

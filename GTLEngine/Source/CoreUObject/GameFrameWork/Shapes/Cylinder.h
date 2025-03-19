@@ -6,6 +6,7 @@ class UCylinderComponent;
 
 class ACylinder : public AActor
 {
+	DECLARE_CLASS(ACylinder, AActor)
 public:
 	ACylinder();
 

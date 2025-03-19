@@ -16,7 +16,7 @@ void USphereComponent::Destroy()
 {
 }
 
-FAABB USphereComponent::GetAABB() const {
+FBoundingBox USphereComponent::GetAABB() const {
 	FVector min = FVector(FLT_MAX, FLT_MAX, FLT_MAX);
 	FVector max = FVector(-FLT_MAX, -FLT_MAX, -FLT_MAX);
 
@@ -42,5 +42,5 @@ FAABB USphereComponent::GetAABB() const {
 		if ( vecs[i].Z > max.Z ) max.Z = vecs[i].Z;
 	}
 
-	return FAABB(min, max);
+	return FBoundingBox(min, max);
 }
