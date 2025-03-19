@@ -57,7 +57,6 @@ void UWorld::Destroy()
 	}
 	MainCamera = nullptr;
 	ActiveActors.clear();
-	GUObjectArray.clear();
 	IClickable::GetClickableList().clear();
 	IDragable::GetClickableList().clear();
 	UEngine::GetEngine().GetGizmoManager()->ClearSelected();
